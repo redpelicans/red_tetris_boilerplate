@@ -5,12 +5,12 @@ This starter kit was made to help students to develop red_tetris project : a Ful
 It helps:
 
 * to transpile with Babel ES6 code
-* to bundle with Wbepack JS files and hot reload client's code
-* to write tests and check code coverage. 
+* to bundle with Webpack JS files and hot reload client's code
+* to write tests and check code covserage. 
 
 Because we use React, Redux, Node.js and Socket.io, we had to define 3 kinds of unit tests :
 
-* React ones like explained in redux documentation + `chai-equal-jsx`
+* React ones like explained in redux documentation + [chai-equal-jsx](https://github.com/echenley/chai-equal-jsx)
 * Redux ones, but instead of just testing pure functions, we defined a middleware to test state’s impact after one or many actions.
 * Redux/Socket.io/Node.js, same as before, we use the same middleware but this time we can test state’s updates after socketio messages round trip.
 
@@ -85,7 +85,7 @@ Tests are installed under `test` folder.
 
 #### fake.js
 
-A simple template to implement simple unit tests. In Tetris context you will try to test every functions or classes from server or client code. Just import your files and check (http://shouldjs.github.io/)[should] documentation to extend the test.
+A simple template to implement simple unit tests. In Tetris context you will try to test every functions or classes from server or client code. Just import your files and check [shouldjs](http://shouldjs.github.io/) documentation to extend the test.
 
 
 #### redux.js
