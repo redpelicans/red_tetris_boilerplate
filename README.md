@@ -5,12 +5,12 @@ This starter kit was made to help students to develop red_tetris project : a Ful
 It helps:
 
 * to transpile with Babel ES6 code
-* to bundle with Wbepack JS files and hot reload client's code
-* to write tests and check code coverage. 
+* to bundle with Webpack JS files and hot reload client's code
+* to write tests and check code covserage.
 
 Because we use React, Redux, Node.js and Socket.io, we had to define 3 kinds of unit tests :
 
-* React ones like explained in redux documentation + `chai-equal-jsx`
+* React ones as explained in the react documentation + [chai-equal-jsx](https://github.com/echenley/chai-equal-jsx)
 * Redux ones, but instead of just testing pure functions, we defined a middleware to test state’s impact after one or many actions.
 * Redux/Socket.io/Node.js, same as before, we use the same middleware but this time we can test state’s updates after socketio messages round trip.
 
@@ -30,12 +30,12 @@ Edit `params.js` for your needs.
 #### Launch Server
 
 ```
-$ npm run  srv-dev
+$ npm run srv-dev
 > red_tetrisboilerplate@0.0.1 srv-dev /home/eric/JS/red_tetris_boilerplate
 > DEBUG=tetris:* babel-watch -w src src/server/main.js
 ```
 
-It launches a node.js server listening for socket.io connexions, that is wired to receive `ping` messages and answered to … `pong`.
+It launches a node.js server listening for socket.io connexions, that is wired to receive `ping` messages and reply … `pong`.
 
 #### Launch Client
 
@@ -52,11 +52,11 @@ webpack: bundle is now VALID.
 ```
 
 
-Point your browser to `http://0.0.0.0:8080/` it will load client side application. You should see `Soon, will be here a fantastic Tetris ...`, open your console and check you have :
+Point your browser to `http://0.0.0.0:8080/`, it will load client side application. You should see `Soon, will be here a fantastic Tetris ...`, open your console and check that you have :
 
 ```
 [HMR] Waiting for update signal from WDS...
-bundle.js:28328  action @ 14:29:58.602 ALERT_POP 
+bundle.js:28328  action @ 14:29:58.602 ALERT_POP
 bundle.js:28340  prev state Object
 bundle.js:28344  action Object
 bundle.js:28352  next state Object
@@ -85,7 +85,7 @@ Tests are installed under `test` folder.
 
 #### fake.js
 
-A simple template to implement simple unit tests. In Tetris context you will try to test every functions or classes from server or client code. Just import your files and check (http://shouldjs.github.io/)[should] documentation to extend the test.
+A simple template to implement simple unit tests. In Tetris context you will try to test every functions or classes from server or client code. Just import your files and check [shouldjs](http://shouldjs.github.io/) documentation to extend the test.
 
 
 #### redux.js
@@ -122,7 +122,7 @@ describe('Fake redux test', function(){
 ```
 
 1. We use a special middleware to set up hooks in action’s workflow.
-2. We use here the  root reducer, but it can be replaced by  any kind of reducer
+2. We use here the root reducer, but it can be replaced by any kind of reducer
 3. target is to check updates in our store, so we have to create a store for each check (`it()`), `configureStore` is a store helper.
 
 *configureStore* :
@@ -130,7 +130,7 @@ describe('Fake redux test', function(){
 * `reducer`:  not necessary the root one
 * `socket`:  (unused here)
 * `initial state`:  set up to realize the action
-* `actions hook`: object where keys are action’s type and values are callbacks. `action’s type` is one of your actions defined in your application, `callback` function will receive  {getState, dispatch, action} as real parameter.
+* `actions hook`: object where keys are action’s type and values are callbacks. `action’s type` is one of your actions defined in your application, `callback` function will receive {getState, dispatch, action} as real parameter.
 
 Thanks to the hook you can react to actions, just to check a new state after an action, or to send actions to follow a workflow and check state at the end.
 
@@ -158,7 +158,7 @@ chai.should()
 describe('Fake server test', function(){
   let tetrisServer
 
-// 2 
+// 2
   before(cb => startServer( params.server, function(err, server){
     tetrisServer = server
     cb()
@@ -231,11 +231,11 @@ Time: 1923ms
 bundle.js  754 kB       0  [emitted]  main
     + 197 hidden modules
 
-$  DEBUG=tetris:* node dist/server/main.js 
+$  DEBUG=tetris:* node dist/server/main.js
   tetris:info tetris listen on http://0.0.0.0:3004 +0ms
   not yet ready to play tetris with U ...
 ```
 
-In production mode, node.js server serves `index.html` and `bundle.js`, so you have to point to url set up in `params.js` 
+In production mode, node.js server serves `index.html` and `bundle.js`, so you have to point to url set up in `params.js`
 
-That’s all folks ... 
+That’s all folks ...
