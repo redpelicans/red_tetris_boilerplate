@@ -10,6 +10,7 @@
     "srv-dev": "DEBUG=tetris:* babel-watch -w src src/server/main.js",
     "srv-dist": "DEBUG=tetris:* babel src --out-dir dist",
     "test": "mocha --require babel-core/register --reporter spec",
+    "test-watch": "mocha --require babel-core/register --reporter spec --watch",
     "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov -r text --require babel-core/register mocha "
   },
   "dependencies": {
