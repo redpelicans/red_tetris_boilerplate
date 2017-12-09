@@ -6,10 +6,11 @@
   "scripts": {
     "eslint": "eslint src",
     "client-dist": "NODE_ENV=production webpack --progress --colors",
-    "client-dev": "webpack-dev-server --colors --hot --inline --host 0.0.0.0 --port 8080",
+    "start": "webpack-dev-server --colors --hot --inline --host 0.0.0.0 --port 8080",
     "srv-dev": "DEBUG=tetris:* babel-watch -w src src/server/main.js",
     "srv-dist": "DEBUG=tetris:* babel src --out-dir dist",
     "test": "mocha --require babel-core/register --reporter spec",
+    "test-watch": "mocha --require babel-core/register --reporter spec --watch",
     "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov -r text --require babel-core/register mocha "
   },
   "dependencies": {
@@ -19,7 +20,8 @@
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1",
-    "socket.io": "^1.4.6"
+    "socket.io": "^1.4.6",
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "babel-cli": "^6.7.7",
