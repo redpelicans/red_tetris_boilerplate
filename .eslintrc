@@ -34,7 +34,7 @@
   ],
   "rules": {
     /* Possible Errors */
-    "comma-dangle": [1, "always-multiline"], //disallow or enforce trailing commas (recommended)
+    "comma-dangle": [0, "always-multiline"], //disallow or enforce trailing commas (recommended)
     "no-cond-assign": [1, "except-parens"], //disallow assignment in conditional expressions (recommended)
     "no-console": 0, //disallow use of console in the node environment (recommended)
     "no-constant-condition": 1, //disallow use of constant expressions in conditions (recommended)
