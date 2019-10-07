@@ -3,18 +3,28 @@ import ReactDom from 'react-dom'
 import createLogger from 'redux-logger'
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'                                                                                                                                                    
+import { Provider } from 'react-redux'
 import {storeStateMiddleWare} from './middleware/storeStateMiddleWare'
-import reducer from './reducers'
+import TetrisApp from './reducers'
 import App from './containers/app'
-import {alert} from './actions/alert'
 
-const initialState = {}
+import socketMiddleware from './middleware/socketMiddleware'
+
+const initialState = {
+ 
+}
+
+function accessRoom(location) {
+    console.log(location)
+    var re = new RegExp('\#(.+)')
+    console.log("REGEXP:", re.exec(location)[1]);
+    
+}
 
 const store = createStore(
-  reducer,
+  TetrisApp,
   initialState,
-  applyMiddleware(thunk, createLogger())
+  applyMiddleware(thunk, createLogger(), socketMiddleware())
 )
 
 ReactDom.render((
@@ -23,4 +33,3 @@ ReactDom.render((
   </Provider>
 ), document.getElementById('tetris'))
 
-store.dispatch(alert('Soon, will be here a fantastic Tetris ...'))

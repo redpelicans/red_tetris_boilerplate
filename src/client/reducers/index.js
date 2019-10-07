@@ -1,5 +1,6 @@
-import alert from './alert'
-export default alert
+import TetrisApp from './reducer';
+
+export default TetrisApp;
 
 
 
