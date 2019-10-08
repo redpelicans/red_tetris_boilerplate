@@ -8,11 +8,4 @@ export const setMenu = (menu, bool) => {
     bool
   }
 }
-
-export const Menu = {
-  SOLO: 'SOLO',
-  MULTI: 'MULTI',
-  OPTION: 'OPTIONS'
-}
-
   

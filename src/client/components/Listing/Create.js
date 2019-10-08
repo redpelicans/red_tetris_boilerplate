@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { join } from '../../actions/socket';
+import { emitJoin } from '../../actions/socket';
+import { isJoining, onPlayers } from '../../actions/rooms';
 
 const Create = ({onSubmit}) => (
   <form onSubmit={(e) => onSubmit(e)}>
@@ -16,8 +17,11 @@ const Create = ({onSubmit}) => (
 
 const handleForm = (e) => {
   e.preventDefault();
-  var room = {}
-  
+  var room = {
+    create: true
+  }
+
+
   room["name"] = e.target.room.value
   room["mode"] = e.target.mode.value
 
@@ -31,7 +35,9 @@ const mapDispatchToProps = (dispatch, e) => ({
   onSubmit: (e) => {
     console.log("here")
     var r = handleForm(e)
-    dispatch(join(r))
+    dispatch(isJoining(true, r))
+    dispatch(emitJoin(r))
+    dispatch(onPlayers())
   }
 })
 export default connect(null, mapDispatchToProps)(Create);

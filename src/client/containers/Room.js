@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
+import { Players } from '../components/room'
 
 const Room = ({ room }) => {
 
@@ -9,6 +10,8 @@ const Room = ({ room }) => {
       <div>
         <h1>{room.name}</h1>
         <h3>{room.mode}</h3>
+        {room.isJoining ? <h2>Preparing session</h2> : null}
+        <Players />
       </div>
     )
   }
@@ -21,5 +24,8 @@ const mapStateToProps = (state) => {
   }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+  
+})
 
 export default connect(mapStateToProps)(Room);

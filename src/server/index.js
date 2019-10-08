@@ -46,15 +46,7 @@ const initEngine = io => {
 
 	socket.on("FETCH_ROOMS", (data) => roomsAPI.fetch(data, socket))
 	socket.on("JOIN_ROOM", (data) => roomsAPI.join(data, socket))
-	socket.on('JOIN', function(room) {
-	    console.log(room)
-	    var r = Rooms[room.name]
-	    if (r) {
-		r.join(socket)
-		return
-	    }
-	    // create new rooms
-	})
+
 	
 	socket.on('disconnect', function() {
 	    loginfo('Socket disconnected: ' + socket.id);

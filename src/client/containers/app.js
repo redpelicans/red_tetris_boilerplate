@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Display from '../components/Display';
 import Play from '../components/app/Play';
 import ListingRooms from './ListingRooms';
-import Room from './Rooms';
+import Room from './Room';
 
 const AppStyle = {
   margin: "auto",

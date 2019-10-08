@@ -2,6 +2,7 @@
 
 const roomJoined = (state = {}, action) => {
   const { result } = action;
+
   if (!result.joined) {
     return state;
   }

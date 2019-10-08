@@ -50,3 +50,11 @@ export const fetch_rooms = (payload) => {
   }
 }
 
+export const emitData = () => {
+  return {
+    event: "USER_DATA",
+    handle: (data) => {
+      
+    }
+  }
+}

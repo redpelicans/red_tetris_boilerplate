@@ -2,6 +2,7 @@ import menu from './menu';
 import createRoom from './createRoom';
 import roomJoined from './Room';
 import fetch_rooms from './fetchRooms';
+import room from './rooms';
 
 const TetrisApp = (state = {}, action) => {
   console.log("TetrisApp")
@@ -14,7 +15,8 @@ const TetrisApp = (state = {}, action) => {
     return fetch_rooms(state, action)
   case "ROOM_JOINED": // CREATE AND JOINED SAME ROUTE
     return roomJoined(state, action)
-  
+  case "ROOM":
+    return room(state, action)
   default:
     return state;
   }

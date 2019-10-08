@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { CreateForm, List } from '../components/Listing'
+import { CreateForm, CreateButton, List } from '../components/Listing'
 
 const ContainerStyle = {
   
@@ -12,6 +12,7 @@ const Rooms = ({ create }) => {
   if (create) {
     return (
       <div>
+        <CreateButton state={false}>Back</CreateButton>
         <h1>Create Room</h1>
         <CreateForm />
       </div>
@@ -22,6 +23,7 @@ const Rooms = ({ create }) => {
     <div style={ContainerStyle}>
       <div style={{display: "inline"}}>
         Listing Room
+        <CreateButton state={true}>New</CreateButton>
         <List />
       </div>
 
@@ -36,7 +38,7 @@ const Rooms = ({ create }) => {
 
 const mapStateToProps = (state) => {
   return {
-    create: state.create,
+    create: state.menu.create,
   }
 }
 
