@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDom from 'react-dom'
+import ReactDOM from 'react-dom'
 import createLogger from 'redux-logger'
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
@@ -8,7 +8,9 @@ import {storeStateMiddleWare} from './middleware/storeStateMiddleWare'
 import TetrisApp from './reducers'
 import App from './containers/app'
 
+
 import socketMiddleware from './middleware/socketMiddleware'
+
 
 const initialState = {
  
@@ -27,7 +29,7 @@ const store = createStore(
   applyMiddleware(thunk, createLogger(), socketMiddleware())
 )
 
-ReactDom.render((
+ReactDOM.render((
   <Provider store={store}>
     <App/>
   </Provider>

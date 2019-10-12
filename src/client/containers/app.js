@@ -5,6 +5,8 @@ import Play from '../components/app/Play';
 import ListingRooms from './ListingRooms';
 import Room from './Room';
 
+import Button from 'react-bootstrap/lib/Button';
+
 const AppStyle = {
   margin: "auto",
   width: "350px",

@@ -2,15 +2,15 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 const style = {
-  width: "150px",
-  height: "50px",
+  width: "100px",
+  height: "40px",
   backgroundColor: "violet",
   margin: "5px"
 }
 
 const Card = ({ player }) => (
   <div style={style}>
-    <h2>{player}</h2>
+    <p>{player}</p>
   </div>
 )
 

@@ -1,7 +1,13 @@
+import React from 'react';
 import { connect } from 'react-redux';
-import Button from '../Button';
 import { setMenu } from '../../actions/Menu';
 import { listRoom, fetch_rooms, onJoin } from '../../actions/socket'
+
+import Button from 'react-bootstrap/lib/Button';
+
+const playBut = ({onClick}) => (
+  <Button onClick={onClick}>Play</Button>
+)
 
 const mapStateToProps = (state, ownProps) => ({
   active: false,
@@ -17,4 +23,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Button);
+export default connect(mapStateToProps, mapDispatchToProps)(playBut);
