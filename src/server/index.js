@@ -2,6 +2,7 @@ import fs  from 'fs'
 import debug from 'debug'
 import connectToDatabase from './config';
 import { roomsAPI } from './rooms'
+import Game from './player/game'
 var url = require('url');
 
 
@@ -33,6 +34,9 @@ const initApp = (app, params, cb) => {
 
 connectToDatabase("mongodb://localhost:27017/rooms")
 
+import Player from './player/player'
+import { get } from './player/tetraminos'
+
 const initEngine = io => {
     io.on('connection', function(socket){
 	loginfo("Socket connected: " + socket.id)
@@ -47,6 +51,22 @@ const initEngine = io => {
 	socket.on("FETCH_ROOMS", (data) => roomsAPI.fetch(data, socket))
 	socket.on("JOIN_ROOM", (data) => roomsAPI.join(data, socket))
 
+
+	socket.on("START", function (data) {
+	    console.log("start")
+
+
+	    const player = new Player(socket, "Browntrip")
+	    player.start(function(id) {
+		return get()
+	    }, null, null)
+
+	    var i = setInterval(function() {
+	    	if (!player.getMalus())
+		    clearInterval(i)
+		player.get()
+	    }, 10000)
+	})
 	
 	socket.on('disconnect', function() {
 	    loginfo('Socket disconnected: ' + socket.id);

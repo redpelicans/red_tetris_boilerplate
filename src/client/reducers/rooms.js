@@ -14,9 +14,15 @@ const room = (state = {}, action) => {
     obj["joined"] = true
     return Object.assign({}, state, { room: obj })
   case "PLAYERS":
-    const { result } = action
-    obj["players"] = result
+    obj["players"] = action.result
     
+    return Object.assign({}, state, { room: obj })
+  case "DISPLAY":
+    obj["display"] = action.result
+//    console.log(action.result)
+    return Object.assign({}, state, {room: obj})
+  case "START":
+    obj["start"] = action.start
     return Object.assign({}, state, { room: obj })
   default:
     return state

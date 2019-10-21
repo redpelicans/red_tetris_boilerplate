@@ -1,41 +1,45 @@
 import uuidv4 from 'uuid'
 import Room from './roomController';
+import { Rooms as roomDb } from './roomsModel';
 
-class Handler {
-    constructor() {
-	this.rooms = {}
-    }
+const Rooms = {};
 
-
-    async join(id, socket) {
-	console.log("join rooms")
-	var r = this.rooms[id];
-	if (!r) {
-	    console.log(uuidv4())
-	    Promise.reject("room doesn't exist")
-	    return false
-	}
-	r.join(socket)
-	return true	
-    }
-
-    async create(room, socket) {
-
-	try {
-	    var id = uuidv4()
-	    this.rooms[id] = new Room(id)
-	    
-	    if (this.rooms[id]) {
-		await this.rooms[id].join(socket)
-	    }
-	    return room
-	} catch (err) {
-	    Promise.reject(err)
-	}
+async function create(room) {
+    try {
+	var id = uuidv4()
+	var r = new Room(id)
+	Rooms[id] = r
+	room["id"] = id
+	var obj = await roomDb.create(room)
+	return r
+    } catch (err) {
+	console.log("Room creation failure!...")
+	Promise.reject(err)
     }
 }
 
+async function find(id) {
+    var r = Rooms[id]
+    if (!r) {
+	console.log("Room doesn't exist")
+	return new Error("Room doesn't exist")
+    }
+
+    return r
+}
+
+function deleteRoom(id) {
+    console.log("deleting room:", id)
+    if (!Rooms[id]) {
+	return new Error("Room doesn't exist")
+    }
+    delete Rooms[id]
+    console.log("room deleted")
+    return null
+}
 
 module.exports = {
-    Handler: new Handler()
+    create,
+    find,
+    deleteRoom
 }

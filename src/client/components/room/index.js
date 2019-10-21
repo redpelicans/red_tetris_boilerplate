@@ -1,5 +1,9 @@
 import Players from './player'
+import Host from './host'
+import Display from './display'
 
 module.exports = {
-  Players
+  Players,
+  Host,
+  Display
 }

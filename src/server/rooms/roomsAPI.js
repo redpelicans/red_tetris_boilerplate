@@ -1,32 +1,50 @@
 import { Rooms } from './roomsModel';
-import { Handler } from './roomsHandler';
+import Handler from './roomsHandler';
+
 
 async function fetch(data, socket) {
     try {
-	var rooms = await Rooms.read({}, {}, 5, 5)
+	var rooms = await Rooms.read({}, {}, 0, 5)
 	console.log("Voici les rooms: ", rooms);
-	socket.emit("FETCH_ROOMS", { rooms: [{name: "lol", mode: "CLASSIC", id: 1}, {name: "lol2", mode: "CLASSIC", id: 2}] });
+	socket.emit("FETCH_ROOMS", { rooms: rooms })
     } catch (err) {
 	console.log(err)
     }
 }
+
+/*
+** Data : { user: {...}, room: {...}}
+*/
 
 async function join(room, socket) {
     try {
 //	var room = await Rooms.readOne({ id: data.id })
 	console.log("Room's info:", room)
 	if (!room.create) {
-	    var ok = await Handler.join(room.id, socket)
+	    var r = await Handler.find(room.id)
+	    if (!r) {
+		console.log("room dont exist");
+		socket.emit("ROOM", { state: "JOINING", joined: false, err: "room doesn't exist"})
+		return
+	    }
+	    console.log("room exist, joining...");
+	    r.join(socket, room)
+
 	} else {
-	    var ok = await Handler.create(room, socket)
+	    var r = await Handler.create(room)
+	    console.log(r)
+	    if (!r) {
+		console.log("Room not created..")
+		socket.emit("ROOM", { state: "JOINING", joined: false, err: "room not created!" })
+		return
+	    }
+	    console.log("Room created, joining...", r.id)
+	    r.join(socket, room)
 	}
-	
-	socket.emit("JOIN_ROOM", { joined: true, room: room});
-	
     } catch (err) {
-	console.log(err)
-	socket.emit("JOIN_ROOM", { joined: false, room: room, error: err});
+	console.log(err);
     }
+    
 }
 
 module.exports = {

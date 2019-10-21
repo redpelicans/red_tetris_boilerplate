@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Display from '../components/Display';
-import Play from '../components/app/Play';
+import Play from '../components/app/HomeButton';
 import ListingRooms from './ListingRooms';
 import Room from './Room';
 
@@ -30,11 +30,7 @@ const App = ({play, room}) => {
   }
 
   if (room) {
-    return (
-      <div style={AppStyle}>
-        <Room />
-      </div>
-    )
+    return (<Room />)
   }
   return (
     <div style={AppStyle}>

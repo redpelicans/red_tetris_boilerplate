@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 const roomSchema = new Schema({
     id: String,
-    title: String,
+    name: String,
     mode: String,
     open: Boolean
 });
@@ -13,12 +13,13 @@ const roomSchema = new Schema({
 roomSchema.statics = {
     async create(newRoom) {
 	try {
-	    const dupliacte = this.findOne({ id: newRoom.id })
+	    const duplicate = this.findOne({ id: newRoom.id })
 	    if (!duplicate) {
 		return new Error("room already exist")
 	    }
-	    const p = await newRoom.save()
-	    return p.Object()
+	    var room = new Rooms(newRoom)
+	    const p = await room.save()
+	    return p
 	} catch (err) {
 	    return Promise.reject(err)
 	}
@@ -57,6 +58,8 @@ roomSchema.statics = {
     }
 }
 
+const Rooms = mongoose.model("Rooms", roomSchema);
+
 module.exports = {
-    Rooms: mongoose.model('Rooms', roomSchema),
+    Rooms
 }
