@@ -4,6 +4,7 @@ import Display from '../components/Display';
 import Play from '../components/app/HomeButton';
 import ListingRooms from './ListingRooms';
 import Room from './Room';
+import Create from './Create'
 
 import Button from 'react-bootstrap/lib/Button';
 
@@ -19,8 +20,8 @@ const AppStyle = {
   backgroundColor: 'blue'
 }
 
-const App = ({play, room}) => {
-  if (!play) {
+const App = ({ menu }) => {
+  if (!menu) {
     return (
       <div style={AppStyle}>
         <h1>Red Tetris</h1>
@@ -29,21 +30,28 @@ const App = ({play, room}) => {
     )
   }
 
-  if (room) {
+  if (menu === 'ROOM') {
     return (<Room />)
+  } else if (menu === 'LISTING') {
+    return (
+      <div style={AppStyle}>
+        <ListingRooms />
+        
+      </div>
+    )
+  } else if (menu === 'CREATE') {
+    return (
+      <div style={AppStyle}>
+        <Create />
+      </div>
+    )
   }
-  return (
-    <div style={AppStyle}>
-      <ListingRooms />
-      
-    </div>
-  )
+  return null
 }
 
 const mapStateToProps = (state) => {
   return {
-    play: state.menu,
-    room: state.room
+    menu: state.menu,
   }
 }
 

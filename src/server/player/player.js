@@ -1,14 +1,19 @@
 import Game from './game'
 
 class Player {
-    constructor(socket, name) {
+    constructor(socket, name = "*******") {
 	this.socket = socket
-	this.name = name
+	if (!name)
+	    this.name = "******"
+	else
+	    this.name = name
 
 	// init controller and map
+	this.nbr = 0
 	this.game = new Game(socket)
 	this.controller()
 	this.pause = false;
+	this.socket.on("INFO", (data) => this.getUser(data))
     }
 
 
@@ -19,12 +24,12 @@ class Player {
 	}
 
 	console.log(info)
-	var arr = [info];
-	this.socket.emit("PLAYERS", arr);
+	return info
     }
+    
     controller() {
 	this.socket.on('CONTROLLER', function(action) {
-	    if (!this.game) {
+	    if (!this.start) {
 		return 
 	    }
 
@@ -49,18 +54,29 @@ class Player {
     // cb function for a new piece ! and for terminate the session
     start(getPiece, sendMallus, win) {
 	console.log("start")
+	this.start = true
 	this.itr = setInterval(function () {
 	    if (!this.pause) {
 		if (this.game.piece === undefined) {
-		    var p = getPiece(this.socket.id)
+		    var p = getPiece(this.socket.id, this.nbr)
 		    if (!this.game.add(p)) {
-			clearInterval(this.itr);
+			return clearInterval(this.itr);
+		    } else {
+			this.nbr++
 		    }
+		    
 		} else if (this.game.down() == false) {
 		    console.log("need new piece")
 		}
 	    }
 	}.bind(this), 1000);
+    }
+
+    stopGame() {
+	if (this.itr === 0) {
+	    return ;
+	}
+	clearInterval(this.itr)
     }
 
     getMalus() {
@@ -73,6 +89,9 @@ class Player {
 	return true
     }
 
+    async getUser(data) {
+	this.name = data.user
+    }
     
 }
 

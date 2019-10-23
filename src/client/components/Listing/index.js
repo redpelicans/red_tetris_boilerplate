@@ -1,9 +1,9 @@
-import CreateForm from './Create'
 import List from './Rooms'
 import CreateButton from './CreateButton'
+import Pagination from './Pagination'
 
 module.exports = {
-  CreateForm,
   CreateButton,
-  List
+  List,
+  Pagination
 }

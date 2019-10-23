@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Display, Players, Host } from '../components/room'
+import { emitQuit } from '../actions/room'
 
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
+import Button from 'react-bootstrap/lib/Button'
 
 const AppStyle = {
   margin: "auto",
@@ -18,7 +20,7 @@ const AppStyle = {
   backgroundColor: 'blue'
 }
 
-const Room = ({ room }) => {
+const Room = ({ room, onLeave }) => {
 
   if (room) {
     return (
@@ -26,7 +28,7 @@ const Room = ({ room }) => {
         <Row>
           <Col>
             <div style={AppStyle}>
-              <Row className="w-100"><h1>{room.name}</h1></Row>
+              <Row className="w-100"><h1>{room.name}</h1><Button onClick={onLeave} variant='danger'>Leave</Button></Row>
               {
                 room.isJoining ?
                   <h2>Preparing session</h2> :
@@ -55,7 +57,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  
+  onLeave: () => {
+    console.log("quit lobby!")
+    dispatch(emitQuit())
+  }
 })
 
-export default connect(mapStateToProps)(Room);
+export default connect(mapStateToProps, mapDispatchToProps)(Room);

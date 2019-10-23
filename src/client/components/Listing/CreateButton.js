@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from '../Button';
-import { setMenu } from '../../actions/Menu'
+import { createRoom } from '../../actions/menu'
 
 const mapStateToProps = (state, ownProps) => ({
   active: false,
@@ -10,7 +10,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onClick: () => {
-    dispatch(setMenu("create", ownProps.state))
+    dispatch(createRoom(ownProps.state))
   }
 })
 

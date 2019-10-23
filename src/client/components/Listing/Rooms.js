@@ -14,6 +14,7 @@ const ListStyle = {
 }
 
 const List = ({rooms, style, onClick}) => {
+  console.log()
   if (!rooms) {
     return (
       <div style={ListStyle}>
@@ -21,10 +22,10 @@ const List = ({rooms, style, onClick}) => {
       </div>
     )
   }
-  console.log("????")
+  console.log("rooms list: ", rooms)
   return (
     <div style={ListStyle}>
-      {rooms.map(r => (<Card room={r}/>))}
+      {rooms.map((r, k) => (<Card key={k} id={k} room={r}/>))}
     </div>
   )
   

@@ -1,47 +1,51 @@
 {
-  menu: {
-    play: false,
-  },
-  
-  list: {
-    isFetching: false,
-    room: [
-      {
-	id: 1,
-	name: "room-1"
-      },
-      ...,
-      {
-	id: 5,
-	name: "room-5"
-      }
-    ]
-  },
+    menu: "LISTING"
+    
+    list: {
+	isFetching: false,
+	onLoad: 1
+	room: [
+	    {
+		id: 1,
+		name: "room-1"
+		isJoining: true,
+	    },
+	    ...,
+	    {
+		id: 5,
+		name: "room-5"
+	    }
+	],
 
-  user: {
-    name: "zadrien"
-  },
-  
-  
-  room: {
-    isJoining: false,
-    info: {
-      name: "name",
-      mode: "classic",
-      id: 1
+	create: true,
+    },
+    create: true,
+    isCreating: false,
+    
+    profil: {
+	name: "zadrien"
     },
     
-    game: {
-      host: false,
-      diplay: [[], ..., []],
-      player: [
-	{
-	  name: "player1",
-	  score: 5
+    
+    room: {
+	isJoining: false,
+	info: {
+	    name: "name",
+	    mode: "classic",
+	    id: 1
 	},
-	...
-      }
+	
+	game: {
+	    host: false,
+	    diplay: [[], ..., []],
+	    player: [
+		{
+		    name: "player1",
+		    score: 5
+		},
+		...
+	    }
+	}
     }
-  }
-  
+    
 }

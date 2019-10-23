@@ -48,25 +48,25 @@ const initEngine = io => {
 	    }
 	});
 
-	socket.on("FETCH_ROOMS", (data) => roomsAPI.fetch(data, socket))
+	socket.on("FETCH", (data) => roomsAPI.fetch(data, socket))
 	socket.on("JOIN_ROOM", (data) => roomsAPI.join(data, socket))
+	socket.on("CREATION", (data) => roomsAPI.create(data, socket))
+
+	// socket.on("START", function (data) {
+	//     console.log("start")
 
 
-	socket.on("START", function (data) {
-	    console.log("start")
+	//     const player = new Player(socket, "Browntrip")
+	//     player.start(function(id) {
+	// 	return get()
+	//     }, null, null)
 
-
-	    const player = new Player(socket, "Browntrip")
-	    player.start(function(id) {
-		return get()
-	    }, null, null)
-
-	    var i = setInterval(function() {
-	    	if (!player.getMalus())
-		    clearInterval(i)
-		player.get()
-	    }, 10000)
-	})
+	//     var i = setInterval(function() {
+	//     	if (!player.getMalus())
+	// 	    clearInterval(i)
+	// 	player.get()
+	//     }, 10000)
+	// })
 	
 	socket.on('disconnect', function() {
 	    loginfo('Socket disconnected: ' + socket.id);

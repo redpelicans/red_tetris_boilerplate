@@ -26,13 +26,6 @@ export const emitJoin = (room) => {
   }
 }
 
-export const onJoin = () => {
-  return {
-    event: 'JOIN_ROOM',
-    handle: 'ROOM_JOINED'
-  }
-}
-
 // on Event Listener
 export const listRoom = () => {
   return {

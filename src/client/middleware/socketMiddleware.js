@@ -3,11 +3,10 @@ import io from 'socket.io-client';
 export default function socketMiddleware() {
   const socket = io('localhost:3004');
 
-  return ({ dispatch }) => next => (action) => {
+  return ({ dispatch, state }) => next => (action) => {
     if (typeof action === 'function') {
       return next(action);
     }
-
     const {
       event,
       leave,
@@ -26,7 +25,8 @@ export default function socketMiddleware() {
     }
 
     if (emit) {
-      socket.emit(event, payload)
+      console.log("payload:", payload)
+      return socket.emit(event, payload)
     }
     
     let handleEvent = handle;

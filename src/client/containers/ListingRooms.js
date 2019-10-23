@@ -1,45 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { CreateForm, CreateButton, List } from '../components/Listing'
+import { CreateButton, List, Pagination } from '../components/Listing'
+import { setInterface } from '../actions/menu'
+
+import Button from 'react-bootstrap/lib/Button'
+
 
 const ContainerStyle = {
   
 }
 
-const Rooms = ({ create }) => {
-
-  console.log(create)
-  if (create) {
-    return (
-      <div>
-        <CreateButton state={false}>Back</CreateButton>
-        <h1>Create Room</h1>
-        <CreateForm />
-      </div>
-    )
-  }
-  
+const Rooms = ({ Create }) => {  
   return (
     <div style={ContainerStyle}>
       <div style={{display: "inline"}}>
-        Listing Room
-        <CreateButton state={true}>New</CreateButton>
+        <h4 className="text-light">Listing Room</h4>
+
+        <Button onClick={Create} variant="dark">New</Button>
         <List />
       </div>
 
       <div>
-        <h3>Control Page</h3>
+        <Pagination />
       </div>
     </div>
   )
 }
 
-
-
 const mapStateToProps = (state) => {
   return {
-    create: state.menu.create,
+//    create: state.create,
   }
 }
 
-export default connect(mapStateToProps)(Rooms);
+const mapDispatchToProps = (dispatch) => ({
+  Create: () => {
+    dispatch(setInterface("CREATE"))
+  }
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Rooms);

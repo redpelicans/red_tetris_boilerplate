@@ -1,5 +1,11 @@
 export const ROOM = "ROOM"
 
+export const onJoined = () => ({
+  event: "JOINED",
+  handle: ROOM,
+  state: "JOINED"
+})
+
 export const onDisplay = () => {
     return {
 	event: "DISPLAY",
@@ -29,7 +35,7 @@ export const emitStart = () => {
   return {
     event: "START",
     emit: true,
-    payload: null
+    payload: "START"
   }
 }
 
@@ -50,3 +56,16 @@ export const startGame = (start) => {
     start
   }
 }
+
+export const emitQuit = () => ({
+  emit: true,
+  event: "QUIT",
+  handle: ROOM,
+  state: "QUIT"
+})
+
+export const onQuit = () => ({
+  event: "QUIT",
+  handle: ROOM,
+  state: "QUIT"
+})
