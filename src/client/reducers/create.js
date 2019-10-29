@@ -6,12 +6,13 @@ const create = (state = {}, action) => {
   case 'CREATE':
     if (action.result.err) {
       alert(action.result.err)
-    if (!action.result.room) {
-      alert("No room!....")
-      return Object.assign({}, state, { isCreating: false })
+      if (!action.result.room) {
+	alert("No room!....")
+	return Object.assign({}, state, { isCreating: false })
+      }
     }
     return Object.assign({}, state, { isCreating: false })
-//    return Object.assign({}, state, { menu: "ROOM", isCreating: false, room: action.result.room })
+    //    return Object.assign({}, state, { menu: "ROOM", isCreating: false, room: action.result.room })
   default:
     return state
   }

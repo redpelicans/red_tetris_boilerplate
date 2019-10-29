@@ -4,7 +4,11 @@ import Handler from './roomsHandler';
 
 async function fetch(data, socket) {
     try {
-	var rooms = await Rooms.read({}, {}, 0, 5)
+	var rooms = await Rooms.read({}, {}, data.skip, data.limit)
+
+	var list = await Handler.restoreRooms()
+//	console.log("ALL rooms:", list)
+//	console.log(data)
 	console.log("Voici les rooms: ", rooms);
 	socket.emit("FETCH", { rooms })
     } catch (err) {
@@ -20,30 +24,16 @@ async function join(room, socket) {
     try {
 //	var room = await Rooms.readOne({ id: data.id })
 	console.log("Room's info:", room)
-	if (!room.create) {
-	    var r = await Handler.find(room.id)
-	    console.log(r)
-	    if (!r) {
-		console.log("room dont exist, need to create it !");
-		socket.emit("LISTING", { state: "JOINED", err: "room doesn't exist, need to be created"})
-		return
-	    }
-	    console.log("room exist, joining...");
-	    r.join(socket, room)
-
-	} else {
-	    socket.emit("CREATION", { state: "CREATE", err: "room not created!" })
-	    return
-	    var r = await Handler.create(room)
-	    console.log(r)
-	    if (!r) {
-		console.log("Room not created..")
-		socket.emit("CREATION", { state: "CREATE", err: "room not created!" })
-		return
-	    }
-	    console.log("Room created, joining...", r.id)
-	    r.join(socket, room)
+	var r = await Handler.find(room.id)
+	console.log(r)
+	if (!r) {
+	    console.log("room dont exist, need to create it !");
+//	    socket.emit("LISTING", { state: "JOINED", err: "room doesn't exist, need to be created"})
+	    r = await Handler.create(room, socket)
 	}
+	console.log("room exist, joining...");
+	r.newPlayer(socket)
+//	socket.emit("JOINED", { room: true })
     } catch (err) {
 //	console.log(err);
 	socket.emit("JOINED", { state: "JOINED", err: err })

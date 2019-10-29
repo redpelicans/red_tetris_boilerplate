@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { emitJoin } from '../../actions/socket'
-import { isJoining, onPlayers } from '../../actions/rooms'
-import { onLoading, onJoined } from '../../actions/listing'
+import { onLoading, onJoined, emitJoin } from '../../actions/listing'
 
 import Card from 'react-bootstrap/lib/Card';
 import Button from 'react-bootstrap/lib/Button'
@@ -22,7 +20,9 @@ const colStyle = {
   align: "center"
 }
 const room = ({ rooms, id, onClick }) => {
+//  console.log("card:", rooms, id)
   var room = rooms[id]
+//  console.log(rooms[id])
   if (room) {
     return (
       <div style={CardStyle} className="rounded shadow">
@@ -48,18 +48,16 @@ const room = ({ rooms, id, onClick }) => {
 
 
 const mapStateToProps = (state, ownProps) => ({
-  rooms: state.rooms,
+  rooms: state.rooms.list,
   id: ownProps.id
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   onClick: () => {
-    console.log("Jeoining the room:", ownProps.room, ownProps.id)
-    dispatch(onLoading(ownProps.id))
-    dispatch(onJoined())
+    console.log("Joining the room:", ownProps.room, ownProps.id)
+  //  dispatch(onLoading(ownProps.id))
+//    dispatch(onJoined())
     dispatch(emitJoin(ownProps.room))
-    // dispatch(isJoining(true, ownProps.room))
-    // dispatch(onPlayers())
   }
 })
 

@@ -28,15 +28,12 @@ const Room = ({ room, onLeave }) => {
         <Row>
           <Col>
             <div style={AppStyle}>
-              <Row className="w-100"><h1>{room.name}</h1><Button onClick={onLeave} variant='danger'>Leave</Button></Row>
-              {
-                room.isJoining ?
-                  <h2>Preparing session</h2> :
-                  <Row>
-                    <Host disabled={false} />
-                    <Display/>
-                  </Row>
-              }
+              <Row className="w-100"><h1>{room.name}</h1><Button onClick={onLeave} variant='danger'>Leave</Button>
+                <Host />
+              </Row>
+              <Row>
+                <Display/>
+              </Row>
             </div>
           </Col>
           <Col sm={4}>

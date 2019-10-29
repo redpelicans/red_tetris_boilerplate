@@ -1,7 +1,7 @@
 import helpers from './helpers'
 import Piece from './piece'
 
-export default class Game {
+class Game {
     constructor(socket) {
 	this.socket = socket
 	this.map = helpers.newMap()
@@ -13,7 +13,7 @@ export default class Game {
 	
     }
 
-    getLine(i) { // error value malus
+    async getLine(i) { // error value malus
 	var r = (i -1) - this.malus
 	console.log(r)
 	var line = [...this.map[r]]
@@ -31,13 +31,13 @@ export default class Game {
 	    this.socket.emit("DISPLAY", this.map)
 	    return true
 	} else {
-	    this.socket.emit("end", null)
+	    this.socket.emit("END", null)
 	    return false
 	}
     }
 
 
-    setMalus() {
+    async setMalus() {
 	console.log("setMalus")
 	this.malus++
 
@@ -71,9 +71,10 @@ export default class Game {
     }
     
     down(instant = false) {
-	if (!this.piece)
+	if (!this.piece) {
+	    console.log("piece is undefined")
 	    return false
-
+	}
 	var copy = helpers.copyMap(this.map)
 	
 	if (instant === true) {
@@ -103,7 +104,7 @@ export default class Game {
 	}
     }
 
-    left() {
+    async left() {
 	if (!this.piece)
 	    return
 	var copy = helpers.copyMap(this.map)
@@ -122,7 +123,7 @@ export default class Game {
 
     }
 
-    right() {
+    async right() {
 	if (!this.piece)
 	    return
 	var copy = helpers.copyMap(this.map)
@@ -140,7 +141,7 @@ export default class Game {
 	}
     }
 
-    rotate() {
+    async rotate() {
 	if (!this.piece)
 	    return
 	var copy = helpers.copyMap(this.map)
@@ -159,8 +160,11 @@ export default class Game {
 	}
     }
 
-    verify() {
+    async verify() {
 	var r = helpers.fullLine(this.map, 20 - this.malus)
 	
     }
 }
+
+
+module.exports = Game

@@ -49,7 +49,9 @@ const initEngine = io => {
 	});
 
 	socket.on("FETCH", (data) => roomsAPI.fetch(data, socket))
-	socket.on("JOIN_ROOM", (data) => roomsAPI.join(data, socket))
+	socket.on("JOIN", function(data) {
+	    roomsAPI.join(data, socket)
+	})
 	socket.on("CREATION", (data) => roomsAPI.create(data, socket))
 
 	// socket.on("START", function (data) {

@@ -18,6 +18,18 @@ export const emitFetch = (payload) => ({
   
 })
 
+export const onPrev = (nbr) => ({
+  type: LISTING,
+  state: "PREV",
+  nbr
+})
+
+export const onNext = (nbr) => ({
+  type: LISTING,
+  state: "NEXT",
+  nbr
+})
+
 export const onLoading = (id) => {
   return {
     type: LISTING,
@@ -26,6 +38,12 @@ export const onLoading = (id) => {
   }
 }
 
+
+export const emitJoin = (room) => ({
+  emit: true,
+  event: "JOIN",
+  payload: room,
+})
 
 /*
 ** OBSOLETE

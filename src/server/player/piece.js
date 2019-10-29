@@ -8,7 +8,7 @@ class Piece {
     }
     
 
-    rotate() {
+    async rotate() {
 	var rotation = this.shape.reverse()
 	this.shape = rotation[0].map((column, index) => (
 	    rotation.map(row => row[index])
@@ -17,7 +17,7 @@ class Piece {
 
     }
 
-    undo() {
+    async undo() {
 	var undo = helpers.copyMap(this.shape);
 	console.log(undo);
 	var rotation = undo[0].map((column, index) => (
@@ -39,4 +39,5 @@ function find(arr) {
     }
     return null;
 }
-module.exports = Piece;
+
+module.exports = Piece

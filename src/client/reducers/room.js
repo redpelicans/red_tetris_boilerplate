@@ -13,7 +13,7 @@ const room = (state = {}, action) => {
     room['display'] = action.result
     return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "HOST":
-    room['host'] = true
+    room['host'] = action.result.host
     return Object.assign({}, state, { room: room/*ADD SOMETHING*/})
   case "PLAYERS":
     room['players'] = action.result

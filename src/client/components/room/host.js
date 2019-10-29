@@ -4,9 +4,11 @@ import { startGame, emitStart, onDisplay, emitMove, onPlayers } from '../../acti
 import Button from 'react-bootstrap/lib/Button'
 
 const host = ({ host, start, onClick }) => {
+  console.log("YOOOOOe", host)
   if (!host) {
     return null
   }
+
   
   return (
     <div>
@@ -22,27 +24,11 @@ const mapStateToProps = (state, ownProps) => ({
   start: state.room.start
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({ 
   onClick: () => {
     dispatch(emitStart())
     dispatch(onDisplay())
     dispatch(onPlayers())
-    window.addEventListener('keydown', function (e) {
-      console.log(e.keyCode)
-      var key = e.keyCode
-      if (key == 38) { // UP
-        dispatch(emitMove("UP"))
-      } else if (key == 39) { // RIGHT
-        dispatch(emitMove("RIGHT"))
-      } else if (key == 40) { // DOWN
-        dispatch(emitMove("DOWN"))
-      } else if (key == 37) { // LEFT
-        dispatch(emitMove("LEFT"))
-      } else if (key == 32) { // SPACE
-        dispatch(emitMove("SPACE"))
-      }
-    })
-
     dispatch(startGame(true))
   }
 })

@@ -13,8 +13,8 @@ const ListStyle = {
   
 }
 
-const List = ({rooms, style, onClick}) => {
-  console.log()
+const List = ({rooms, start, style, onClick}) => {
+  console.log(rooms)
   if (!rooms) {
     return (
       <div style={ListStyle}>
@@ -23,12 +23,19 @@ const List = ({rooms, style, onClick}) => {
     )
   }
   console.log("rooms list: ", rooms)
-  return (
-    <div style={ListStyle}>
-      {rooms.map((r, k) => (<Card key={k} id={k} room={r}/>))}
-    </div>
-  )
-  
+  if (rooms["list"]) {
+    var render = []
+    for (var i = rooms.start; i < rooms.start + 5 && i < rooms.nbr; i++) {
+      render.push({ id: i, room: rooms.list[i] })
+    }
+    console.log(render)
+    return (
+      <div style={ListStyle}>
+        {render.map((v, k) => (<Card key={k} id={v.id} room={v.room}/>))}
+      </div>
+    )
+  }
+  return null
 }
 
 
