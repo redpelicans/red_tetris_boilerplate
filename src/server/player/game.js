@@ -22,12 +22,16 @@ class Game {
     
     add(piece) {
 	console.log(piece)
-	this.piece = new Piece(piece)
+	this.piece = Object.assign({}, piece)
 	this.x = Math.round((10 - piece.shape[0].length) / 2);
 	this.y = 0
-	
-	if (helpers.placeable(this.map, this.piece, this.x, this.y)) {
+
+	var cpy = helpers.copyMap(this.map)
+	console.log(this.piece)
+	if (helpers.placeable(cpy, this.piece, this.x, this.y)) {
 	    console.log("placeable!")
+	    console.log(cpy)
+	    this.map = cpy
 	    this.socket.emit("DISPLAY", this.map)
 	    return true
 	} else {
@@ -70,7 +74,7 @@ class Game {
 	return true
     }
     
-    down(instant = false) {
+    async down(instant = false) {
 	if (!this.piece) {
 	    console.log("piece is undefined")
 	    return false
@@ -79,26 +83,27 @@ class Game {
 	
 	if (instant === true) {
 	    helpers.remove(copy, this.piece, this.x, this.y)
-	    while(helpers.placeable(copy, this.piece, this.x, this.y + 1)) {
+	    while(await helpers.placeable(copy, this.piece, this.x, this.y + 1)) {
 		this.y++
 		this.map = helpers.copyMap(copy)
 		helpers.remove(copy, this.piece, this.x, this.y)
 	    }
 	    this.socket.emit('DISPLAY', this.map )
-	    this.piece = undefined
-	    return true
+	    delete this.piece
+	    return false
 	}
 
 	if (helpers.remove(copy, this.piece, this.x, this.y)) {
 	    if (helpers.placeable(copy, this.piece, this.x, this.y+1)) {
 		this.y++
 		this.map = copy
+//		console.log(this.map)
 		this.socket.emit('DISPLAY', this.map )
 		console.log("move down")
 		return true
 	    } else {
 		console.log("can't move down piece")
-		this.piece = undefined
+		delete this.piece
 		return false
 	    }
 	}
@@ -141,28 +146,42 @@ class Game {
 	}
     }
 
-    async rotate() {
+    rotate(id) {
 	if (!this.piece)
 	    return
 	var copy = helpers.copyMap(this.map)
 
 	if (helpers.remove(copy, this.piece, this.x, this.y)) {
-	    this.piece.rotate()
+	    helpers.rotateClockwise(this.piece)
+	    console.log(this.piece)
+//	    this.piece.rotate()
 	    if (helpers.placeable(copy, this.piece, this.x, this.y)) {
 		this.map = copy
-
 		this.socket.emit('DISPLAY', this.map)
-		console.log("ROTATE")
 	    } else {
-		this.piece.undo();
-		console.log("can't ROTATE")
+//		this.piece.undo();
+		helpers.rotateUndo(this.piece)
 	    }
 	}
     }
 
-    async verify() {
+    verify() {
+	var copy = helpers.copyMap(this.map)
 	var r = helpers.fullLine(this.map, 20 - this.malus)
-	
+	console.log(r)
+	if (r.length > 0) {
+	    for (var i = r.length - 1; i >= 0; i--) {
+		console.log("removeeeeeee", i)
+		console.log(r[i])
+		copy.splice(r[i], 1)
+		copy.splice(0, 0, [ ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ])
+		console.log(copy)
+	    }
+	    this.map = copy
+	    this.socket.emit("DISPLAY", this.map)
+	    return r.length
+	}
+	return 0
     }
 }
 

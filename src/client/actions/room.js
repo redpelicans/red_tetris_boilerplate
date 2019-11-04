@@ -41,13 +41,11 @@ export const emitStart = () => {
 }
 
 
-export const emitMove = (move) => {
-  return {
+export const emitMove = (move) => ({
     event: "CONTROLLER",
     emit: true,
     payload: move
-  }
-}
+})
 
 
 export const startGame = (start) => {

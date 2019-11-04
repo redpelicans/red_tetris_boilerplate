@@ -34,74 +34,42 @@ class Lobby {
 		console.log('already an host!')
 		socket.emit("HOST", { host: false })
 	    }
-	    console.log(this.users)
-	    socket.on("CONTROLLER", this.Controller)
-	    socket.on("START", (data) => this.startGame(data, socket))
-	    socket.on("disconnect", (data) => this.playerQuit(socket))
-	    socket.on("QUIT", this.playerQuit.bind(this))
+	    return player;
 	} catch (err) {
 	    console.log(err)
 	    socket.emit("LISTING", { state: "JOINED", err: err })
 	}
     }
 
-    playerQuit(s) {
-	console.log("player quit the lobby")
-	console.log("VALUE OF THIS", this)
-	console.log(this.users)
-	//	this.players[socket.id].stop()// WHEN EXISTING OMFG
-	this.removeListener("CONTROLLER", this.Controller)
-	const { id } = this;
-	const { Socket } = this.client.conn;
+    leave(socket) {
+	console.log("user (", socket.id, ") leaving room...")
+	delete this.users[socket.id]
+	socket.emit("QUIT", { state: "QUIT" })
 	
-	console.log("this.players in playerQuit", this.users)
-//	socket.off("CONTROLLER")
-	Socket.removeListener("CONTROLLER", function(data) {
-	    console.log("here", socket.id)
-	    if (this.users[socket.id])
-		this.users[socket.id].player.controller(data)
-	}.bind(this))
-	socket.removeListener('START', (data) => this.startGame(data, socket))
-	socket.removeListener('QUIT', (data) => this.playerQuit(socket))
-	socket.emit("QUIT", {state: "QUIT"})
-	delete this.users[id]
-
-	if (this.host === id) {
-	    console.log("Find another host!")
-	    var newHost = _.sample(this.users)
-	    console.log("new host", newHost)
+	if (socket.id === this.host) {
+	    console.log("need new host")
 	    this.host = undefined
+	    var newHost = _.sample(this.users)
 	    if (!newHost) {
-		console.log("no new host in room")
 		return
 	    }
 	    newHost.socket.emit("HOST", { host: true })
 	    this.host = newHost.socket.id
-	    
 	}
-
-    }
-
-    Controller(action) {
-	console.log("here")
-	if (this.users[socket.id])
-	    this.users[socket.id].player.controller(action)
     }
     
     async startGame(data, socket) {
 	if (this.open === true) {
 	    if (socket.id === this.host) {
-		console.log("this is host")
-		if (data === 'START') {
-		    _.map(this.users, (v, k) => {
-			v.player.start(this.pieceCallback.bind(this),
-				       this.mallusCallback.bind(this),
-				       this.winnerCallback.bind(this)
-				      )
-		    })
-		}
-		
+		console.log("this is lhost")
+		_.map(this.users, (v, k) => {
+		    v.player.start(this.pieceCallback.bind(this),
+				   this.mallusCallback.bind(this),
+				   this.winnerCallback.bind(this)
+				  )
+		})
 	    }
+	    
 	}
     }
 
@@ -111,8 +79,6 @@ class Lobby {
 	    console.log("found anothr piece & adding to stack")
 	    p = Tetraminos.get()
 	    this.pieces.push(p)
-	    
-//	    return "new Piece!"
 	}
 	console.log("[GET PIECE] - ", id)
 	return p
@@ -122,7 +88,7 @@ class Lobby {
 	_.map(this.users, (v, k) => {
 	    if (k === id)
 		return
-	    v.player.getMallus()
+	    v.player.getMalus()
 	})
     }
 

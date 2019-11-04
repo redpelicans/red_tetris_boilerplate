@@ -26,7 +26,7 @@ const initApp = (app, params, cb) => {
     
     app.on('request', handler)
 
-    app.listen({host, port}, () =>{
+    app.listen({host, port}, () => {
 	loginfo(`tetris listen on ${params.url}`)
 	cb()
     })
@@ -49,27 +49,51 @@ const initEngine = io => {
 	});
 
 	socket.on("FETCH", (data) => roomsAPI.fetch(data, socket))
-	socket.on("JOIN", function(data) {
-	    roomsAPI.join(data, socket)
+	socket.on("JOIN", async function(data) {
+	    var obj = await roomsAPI.join(data, socket)
+	    var ctrl = (data) => {
+		obj.player.controller(data)
+	    }
+	    var start = (data) => {
+		obj.room.startGame(data, socket)
+	    }
+
+	    var leave = (data) => {
+		socket.removeListener("CONTROLLER", ctrl)
+		socket.removeListener("START", start)
+		socket.removeListener("QUIT", leave)
+		obj.room.leave(socket)
+	    }
+	    socket.on("CONTROLLER", ctrl)
+	    socket.on("START", start)
+	    socket.on("QUIT", leave)
 	})
+
+	socket.on("ROOM", function (action) {
+	    switch (action.type) {
+	    case 'join':
+		if (action.room.id) {
+		    console.log("find this room:", aciton.room.id)
+		}
+		/*
+		** Find room by id that return player controller controller
+		** Init socket.on('CONTROLLER')
+		*/
+	    case 'leave':
+		/*
+		** socket.removeListener("CONTROLLER")
+		*/
+	    case 'controller':
+		/*
+		** Or directly handle controller here ??
+		*/
+	    default:
+		return ;
+	    }
+	})
+
 	socket.on("CREATION", (data) => roomsAPI.create(data, socket))
-
-	// socket.on("START", function (data) {
-	//     console.log("start")
-
-
-	//     const player = new Player(socket, "Browntrip")
-	//     player.start(function(id) {
-	// 	return get()
-	//     }, null, null)
-
-	//     var i = setInterval(function() {
-	//     	if (!player.getMalus())
-	// 	    clearInterval(i)
-	// 	player.get()
-	//     }, 10000)
-	// })
-	
+		
 	socket.on('disconnect', function() {
 	    loginfo('Socket disconnected: ' + socket.id);
 

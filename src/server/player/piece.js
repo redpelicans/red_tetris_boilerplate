@@ -8,7 +8,7 @@ class Piece {
     }
     
 
-    async rotate() {
+    rotate() {
 	var rotation = this.shape.reverse()
 	this.shape = rotation[0].map((column, index) => (
 	    rotation.map(row => row[index])
@@ -17,7 +17,7 @@ class Piece {
 
     }
 
-    async undo() {
+    undo() {
 	var undo = helpers.copyMap(this.shape);
 	console.log(undo);
 	var rotation = undo[0].map((column, index) => (

@@ -32,7 +32,11 @@ async function join(room, socket) {
 	    r = await Handler.create(room, socket)
 	}
 	console.log("room exist, joining...");
-	r.newPlayer(socket)
+	var player = r.newPlayer(socket)
+	if (!player) {
+	    return undefined
+	}
+	return { room: r, player }
 //	socket.emit("JOINED", { room: true })
     } catch (err) {
 //	console.log(err);
@@ -61,6 +65,10 @@ async function create(data, socket) {
     }
     // ?? join ??
 }
+
+
+
+
 
 module.exports = {
     fetch,

@@ -14,16 +14,17 @@ function showMap(map) {
     }
 }
 
-function placeable(map, piece, map_x, map_y) {
+function placeable(map, piece, mapX, mapY) {
+    console.log("position", mapX, mapY)
     for(var y = 0; y < piece.shape.length; y++) {
+	console.log(piece.shape[y].length)
 	for(var x = 0; x < piece.shape[y].length; x++) {
-	    if (piece.shape[y][x] === piece.charac) {
-		if (!map[map_y + y]) {
+	    if (piece.shape[y][x] === piece.letter) {
+		if (!map[mapY + y]) {
 		    return false
-		} else if (map[map_y + y][map_x + x] === '.') {
-		    map[map_y + y][map_x + x] = piece.shape[y][x];
-		} else {
-		    return false;
+		} else if (map[mapY + y][mapX + x] === '.') {
+		    map[mapY + y][mapX + x] = piece.shape[y][x];
+		    console.log("HNNNNN")
 		}
 	    }
 	}	
@@ -35,10 +36,10 @@ function remove(map, piece, map_x, map_y) {
     for (var y = 0; y < piece.shape.length; y++) {
 	
 	for(var x = 0; x < piece.shape[y].length; x++) {
-	    if (piece.shape[y][x] === piece.charac) {
+	    if (piece.shape[y][x] === piece.letter) {
 		if (!map[map_y + y][map_x + x]) {
 		    return false;
-		} else if (map[map_y + y][map_x + x] === piece.charac) {
+		} else if (map[map_y + y][map_x + x] === piece.letter) {
 		map[map_y + y][map_x + x] = '.';
 		}
 	    }
@@ -63,18 +64,33 @@ function fillLine(map, pos) {
 
 
 function fullLine(map, max) {
-
     var remove = []
-    for (var i = max; i < 0; i--) {
-	if (!this.map[i].find(full)) {
+    for (var i = max - 1; i > 0; i--) {
+	if (!map[i].find(full)) {
 	    console.log("Removeable")
-	    remove.push(i);
+	    remove.push(i)
 	}
     }
+    return remove
 }
 
 function full(value) {
     return value === '.'
+}
+
+
+function rotateClockwise(piece) {
+    var rotation = piece.shape.reverse()
+    piece.shape = rotation[0].map((v, k) => (
+	rotation.map(row => row[k])
+    ))
+}
+
+function rotateUndo(piece) {
+    var undo = helpers.copyMap(piece.shape)
+    var rotation = undo[0].map((v, k) => (
+	undo.map(row => row[k])
+    ))
 }
 
 module.exports = {
@@ -84,6 +100,8 @@ module.exports = {
     remove,
     placeable,
     fillLine,
-    fullLine
+    fullLine,
+    rotateClockwise,
+    rotateUndo
     
 }

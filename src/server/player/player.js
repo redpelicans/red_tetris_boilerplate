@@ -12,8 +12,7 @@ class Player {
 	this.nbr = 0
 	this.game = new Game(socket)
 	this.pause = false;
-	//	this.socket.on("INFO", (data) => this.getUser(data))
-	console.log("new playr:", socket.id)
+	console.log("new player:", socket.id)
     }
 
 
@@ -27,25 +26,22 @@ class Player {
 	return info
     }
     
-    controller(action) {
-	if (!this.start) {
+    async controller(data) {
+	if (!this.start)
 	    return 
-	}
-
-	if (this.pause)
-	    return
-	if (action === 'LEFT') {
+	console.log("PASS")
+	if (data === 'LEFT') {
 	    this.game.left()
-	} else if (action === 'UP') {
+	} else if (data === 'UP') {
 	    this.game.rotate()
-	} else if (action === 'RIGHT') {
+	} else if (data === 'RIGHT') {
 	    this.game.right()
-	} else if (action === 'DOWN') {
+	} else if (data === 'DOWN') {
 	    this.game.down()
-	} else if (action === 'SPACE') {
-	    this.pause = true
+	} else if (data === 'SPACE') {
+//	    this.pause = true
 	    this.game.down(true)
-	    this.pause = false
+//	    this.pause = false
 	}
     }
 
@@ -54,28 +50,20 @@ class Player {
 	this.socket.on("disconnect", (data) => this.stopGame());
 	this.socket.on("QUIT", (data) => this.stopGame())
 
-	    console.log("[GAME START] - ", this.socket.id)
-	    this.start = true
-	    this.itr = setInterval(async function () {
-		if (!this.pause) {
-		    if (this.game.down() === false) {
-			console.log("need new piece")
-			if (this.game.piece === undefined) {
-			    var p = await getPiece(this.socket.id, this.nbr)
-			    
-			    if (!this.game.add(p)) {
-				return clearInterval(this.itr);
-			    } else {
-				this.nbr++
-			    }
-			}
-		    } else {
-			console.log("down")
-		    }
-		}
-	    }.bind(this), 1000);
+	console.log("[GAME /START] - ", this.socket.id)
+	this.start = true
+	this.itr = setInterval(async function () {
+	    if (await this.game.down() === false) {
+		if (this.game.verify() !== 0)
+		    sendMallus(this.socket.id)
+		var p = await getPiece(this.socket.id, this.nbr)
+		if (!this.game.add(p))
+		    return clearInterval(itr)
+		this.nbr++
+	    }
+    	}.bind(this), 1000);
     }
-
+    
     stopGame() {
 	if (this.itr === 0) {
 	    return ;
