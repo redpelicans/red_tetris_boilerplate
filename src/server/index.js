@@ -22,10 +22,8 @@ const initApp = (app, params, cb) => {
 	    res.writeHead(200)
 	    res.end(data)
 	})
-    }
-    
+    }    
     app.on('request', handler)
-
     app.listen({host, port}, () => {
 	loginfo(`tetris listen on ${params.url}`)
 	cb()
@@ -34,11 +32,8 @@ const initApp = (app, params, cb) => {
 
 connectToDatabase("mongodb://localhost:27017/rooms")
 
-import Player from './player/player'
-import { get } from './player/tetraminos'
-
 const initEngine = io => {
-    io.on('connection', function(socket){
+    io.on('connection', function (socket) {
 	loginfo("Socket connected: " + socket.id)
 	
 	socket.on('action', (action) => {
@@ -49,16 +44,18 @@ const initEngine = io => {
 	});
 
 	socket.on("FETCH", (data) => roomsAPI.fetch(data, socket))
-	socket.on("JOIN", async function(data) {
-	    var obj = await roomsAPI.join(data, socket)
-	    var ctrl = (data) => {
+	socket.on("JOIN", function (data) {
+	    var obj = roomsAPI.join(data, socket)
+	    console.log(obj)
+	    var ctrl = function (data) {
+//		console.log(socket.id)
 		obj.player.controller(data)
 	    }
-	    var start = (data) => {
+	    var start = function (data) {
 		obj.room.startGame(data, socket)
 	    }
 
-	    var leave = (data) => {
+	    var leave = function(data) {
 		socket.removeListener("CONTROLLER", ctrl)
 		socket.removeListener("START", start)
 		socket.removeListener("QUIT", leave)
@@ -69,30 +66,7 @@ const initEngine = io => {
 	    socket.on("QUIT", leave)
 	})
 
-	socket.on("ROOM", function (action) {
-	    switch (action.type) {
-	    case 'join':
-		if (action.room.id) {
-		    console.log("find this room:", aciton.room.id)
-		}
-		/*
-		** Find room by id that return player controller controller
-		** Init socket.on('CONTROLLER')
-		*/
-	    case 'leave':
-		/*
-		** socket.removeListener("CONTROLLER")
-		*/
-	    case 'controller':
-		/*
-		** Or directly handle controller here ??
-		*/
-	    default:
-		return ;
-	    }
-	})
-
-	socket.on("CREATION", (data) => roomsAPI.create(data, socket))
+	socket.on("CREATION", (data) => roomsAPI.newRoom(data, socket))
 		
 	socket.on('disconnect', function() {
 	    loginfo('Socket disconnected: ' + socket.id);

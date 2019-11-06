@@ -3,33 +3,15 @@ import Game from './game'
 class Player {
     constructor(socket, name = "*******") {
 	this.socket = socket
-	if (!name)
-	    this.name = "******"
-	else
-	    this.name = name
-
-	// init controller and map
+	this.name = name
 	this.nbr = 0
-	this.game = new Game(socket)
+	this.game = new Game()
 	this.pause = false;
-	console.log("new player:", socket.id)
-    }
-
-
-    get() {
-	var info = {
-	    name: this.name,
-	    line: this.game.getLine(20)
-	}
-
-	console.log(info)
-	return info
+	console.log(`New player ${socket.id} ${name}`)
     }
     
-    async controller(data) {
-	if (!this.start)
-	    return 
-	console.log("PASS")
+    controller(data) {
+	console.log(`${this.socket.id} - ${data}`)
 	if (data === 'LEFT') {
 	    this.game.left()
 	} else if (data === 'UP') {
@@ -39,52 +21,44 @@ class Player {
 	} else if (data === 'DOWN') {
 	    this.game.down()
 	} else if (data === 'SPACE') {
-//	    this.pause = true
-	    this.game.down(true)
-//	    this.pause = false
+	    this.game.place()
 	}
+	this.socket.emit("DISPLAY", this.game.map)
     }
 
     // cb function for a new piece ! and for terminate the session
-    async start(getPiece, sendMallus, win) {
+    start(getPiece, sendMallus, win) {
 	this.socket.on("disconnect", (data) => this.stopGame());
 	this.socket.on("QUIT", (data) => this.stopGame())
-
-	console.log("[GAME /START] - ", this.socket.id)
-	this.start = true
-	this.itr = setInterval(async function () {
-	    if (await this.game.down() === false) {
+	console.log("[GAME START] - ", this.socket.id)
+	this.itr = 0
+	var marine = function () {
+	       if (this.game.down() === false) {
 		if (this.game.verify() !== 0)
 		    sendMallus(this.socket.id)
-		var p = await getPiece(this.socket.id, this.nbr)
+		var p = getPiece(this.socket.id, this.nbr)
 		if (!this.game.add(p))
-		    return clearInterval(itr)
+		    return clearInterval(this.itr)
 		this.nbr++
-	    }
-    	}.bind(this), 1000);
+	       }
+	    this.socket.emit("DISPLAY", this.game.map)
+	}.bind(this)
+	this.itr = setInterval(marine, 1000)
     }
     
     stopGame() {
-	if (this.itr === 0) {
+	if (this.itr === 0)
 	    return ;
-	}
 	clearInterval(this.itr)
     }
 
     getMalus() {
-	this.pause = true;
 	if (!this.game.setMalus()) {
 	    clearInterval(this.itr)
 	    return false
 	}
-	this.pause = false
 	return true
-    }
-
-    async getUser(data) {
-	this.name = data.user
-    }
-    
+    }    
 }
 
 

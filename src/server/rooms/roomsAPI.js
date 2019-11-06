@@ -1,15 +1,13 @@
 import { Rooms } from './roomsModel';
 import Handler from './roomsHandler';
-
+import  Player from '../player/player';
 
 async function fetch(data, socket) {
     try {
 	var rooms = await Rooms.read({}, {}, data.skip, data.limit)
 
 	var list = await Handler.restoreRooms()
-//	console.log("ALL rooms:", list)
-//	console.log(data)
-	console.log("Voici les rooms: ", rooms);
+//	console.log("Voici les rooms: ", rooms);
 	socket.emit("FETCH", { rooms })
     } catch (err) {
 	console.log(err)
@@ -20,34 +18,57 @@ async function fetch(data, socket) {
 ** Data : { user: {...}, room: {...}}
 */
 
-async function join(room, socket) {
+function join(room, socket) {
     try {
-//	var room = await Rooms.readOne({ id: data.id })
 	console.log("Room's info:", room)
-	var r = await Handler.find(room.id)
-	console.log(r)
+	var r = Handler.find(room.id)
 	if (!r) {
 	    console.log("room dont exist, need to create it !");
-//	    socket.emit("LISTING", { state: "JOINED", err: "room doesn't exist, need to be created"})
-	    r = await Handler.create(room, socket)
+	    r =  Handler.create(room, socket)
 	}
 	console.log("room exist, joining...");
-	var player = r.newPlayer(socket)
+	var player = new Player(socket)
 	if (!player) {
 	    return undefined
 	}
+
+	console.log("wuut")
+	r.newPlayer(player)
 	return { room: r, player }
-//	socket.emit("JOINED", { room: true })
     } catch (err) {
-//	console.log(err);
 	socket.emit("JOINED", { state: "JOINED", err: err })
     }
     
 }
 
+/*
+** data:{
+**		user: { name, ...},
+**		room: {id, name, mode, ...}
+**	}
+*/
+async function accessRoom(data, socket) {
+    try {
+	console.log("Room info::", data.room)
+	var room
+	if (data.room.id)
+	    room = Handler.find(room.id)
+	else {
+	    room = await Handler.create(data.room)
+//	    socket.emit("CREATED", { true }) // OPTIONAL
+	}
+	console.log("Room existing, joining. . .")
+	var player = newPlayer(socket, data.user)
+	room.newPlayer(player)
+	return { room, player }
+    } catch (err) {
+	socket.emit("JOINING", {state: "JOINED", err })
+	Promise.reject(err)
+    }
+}
 
-async function create(data, socket) {
-    console.log("HELLLO", data)
+// use join function
+async function newRoom(data, socket) {
     try {
 	var newRoom = await Handler.create(data)
 	console.log(newRoom)
@@ -67,11 +88,8 @@ async function create(data, socket) {
 }
 
 
-
-
-
 module.exports = {
+    newRoom,
     fetch,
-    join,
-    create
+    join
 }

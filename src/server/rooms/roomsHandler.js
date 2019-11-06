@@ -5,7 +5,6 @@ import _ from 'lodash'
 
 const Rooms = {};
 
-
 /*
 ** Launch at Start
 */
@@ -42,14 +41,10 @@ async function create(room) {
     }
 }
 
-async function find(id) {
-    var r = Rooms[id]
-    if (!r) {
-	console.log("Room doesn't exist")
+function find(id) {
+    if (!id)
 	return undefined
-    }
-
-    return r
+    return Rooms[id]
 }
 
 function deleteRoom(id) {

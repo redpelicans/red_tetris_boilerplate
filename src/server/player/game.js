@@ -1,19 +1,28 @@
-import helpers from './helpers'
-import Piece from './piece'
+import {     newMap,
+	     copyMap,
+	     showMap,
+	     remove,
+	     placeable,
+	     fillLine,
+	     fullLine,
+	     rotateClockwise,
+	     rotateUndo
+       } from './helpers'
+
 
 class Game {
-    constructor(socket) {
-	this.socket = socket
-	this.map = helpers.newMap()
+    constructor() {
+	this.map = newMap()
 	this.piece = undefined
 	this.x = 0
 	this.y = 0
 
+	this.lock = false;
 	this.malus = 0
 	
     }
 
-    async getLine(i) { // error value malus
+    getLine(i) { // error value malus
 	var r = (i -1) - this.malus
 	console.log(r)
 	var line = [...this.map[r]]
@@ -22,163 +31,148 @@ class Game {
     
     add(piece) {
 	console.log(piece)
-	this.piece = Object.assign({}, piece)
+	this.piece = JSON.parse(JSON.stringify(piece))
 	this.x = Math.round((10 - piece.shape[0].length) / 2);
 	this.y = 0
 
-	var cpy = helpers.copyMap(this.map)
+	var cpy = copyMap(this.map)
 	console.log(this.piece)
-	if (helpers.placeable(cpy, this.piece, this.x, this.y)) {
-	    console.log("placeable!")
-	    console.log(cpy)
+	if (placeable(cpy, this.piece, this.x, this.y)) {
 	    this.map = cpy
-	    this.socket.emit("DISPLAY", this.map)
+	    showMap(this.map)
 	    return true
 	} else {
-	    this.socket.emit("END", null)
 	    return false
 	}
     }
 
 
-    async setMalus() {
-	console.log("setMalus")
+    setMalus() {
 	this.malus++
-
-	var copy = helpers.copyMap(this.map)
-	
+	var copy = copyMap(this.map)
 	if (this.piece)
-	    helpers.remove(copy, this.piece, this.x, this.y)
+	    remove(copy, this.piece, this.x, this.y)
 		
 	var a = copy[0].find(function(c) {
 	    return c != '.'
 	})
 	if (a)
 	    return false
-	console.log("can set malus!")
-	helpers.fillLine(copy, 20 - this.malus)
+	fillLine(copy, 20 - this.malus)
 	if (this.piece) {
-	    var finalMap = helpers.copyMap(copy)
-	    helpers.placeable(finalMap, this.piece, this.x, this.y -1)
-	    if (!helpers.placeable(copy, this.piece, this.x, this.y)) {
-		console.log("Can't replace piece, game over!")
-		console.log(copy)
+	    var finalMap = copyMap(copy)
+	    placeable(finalMap, this.piece, this.x, this.y -1)
+	    if (!placeable(copy, this.piece, this.x, this.y)) {
+//		console.log("Can't replace piece, game over!")
+//		console.log(copy)
 		this.map = finalMap
 	    } else {
 		this.map = copy
 	    }
 	}
+	showMap(this.map)
+	return true
+    }
 
-	console.log(this.map)
-	this.socket.emit("DISPLAY", this.map)
+
+    place() {
+	if (this.lock)
+	    return 
+	if (!this.piece)
+	    return false
+	var copy = copyMap(this.map)
+	remove(copy, this.piece, this.x, this.y)
+	while(placeable(copy, this.piece, this.x, this.y + 1)) {
+	    this.y++
+	    this.map = copyMap(copy)
+	    remove(copy, this.piece, this.x, this.y)
+	}
+	delete this.piece
 	return true
     }
     
-    async down(instant = false) {
+    down(instant = false) {
+	if (this.lock)
+	    return
 	if (!this.piece) {
 	    console.log("piece is undefined")
 	    return false
 	}
-	var copy = helpers.copyMap(this.map)
-	
-	if (instant === true) {
-	    helpers.remove(copy, this.piece, this.x, this.y)
-	    while(await helpers.placeable(copy, this.piece, this.x, this.y + 1)) {
-		this.y++
-		this.map = helpers.copyMap(copy)
-		helpers.remove(copy, this.piece, this.x, this.y)
-	    }
-	    this.socket.emit('DISPLAY', this.map )
-	    delete this.piece
-	    return false
-	}
-
-	if (helpers.remove(copy, this.piece, this.x, this.y)) {
-	    if (helpers.placeable(copy, this.piece, this.x, this.y+1)) {
+	var copy = copyMap(this.map)
+	if (remove(copy, this.piece, this.x, this.y)) {
+	    if (placeable(copy, this.piece, this.x, this.y+1)) {
 		this.y++
 		this.map = copy
-//		console.log(this.map)
-		this.socket.emit('DISPLAY', this.map )
-		console.log("move down")
+		showMap(this.map)
 		return true
 	    } else {
-		console.log("can't move down piece")
+		console.log("//////can't move doown piece\\\\\\")
+		showMap(this.map)
+		console.log(this.piece, this.x, this.y)
 		delete this.piece
 		return false
 	    }
 	}
     }
 
-    async left() {
+    left() {
 	if (!this.piece)
 	    return
-	var copy = helpers.copyMap(this.map)
+	var copy = copyMap(this.map)
 
-	if (helpers.remove(copy, this.piece, this.x, this.y)) {
-	    if (helpers.placeable(copy, this.piece, this.x - 1, this.y)) {
+	if (remove(copy, this.piece, this.x, this.y)) {
+	    if (placeable(copy, this.piece, this.x - 1, this.y)) {
 		console.log("lefteable!")
 		this.x--
 		this.map = copy
-		console.log("LEFT");
-		this.socket.emit('DISPLAY', this.map)
-	    } else {
-		console.log("can't move left")
+		showMap(this.map)
 	    }
 	}
 
     }
 
-    async right() {
+    right() {
 	if (!this.piece)
 	    return
-	var copy = helpers.copyMap(this.map)
+	var copy = copyMap(this.map)
 
-	if (helpers.remove(copy, this.piece, this.x, this.y)) {
-	    if (helpers.placeable(copy, this.piece, this.x + 1, this.y)) {
-		console.log("lefteable!")
+	if (remove(copy, this.piece, this.x, this.y)) {
+	    if (placeable(copy, this.piece, this.x + 1, this.y)) {
 		this.x++
 		this.map = copy
-		console.log("RIGHT")
-		this.socket.emit('DISPLAY', this.map)
-	    } else {
-		console.log("can't move right")
+		showMap(this.map)
 	    }
 	}
     }
 
-    rotate(id) {
+    rotate() {
 	if (!this.piece)
 	    return
-	var copy = helpers.copyMap(this.map)
-
-	if (helpers.remove(copy, this.piece, this.x, this.y)) {
-	    helpers.rotateClockwise(this.piece)
-	    console.log(this.piece)
-//	    this.piece.rotate()
-	    if (helpers.placeable(copy, this.piece, this.x, this.y)) {
+	this.lock = true;
+	var copy = copyMap(this.map)
+	var piece = Object.assign({}, this.piece)
+	
+	if (remove(copy, piece, this.x, this.y)) {
+	    rotateClockwise(piece)
+	    if (placeable(copy, piece, this.x, this.y)) {
 		this.map = copy
-		this.socket.emit('DISPLAY', this.map)
-	    } else {
-//		this.piece.undo();
-		helpers.rotateUndo(this.piece)
+		this.piece = piece
+		showMap(this.map)		
 	    }
 	}
+	this.lock = false;
     }
 
     verify() {
-	var copy = helpers.copyMap(this.map)
-	var r = helpers.fullLine(this.map, 20 - this.malus)
-	console.log(r)
+	var copy = copyMap(this.map)
+	var r = fullLine(this.map, 20 - this.malus)
 	if (r.length > 0) {
 	    for (var i = r.length - 1; i >= 0; i--) {
-		console.log("removeeeeeee", i)
-		console.log(r[i])
 		copy.splice(r[i], 1)
 		copy.splice(0, 0, [ ".", ".", ".", ".", ".", ".", ".", ".", ".", "." ])
-		console.log(copy)
 	    }
 	    this.map = copy
-	    this.socket.emit("DISPLAY", this.map)
+	    showMap(this.map)
 	    return r.length
 	}
 	return 0

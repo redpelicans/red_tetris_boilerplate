@@ -72,6 +72,4 @@ function get () {
     return Object.assign({}, shape[keys[i]]);
 }
 
-module.exports = {
-    get,
-}
+module.exports = get
