@@ -1,0 +1,33 @@
+version: "3.3"
+services:
+  database:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    networks:
+      - project
+      
+  client:
+    build:
+      context: .
+      dockerfile: dockerfile-cli
+    ports:
+      - 8080:8080
+    volumes:
+      - "./src/client:/app/src/client"
+    networks:
+      - project
+
+  server:
+    build:
+      context: .
+      dockerfile: dockerfile-srv
+    ports:
+      - 3004:3004
+    volumes:
+      - "./src/server:/app/src/server"
+    networks:
+      - project
+      
+networks:
+  project:

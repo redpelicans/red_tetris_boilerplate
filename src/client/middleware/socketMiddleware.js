@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 export default function socketMiddleware() {
-  const socket = io('localhost:3004');
+  const socket = io('http://localhost:3004');
 
   return ({ dispatch, state }) => next => (action) => {
     if (typeof action === 'function') {

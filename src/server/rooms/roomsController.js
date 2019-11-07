@@ -40,7 +40,7 @@ class Lobby {
 	    this.host = undefined
 	    var newHost = _.sample(this.users)
 	    if (!newHost) {
-		delete this.pieces
+		this.pieces = []
 		return
 	    }
 	    newHost.socket.emit("HOST", { host: true })

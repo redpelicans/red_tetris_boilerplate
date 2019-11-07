@@ -13,6 +13,6 @@ export const onCreation = () => ({
 
 export const emitCreate = (form) => ({
   emit: true,
-  event: 'CREATION',
+  event: 'JOIN',
   payload: form
 })

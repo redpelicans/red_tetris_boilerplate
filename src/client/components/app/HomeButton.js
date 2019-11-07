@@ -22,8 +22,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onClick: () => {
     dispatch(setInterface("LISTING"))
     dispatch(onCreation())
-//    dispatch(listRoom())
-    //    dispatch(fetch_rooms())
     dispatch(onFetch())
     dispatch(emitFetch({skip: 0, limit: 5}))
     dispatch(onJoined())

@@ -39,10 +39,13 @@ export const onLoading = (id) => {
 }
 
 
-export const emitJoin = (room) => ({
+export const emitJoin = (user, room) => ({
   emit: true,
   event: "JOIN",
-  payload: room,
+  payload: {
+    user,
+    room
+  },
 })
 
 /*

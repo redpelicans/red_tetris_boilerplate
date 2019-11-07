@@ -30,7 +30,7 @@ const initApp = (app, params, cb) => {
     })
 }
 
-connectToDatabase("mongodb://localhost:27017/rooms")
+connectToDatabase("mongodb://database:27017/rooms")
 
 const initEngine = io => {
     io.on('connection', function (socket) {
@@ -44,11 +44,9 @@ const initEngine = io => {
 	});
 
 	socket.on("FETCH", (data) => roomsAPI.fetch(data, socket))
-	socket.on("JOIN", function (data) {
-	    var obj = roomsAPI.join(data, socket)
-	    console.log(obj)
+	socket.on("JOIN", async function (data) {
+	    var obj = await roomsAPI.accessRoom(data, socket)
 	    var ctrl = function (data) {
-//		console.log(socket.id)
 		obj.player.controller(data)
 	    }
 	    var start = function (data) {
@@ -65,8 +63,6 @@ const initEngine = io => {
 	    socket.on("START", start)
 	    socket.on("QUIT", leave)
 	})
-
-	socket.on("CREATION", (data) => roomsAPI.newRoom(data, socket))
 		
 	socket.on('disconnect', function() {
 	    loginfo('Socket disconnected: ' + socket.id);

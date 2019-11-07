@@ -8,8 +8,8 @@ import { isCreating, onCreation, emitCreate } from '../../actions/create'
 
 import Button from 'react-bootstrap/lib/Button'
 
-const Create = ({ isCreating, onSubmit}) => (
-  <form onSubmit={(e) => onSubmit(e)}>
+const Create = ({ isCreating, onSubmit, user}) => (
+  <form onSubmit={(e) => onSubmit(e, user)}>
     <label id="room">Room's Name</label><br/>
     <input type="text" id="room" name="room" />
     <h2>Game Mode</h2>
@@ -35,16 +35,22 @@ const handleForm = (e) => {
 }
 
 const mapStateToProps = (state) => ({
-  isCreating: state.isCreating
+  isCreating: state.isCreating,
+  user: state.user
+  
 })
 const mapDispatchToProps = (dispatch, e) => ({
-  onSubmit: (e) => {
+  onSubmit: (e, user) => {
     console.log("here")
-    var r = handleForm(e)
+    var room = handleForm(e)
+    var data = {
+      user,
+      room
+    }
     dispatch(isCreating())
-//    dispatch(onCreation())
-    console.log(r)
-    dispatch(emitCreate(r))
+    dispatch(onCreation())
+    console.log(data)
+    dispatch(emitCreate(data))
     
 //    dispatch(isJoining(true, r))
 //    dispatch(emitJoin(r))

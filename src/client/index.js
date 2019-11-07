@@ -13,6 +13,9 @@ import socketMiddleware from './middleware/socketMiddleware'
 
 
 const initialState = {
+  user: {
+    name: "BrownTrip"
+  }
   //  menu: "ROOM",
     //   rooms: [
     //   {

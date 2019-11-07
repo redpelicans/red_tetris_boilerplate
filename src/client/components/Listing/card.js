@@ -19,7 +19,8 @@ const CardStyle = {
 const colStyle = {
   align: "center"
 }
-const room = ({ rooms, id, onClick }) => {
+
+const room = ({ rooms, id, user, onClick }) => {
 //  console.log("card:", rooms, id)
   var room = rooms[id]
 //  console.log(rooms[id])
@@ -36,7 +37,7 @@ const room = ({ rooms, id, onClick }) => {
         </Col>
         <Col sm={4} className='m-auto'>
           {room.isLoading ?
-           <Button disabled={true}>Loading...</Button> : <Button onClick={onClick} variant='success'>join</Button>
+           <Button disabled={true}>Loading...</Button> : <Button onClick={() => onClick(user)} variant='success'>join</Button>
           }
         </Col>
       </div>
@@ -49,15 +50,16 @@ const room = ({ rooms, id, onClick }) => {
 
 const mapStateToProps = (state, ownProps) => ({
   rooms: state.rooms.list,
-  id: ownProps.id
+  id: ownProps.id,
+  user: state.user
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  onClick: () => {
+  onClick: (user) => {
     console.log("Joining the room:", ownProps.room, ownProps.id)
-  //  dispatch(onLoading(ownProps.id))
-//    dispatch(onJoined())
-    dispatch(emitJoin(ownProps.room))
+    //  dispatch(onLoading(ownProps.id))
+    //    dispatch(onJoined())
+    dispatch(emitJoin(user, ownProps.room))
   }
 })
 

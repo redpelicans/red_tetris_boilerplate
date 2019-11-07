@@ -48,17 +48,18 @@ function join(room, socket) {
 **	}
 */
 async function accessRoom(data, socket) {
+    var room
     try {
-	console.log("Room info::", data.room)
-	var room
+	console.log("Room info::", data)
+	console.log(data.room)
 	if (data.room.id)
-	    room = Handler.find(room.id)
+	    room = Handler.find(data.room.id)
 	else {
 	    room = await Handler.create(data.room)
-//	    socket.emit("CREATED", { true }) // OPTIONAL
+	    socket.emit("CREATED", { room: true }) // OPTIONAL
 	}
 	console.log("Room existing, joining. . .")
-	var player = newPlayer(socket, data.user)
+	var player = new Player(socket, data.user.name)
 	room.newPlayer(player)
 	return { room, player }
     } catch (err) {
@@ -91,5 +92,6 @@ async function newRoom(data, socket) {
 module.exports = {
     newRoom,
     fetch,
-    join
+    join,
+    accessRoom
 }

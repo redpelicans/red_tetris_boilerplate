@@ -18,5 +18,4 @@ const create = (state = {}, action) => {
   }
 }
 
-
 export default create

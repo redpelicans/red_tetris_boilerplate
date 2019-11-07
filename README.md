@@ -1,18 +1,13 @@
-# Red Tetris Boilerplate
+# Red Tetris
 
-This starter kit was made to help students to develop red_tetris project : a Full Stack Javascript Tetris. We can also use it as a starting point for any product made of React / Redux and socket.io.
+## Launch the project with docker
 
-It helps:
+Just do:
+```
+$ docker-compose up
+```
 
-* to transpile with Babel ES6 code
-* to bundle with Wbepack JS files and hot reload client's code
-* to write tests and check code coverage. 
-
-Because we use React, Redux, Node.js and Socket.io, we had to define 3 kinds of unit tests :
-
-* React ones like explained in redux documentation + `chai-equal-jsx`
-* Redux ones, but instead of just testing pure functions, we defined a middleware to test state’s impact after one or many actions.
-* Redux/Socket.io/Node.js, same as before, we use the same middleware but this time we can test state’s updates after socketio messages round trip.
+## Without docker
 
 ### Install
 
