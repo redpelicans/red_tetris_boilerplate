@@ -16,9 +16,9 @@ This folder contains all the reducers used by the global state manager.
 
 This is where you will put your UI components. These should be small independent piece of code with high reusability.
 
-### **screens**
+### **pages**
 
-It contains the pages (URLs) of the application. A screen (or page, or container... Call it as you want) is made of components. This is why their reusability is very important to avoid code bloat.
+It contains the pages (URLs) of the application. A page (or screen, or container... Call it as you want) is made of components. This is why their reusability is very important to avoid code bloat.
 
 ### **hooks**
 
