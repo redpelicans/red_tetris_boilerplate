@@ -29,9 +29,7 @@
     "node": true
   },
   "parser": "babel-eslint",
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "rules": {
     /* Possible Errors */
     "comma-dangle": [1, "always-multiline"], //disallow or enforce trailing commas (recommended)
@@ -102,7 +100,7 @@
     "no-new": 1, //disallow use of the new operator when not part of an assignment or comparison
     "no-octal-escape": 1, //disallow use of octal escape sequences in string literals, such as var foo = "Copyright \251";
     "no-octal": 1, //disallow use of octal literals (recommended)
-    "no-param-reassign": [1, {"props": false}], //disallow reassignment of function parameters
+    "no-param-reassign": [1, { "props": false }], //disallow reassignment of function parameters
     "no-process-env": 0, //disallow use of process.env
     "no-proto": 1, //disallow usage of __proto__ property
     "no-redeclare": 1, //disallow declaring the same variable more than once (recommended)
@@ -111,11 +109,17 @@
     "no-self-compare": 1, //disallow comparisons where both sides are exactly the same
     "no-sequences": 1, //disallow use of the comma operator
     "no-throw-literal": 1, //restrict what can be thrown as an exception
-    "no-unused-expressions": [1, { allowShortCircuit: true, allowTernary: true }], //disallow usage of expressions in statement position
+    "no-unused-expressions": [
+      1,
+      { "allowShortCircuit": true, "allowTernary": true }
+    ], //disallow usage of expressions in statement position
     "no-useless-call": 1, //disallow unnecessary .call() and .apply()
     "no-useless-concat": 1, //disallow unnecessary concatenation of literals or template literals
     "no-void": 0, //disallow use of the void operator
-    "no-warning-comments": [1, { "terms": ["todo", "fixme"], "location": "start" }], //disallow usage of configurable warning terms in comments e.g. TODO or FIXME
+    "no-warning-comments": [
+      1,
+      { "terms": ["todo", "fixme"], "location": "start" }
+    ], //disallow usage of configurable warning terms in comments e.g. TODO or FIXME
     "no-with": 1, //disallow use of the with statement
     "radix": 0, // require use of the second argument for parseInt()
     "vars-on-top": 1, //require declaration of all vars at the top of their containing scope
@@ -162,12 +166,20 @@
     "func-names": 1, //require function expressions to have a name
     "func-style": 0, //enforce use of function declarations or expressions
     "id-length": 0, //this option enforces minimum and maximum identifier lengths (variable names, property names etc.)
-    "id-match": [0, "^[a-z]+([A-Z][a-z]*)*$", {"properties": true}], //require identifiers to match the provided regular expression
+    "id-match": [0, "^[a-z]+([A-Z][a-z]*)*$", { "properties": true }], //require identifiers to match the provided regular expression
     "indent": [1, 2], //specify tab or space width for your code (fixable)
     "jsx-quotes": [1, "prefer-single"], //specify whether double or single quotes should be used in JSX attributes
     "key-spacing": [1, { "beforeColon": false, "afterColon": true }], //enforce spacing between keys and values in object literal properties
     "linebreak-style": 0, //disallow mixed 'LF' and 'CRLF' as linebreaks
-    "lines-around-comment": [1, { "beforeLineComment": true, "allowBlockStart": true, "allowObjectStart": true, "allowArrayStart": true }], //enforce empty lines around comments
+    "lines-around-comment": [
+      1,
+      {
+        "beforeLineComment": true,
+        "allowBlockStart": true,
+        "allowObjectStart": true,
+        "allowArrayStart": true
+      }
+    ], //enforce empty lines around comments
     "max-nested-callbacks": [0, 3], //specify the maximum depth callbacks can be nested
     "new-cap": [1, { "capIsNewExceptions": ["NaN", "T.Promise"] }], // require a capital letter for constructors
     "new-parens": 1, //disallow the omission of parentheses when invoking a constructor with no arguments
@@ -181,14 +193,15 @@
     "no-negated-condition": 1, //disallow negated conditions
     "no-nested-ternary": 0, //disallow nested ternary expressions
     "no-new-object": 1, //disallow the use of the Object constructor
-    "no-restricted-syntax": [1,
+    "no-restricted-syntax": [
+      1,
       "BreakStatement",
       "ContinueStatement",
       "DoWhileStatement",
       "DebuggerStatement",
       "LabeledStatement",
       "WithStatement",
-      "ExportAllDeclaration",
+      "ExportAllDeclaration"
     ], //disallow use of certain syntax in code
     "no-spaced-func": 1, //disallow space between function identifier and application (fixable)
     "no-ternary": 0, //disallow the use of ternary operators
@@ -277,6 +290,5 @@
     "react/self-closing-comp": 1, //Prevent extra closing tags for components without children
     "react/sort-comp": 1, //Enforce component methods order
     "react/wrap-multilines": 0 //Prevent missing parentheses around multiline JSX
-
   }
 }

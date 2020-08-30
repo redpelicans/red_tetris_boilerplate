@@ -1,13 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 export const Tetris = () => {
-  return (
-    <Board/>
-  )
-}
+  return <Board />;
+};
 
 export const Board = () => {
-  return (
-    <div/>
-  )
-}
+  return <div />;
+};

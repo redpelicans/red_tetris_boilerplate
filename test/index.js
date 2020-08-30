@@ -1,4 +1,4 @@
-import glob from 'glob'
+import glob from 'glob';
 
 // console.log(__dirname)
 // const files = glob.sync("src/server#<{(||)}>#*.js")
