@@ -1,8 +1,7 @@
 {
-  "name": "red_tetrisboilerplate",
+  "name": "red_tetris",
   "version": "0.0.1",
-  "author": "redpelicans",
-  "license": "MIT",
+  "author": "nvienot, jergauth",
   "scripts": {
     "eslint": "eslint src",
     "client-dist": "NODE_ENV=production webpack --progress --colors",
