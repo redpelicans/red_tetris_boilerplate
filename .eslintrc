@@ -214,7 +214,7 @@
     "operator-linebreak": [1, "after"], //enforce operators to be placed before or after line breaks
     "padded-blocks": [0, "never"], //enforce padding within blocks
     "quote-props": [0, "as-needed"], //require quotes around object literal property names
-    "quotes": [1, "single"], //specify whether backticks, double or single quotes should be used (fixable)
+    "quotes": [1, "double"], //specify whether backticks, double or single quotes should be used (fixable)
     "require-jsdoc": 0, //Require JSDoc comment
     "semi-spacing": [1, { "before": false, "after": true }], //enforce spacing before and after semicolons
     "semi": [0, "always"], //require or disallow use of semicolons instead of ASI (fixable)
