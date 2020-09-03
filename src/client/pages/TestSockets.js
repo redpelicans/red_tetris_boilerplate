@@ -3,7 +3,7 @@ import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://0.0.0.0:3004";
 const socket = socketIOClient(ENDPOINT);
 
-export default function App() {
+export default function TestSockets() {
   const [piece, setPiece] = useState("");
 
   useEffect(() => {
