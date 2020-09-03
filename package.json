@@ -25,15 +25,15 @@
     "tailwindcss": "^1.7.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.5",
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "babel-watch": "^7.0.0",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "autoprefixer": "^9.8.6",
-    "babel-cli": "^6.7.7",
     "babel-eslint": "^6.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-__coverage__": "^0.111111.1",
-    "babel-watch": "^2.0.2",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "chai-equal-jsx": "^1.0.9",
