@@ -191,7 +191,7 @@
     "no-mixed-spaces-and-tabs": 1, //disallow mixed spaces and tabs for indentation (recommended)
     "no-multiple-empty-lines": [1, { "max": 1 }], //disallow multiple empty lines
     "no-negated-condition": 1, //disallow negated conditions
-    "no-nested-ternary": 0, //disallow nested ternary expressions
+    "no-nested-ternary": 1, //disallow nested ternary expressions
     "no-new-object": 1, //disallow the use of the Object constructor
     "no-restricted-syntax": [
       1,
@@ -234,7 +234,7 @@
     "arrow-body-style": [1, "as-needed"], // require braces in arrow function body
     "arrow-parens": [0, "always"], // require parens in arrow function arguments
     "arrow-spacing": [1, { "before": true, "after": true }], //require space before/after arrow function's arrow (fixable)
-    "constructor-super": 1, //verify calls of super() in constructors
+    "constructor-super": 0, //verify calls of super() in constructors
     "no-confusing-arrow": 1, // disallow arrow functions where a condition is expected
     "generator-star-spacing": [1, "after"], // enforce spacing around the * in generator functions (fixable)
     "no-class-assign": 1, //disallow modifying variables of class declarations
@@ -244,19 +244,19 @@
     "no-var": 1, //require let or const instead of var
     "object-shorthand": 1, // (see Babel section) require method and property shorthand syntax for object literals
     "prefer-arrow-callback": 1, //suggest using arrow functions as callbacks
-    "prefer-const": 1, //suggest using const declaration for variables that are never modified after declared
+    "prefer-const": 2, //suggest using const declaration for variables that are never modified after declared
     "prefer-reflect": 1, //suggest using Reflect methods where applicable
     "prefer-spread": 1, //suggest using the spread operator instead of .apply().
-    "prefer-template": 1, //suggest using template literals instead of strings concatenation
+    "prefer-template": 0, //suggest using template literals instead of strings concatenation
     "require-yield": 1, //disallow generator functions that do not have yield
 
     /* Legacy */
     "max-depth": [0, 3], //specify the maximum depth that blocks can be nested
-    "max-len": [1, 121, 2], //specify the maximum length of a line in your program
+    "max-len": [1, 81, 2], //specify the maximum length of a line in your program
     "max-params": 0, //limits the number of parameters that can be used in the function declaration.
     "max-statements": 0, //specify the maximum number of statement allowed in a function
-    "no-bitwise": 1, //disallow use of bitwise operators
-    "no-plusplus": 1, //disallow use of unary operators, ++ and --
+    "no-bitwise": 0, //disallow use of bitwise operators
+    "no-plusplus": 0, //disallow use of unary operators, ++ and --
 
     /* React */
     "react/display-name": 0, //Prevent missing displayName in a React component definition
