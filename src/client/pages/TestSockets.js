@@ -20,7 +20,7 @@ export default function TestSockets() {
   };
 
   return (
-    <div>
+    <div className="h-full">
       <span>Hello World ! </span>
       <br />
       <span>This is a socket test !</span>
