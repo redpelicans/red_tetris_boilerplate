@@ -4,6 +4,10 @@
 
 Our naming convention.
 
+## [Project Guidelines](./project-guidelines.md)
+
+Our guidelines.
+
 ## [Server architecture](./server-architecture.md)
 
 The server folder structure.
