@@ -19,7 +19,7 @@ module.exports = () => {
       rules: [
         {
           test: /\.(js|jsx)$/,
-          exclude: /node_modules/,
+          include: path.resolve(__dirname, "src/client"),
           use: {
             loader: "babel-loader",
           },
@@ -34,6 +34,7 @@ module.exports = () => {
         },
         {
           test: /\.scss$/,
+          include: path.resolve(__dirname, "src/client"),
           use: [
             MiniCssExtractPlugin.loader,
             "css-loader",
@@ -45,6 +46,7 @@ module.exports = () => {
     },
 
     resolve: {
+      symlinks: false,
       alias: {
         actions: path.resolve(__dirname, "src/client/actions"),
         components: path.resolve(__dirname, "src/client/components"),
