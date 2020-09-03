@@ -5,9 +5,8 @@
   "private": "true",
   "scripts": {
     "eslint": "eslint src",
-    "start": "webpack-dev-server --open --mode development",
     "client-dist": "NODE_ENV=production webpack --progress --colors",
-    "client-dev": "webpack-dev-server --colors --hot --inline --host 0.0.0.0 --port 3000",
+    "client-dev": "webpack-dev-server --colors --hot --inline --open --port 3000",
     "srv-dev": "DEBUG=tetris:* babel-watch -w src src/server/main.js",
     "srv-dist": "DEBUG=tetris:* babel src --out-dir dist",
     "test": "mocha --require babel-core/register --reporter spec",
