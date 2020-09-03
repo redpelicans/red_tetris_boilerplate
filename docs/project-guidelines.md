@@ -14,11 +14,11 @@ xxx
 
 xxx
 
-### **Projects**
+## **Projects**
 
 https://github.com/jeremie-gauthier/Red-Tetris/projects/1
 https://robinpowered.com/blog/best-practice-system-for-organizing-and-tagging-github-issues/
 
-## **Kanban**
+### **Kanban**
 
-## **Tags**
+### **Tags**
