@@ -7,10 +7,6 @@ module.exports = () => {
 
   return {
     mode: isEnvProduction ? "production" : "development",
-    devtool: "inline-source-map",
-    devServer: {
-      contentBase: "./build",
-    },
 
     entry: path.join(__dirname, "src/client/index.js"),
 
