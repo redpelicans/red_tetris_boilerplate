@@ -1,23 +1,73 @@
-var path = require('path');
+const path = require("path");
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-module.exports = {
-  entry: './src/client/index.js',
+module.exports = () => {
+  const isEnvProduction = process.env.NODE_ENV === "production";
 
-  output: {
-    path: path.join(__dirname, 'build'),
-    filename: 'bundle.js',
-  },
+  return {
+    mode: isEnvProduction ? "production" : "development",
+    devtool: "inline-source-map",
+    devServer: {
+      contentBase: "./build",
+    },
 
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          presets: ['es2015', 'react', 'stage-0'],
+    entry: path.join(__dirname, "src/client/index.js"),
+
+    output: {
+      path: path.join(__dirname, "build"),
+      filename: "bundle.js",
+    },
+
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+          },
         },
+        {
+          test: /\.html$/,
+          use: [
+            {
+              loader: "html-loader",
+            },
+          ],
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            "css-loader",
+            "sass-loader",
+            "postcss-loader",
+          ],
+        },
+      ],
+    },
+
+    resolve: {
+      alias: {
+        actions: path.resolve(__dirname, "src/client/actions"),
+        components: path.resolve(__dirname, "src/client/components"),
+        hooks: path.resolve(__dirname, "src/client/hooks"),
+        pages: path.resolve(__dirname, "src/client/pages"),
+        reducers: path.resolve(__dirname, "src/client/reducers"),
       },
+      extensions: ["*", ".js", ".jsx", ".scss"],
+    },
+
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: "[name].css",
+        chunkFilename: "[id].css",
+      }),
+      new HtmlWebPackPlugin({
+        template: "./index.html",
+        filename: "./index.html",
+      }),
     ],
-  },
+  };
 };
