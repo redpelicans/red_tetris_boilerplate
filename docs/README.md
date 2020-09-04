@@ -4,7 +4,7 @@
 
 Our naming convention.
 
-## [Project Guidelines](./project-guidelines.md)
+## [Project guidelines](./project-guidelines.md)
 
 Our guidelines.
 
