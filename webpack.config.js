@@ -20,9 +20,7 @@ module.exports = () => {
         {
           test: /\.(js|jsx)$/,
           include: path.resolve(__dirname, "src/client"),
-          use: {
-            loader: "babel-loader",
-          },
+          use: ["cache-loader", "babel-loader"],
         },
         {
           test: /\.html$/,
@@ -32,6 +30,7 @@ module.exports = () => {
           test: /\.scss$/,
           include: path.resolve(__dirname, "src/client"),
           use: [
+            "cache-loader",
             MiniCssExtractPlugin.loader,
             "css-loader",
             "sass-loader",
@@ -55,8 +54,8 @@ module.exports = () => {
 
     plugins: [
       new MiniCssExtractPlugin({
-        filename: "[name].css",
-        chunkFilename: "[id].css",
+        filename: isEnvProduction ? "[name].css" : "styles.css",
+        chunkFilename: isEnvProduction ? "[id].css" : "styles.css",
       }),
       new HtmlWebPackPlugin({
         template: "./index.html",
