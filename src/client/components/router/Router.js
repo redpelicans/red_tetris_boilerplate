@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import TestSockets from "../../pages/TestSockets";
+import Home from "pages/home/Home";
 
 /*
  **   You can had any Route you need inside the <Switch />
@@ -12,7 +13,7 @@ export default function Router() {
     <BrowserRouter>
       <Switch>
         <Route to="/">
-          <TestSockets />
+          <Home />
         </Route>
       </Switch>
     </BrowserRouter>
