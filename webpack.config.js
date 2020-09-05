@@ -37,6 +37,14 @@ module.exports = () => {
             "postcss-loader",
           ],
         },
+        {
+          test: /\.(png|svg|jpg|gif)$/,
+          use: ["cache-loader", "file-loader"],
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: ["cache-loader", "file-loader"],
+        },
       ],
     },
 
