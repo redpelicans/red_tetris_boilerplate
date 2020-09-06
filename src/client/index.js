@@ -5,8 +5,10 @@ import { StoreContextProvider } from "store";
 import "./styles.scss";
 
 ReactDom.render(
-  <StoreContextProvider>
-    <Router />
-  </StoreContextProvider>,
+  <React.StrictMode>
+    <StoreContextProvider>
+      <Router />
+    </StoreContextProvider>
+  </React.StrictMode>,
   document.getElementById("tetris"),
 );
