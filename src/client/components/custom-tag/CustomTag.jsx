@@ -10,6 +10,6 @@ const CustomTag = React.forwardRef(({ tag: Tag, children, ...rest }, ref) => (
 export default CustomTag;
 
 CustomTag.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.any,
   tag: PropTypes.string.isRequired,
 };

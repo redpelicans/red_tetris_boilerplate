@@ -23,7 +23,7 @@ export default function FlexBox({
 }
 
 FlexBox.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.any,
   className: PropTypes.string,
   direction: PropTypes.oneOf(["row", "col"]),
   height: PropTypes.string,
