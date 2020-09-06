@@ -1,4 +1,4 @@
 export const PLAYERS = {
   GET: "players:get",
-  RES: "players:response",
+  RESPONSE: "players:response",
 };
