@@ -7,8 +7,8 @@
     "eslint": "eslint src",
     "client-dist": "NODE_ENV=production webpack --progress --colors",
     "client-dev": "webpack-dev-server --colors --hot --inline --open --port 3000",
-    "srv-dev": "DEBUG=tetris:* babel-watch -w src src/server/index.js",
-    "srv-dist": "DEBUG=tetris:* babel src --out-dir dist",
+    "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
+    "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
     "test": "mocha --require babel-core/register --reporter spec",
     "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov -r text --require babel-core/register mocha "
   },
