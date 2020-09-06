@@ -1,0 +1,46 @@
+const Joi = require("joi");
+const Hoek = require("@hapi/hoek");
+
+/**
+ * Create an event to be implemented into sockets
+ * @param {String} name - The name of the event
+ * @param {object} rules - Object containing Joi validation rules
+ * @param {Function} fn - The function to be called on event
+ * @returns {*} The event Object
+ */
+
+export const createEvent = (name, rules, fn) => {
+  Hoek.assert(!!name, "helpers - socket.createEvent() must have a name");
+  Hoek.assert(
+    typeof fn === "function",
+    "helpers - socket.createEvent() must have a function",
+  );
+
+  return {
+    name,
+    fn,
+    validation: rules && Joi.object().keys(rules),
+  };
+};
+
+/**
+ * Bind an event to a socket
+ * @param {String} name - The name of the event
+ * @param {any} validation - A Joi object validation
+ * @param {Function} fn - The function to be called on event
+ */
+
+export const bindEvent = (socket, { name, validation, fn }) => {
+  socket.on(name, (payload = {}) => {
+    if (validation) {
+      /* Careful Joi.validate is deprecated (<14) */
+      Joi.validate(payload, validation, (error) => {
+        if (error) {
+          return socket.emit(name, { error });
+        }
+        fn(socket, payload);
+      });
+    }
+    return fn(socket, payload);
+  });
+};
