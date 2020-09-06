@@ -56,6 +56,7 @@ module.exports = () => {
         hooks: path.resolve(__dirname, "src/client/hooks"),
         pages: path.resolve(__dirname, "src/client/pages"),
         reducers: path.resolve(__dirname, "src/client/reducers"),
+        store: path.resolve(__dirname, "src/client/store"),
       },
       extensions: ["*", ".js", ".jsx", ".scss"],
     },
