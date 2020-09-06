@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        black: "#13151a",
         green: {
           50: "#F2FAF2",
           100: "#E6F5E6",
@@ -90,8 +91,21 @@ module.exports = {
           800: "#002E45",
           900: "#001F2E",
         },
+        grey: {
+          50: "#FCFCFC",
+          100: "#F8F8FA",
+          200: "#EEEEF2",
+          300: "#E3E4EA",
+          400: "#CECFDB",
+          500: "#B9BBCB",
+          600: "#A7A8B7",
+          700: "#6F707A",
+          800: "#53545B",
+          900: "#38383D",
+        },
         success: "#009600",
         error: "#E00000",
+        disabled: "#CECFDB",
       },
     },
   },
