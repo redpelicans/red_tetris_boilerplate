@@ -35,7 +35,7 @@ Tetromino.propTypes = {
     "cyan",
   ]),
   shape: PropTypes.oneOf(["I", "O", "T", "L", "J", "Z", "S"]).isRequired,
-  size: PropTypes.string.isRequired,
+  size: PropTypes.string,
 };
 
 // eslint-disable-next-line
