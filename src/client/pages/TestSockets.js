@@ -30,7 +30,7 @@ export default function TestSockets() {
       <br />
       <br />
       <span>
-        You got piece [{piece.piece}] with color [{piece.color}], congrats!
+        You got piece [{piece.shape}] with color [{piece.color}], congrats!
       </span>
     </div>
   );
