@@ -1,3 +1,4 @@
+import { logerror, loginfo } from "utils/log";
 const Joi = require("joi");
 const Hoek = require("@hapi/hoek");
 
@@ -36,9 +37,10 @@ export const bindEvent = (socket, { name, validation, fn }) => {
       /* Careful Joi.validate is deprecated (<14) */
       Joi.validate(payload, validation, (error) => {
         if (error) {
+          logerror("bindEvent error!");
           return socket.emit(name, { error });
         }
-        fn(socket, payload);
+        // fn(socket, payload);
       });
     }
     return fn(socket, payload);
