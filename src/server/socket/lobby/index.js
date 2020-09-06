@@ -1,6 +1,10 @@
 import { createEvent } from "helpers/socket";
-import { validationLobby } from "socket/lobby/schemas";
-import { handlerLobby } from "socket/lobby/handlers";
+import { validationJoinLobby } from "socket/lobby/schemas";
+import { handlerJoinLobby } from "socket/lobby/handlers";
 import { LOBBY } from "./../../../config/actions/lobby";
 
-export const Lobby = createEvent(LOBBY.TEST, validationLobby, handlerLobby);
+export const joinLobby = createEvent(
+  LOBBY.JOIN,
+  validationJoinLobby,
+  handlerJoinLobby,
+);

@@ -4,7 +4,7 @@ import { logerror, loginfo } from "utils/log";
 import { pushLobby } from "service/players";
 import { LOBBY } from "./../../../config/actions/lobby";
 
-export const handlerLobby = async (socket, { name }) => {
+export const handlerJoinLobby = async (socket, { name }) => {
   // const socketId = socket.id;
   // const player = new Player({ name, socketId });
   // pushPlayer(player);
