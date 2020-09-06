@@ -1,6 +1,6 @@
 import { PIECES, COLORS } from "./../../../config/constants";
 
-class Piece {
+export default class Piece {
   constructor(props) {
     this.piece = this.randomPiece();
     this.color = this.randomColor();
@@ -15,4 +15,15 @@ class Piece {
   }
 }
 
-export default Piece;
+// function randomPiece() {
+//   return Math.floor(Math.random() * Math.floor(PIECES.length));
+// }
+
+// function randomColor() {
+//   return Math.floor(Math.random() * Math.floor(COLORS.length));
+// }
+
+// const Piece = {
+//   piece: randomPiece(),
+//   color: randomColor()
+// };
