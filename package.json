@@ -15,6 +15,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.11.5",
     "@hapi/hoek": "^9.1.0",
+    "cache-loader": "^4.1.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
