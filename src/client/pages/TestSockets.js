@@ -41,6 +41,21 @@ export default function TestSockets() {
     socket.emit("players:get");
   };
 
+  const addLobby = () => {
+    console.log("I'm asking to add a Lobby!");
+    socket.emit("lobbies:add", {
+      hash: "12345",
+      name: "lobby1",
+      maxPlayer: 12,
+      owner: player,
+    });
+  };
+
+  const getLobbies = () => {
+    console.log("I'm asking to get all lobbies!");
+    socket.emit("lobbies:get");
+  };
+
   return (
     <div className="h-full">
       <span>Hello World ! </span>
@@ -73,6 +88,12 @@ export default function TestSockets() {
       <br />
       <br />
       <button onClick={callForPlayers}>Trigger players:get!</button>
+      <br />
+      <br />
+      <button onClick={addLobby}>Trigger lobbies:add!</button>
+      <br />
+      <br />
+      <button onClick={getLobbies}>Trigger lobbies:get!</button>
       <br />
     </div>
   );

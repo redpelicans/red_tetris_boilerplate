@@ -2,6 +2,8 @@ import { createEvent, bindEvent } from "helpers/socket";
 import * as piece from "socket/piece";
 import * as player from "socket/player";
 import * as players from "socket/players";
+import * as lobbies from "socket/lobbies";
+
 import { logerror, loginfo } from "utils/log";
 import socketIO from "socket.io";
 
@@ -9,6 +11,7 @@ const handlers = Object.values({
   ...piece,
   ...player,
   ...players,
+  ...lobbies,
 });
 
 const runSocketIo = (httpServer) => {

@@ -2,10 +2,17 @@ import Lobby from "models/lobby";
 
 const lobbies = [];
 
+export const getLobbies = () => {
+  return lobbies;
+};
+
 export const pushLobby = (lobby) => {
   lobbies.push(lobby);
 };
 
-export const getLobbies = () => {
-  return lobbies;
+export const popLobby = (id) => {
+  const lobby = lobbies.filter(function (el) {
+    return el.id === id;
+  });
+  lobbies.pop(lobby);
 };
