@@ -1,6 +1,6 @@
 import { logerror, loginfo } from "utils/log";
-const Joi = require("joi");
-const Hoek = require("@hapi/hoek");
+import Joi from "joi";
+import Hoek from "@hapi/hoek";
 
 /**
  * Create an event to be implemented into sockets
