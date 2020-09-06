@@ -1,5 +1,6 @@
 import Joi from "joi";
 
 export const validationJoinLobby = {
-  // name: Joi.string().required().description("The name of the player"),
+  lobbyId: Joi.string().required().description("The id of the lobby"),
+  playerId: Joi.string().required().description("The id of the player"),
 };

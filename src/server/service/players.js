@@ -9,3 +9,10 @@ export const pushPlayer = (player) => {
 export const getPlayers = () => {
   return players;
 };
+
+export const getPlayer = (id) => {
+  const player = players.filter(function (el) {
+    return el.id === id;
+  });
+  return player;
+};

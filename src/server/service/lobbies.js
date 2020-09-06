@@ -16,3 +16,10 @@ export const popLobby = (id) => {
   });
   lobbies.pop(lobby);
 };
+
+export const joinLobby = (player, id) => {
+  const lobby = lobbies.filter(function (el) {
+    return el.id === id;
+  });
+  lobby.players.push(player);
+};

@@ -1,13 +1,12 @@
-import Lobby from "models/lobby";
 import Response from "models/response";
 import { logerror, loginfo } from "utils/log";
-import { pushLobby } from "service/players";
+import { getPlayer } from "service/players";
+import { joinLobby } from "service/lobbies";
 import { LOBBY } from "./../../../config/actions/lobby";
 
-export const handlerJoinLobby = async (socket, { name }) => {
-  // const socketId = socket.id;
-  // const player = new Player({ name, socketId });
-  // pushPlayer(player);
+export const handlerJoinLobby = async (socket, { playerId, lobbyId }) => {
+  const player = getPlayer(playerId);
+  joinLobby(player, lobbyId);
   // const response = Response.success(PLAYER.CREATE, player);
   // loginfo("Player", response.payload.name, "created!");
   // socket.emit(PLAYER.RESPONSE, { response });
