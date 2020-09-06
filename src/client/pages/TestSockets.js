@@ -7,7 +7,7 @@ export default function TestSockets() {
   const [piece, setPiece] = useState("");
 
   useEffect(() => {
-    socket.on("piece", (data) => {
+    socket.on("piece:send", (data) => {
       console.log("I got a new piece!");
       console.log(data.response);
       setPiece(data.response);
@@ -16,7 +16,7 @@ export default function TestSockets() {
 
   const callForPiece = () => {
     console.log("I'm asking for a new piece!");
-    socket.emit("getPiece");
+    socket.emit("piece:get");
   };
 
   return (
@@ -30,7 +30,7 @@ export default function TestSockets() {
       <br />
       <br />
       <span>
-        You got piece [{piece.piece}] with color [{piece.color}], congrats!
+        You got piece [{piece.shape}] with color [{piece.color}], congrats!
       </span>
     </div>
   );
