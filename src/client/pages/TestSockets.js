@@ -7,6 +7,7 @@ export default function TestSockets() {
   const [piece, setPiece] = useState([]);
   const [playerName, setPlayerName] = useState([]);
   const [player, setPlayer] = useState([]);
+  const [lobby, setLobby] = useState([]);
 
   const handlePlayerName = (e) => {
     setPlayerName(e.target.value);
@@ -23,6 +24,12 @@ export default function TestSockets() {
       console.log("I got a new player!");
       console.log(data.response);
       setPlayer(data.response.payload);
+    });
+
+    socket.on("lobbies:response", (data) => {
+      console.log("I got a new lobby!");
+      console.log(data.response);
+      setLobby(data.response.payload);
     });
   }, []);
 
@@ -54,6 +61,13 @@ export default function TestSockets() {
   const getLobbies = () => {
     console.log("I'm asking to get all lobbies!");
     socket.emit("lobbies:get");
+  };
+
+  const deleteLobby = () => {
+    console.log("I'm asking to delete a Lobby!");
+    socket.emit("lobbies:delete", {
+      id: lobby.id,
+    });
   };
 
   return (
@@ -94,6 +108,9 @@ export default function TestSockets() {
       <br />
       <br />
       <button onClick={getLobbies}>Trigger lobbies:get!</button>
+      <br />
+      <br />
+      <button onClick={deleteLobby}>Trigger lobbies:delete!</button>
       <br />
     </div>
   );

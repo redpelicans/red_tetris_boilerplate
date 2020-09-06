@@ -18,13 +18,13 @@ export const handlerAddLobby = async (
 export const handlerDeleteLobby = async (socket, { id }) => {
   // const lobby = new Lobby({ hash, name, maxPlayer, owner });
   popLobby(id);
-  // const response = Response.success(LOBBIES.ADD, lobby);
-  // loginfo("Lobby", response.payload.name, "created!");
+  // const response = Response.success(LOBBIES.DELETE, null);
+  loginfo("Lobby with id", id, "deleted!");
   // socket.emit(LOBBIES.RESPONSE, { response });
 };
 
 export const handlerGetLobbies = async (socket) => {
   const response = getLobbies();
   loginfo(response);
-  socket.emit(LOBBIES.RESPONSE, { response });
+  // socket.emit(LOBBIES.RESPONSE, { response });
 };
