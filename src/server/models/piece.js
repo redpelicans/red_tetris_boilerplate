@@ -1,29 +1,25 @@
-import { PIECES, COLORS } from "./../../../config/constants";
+import { TETROMINO } from "./../../config/models/piece";
+
+const randomShape = () => {
+  return TETROMINO.shape[
+    Math.floor(Math.random() * Math.floor(TETROMINO.shape.length))
+  ];
+};
+
+const randomColor = () => {
+  return TETROMINO.color[
+    Math.floor(Math.random() * Math.floor(TETROMINO.color.length))
+  ];
+};
 
 export default class Piece {
-  constructor(props) {
-    this.piece = this.randomPiece();
-    this.color = this.randomColor();
-  }
-
-  randomPiece() {
-    return Math.floor(Math.random() * Math.floor(PIECES.length));
-  }
-
-  randomColor() {
-    return Math.floor(Math.random() * Math.floor(COLORS.length));
+  constructor() {
+    this.shape = randomShape();
+    this.color = randomColor();
   }
 }
 
-// function randomPiece() {
-//   return Math.floor(Math.random() * Math.floor(PIECES.length));
-// }
-
-// function randomColor() {
-//   return Math.floor(Math.random() * Math.floor(COLORS.length));
-// }
-
-// const Piece = {
-//   piece: randomPiece(),
-//   color: randomColor()
-// };
+// export const Piece = () => ({
+//   piece: randomShape(),
+//   color: randomColor(),
+// });

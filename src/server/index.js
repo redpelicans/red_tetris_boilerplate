@@ -1,7 +1,5 @@
-import runServer from "./http";
-import runSocketIo from "./socket";
-import params from "../../config/params";
-import { logerror, loginfo } from "./log";
+import runHttpServer from "httpserver";
+import runSocketIo from "socket";
 
-const httpParams = runServer(params);
-runSocketIo(httpParams);
+const httpServer = runHttpServer();
+runSocketIo(httpServer);

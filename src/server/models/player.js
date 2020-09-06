@@ -1,12 +1,7 @@
-import { PIECES, COLORS } from "../config/constants";
-import { create } from "..";
-
-class Player {
-  constructor(props) {
-    this.id = props.id;
-    this.name = props.name;
-    this.socketId = props.socketId;
+export default class Player {
+  constructor({ id, name, socketId }) {
+    this.id = id;
+    this.name = name;
+    this.socketId = socketId;
   }
 }
-
-export default Player;

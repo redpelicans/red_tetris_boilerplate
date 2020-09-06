@@ -1,14 +1,14 @@
-import { createEvent, bindEvent } from "./../helpers/socket";
-import * as piece from "./piece";
-import { logerror, loginfo } from "../log";
+import { createEvent, bindEvent } from "helpers/socket";
+import * as piece from "socket/piece";
+import { logerror, loginfo } from "utils/log";
 import socketIO from "socket.io";
 
 const handlers = Object.values({
   ...piece,
 });
 
-const runSocketIo = (params) => {
-  const io = socketIO(params.httpServer);
+const runSocketIo = (httpServer) => {
+  const io = socketIO(httpServer);
 
   io.on("connection", (socket) => {
     loginfo("A new user has connected!");
@@ -17,8 +17,8 @@ const runSocketIo = (params) => {
     });
   });
 
-  loginfo("Server launched and ready!");
-  return { ...params, io };
+  loginfo("Sockets have been initialized!");
+  return { httpServer, io };
 };
 
 export default runSocketIo;

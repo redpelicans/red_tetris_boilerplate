@@ -1,13 +1,14 @@
-import { logerror, loginfo } from "../log";
+import { logerror, loginfo } from "utils/log";
 import express from "express";
 import http from "http";
 import path from "path";
+import params from "../../config/params";
 
 const app = express();
 const httpServer = http.createServer(app);
 
-const runServer = (params) => {
-  /* To check and remove if needed */
+const runHttpServer = () => {
+  /* To check and remove if not needed */
   const file =
     params.url === "/bundle.js" ? "/../../build/bundle.js" : "/../index.html";
 
@@ -16,10 +17,10 @@ const runServer = (params) => {
   });
 
   httpServer.listen(params.server.port, () => {
-    loginfo("listening on port:", params.server.port);
+    loginfo("Server listening on port:", params.server.port);
   });
 
-  return { ...params, httpServer };
+  return httpServer;
 };
 
-export default runServer;
+export default runHttpServer;

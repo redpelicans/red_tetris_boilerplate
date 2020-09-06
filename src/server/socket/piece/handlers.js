@@ -1,8 +1,7 @@
-import { logerror, loginfo } from "log";
 import Piece from "models/piece";
+import { PIECE } from "./../../../config/actions/piece";
 
 export const handlerGetPiece = async (socket) => {
   const response = new Piece();
-  loginfo(response);
-  socket.emit("piece:send", { response });
+  socket.emit(PIECE.SEND, { response });
 };

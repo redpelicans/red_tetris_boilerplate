@@ -1,12 +1,5 @@
-class Lobbies {
-    constructor(props) {
-      this.lobbies = props.lobbies;
-    }
-
-    getLobbies();
-    pushLobby();
-    popLobby();  
+export default class Lobbies {
+  constructor({ lobbies }) {
+    this.lobbies = lobbies;
   }
-  
-  export default Lobbies;
-  
+}

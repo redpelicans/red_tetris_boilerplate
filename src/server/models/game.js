@@ -1,8 +1,6 @@
-class Game {
-    constructor(props) {
-        this.id = props.id;
-        this.name = props.name;
-    }
+export default class Game {
+  constructor({ id, name }) {
+    this.id = id;
+    this.name = name;
+  }
 }
-
-export default Game;

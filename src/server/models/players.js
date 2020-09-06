@@ -1,11 +1,7 @@
-class Players {
-  constructor(props) {
-    this.Players = props.Players;
+export default class Players {
+  constructor({ players }) {
+    this.players = players;
   }
-
-  getPlayers();
-  pushPlayer();
-  popPlayer();  
 }
 
-export default Players;
+export default players;
