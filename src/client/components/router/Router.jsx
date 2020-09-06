@@ -5,7 +5,8 @@ import Home from "pages/home/Home";
 
 /*
  **   You can had any Route you need inside the <Switch />
- **   The component that should be display for this Route must be passed as children
+ **   The component that should be display for this Route
+ **     must be passed as children.
  **   Documentation: https://reactrouter.com/web/guides/quick-start
  */
 export default function Router() {
