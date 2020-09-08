@@ -13,6 +13,11 @@ export const handlerAddLobby = async (
   const response = Response.success(LOBBIES.ADD, lobby);
   loginfo("Lobby", response.payload.name, "created!");
   socket.emit(LOBBIES.RESPONSE, { response });
+
+  // send all lobbies
+  const lobbies = getLobbies();
+  socket.broadcast.emit(LOBBIES.PUBLISH, { lobbies });
+  socket.emit(LOBBIES.PUBLISH, { lobbies });
 };
 
 export const handlerDeleteLobby = async (socket, { id }) => {
@@ -26,5 +31,5 @@ export const handlerDeleteLobby = async (socket, { id }) => {
 export const handlerGetLobbies = async (socket) => {
   const response = getLobbies();
   loginfo(response);
-  // socket.emit(LOBBIES.RESPONSE, { response });
+  socket.emit(LOBBIES.PUBLISH, { response });
 };

@@ -16,3 +16,12 @@ export const getPlayer = (id) => {
   });
   return player;
 };
+
+export const popPlayer = (socketId) => {
+  players.filter(function (el) {
+    if (el.socketId === socketId) {
+      const index = players.indexOf(el);
+      players.splice(index, 1);
+    }
+  });
+};

@@ -11,10 +11,17 @@ export const pushLobby = (lobby) => {
 };
 
 export const popLobby = (id) => {
-  const lobby = lobbies.filter(function (el) {
-    return el.id === id;
+  lobbies.filter(function (el) {
+    if (el.id === id) {
+      const index = lobbies.indexOf(el);
+      lobbies.splice(index, 1);
+    }
   });
-  lobbies.pop(lobby);
+
+  // const lobby = lobbies.filter(function (el) {
+  //   return el.id === id;
+  // });
+  // lobbies.pop(lobby);
 };
 
 export const joinLobby = (player, id) => {
