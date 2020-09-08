@@ -1,0 +1,62 @@
+.tetromino-red {
+  @apply bg-red-500;
+  border-width: 3px;
+  border-top-color: #f39999;
+  border-left-color: #f39999;
+  border-right-color: #860000;
+  border-bottom-color: #860000;
+}
+
+.tetromino-green {
+  @apply bg-green-500;
+  border-width: 3px;
+  border-top-color: #99d599;
+  border-left-color: #99d599;
+  border-right-color: #005a00;
+  border-bottom-color: #005a00;
+}
+
+.tetromino-yellow {
+  @apply bg-yellow-500;
+  border-width: 3px;
+  border-top-color: #fff199;
+  border-left-color: #fff199;
+  border-right-color: #998500;
+  border-bottom-color: #998500;
+}
+
+.tetromino-orange {
+  @apply bg-orange-500;
+  border-width: 3px;
+  border-top-color: #ffd6ad;
+  border-left-color: #ffd6ad;
+  border-right-color: #995c1f;
+  border-bottom-color: #995c1f;
+}
+
+.tetromino-blue {
+  @apply bg-blue-500;
+  border-width: 3px;
+  border-top-color: #99c2d6;
+  border-left-color: #99c2d6;
+  border-right-color: #003d5c;
+  border-bottom-color: #003d5c;
+}
+
+.tetromino-cyan {
+  @apply bg-cyan-500;
+  border-width: 3px;
+  border-top-color: #99ffeb;
+  border-left-color: #99ffeb;
+  border-right-color: #00997a;
+  border-bottom-color: #00997a;
+}
+
+.tetromino-purple {
+  @apply bg-purple-500;
+  border-width: 3px;
+  border-top-color: #d699d6;
+  border-left-color: #d699d6;
+  border-right-color: #5c005c;
+  border-bottom-color: #5c005c;
+}

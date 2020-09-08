@@ -1,0 +1,37 @@
+@font-face {
+  font-family: Grandstander;
+  src: url("./assets/fonts/Grandstander-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: Grandstander;
+  src: url("./assets/fonts/Grandstander-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: Grandstander;
+  src: url("./assets/fonts/Grandstander-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: Grandstander;
+  src: url("./assets/fonts/Grandstander-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-stretch: normal;
+}
+
+html {
+  font-family: Grandstander;
+  font-size: 16px;
+  @apply text-black;
+}

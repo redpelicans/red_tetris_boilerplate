@@ -37,6 +37,14 @@ module.exports = () => {
             "postcss-loader",
           ],
         },
+        {
+          test: /\.(png|svg|jpg|gif)$/,
+          use: ["cache-loader", "file-loader"],
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: ["cache-loader", "file-loader"],
+        },
       ],
     },
 
@@ -48,6 +56,7 @@ module.exports = () => {
         hooks: path.resolve(__dirname, "src/client/hooks"),
         pages: path.resolve(__dirname, "src/client/pages"),
         reducers: path.resolve(__dirname, "src/client/reducers"),
+        store: path.resolve(__dirname, "src/client/store"),
       },
       extensions: ["*", ".js", ".jsx", ".scss"],
     },
