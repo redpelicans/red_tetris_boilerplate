@@ -14,7 +14,14 @@ function PlayersList(props) {
 function LobbiesList(props) {
   const lobbies = props.lobbies;
   const listItems = lobbies.map((lobby, index) => (
-    <li key={lobby.id}>{"lobby " + index + " : " + lobby.name}</li>
+    <li key={lobby.id}>
+      {"lobby " +
+        index +
+        " / name : " +
+        lobby.name +
+        " / owner : " +
+        lobby.owner.name}
+    </li>
   ));
   return <ul>{listItems}</ul>;
 }
@@ -54,6 +61,10 @@ export default function TestSockets() {
   const handleLobbyMaxPlayers = (e) => {
     setLobbyToCreate({ ...lobbyToCreate, maxPlayer: e.target.value });
   };
+
+  useEffect(() => {
+    setLobbyToCreate({ ...lobbyToCreate, owner: myPlayer });
+  }, [myPlayer]);
 
   useEffect(() => {
     socket.on("piece:send", (data) => {
