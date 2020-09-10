@@ -20,11 +20,19 @@ export const handlerAddLobby = async (
   socket.emit(LOBBIES.PUBLISH, { lobbies });
 };
 
-export const handlerDeleteLobby = async (socket, { id }) => {
+export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
   // const lobby = new Lobby({ hash, name, maxPlayer, owner });
-  popLobby(id);
+  const res = popLobby(lobbyId, ownerId);
   // const response = Response.success(LOBBIES.DELETE, null);
-  loginfo("Lobby with id", id, "deleted!");
+  if (res) {
+    loginfo("Lobby with id", lobbyId, "deleted!");
+    // send all lobbies
+    const lobbies = getLobbies();
+    socket.broadcast.emit(LOBBIES.PUBLISH, { lobbies });
+    socket.emit(LOBBIES.PUBLISH, { lobbies });
+  } else {
+    loginfo("Cannot delete with lobby id", lobbyId, "and ownerId", ownerId);
+  }
   // socket.emit(LOBBIES.RESPONSE, { response });
 };
 

@@ -11,6 +11,15 @@ function PlayersList(props) {
   return <ul>{listItems}</ul>;
 }
 
+function deleteLobby(props) {
+  console.log(props);
+  console.log("I'm asking to delete a Lobby!");
+  socket.emit("lobbies:delete", {
+    lobbyId: props.lobbyId,
+    ownerId: props.playerId,
+  });
+}
+
 function LobbiesList(props) {
   const lobbies = props.lobbies;
   const listItems = lobbies.map((lobby, index) => (
@@ -20,7 +29,17 @@ function LobbiesList(props) {
         " / name : " +
         lobby.name +
         " / owner : " +
-        lobby.owner.name}
+        lobby.owner.name +
+        " / "}
+      {
+        <button
+          onClick={() =>
+            deleteLobby({ lobbyId: lobby.id, playerId: props.player.id })
+          }
+        >
+          Delete lobby if owner!
+        </button>
+      }
     </li>
   ));
   return <ul>{listItems}</ul>;
@@ -131,13 +150,6 @@ export default function TestSockets() {
     socket.emit("lobbies:get");
   };
 
-  const deleteLobby = () => {
-    console.log("I'm asking to delete a Lobby!");
-    socket.emit("lobbies:delete", {
-      id: lobby.id,
-    });
-  };
-
   return (
     <div className="h-full">
       <span>DIRTY SOCKET TEST !</span>
@@ -218,7 +230,7 @@ export default function TestSockets() {
       <br />
       <span>List of lobbies : </span>
       <br />
-      <LobbiesList lobbies={lobbies} />
+      <LobbiesList lobbies={lobbies} fct={deleteLobby} player={myPlayer} />
       <br />
     </div>
   );

@@ -10,7 +10,8 @@ export const validationAddLobby = {
 };
 
 export const validationDeleteLobby = {
-  id: Joi.string().required().description("The id of the lobby"),
+  lobbyId: Joi.string().required().description("The id of the lobby"),
+  ownerId: Joi.string().required().description("The id of the owner"),
 };
 
 export const validationGetLobbies = {};

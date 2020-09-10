@@ -10,14 +10,17 @@ export const pushLobby = (lobby) => {
   lobbies.push(lobby);
 };
 
-export const popLobby = (id) => {
-  lobbies.filter(function (el) {
-    if (el.id === id) {
+export const popLobby = (lobbyId, ownerId) => {
+  var res = false;
+  res = lobbies.filter(function (el) {
+    if (el.id === lobbyId && el.owner.id == ownerId) {
       const index = lobbies.indexOf(el);
       lobbies.splice(index, 1);
+      return true;
     }
   });
-
+  if (res) return true;
+  else return false;
   // const lobby = lobbies.filter(function (el) {
   //   return el.id === id;
   // });
