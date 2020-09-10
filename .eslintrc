@@ -91,7 +91,7 @@
     "no-labels": 1, //disallow use of labeled statements
     "no-lone-blocks": 1, //disallow unnecessary nested blocks
     "no-loop-func": 1, //disallow creation of functions within loops
-    "no-magic-numbers": [1, { "ignore": [-1, 0, 1] }], // disallow the use of magic numbers
+    "no-magic-numbers": [0, { "ignore": [-1, 0, 1] }], // disallow the use of magic numbers
     "no-multi-spaces": 1, //disallow use of multiple spaces (fixable)
     "no-multi-str": 1, //disallow use of multiline strings
     "no-native-reassign": 1, //disallow reassignments of native objects
@@ -138,7 +138,7 @@
     "no-shadow": 0, //disallow declaration of variables already declared in the outer scope
     "no-undef-init": 1, //disallow use of undefined when initializing variables
     "no-undef": 1, //disallow use of undeclared variables unless mentioned in a /*global */ block (recommended)
-    "no-undefined": 1, //disallow use of undefined variable
+    "no-undefined": 0, //disallow use of undefined variable
     "no-unused-vars": [1, { "vars": "local", "args": "after-used" }], //disallow declaration of variables that are not used in the code (recommended)
     "no-use-before-define": 1, //disallow use of variables before they are defined
 
@@ -211,7 +211,7 @@
     "object-curly-spacing": [1, "always"], // require or disallow padding inside curly braces (fixable)
     "one-var": [0, "never"], //require or disallow one variable declaration per function
     "operator-assignment": [1, "never"], //require assignment operator shorthand where possible or prohibit it entirely
-    "operator-linebreak": [1, "after"], //enforce operators to be placed before or after line breaks
+    "operator-linebreak": [0, "after"], //enforce operators to be placed before or after line breaks
     "padded-blocks": [0, "never"], //enforce padding within blocks
     "quote-props": [0, "as-needed"], //require quotes around object literal property names
     "quotes": [1, "double"], //specify whether backticks, double or single quotes should be used (fixable)
