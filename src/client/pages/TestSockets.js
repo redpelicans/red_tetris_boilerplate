@@ -144,8 +144,14 @@ export default function TestSockets() {
   };
 
   const addLobby = () => {
-    console.log("I'm asking to add a Lobby!");
-    socket.emit("lobbies:add", lobbyToCreate);
+    if (
+      lobbyToCreate.owner.ownerId !== "" &&
+      lobbyToCreate.owner.name != "" &&
+      lobbyToCreate.owner.socketId != ""
+    ) {
+      console.log("I'm asking to add a Lobby!");
+      socket.emit("lobbies:add", lobbyToCreate);
+    }
   };
 
   const getLobbies = () => {
