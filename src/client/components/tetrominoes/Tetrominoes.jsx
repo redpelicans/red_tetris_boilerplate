@@ -3,7 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import PropTypes from "prop-types";
 import "./Tetrominoes.scss";
 
-export default function Tetromino({ shape, color, size = "10" }) {
+export default function Tetromino({ shape, color, size = 10 }) {
   switch (shape) {
     case "I":
       return <TetrominoI color={color} size={size} />;
@@ -35,7 +35,7 @@ Tetromino.propTypes = {
     "cyan",
   ]),
   shape: PropTypes.oneOf(["I", "O", "T", "L", "J", "Z", "S"]).isRequired,
-  size: PropTypes.string,
+  size: PropTypes.number,
 };
 
 // eslint-disable-next-line
