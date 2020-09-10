@@ -30,8 +30,8 @@ module.exports = () => {
           test: /\.scss$/,
           include: path.resolve(__dirname, "src/client"),
           use: [
-            "cache-loader",
             MiniCssExtractPlugin.loader,
+            "cache-loader",
             "css-loader",
             "sass-loader",
             "postcss-loader",
