@@ -33,6 +33,9 @@ function LobbiesList(props) {
         " / "}
       {
         <button
+          style={{
+            color: "red",
+          }}
           onClick={() =>
             deleteLobby({ lobbyId: lobby.id, playerId: props.player.id })
           }
@@ -155,7 +158,14 @@ export default function TestSockets() {
       <span>DIRTY SOCKET TEST !</span>
       <br />
       <br />
-      <button onClick={callForPiece}>Get a piece!</button>
+      <button
+        style={{
+          color: "red",
+        }}
+        onClick={callForPiece}
+      >
+        Get a piece!
+      </button>
       <br />
       <br />
       <span>
@@ -173,7 +183,14 @@ export default function TestSockets() {
         value={playerName}
       />
       <br />
-      <button onClick={callForPlayer}>Create a player!</button>
+      <button
+        style={{
+          color: "red",
+        }}
+        onClick={callForPlayer}
+      >
+        Create a player!
+      </button>
       <br />
       <br />
       <span>
@@ -217,7 +234,14 @@ export default function TestSockets() {
         value={lobbyToCreate.maxPlayer}
       />
       <br />
-      <button onClick={addLobby}>Create a lobby!</button>
+      <button
+        style={{
+          color: "red",
+        }}
+        onClick={addLobby}
+      >
+        Create a lobby!
+      </button>
       <br />
       <br />
       <span>
