@@ -14,6 +14,7 @@
 
 ```
 Emit a success or error object
+payload: Objet Player
 ```
 
 ### **Client**
@@ -22,4 +23,14 @@ Emit a success or error object
 
 ```
 Ask server to create a new player.
+Send : name
 ```
+
+`player:delete`
+
+```
+Ask server to delete player.
+Send : id
+```
+
+
