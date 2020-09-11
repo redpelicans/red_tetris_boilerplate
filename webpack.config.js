@@ -55,12 +55,12 @@ module.exports = () => {
         {
           test: /\.(png|svg|jpe?g|gif)$/,
           include: path.resolve(__dirname, CLIENT_DIR, "assets/img"),
-          use: ["cache-loader", "file-loader"],
+          use: "file-loader",
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
           include: path.resolve(__dirname, CLIENT_DIR, "assets/fonts"),
-          use: ["cache-loader", "file-loader"],
+          use: "file-loader",
         },
       ],
     },
