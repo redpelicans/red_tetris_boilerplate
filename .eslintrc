@@ -58,7 +58,7 @@
     "no-unexpected-multiline": 1, //Avoid code that looks like two expressions but is actually one
     "no-unreachable": 1, //disallow unreachable statements after a return, throw, continue, or break statement (recommended)
     "use-isnan": 1, //disallow comparisons with the value NaN (recommended)
-    "valid-jsdoc": 1, //Ensure JSDoc comments are valid
+    "valid-jsdoc": 0, //Ensure JSDoc comments are valid
     "valid-typeof": 1, //Ensure that the results of typeof are compared against a valid string (recommended)
 
     /* Best Practices */
