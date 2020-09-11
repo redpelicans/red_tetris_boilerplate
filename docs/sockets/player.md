@@ -24,6 +24,7 @@ payload: Objet Player
 ```
 Ask server to create a new player.
 Send : name
+Server will : create an Object Player and emit a player:response
 ```
 
 `player:restore`
@@ -31,7 +32,7 @@ Send : name
 ```
 Ask server to restore a previous player.
 Send : oldSocketId
-Serder sends player:response // lobbies:publish // subscribe lobbies
+Serder will : update the socketId and send player:response / subscribe the player to lobbies / send lobbies:publish
 ```
 
 `player:delete`
@@ -39,6 +40,7 @@ Serder sends player:response // lobbies:publish // subscribe lobbies
 ```
 Ask server to delete player.
 Send : id
+Server will : delete the Object Player in players
 ```
 
 
