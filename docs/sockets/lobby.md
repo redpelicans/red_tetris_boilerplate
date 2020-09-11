@@ -17,7 +17,7 @@
 
 ```
 Emit a success or error object.
-payload: ObjectLobby
+payload: Lobby
 ```
 
 `lobby:publish`
@@ -40,10 +40,15 @@ Send : Objet Lobby, List playerId, userId
 ```
 
 `lobby:subscribe`
+```
 Ask a subscription demand on 'group:lobby' to the server.
-The server should emit the 'lobby:response' to the new subscriber.
 Send : lobbyId, userId
+Server will : add the player to the group 'group:lobbyid' and emit 'lobby:response'
+```
 
 `lobby:unsubscribe`
+```
 Ask an unsubscription demand on 'group:lobby' to the server.
 Send : lobbyId, userId
+Server will : remove the player from the group 'group:lobbyid'
+```
