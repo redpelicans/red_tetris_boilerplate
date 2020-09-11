@@ -26,6 +26,14 @@ Ask server to create a new player.
 Send : name
 ```
 
+`player:restore`
+
+```
+Ask server to restore a previous player.
+Send : oldSocketId
+Serder sends player:response // lobbies:publish // subscribe lobbies
+```
+
 `player:delete`
 
 ```
