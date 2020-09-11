@@ -17,6 +17,7 @@
 
 ```
 Emit a success or error object.
+payload: ObjectLobby
 ```
 
 `lobby:publish`
@@ -25,20 +26,24 @@ Emit a success or error object.
 Emit the actualized state of the Lobby.
 ```
 
+`lobby:ban`
+```
+Emit a response with lobby:ban and the reason.
+```
+
 ### **Client**
 
-`lobby:delete`
-
+`lobby:update`
 ```
-The owner ask to delete the current lobby.
+The owner change the current settings.
+Send : Objet Lobby, List playerId, userId
 ```
 
 `lobby:subscribe`
+Ask a subscription demand on 'group:lobby' to the server.
+The server should emit the 'lobby:response' to the new subscriber.
+Send : lobbyId, userId
 
 `lobby:unsubscribe`
-
-`lobby:join`
-
-```
-A user ask to join an existing lobby.
-```
+Ask an unsubscription demand on 'group:lobby' to the server.
+Send : lobbyId, userId
