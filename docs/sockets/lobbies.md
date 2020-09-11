@@ -19,6 +19,7 @@ Send an array of objects [Lobby]
 
 ```
 Emit a success or error object
+payload: Lobby "full"
 ```
 
 ### **Client**
@@ -40,7 +41,7 @@ Ask a unsubscription demand on 'group:lobbies' to the server.
 
 ```
 Create a new lobby.
-Emit the lobby object.
+Send : Object Lobby without id
 ```
 
 `lobbies:delete`
