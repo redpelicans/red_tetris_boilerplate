@@ -1,0 +1,52 @@
+$tetrominoes: (
+  red: (
+    theme("colors.red.300"),
+    theme("colors.red.500"),
+    theme("colors.red.700"),
+  ),
+  green: (
+    theme("colors.green.300"),
+    theme("colors.green.500"),
+    theme("colors.green.700"),
+  ),
+  yellow: (
+    theme("colors.yellow.300"),
+    theme("colors.yellow.500"),
+    theme("colors.yellow.700"),
+  ),
+  orange: (
+    theme("colors.orange.300"),
+    theme("colors.orange.500"),
+    theme("colors.orange.700"),
+  ),
+  blue: (
+    theme("colors.blue.300"),
+    theme("colors.blue.500"),
+    theme("colors.blue.700"),
+  ),
+  cyan: (
+    theme("colors.cyan.300"),
+    theme("colors.cyan.500"),
+    theme("colors.cyan.700"),
+  ),
+  purple: (
+    theme("colors.purple.300"),
+    theme("colors.purple.500"),
+    theme("colors.purple.700"),
+  ),
+);
+
+@each $name, $colors in $tetrominoes {
+  $light: nth($colors, 1);
+  $main: nth($colors, 2);
+  $dark: nth($colors, 3);
+
+  .tetromino-#{$name} {
+    border-width: 3px;
+    background-color: $main;
+    border-top-color: $light;
+    border-left-color: $light;
+    border-right-color: $dark;
+    border-bottom-color: $dark;
+  }
+}
