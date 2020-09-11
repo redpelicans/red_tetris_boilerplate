@@ -48,8 +48,8 @@ module.exports = () => {
             MiniCssExtractPlugin.loader,
             "cache-loader",
             "css-loader",
-            "sass-loader",
             "postcss-loader",
+            "sass-loader",
           ],
         },
         {
