@@ -70,6 +70,7 @@ module.exports = () => {
       alias: {
         actions: path.resolve(__dirname, CLIENT_DIR, "actions"),
         components: path.resolve(__dirname, CLIENT_DIR, "components"),
+        helpers: path.resolve(__dirname, CLIENT_DIR, "helpers"),
         hooks: path.resolve(__dirname, CLIENT_DIR, "hooks"),
         pages: path.resolve(__dirname, CLIENT_DIR, "pages"),
         reducers: path.resolve(__dirname, CLIENT_DIR, "reducers"),
