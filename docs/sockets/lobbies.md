@@ -2,16 +2,17 @@
 
 ## Properties
 
-This is just an array of [Lobby](./lobby.md).
+This is just a key value array of objects [Lobby](./lobby.md).
+key value : lobby id
 
 ## Actions
 
 ### **Server**
 
 `lobbies:publish`
-
 ```
 Send the actual state of lobbies to all subscribers of group 'group:lobbies'.
+Send an array of objects [Lobby]
 ```
 
 `lobbies:response`
@@ -36,6 +37,13 @@ Ask a unsubscription demand on 'group:lobbies' to the server.
 ```
 
 `lobbies:add`
+
+```
+Create a new lobby.
+Emit the lobby object.
+```
+
+`lobbies:delete`
 
 ```
 Create a new lobby.
