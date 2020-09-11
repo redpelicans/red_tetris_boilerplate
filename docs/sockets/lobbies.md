@@ -12,14 +12,13 @@ key value : lobby id
 `lobbies:publish`
 ```
 Send the actual state of lobbies to all subscribers of group 'group:lobbies'.
-Send an array of objects [Lobby]
 ```
 
 `lobbies:response`
 
 ```
 Emit a success or error object
-payload: Lobby "full"
+payload: Lobbies
 ```
 
 ### **Client**
@@ -29,13 +28,15 @@ payload: Lobby "full"
 ```
 Ask a subscription demand on 'group:lobbies' to the server.
 Send : userId ?
-Server will : add the playter to the groupe "lobbies:group" and emit a lobbies:response
+Server will : add the player to the group "group:lobbies" and emit a lobbies:response
 ```
 
 `lobbies:unsubscribe`
 
 ```
 Ask a unsubscription demand on 'group:lobbies' to the server.
+Send : userId ?
+Server will : remove the player from the group "group:lobbies"
 ```
 
 `lobbies:add`
