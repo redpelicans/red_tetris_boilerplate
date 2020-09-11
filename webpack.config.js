@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ErrorOverlayPlugin = require("error-overlay-webpack-plugin");
 
 const CLIENT_DIR = "src/client";
 
@@ -17,6 +18,8 @@ module.exports = () => {
       filename: "bundle.js",
       publicPath: "/",
     },
+
+    devtool: "cheap-module-source-map",
 
     devServer: {
       historyApiFallback: true,
@@ -76,6 +79,7 @@ module.exports = () => {
     },
 
     plugins: [
+      new ErrorOverlayPlugin(),
       new MiniCssExtractPlugin({
         filename: isEnvProduction ? "[name].css" : "styles.css",
         chunkFilename: isEnvProduction ? "[id].css" : "styles.css",
