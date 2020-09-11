@@ -28,7 +28,8 @@ payload: Lobby "full"
 
 ```
 Ask a subscription demand on 'group:lobbies' to the server.
-The server should emit the 'lobbies:publish' to the new subscriber.
+Send : userId ?
+Server will : add the playter to the groupe "lobbies:group" and emit a lobbies:response
 ```
 
 `lobbies:unsubscribe`
@@ -42,11 +43,12 @@ Ask a unsubscription demand on 'group:lobbies' to the server.
 ```
 Create a new lobby.
 Send : Object Lobby without id
+Server will : create an Object Lobby and emit a lobbies:response
 ```
 
 `lobbies:delete`
 
 ```
-Create a new lobby.
-Emit the lobby object.
+Delete a lobby.
+Send : lobbyId and userId 
 ```
