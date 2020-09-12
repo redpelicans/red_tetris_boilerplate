@@ -2,7 +2,6 @@ import { createEvent } from "helpers/socket";
 import {
   validationAddLobby,
   validationDeleteLobby,
-  validationGetLobbies,
   validationSubscribeLobbies,
   validationUnsubscribeLobbies,
 } from "socket/lobbies/schemas";

@@ -11,10 +11,10 @@ export const getPlayer = (id) => {
 };
 
 export const getPlayerId = (socketId) => {
-  const id = Object.keys(players).map((key) => {
-    if (players[key].socketId === socketId) return key;
-  });
-  return id;
+  const playerId = Object.keys(players).find(
+    (key) => players[key].socketId === socketId,
+  );
+  return playerId;
 };
 
 export const pushPlayer = (player) => {

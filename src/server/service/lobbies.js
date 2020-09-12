@@ -26,8 +26,6 @@ export const joinLobby = (player, lobbyId) => {
 
 export const leaveLobby = (playerId, lobbyId) => {
   const players = lobbies[lobbyId].players;
-  const newPlayers = players.map((player) => {
-    return player.id !== playerId;
-  });
+  const newPlayers = players.map((player) => player.id !== playerId);
   lobbies[lobbyId].players = newPlayers;
 };
