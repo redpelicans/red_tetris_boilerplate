@@ -28,7 +28,7 @@ export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
     const lobbies = getLobbies();
     socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
     socket.leave("group:" + lobby.id);
-    // make everyone leave?
+    /* Make everyone leave? */
     socket.emit(LOBBIES.PUBLISH, { lobbies });
   } else {
     loginfo("Cannot delete with lobby id", lobbyId, "and ownerId", ownerId);

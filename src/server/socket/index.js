@@ -23,31 +23,31 @@ const runSocketIo = (httpServer) => {
   io.on("connection", async (socket) => {
     loginfo("A new user has connected!");
 
-    // Test on connection
+    /* Test on connection */
     const players = await getComplexObjectFromRedis("players");
     socket.emit("players:publish", { players });
 
     const lobbies = getLobbies();
     socket.emit(LOBBIES.PUBLISH, { lobbies });
 
-    // Test on disconnect
+    /* Test on disconnect */
     socket.on("disconnect", async (reason) => {
       loginfo(socket.id, "disconnect with reason", reason);
       if (reason === "io server disconnect") {
-        // the disconnection was initiated by the server, you need to reconnect manually
+        /* the disconnection was initiated by the server, you need to reconnect manually */
         socket.connect();
       }
-      // else the socket will automatically try to reconnect
+      /* else the socket will automatically try to reconnect */
       const playerId = await getPlayerId(socket.id);
       await popPlayer(playerId);
 
-      // const players = getPlayers();
+      /* const players = getPlayers(); */
       const players = await getComplexObjectFromRedis("players");
       socket.emit("players:publish", { players });
       socket.broadcast.emit("players:publish", { players });
     });
 
-    // Test on reconnect
+    /* Test on reconnect */
     socket.on("reconnect", (attemptNumber) => {
       loginfo(socket.id, "tried to reconnect... attemptNumber:", attemptNumber);
     });

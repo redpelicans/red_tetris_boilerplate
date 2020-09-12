@@ -40,7 +40,8 @@ export const bindEvent = (socket, { name, validation, fn }) => {
           logerror("bindEvent error!", error);
           return socket.emit(name, { error });
         }
-        // fn(socket, payload);
+        /* Why?
+          fn(socket, payload); */
       });
     }
     return fn(socket, payload);

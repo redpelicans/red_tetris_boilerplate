@@ -14,8 +14,9 @@ export const getValueFromRedis = (message) => {
   return new Promise((resolve, reject) => {
     redisClient.get(message, (err, data) => {
       if (err) reject(err);
-      // else resolve({ message, data });
-      else resolve(data);
+      /* Need to choose if we resolve data or object
+      else resolve({ message, data }); */ else
+        resolve(data);
     });
   });
 };
@@ -24,8 +25,9 @@ export const getObjectFromRedis = (message) => {
   return new Promise((resolve, reject) => {
     redisClient.hgetall(message, (err, data) => {
       if (err) reject(err);
-      // else resolve({ message, data });
-      else resolve(data);
+      /* Need to choose if we resolve data or object
+      else resolve({ message, data }); */ else
+        resolve(data);
     });
   });
 };
@@ -34,8 +36,9 @@ export const getComplexObjectFromRedis = (message) => {
   return new Promise((resolve, reject) => {
     redisClient.get(message, (err, data) => {
       if (err) reject(err);
-      // else resolve({ message, data: JSON.parse(data) });
-      else resolve(JSON.parse(data));
+      /* Need to choose if we resolve data or object
+      else resolve({ message, data }); */ else
+        resolve(JSON.parse(data));
     });
   });
 };
@@ -65,11 +68,11 @@ export const setComplexObjectToRedis = (message, data) => {
   });
 };
 
-// const clientExpire = (message) => {
-//   return new Promise((resolve, reject) => {
-//     redisClient.expire(message, 10);
-//     resolve();
-//   });
-// };
+/* const clientExpire = (message) => {
+    return new Promise((resolve, reject) => {
+      redisClient.expire(message, 10);
+      resolve();
+    });
+  }; */
 
 export default runRedis;

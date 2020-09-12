@@ -19,7 +19,7 @@ export default class Piece {
   }
 }
 
-// export const Piece = () => ({
-//   piece: randomShape(),
-//   color: randomColor(),
-// });
+/* export const Piece = () => ({
+    piece: randomShape(),
+    color: randomColor(),
+  }) */

@@ -13,7 +13,7 @@ export const handlerCreatePlayer = async (socket, { name }) => {
   loginfo("Player", response.payload.name, "created!");
   socket.emit(PLAYER.RESPONSE, { response });
 
-  // send all players
+  /* Sending all players */
   const players = await getComplexObjectFromRedis("players");
   socket.broadcast.emit("players:publish", { players });
   socket.emit("players:publish", { players });
@@ -23,7 +23,7 @@ export const handlerDeletePlayer = async (socket, { socketId }) => {
   await popPlayer(socketId);
   loginfo("Player with socketId", socketId, "deleted!");
 
-  // send all players
+  /* Sending all players */
   const players = await getComplexObjectFromRedis("players");
   socket.broadcast.emit("players:publish", { players });
   socket.emit("players:publish", { players });
