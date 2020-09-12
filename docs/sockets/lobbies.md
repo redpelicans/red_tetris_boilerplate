@@ -51,5 +51,6 @@ Server will : create an Object Lobby and emit a lobbies:response
 
 ```
 Delete a lobby.
-Send : lobbyId and userId 
+Send : lobbyId and userId
+Server will : unsubsribe all the players in the lobby, delete the Lobby Object and emit a lobbies:response
 ```
