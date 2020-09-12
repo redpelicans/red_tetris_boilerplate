@@ -37,7 +37,7 @@ function canMove(grid, colLength) {
 export function moveDown(grid, colLength) {
   const gridCopy = deepCopy(grid);
 
-  if (!canMove(gridCopy)) {
+  if (!canMove(gridCopy, colLength)) {
     return null;
   }
 
