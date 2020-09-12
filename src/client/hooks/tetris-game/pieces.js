@@ -2,8 +2,9 @@ import { deepCopy } from "helpers/functional";
 import { isFree, isBottomLine } from "./grid";
 
 // TODO: check if the piece can be inserted
-export function insertPiece(piece, grid, insertPos) {
+export function insertPiece(piece, grid, midGrid) {
   const gridCopy = deepCopy(grid);
+  const insertPos = midGrid - Math.ceil(piece[0].length / 2);
 
   piece[0].map((_, colIdx) =>
     piece.map(
