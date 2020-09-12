@@ -26,7 +26,8 @@
   },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "es6": true
   },
   "parser": "babel-eslint",
   "plugins": ["react"],
@@ -117,7 +118,7 @@
     "no-useless-concat": 1, //disallow unnecessary concatenation of literals or template literals
     "no-void": 0, //disallow use of the void operator
     "no-warning-comments": [
-      1,
+      0,
       { "terms": ["todo", "fixme"], "location": "start" }
     ], //disallow usage of configurable warning terms in comments e.g. TODO or FIXME
     "no-with": 1, //disallow use of the with statement
