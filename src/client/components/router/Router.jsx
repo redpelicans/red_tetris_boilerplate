@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-// import TestSockets from "../../pages/TestSockets";
 import Home from "pages/home/Home";
+import Game from "pages/game/Game";
 
 /*
  **   You can had any Route you need inside the <Switch />
@@ -13,9 +13,9 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route to="/">
-          <Home />
-        </Route>
+        <Route exact path="/" component={Home} />
+        <Route path="/game" component={Game} />
+        <Route render={() => <h1>Not found!</h1>} />
       </Switch>
     </BrowserRouter>
   );
