@@ -1,11 +1,11 @@
 import Response from "models/response";
 import { logerror, loginfo } from "utils/log";
-import { getPlayer } from "service/players";
+import { getPlayer } from "store/players";
 import { joinLobby, leaveLobby } from "service/lobbies";
 import { LOBBY } from "./../../../config/actions/lobby";
 
 export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
-  const player = getPlayer(playerId);
+  const player = await getPlayer(playerId);
   joinLobby(player, lobbyId);
   socket.join("group:" + lobbyId);
 
@@ -18,7 +18,7 @@ export const handlerUnsubscribeLobby = async (
   socket,
   { playerId, lobbyId },
 ) => {
-  const player = getPlayer(playerId);
+  const player = await getPlayer(playerId);
   leaveLobby(player, lobbyId);
   socket.leave("group:" + lobbyId);
 };
