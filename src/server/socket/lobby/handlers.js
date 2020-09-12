@@ -7,6 +7,7 @@ import { LOBBY } from "./../../../config/actions/lobby";
 export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
   const player = await getPlayer(playerId);
   joinLobby(player, lobbyId);
+  loginfo("Player", player.name, "joined lobby", lobbyId);
   socket.join("group:" + lobbyId);
 
   const lobby = getLobby(lobbyId);
@@ -20,5 +21,6 @@ export const handlerUnsubscribeLobby = async (
 ) => {
   const player = await getPlayer(playerId);
   leaveLobby(player, lobbyId);
+  loginfo("Player", player.name, "left lobby", lobbyId);
   socket.leave("group:" + lobbyId);
 };

@@ -1,11 +1,9 @@
 import Player from "models/player";
 import Response from "models/response";
 import { logerror, loginfo } from "utils/log";
-import { pushPlayer, getPlayers, popPlayer } from "store/players";
-import { PLAYER } from "./../../../config/actions/player";
+import { pushPlayer, popPlayer } from "store/players";
 import { getComplexObjectFromRedis } from "store";
-
-// import { PLAYERS } from "./../../../config/actions/players";
+import { PLAYER } from "./../../../config/actions/player";
 
 export const handlerCreatePlayer = async (socket, { name }) => {
   const socketId = socket.id;
@@ -17,8 +15,6 @@ export const handlerCreatePlayer = async (socket, { name }) => {
 
   // send all players
   const players = await getComplexObjectFromRedis("players");
-  // const players = getPlayers();
-  loginfo(players);
   socket.broadcast.emit("players:publish", { players });
   socket.emit("players:publish", { players });
 };
@@ -29,8 +25,6 @@ export const handlerDeletePlayer = async (socket, { socketId }) => {
 
   // send all players
   const players = await getComplexObjectFromRedis("players");
-  // const players = getPlayers();
-  loginfo(players);
   socket.broadcast.emit("players:publish", { players });
   socket.emit("players:publish", { players });
 };

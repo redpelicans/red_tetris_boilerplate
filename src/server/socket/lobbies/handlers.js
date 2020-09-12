@@ -16,9 +16,7 @@ export const handlerAddLobby = async (
   socket.join("group:" + lobby.id);
   socket.emit(LOBBIES.RESPONSE, { response });
 
-  // send all lobbies
   const lobbies = getLobbies();
-  // io.sockets.in('GROUP.LOBBIES').emit('new non-fan');
   socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
   socket.emit(LOBBIES.PUBLISH, { lobbies });
 };
@@ -39,13 +37,14 @@ export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
 
 export const handlerSubscribeLobbies = async (socket) => {
   socket.join(GROUP.LOBBIES);
+  loginfo(socket.id, "joined group:lobbies");
 
   const lobbies = getLobbies();
   const response = Response.success(LOBBIES.SUBSCRIBE, lobbies);
-  loginfo("Lobby", response.payload.name, "created!");
   socket.emit(LOBBIES.RESPONSE, { response });
 };
 
 export const handlerUnsubscribeLobbies = async (socket) => {
   socket.leave(GROUP.LOBBIES);
+  loginfo(socket.id, "left group:lobbies");
 };
