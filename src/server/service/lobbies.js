@@ -23,3 +23,11 @@ export const joinLobby = (player, lobbyId) => {
   lobby.players.push(player);
   lobbies[lobbyId] = lobby;
 };
+
+export const leaveLobby = (playerId, lobbyId) => {
+  const players = lobbies[lobbyId].players;
+  const newPlayers = players.map((player) => {
+    return player.id !== playerId;
+  });
+  lobbies[lobbyId].players = newPlayers;
+};

@@ -9,7 +9,6 @@ import {
 import {
   handlerAddLobby,
   handlerDeleteLobby,
-  handlerGetLobbies,
   handlerSubscribeLobbies,
   handlerUnsubscribeLobbies,
 } from "socket/lobbies/handlers";

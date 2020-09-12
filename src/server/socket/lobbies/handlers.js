@@ -13,11 +13,13 @@ export const handlerAddLobby = async (
   pushLobby(lobby);
   const response = Response.success(LOBBIES.ADD, lobby);
   loginfo("Lobby", response.payload.name, "created!");
+  socket.join("group:" + lobby.id);
   socket.emit(LOBBIES.RESPONSE, { response });
 
   // send all lobbies
   const lobbies = getLobbies();
-  socket.broadcast.emit(LOBBIES.PUBLISH, { lobbies });
+  // io.sockets.in('GROUP.LOBBIES').emit('new non-fan');
+  socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
   socket.emit(LOBBIES.PUBLISH, { lobbies });
 };
 
@@ -26,17 +28,13 @@ export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
   if (res) {
     loginfo("Lobby with id", lobbyId, "deleted!");
     const lobbies = getLobbies();
-    socket.broadcast.emit(LOBBIES.PUBLISH, { lobbies });
+    socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
+    socket.leave("group:" + lobby.id);
+    // make everyone leave?
     socket.emit(LOBBIES.PUBLISH, { lobbies });
   } else {
     loginfo("Cannot delete with lobby id", lobbyId, "and ownerId", ownerId);
   }
-};
-
-export const handlerGetLobbies = async (socket) => {
-  const response = getLobbies();
-  loginfo(response);
-  socket.emit(LOBBIES.PUBLISH, { response });
 };
 
 export const handlerSubscribeLobbies = async (socket) => {
