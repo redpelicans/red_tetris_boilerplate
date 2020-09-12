@@ -1,19 +1,22 @@
 import { createEvent } from "helpers/socket";
 import {
-  validationJoinLobby,
-  validationLeaveLobby,
+  validationSubscribeLobby,
+  validationUnsubscribeLobby,
 } from "socket/lobby/schemas";
-import { handlerJoinLobby, handlerLeaveLobby } from "socket/lobby/handlers";
+import {
+  handlerSubscribeLobby,
+  handlerUnsubscribeLobby,
+} from "socket/lobby/handlers";
 import { LOBBY } from "./../../../config/actions/lobby";
 
-export const joinLobby = createEvent(
-  LOBBY.JOIN,
-  validationJoinLobby,
-  handlerJoinLobby,
+export const subscribeLobby = createEvent(
+  LOBBY.SUBSCRIBE,
+  validationSubscribeLobby,
+  handlerSubscribeLobby,
 );
 
-export const leaveLobby = createEvent(
-  LOBBY.LEAVE,
-  validationLeaveLobby,
-  handlerLeaveLobby,
+export const unsubscribeLobby = createEvent(
+  LOBBY.UNSUBSCRIBE,
+  validationUnsubscribeLobby,
+  handlerUnsubscribeLobby,
 );

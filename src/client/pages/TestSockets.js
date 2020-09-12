@@ -5,8 +5,10 @@ const socket = socketIOClient(ENDPOINT);
 
 function PlayersList(props) {
   const players = props.players;
-  const listItems = players.map((player, index) => (
-    <li key={player.id}>{"player " + index + " : " + player.name}</li>
+  const listItems = Object.keys(players).map((key, index) => (
+    <li key={players[key].id}>
+      {"player " + index + " : " + players[key].name}
+    </li>
   ));
   return <ul>{listItems}</ul>;
 }
@@ -22,14 +24,14 @@ function deleteLobby(props) {
 
 function LobbiesList(props) {
   const lobbies = props.lobbies;
-  const listItems = lobbies.map((lobby, index) => (
-    <li key={lobby.id}>
+  const listItems = Object.keys(lobbies).map((key, index) => (
+    <li key={lobbies[key].id}>
       {"lobby " +
         index +
         " / name : " +
-        lobby.name +
+        lobbies[key].name +
         " / owner : " +
-        lobby.owner.name +
+        lobbies[key].owner.name +
         " / "}
       {
         <button
@@ -37,7 +39,7 @@ function LobbiesList(props) {
             color: "red",
           }}
           onClick={() =>
-            deleteLobby({ lobbyId: lobby.id, playerId: props.player.id })
+            deleteLobby({ lobbyId: lobbies[key].id, playerId: props.player.id })
           }
         >
           Delete lobby if owner!
@@ -65,8 +67,8 @@ export default function TestSockets() {
     maxPlayer: 4,
     owner: myPlayer,
   });
-  const [players, setPlayers] = useState([]);
-  const [lobbies, setLobbies] = useState([]);
+  const [players, setPlayers] = useState({});
+  const [lobbies, setLobbies] = useState({});
 
   const handlePlayerName = (e) => {
     setPlayerName(e.target.value);
@@ -134,7 +136,7 @@ export default function TestSockets() {
   const callForPlayer = () => {
     console.log("I'm asking for a new player!");
     if (myPlayer.socketId != "")
-      socket.emit("player:delete", { socketId: myPlayer.socketId });
+      socket.emit("player:delete", { socketId: myPlayer.id });
     socket.emit("player:create", { name: playerName });
   };
 

@@ -1,35 +1,25 @@
 import Lobby from "models/lobby";
 
-const lobbies = [];
+const lobbies = {};
 
 export const getLobbies = () => {
   return lobbies;
 };
 
 export const pushLobby = (lobby) => {
-  lobbies.push(lobby);
+  lobbies[lobby.id] = lobby;
+  console.log(lobbies);
 };
 
 export const popLobby = (lobbyId, ownerId) => {
-  var res = false;
-  res = lobbies.filter(function (el) {
-    if (el.id === lobbyId && el.owner.id == ownerId) {
-      const index = lobbies.indexOf(el);
-      lobbies.splice(index, 1);
-      return true;
-    }
-  });
-  if (res) return true;
-  else return false;
-  // const lobby = lobbies.filter(function (el) {
-  //   return el.id === id;
-  // });
-  // lobbies.pop(lobby);
+  const lobby = lobbies[lobbyId];
+  if (lobby.owner.id !== ownerId) return false;
+  delete lobbies[lobbyId];
+  return true;
 };
 
-export const joinLobby = (player, id) => {
-  const lobby = lobbies.filter(function (el) {
-    return el.id === id;
-  });
+export const joinLobby = (player, lobbyId) => {
+  const lobby = lobbies[lobbyId];
   lobby.players.push(player);
+  lobbies[lobbyId] = lobby;
 };

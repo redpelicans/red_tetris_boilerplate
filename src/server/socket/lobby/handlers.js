@@ -4,18 +4,23 @@ import { getPlayer } from "service/players";
 import { joinLobby, leaveLobby } from "service/lobbies";
 import { LOBBY } from "./../../../config/actions/lobby";
 
-export const handlerJoinLobby = async (socket, { playerId, lobbyId }) => {
+export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
   const player = getPlayer(playerId);
   joinLobby(player, lobbyId);
-  // const response = Response.success(PLAYER.CREATE, player);
-  // loginfo("Player", response.payload.name, "created!");
-  // socket.emit(PLAYER.RESPONSE, { response });
+
+  socket.join("group:" + lobbyId);
+
+  // const lobby = getLobby(lobbyId);
+  // const response = Response.success(LOBBY.SUBSCRIBE, lobby);
+  // socket.emit(LOBBY.RESPONSE, { response });
 };
 
-export const handlerLeaveLobby = async (socket, { playerId, lobbyId }) => {
+export const handlerUnsubscribeLobby = async (
+  socket,
+  { playerId, lobbyId },
+) => {
   const player = getPlayer(playerId);
   leaveLobby(player, lobbyId);
-  // const response = Response.success(PLAYER.CREATE, player);
-  // loginfo("Player", response.payload.name, "created!");
-  // socket.emit(PLAYER.RESPONSE, { response });
+
+  socket.leave("group:" + lobbyId);
 };

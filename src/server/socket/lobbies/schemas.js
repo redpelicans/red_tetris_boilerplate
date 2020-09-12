@@ -11,7 +11,15 @@ export const validationAddLobby = {
 
 export const validationDeleteLobby = {
   lobbyId: Joi.string().required().description("The id of the lobby"),
-  ownerId: Joi.string().required().description("The id of the owner"),
+  ownerId: Joi.string().required().description("The id of the user"),
 };
 
 export const validationGetLobbies = {};
+
+export const validationSubscribeLobbies = {
+  ownerId: Joi.string().required().description("The id of the user"),
+};
+
+export const validationunsubscribeLobbies = {
+  ownerId: Joi.string().required().description("The id of the user"),
+};

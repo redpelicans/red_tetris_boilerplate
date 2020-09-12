@@ -1,27 +1,26 @@
 import Player from "models/player";
 
-const players = [];
-
-export const pushPlayer = (player) => {
-  players.push(player);
-};
+const players = {};
 
 export const getPlayers = () => {
   return players;
 };
 
 export const getPlayer = (id) => {
-  const player = players.filter(function (el) {
-    return el.id === id;
-  });
-  return player;
+  return players?.[id];
 };
 
-export const popPlayer = (socketId) => {
-  players.filter(function (el) {
-    if (el.socketId === socketId) {
-      const index = players.indexOf(el);
-      players.splice(index, 1);
-    }
+export const getPlayerId = (socketId) => {
+  const id = Object.keys(players).map((key) => {
+    if (players[key].socketId === socketId) return key;
   });
+  return id;
+};
+
+export const pushPlayer = (player) => {
+  players[player.id] = player;
+};
+
+export const popPlayer = (id) => {
+  delete players[id];
 };

@@ -1,5 +1,4 @@
 export const LOBBIES = {
-  GET: "lobbies:get",
   ADD: "lobbies:add",
   DELETE: "lobbies:delete",
   SUBSCRIBE: "lobbies:subscribe",

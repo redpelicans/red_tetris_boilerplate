@@ -3,11 +3,9 @@ import * as piece from "socket/piece";
 import * as player from "socket/player";
 import * as players from "socket/players";
 import * as lobbies from "socket/lobbies";
-
-import { PLAYERS } from "./../../config/actions/players";
 import { LOBBIES } from "./../../config/actions/lobbies";
 import { getLobbies } from "service/lobbies";
-import { getPlayers, popPlayer } from "service/players";
+import { getPlayers, popPlayer, getPlayerId } from "service/players";
 
 import { logerror, loginfo } from "utils/log";
 import socketIO from "socket.io";
@@ -27,7 +25,7 @@ const runSocketIo = (httpServer) => {
 
     // Test on connection
     const players = getPlayers();
-    socket.emit(PLAYERS.PUBLISH, { players });
+    socket.emit("players:publish", { players });
     const lobbies = getLobbies();
     socket.emit(LOBBIES.PUBLISH, { lobbies });
 
@@ -40,9 +38,9 @@ const runSocketIo = (httpServer) => {
       }
       // else the socket will automatically try to reconnect
 
-      popPlayer(socket.id);
+      popPlayer(getPlayerId(socket.id));
       const players = getPlayers();
-      socket.broadcast.emit(PLAYERS.PUBLISH, { players });
+      socket.broadcast.emit("players:publish", { players });
     });
 
     // Test on reconnect

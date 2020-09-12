@@ -3,7 +3,7 @@ import Response from "models/response";
 import { logerror, loginfo } from "utils/log";
 import { pushPlayer, getPlayers, popPlayer } from "service/players";
 import { PLAYER } from "./../../../config/actions/player";
-import { PLAYERS } from "./../../../config/actions/players";
+// import { PLAYERS } from "./../../../config/actions/players";
 
 export const handlerCreatePlayer = async (socket, { name }) => {
   const socketId = socket.id;
@@ -16,8 +16,8 @@ export const handlerCreatePlayer = async (socket, { name }) => {
   // send all players
   const players = getPlayers();
   loginfo(players);
-  socket.broadcast.emit(PLAYERS.PUBLISH, { players });
-  socket.emit(PLAYERS.PUBLISH, { players });
+  socket.broadcast.emit("players:publish", { players });
+  socket.emit("players:publish", { players });
 };
 
 export const handlerDeletePlayer = async (socket, { socketId }) => {
@@ -27,6 +27,6 @@ export const handlerDeletePlayer = async (socket, { socketId }) => {
   // send all players
   const players = getPlayers();
   loginfo(players);
-  socket.broadcast.emit(PLAYERS.PUBLISH, { players });
-  socket.emit(PLAYERS.PUBLISH, { players });
+  socket.broadcast.emit("players:publish", { players });
+  socket.emit("players:publish", { players });
 };

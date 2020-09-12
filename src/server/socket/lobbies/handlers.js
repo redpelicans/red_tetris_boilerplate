@@ -3,6 +3,7 @@ import Response from "models/response";
 import { logerror, loginfo } from "utils/log";
 import { getLobbies, pushLobby, popLobby } from "service/lobbies";
 import { LOBBIES } from "./../../../config/actions/lobbies";
+import { GROUP } from "./../../../config/actions/group";
 
 export const handlerAddLobby = async (
   socket,
@@ -21,23 +22,32 @@ export const handlerAddLobby = async (
 };
 
 export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
-  // const lobby = new Lobby({ hash, name, maxPlayer, owner });
   const res = popLobby(lobbyId, ownerId);
-  // const response = Response.success(LOBBIES.DELETE, null);
   if (res) {
     loginfo("Lobby with id", lobbyId, "deleted!");
-    // send all lobbies
     const lobbies = getLobbies();
     socket.broadcast.emit(LOBBIES.PUBLISH, { lobbies });
     socket.emit(LOBBIES.PUBLISH, { lobbies });
   } else {
     loginfo("Cannot delete with lobby id", lobbyId, "and ownerId", ownerId);
   }
-  // socket.emit(LOBBIES.RESPONSE, { response });
 };
 
 export const handlerGetLobbies = async (socket) => {
   const response = getLobbies();
   loginfo(response);
   socket.emit(LOBBIES.PUBLISH, { response });
+};
+
+export const handlerSubscribeLobbies = async (socket) => {
+  socket.join(GROUP.LOBBIES);
+
+  const lobbies = getLobbies();
+  const response = Response.success(LOBBIES.SUBSCRIBE, lobbies);
+  loginfo("Lobby", response.payload.name, "created!");
+  socket.emit(LOBBIES.RESPONSE, { response });
+};
+
+export const handlerUnsubscribeLobbies = async (socket) => {
+  socket.leave(GROUP.LOBBIES);
 };

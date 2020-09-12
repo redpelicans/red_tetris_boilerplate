@@ -3,11 +3,15 @@ import {
   validationAddLobby,
   validationDeleteLobby,
   validationGetLobbies,
+  validationSubscribeLobbies,
+  validationUnsubscribeLobbies,
 } from "socket/lobbies/schemas";
 import {
   handlerAddLobby,
   handlerDeleteLobby,
   handlerGetLobbies,
+  handlerSubscribeLobbies,
+  handlerUnsubscribeLobbies,
 } from "socket/lobbies/handlers";
 import { LOBBIES } from "./../../../config/actions/lobbies";
 
@@ -23,8 +27,14 @@ export const deleteLobby = createEvent(
   handlerDeleteLobby,
 );
 
-export const getLobbies = createEvent(
-  LOBBIES.GET,
-  validationGetLobbies,
-  handlerGetLobbies,
+export const subscribeLobbies = createEvent(
+  LOBBIES.SUBSCRIBE,
+  validationSubscribeLobbies,
+  handlerSubscribeLobbies,
+);
+
+export const unsuscribeLobbies = createEvent(
+  LOBBIES.UNSUBSCRIBE,
+  validationUnsubscribeLobbies,
+  handlerUnsubscribeLobbies,
 );
