@@ -1,7 +1,7 @@
 export const INIT_NEXT_PIECES = "INIT_NEXT_PIECES";
 export const FETCH_PIECE = "FETCH_PIECE";
-export const POP_PIECE = "POP_PIECE";
-export const PUT_PIECE_COLOR = "PUT_PIECE_COLOR";
+export const PULL_CURRENT_PIECE_FROM_NEXT_PIECES =
+  "PULL_CURRENT_PIECE_FROM_NEXT_PIECES";
 
 export const initNextPieces = (initPieces) => ({
   type: INIT_NEXT_PIECES,
@@ -13,11 +13,6 @@ export const pushNewPiece = (newPiece) => ({
   newPiece,
 });
 
-export const popPiece = () => ({
-  type: POP_PIECE,
-});
-
-export const putColor = (color) => ({
-  type: PUT_PIECE_COLOR,
-  pieceColor: color,
+export const updateCurrentPiece = () => ({
+  type: PULL_CURRENT_PIECE_FROM_NEXT_PIECES,
 });
