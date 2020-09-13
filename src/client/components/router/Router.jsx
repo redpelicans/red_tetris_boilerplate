@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "pages/home/Home";
 import Game from "pages/game/Game";
+import { GameContextProvider } from "store";
 
 /*
  **   You can had any Route you need inside the <Switch />
@@ -14,7 +15,11 @@ export default function Router() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/game" component={Game} />
+        <Route path="/game">
+          <GameContextProvider>
+            <Game />
+          </GameContextProvider>
+        </Route>
         <Route render={() => <h1>Not found!</h1>} />
       </Switch>
     </BrowserRouter>
