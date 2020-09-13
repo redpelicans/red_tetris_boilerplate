@@ -45,7 +45,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   }, [state.nextPieces]);
 
   const movePieceDown = () => {
-    let newGrid = moveDown(tetrisGrid, cols);
+    let newGrid = moveDown(tetrisGrid, cols, rows);
     // console.log(newGrid);
     if (isEmpty(newGrid)) {
       newGrid = putTetromino(currentPiece.current, tetrisGrid);
