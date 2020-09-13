@@ -1,10 +1,11 @@
 import React from "react";
-import useCurrentPiece from "./useCurrentPiece";
 import { insertPiece, moveDown, putTetromino } from "./pieces";
 import { isEmpty } from "helpers/functional";
 import { GameContext } from "store";
-import { putColor, popPiece } from "actions/pieces";
-import MOCK_TETROMINOES from "mocks/Tetrominoes";
+import { updateCurrentPiece } from "actions/pieces";
+import useAutoMove from "./useAutoMove";
+
+const INTERVAL_MS = 1250;
 
 /*
  ** This custom hook is used to manage the game board.
@@ -15,8 +16,7 @@ import MOCK_TETROMINOES from "mocks/Tetrominoes";
  */
 function useTetrisGame(cols = 10, rows = 20) {
   const { state, dispatch } = React.useContext(GameContext);
-  const [currentPiece, updateCurrentPiece] = useCurrentPiece();
-  // const currentPiece = React.useRef(null);
+  const autoMoveTimer = useAutoMove(movePieceDown);
 
   // The board game and its initialization
   const [tetrisGrid, setTetrisGrid] = React.useState(() => {
@@ -31,32 +31,46 @@ function useTetrisGame(cols = 10, rows = 20) {
   const midGrid = React.useMemo(() => getMidGrid(cols), [cols]);
 
   // Methods
-  const insertNewPiece = (piece, grid = tetrisGrid) => {
+  function insertNewPiece(piece, grid = tetrisGrid) {
     const newGrid = insertPiece(piece, grid, midGrid);
     setTetrisGrid(newGrid);
-  };
+  }
 
   React.useEffect(() => {
+    if (state.currentPiece.shape.length > 0) {
+      insertNewPiece(state.currentPiece.shape);
+      autoMoveTimer.start(INTERVAL_MS);
+    }
+  }, [state.currentPiece]);
+
+  // At start only
+  React.useEffect(() => {
     if (state.nextPieces.length === 4) {
-      updateCurrentPiece();
-      // console.log(currentPiece, state.nextPieces);
-      insertNewPiece(currentPiece.current.shape);
+      dispatch(updateCurrentPiece());
     }
   }, [state.nextPieces]);
 
-  const movePieceDown = () => {
+  function movePiece(action) {
+    autoMoveTimer.stop();
+    if (action === "DOWN") {
+      movePieceDown();
+    }
+    autoMoveTimer.start(INTERVAL_MS);
+  }
+
+  function movePieceDown() {
     let newGrid = moveDown(tetrisGrid, cols, rows);
-    // console.log(newGrid);
     if (isEmpty(newGrid)) {
-      newGrid = putTetromino(currentPiece.current, tetrisGrid);
-      updateCurrentPiece();
-      insertNewPiece(currentPiece.current.shape, newGrid);
+      autoMoveTimer.stop();
+      newGrid = putTetromino(state.currentPiece, tetrisGrid);
+      setTetrisGrid(newGrid);
+      dispatch(updateCurrentPiece());
     } else {
       setTetrisGrid(newGrid);
     }
-  };
+  }
 
-  return { tetrisGrid, insertNewPiece, movePieceDown };
+  return { tetrisGrid, insertNewPiece, movePiece };
 }
 
 export default useTetrisGame;
@@ -70,13 +84,4 @@ function createGrid(col, row) {
 
 function getMidGrid(colLength) {
   return Math.floor(colLength / 2);
-}
-
-// Function for test env
-function fetchFromMock(n) {
-  if (MOCK_TETROMINOES.length < n) {
-    console.log("END OF TETROMINOES");
-  }
-
-  return MOCK_TETROMINOES.splice(0, n);
 }
