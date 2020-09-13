@@ -21,7 +21,7 @@ const TetrisRows = ({ rows }) =>
 
 const TetrisCols = ({ cols, rowIdx }) => {
   const {
-    state: { currentPieceColor },
+    state: { currentPiece },
   } = React.useContext(GameContext);
   const nbCol = cols.length;
 
@@ -32,7 +32,7 @@ const TetrisCols = ({ cols, rowIdx }) => {
       height={6}
       width={`1/${nbCol}`}
       className={
-        col === 1 ? `tetromino-${currentPieceColor}` : `tetromino-${col}`
+        col === 1 ? `tetromino-${currentPiece.color}` : `tetromino-${col}`
       }
     />
   ));
