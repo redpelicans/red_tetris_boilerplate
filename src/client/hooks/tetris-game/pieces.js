@@ -52,3 +52,11 @@ export function moveDown(grid, colLength) {
   }
   return gridCopy;
 }
+
+export function putTetromino(tetromino, grid) {
+  const gridCopy = deepCopy(grid);
+
+  return gridCopy.map((row) =>
+    row.map((col) => (col === 1 ? tetromino.color : col)),
+  );
+}
