@@ -50,3 +50,7 @@ $tetrominoes: (
     border-bottom-color: $dark;
   }
 }
+
+.tetromino-0 {
+  @apply border;
+}
