@@ -1,34 +1,38 @@
 {
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "binaryLiterals": false,
-    "blockBindings": true,
-    "classes": true,
-    "defaultParams": true,
-    "destructuring": true,
-    "forOf": true,
-    "generators": true,
-    "modules": false,
-    "objectLiteralComputedProperties": true,
-    "objectLiteralDuplicateProperties": false,
-    "objectLiteralShorthandMethods": true,
-    "objectLiteralShorthandProperties": true,
-    "octalLiterals": false,
-    "regexUFlag": false,
-    "regexYFlag": false,
-    "restParams": true,
-    "spread": true,
-    "superInFunctions": true,
-    "templateStrings": true,
-    "unicodePointEscapes": true,
-    "globalReturn": false,
-    "jsx": true
-  },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "es6": true
   },
   "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "ecmaFeatures": {
+      "arrowFunctions": true,
+      "binaryLiterals": false,
+      "blockBindings": true,
+      "classes": true,
+      "defaultParams": true,
+      "destructuring": true,
+      "forOf": true,
+      "generators": true,
+      "modules": false,
+      "objectLiteralComputedProperties": true,
+      "objectLiteralDuplicateProperties": false,
+      "objectLiteralShorthandMethods": true,
+      "objectLiteralShorthandProperties": true,
+      "octalLiterals": false,
+      "regexUFlag": false,
+      "regexYFlag": false,
+      "restParams": true,
+      "spread": true,
+      "superInFunctions": true,
+      "templateStrings": true,
+      "unicodePointEscapes": true,
+      "globalReturn": false,
+      "jsx": true
+    }
+  },
   "plugins": ["react"],
   "rules": {
     /* Possible Errors */
@@ -58,7 +62,7 @@
     "no-unexpected-multiline": 1, //Avoid code that looks like two expressions but is actually one
     "no-unreachable": 1, //disallow unreachable statements after a return, throw, continue, or break statement (recommended)
     "use-isnan": 1, //disallow comparisons with the value NaN (recommended)
-    "valid-jsdoc": 1, //Ensure JSDoc comments are valid
+    "valid-jsdoc": 0, //Ensure JSDoc comments are valid
     "valid-typeof": 1, //Ensure that the results of typeof are compared against a valid string (recommended)
 
     /* Best Practices */
@@ -91,7 +95,7 @@
     "no-labels": 1, //disallow use of labeled statements
     "no-lone-blocks": 1, //disallow unnecessary nested blocks
     "no-loop-func": 1, //disallow creation of functions within loops
-    "no-magic-numbers": [1, { "ignore": [-1, 0, 1] }], // disallow the use of magic numbers
+    "no-magic-numbers": [0, { "ignore": [-1, 0, 1] }], // disallow the use of magic numbers
     "no-multi-spaces": 1, //disallow use of multiple spaces (fixable)
     "no-multi-str": 1, //disallow use of multiline strings
     "no-native-reassign": 1, //disallow reassignments of native objects
@@ -117,7 +121,7 @@
     "no-useless-concat": 1, //disallow unnecessary concatenation of literals or template literals
     "no-void": 0, //disallow use of the void operator
     "no-warning-comments": [
-      1,
+      0,
       { "terms": ["todo", "fixme"], "location": "start" }
     ], //disallow usage of configurable warning terms in comments e.g. TODO or FIXME
     "no-with": 1, //disallow use of the with statement
@@ -138,9 +142,9 @@
     "no-shadow": 0, //disallow declaration of variables already declared in the outer scope
     "no-undef-init": 1, //disallow use of undefined when initializing variables
     "no-undef": 1, //disallow use of undeclared variables unless mentioned in a /*global */ block (recommended)
-    "no-undefined": 1, //disallow use of undefined variable
+    "no-undefined": 0, //disallow use of undefined variable
     "no-unused-vars": [1, { "vars": "local", "args": "after-used" }], //disallow declaration of variables that are not used in the code (recommended)
-    "no-use-before-define": 1, //disallow use of variables before they are defined
+    "no-use-before-define": 0, //disallow use of variables before they are defined
 
     /* Node.js */
     "callback-return": 1, //enforce return after a callback
@@ -167,7 +171,7 @@
     "func-style": 0, //enforce use of function declarations or expressions
     "id-length": 0, //this option enforces minimum and maximum identifier lengths (variable names, property names etc.)
     "id-match": [0, "^[a-z]+([A-Z][a-z]*)*$", { "properties": true }], //require identifiers to match the provided regular expression
-    "indent": [1, 2], //specify tab or space width for your code (fixable)
+    // "indent": [1, 2], //specify tab or space width for your code (fixable)
     "jsx-quotes": [1, "prefer-double"], //specify whether double or single quotes should be used in JSX attributes
     "key-spacing": [1, { "beforeColon": false, "afterColon": true }], //enforce spacing between keys and values in object literal properties
     "linebreak-style": 0, //disallow mixed 'LF' and 'CRLF' as linebreaks
@@ -211,7 +215,7 @@
     "object-curly-spacing": [1, "always"], // require or disallow padding inside curly braces (fixable)
     "one-var": [0, "never"], //require or disallow one variable declaration per function
     "operator-assignment": [1, "never"], //require assignment operator shorthand where possible or prohibit it entirely
-    "operator-linebreak": [1, "after"], //enforce operators to be placed before or after line breaks
+    "operator-linebreak": [0, "after"], //enforce operators to be placed before or after line breaks
     "padded-blocks": [0, "never"], //enforce padding within blocks
     "quote-props": [0, "as-needed"], //require quotes around object literal property names
     "quotes": [1, "double"], //specify whether backticks, double or single quotes should be used (fixable)
@@ -221,7 +225,10 @@
     "sort-vars": 0, //sort variables within the same declaration block
     "space-after-keywords": 0, //require a space after certain keywords (fixable)
     "space-before-blocks": [1, "always"], //require or disallow a space before blocks (fixable)
-    "space-before-function-paren": [1, "never"], //require or disallow a space before function opening parenthesis (fixable)
+    "space-before-function-paren": [
+      1,
+      { "named": "never", "anonymous": "always", "asyncArrow": "always" }
+    ], //require or disallow a space before function opening parenthesis (fixable)
     "space-before-keywords": [0, "never"], //require a space before certain keywords (fixable)
     "space-in-parens": [1, "never"], //require or disallow spaces inside parentheses
     "space-infix-ops": 1, //require spaces around operators (fixable)
@@ -268,12 +275,12 @@
     "react/jsx-key": 1, // Validate JSX has key prop when in array or iterator
     "react/jsx-max-props-per-line": 0, //Limit maximum of props on a single line in JSX
     "react/jsx-no-bind": 0, // Prevent usage of .bind() and arrow functions in JSX props
-    "react/jsx-no-duplicate-props": 1, //Prevent duplicate properties in JSX
+    "react/jsx-no-duplicate-props": 2, //Prevent duplicate properties in JSX
     "react/jsx-no-literals": 0, //Prevent usage of unwrapped JSX strings
-    "react/jsx-no-undef": 1, //Disallow undeclared variables in JSX
+    "react/jsx-no-undef": 2, //Disallow undeclared variables in JSX
     "react/jsx-pascal-case": 1, // Enforce PascalCase for user-defined JSX components
-    "react/sort-prop-types": 1, //Enforce propTypes declarations alphabetical sorting
-    "react/jsx-sort-props": 1, //Enforce props alphabetical sorting
+    "react/sort-prop-types": 0, //Enforce propTypes declarations alphabetical sorting
+    "react/jsx-sort-props": 0, //Enforce props alphabetical sorting
     "react/jsx-uses-react": 1, //Prevent React to be incorrectly marked as unused
     "react/jsx-uses-vars": 1, //Prevent variables used in JSX to be incorrectly marked as unused
     "react/no-danger": 1, //Prevent usage of dangerous JSX properties
