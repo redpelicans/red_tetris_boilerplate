@@ -22,16 +22,16 @@ function isPartOfPiece(element) {
 
 function canMove(grid, colLength, rowLength) {
   for (let col = 0; col < colLength; col++) {
-    for (let row = 0; row < grid.length; row++) {
+    for (let row = 0; row < rowLength; row++) {
       if (
         isPartOfPiece(grid[row][col]) &&
         (isBottomLine(grid, row) || !isFree(grid, row, col))
       ) {
-        canMoveDown = false;
+        return false;
       }
     }
   }
-  return canMoveDown;
+  return true;
 }
 
 export function moveDown(grid, colLength, rowLength) {
