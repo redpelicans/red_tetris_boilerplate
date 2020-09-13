@@ -1,6 +1,6 @@
 function isPromise(value) {
   // console.log("isPromise value >>>", value);
-  const resolved = Promise.resolve(value);
+  // const resolved = Promise.resolve(value);
   // console.log("isPromise resolved", resolved);
   return Promise.resolve(value) === value;
 }
