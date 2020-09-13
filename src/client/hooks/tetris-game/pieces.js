@@ -1,9 +1,9 @@
-import { deepCopy } from "helpers/functional";
+import { shallowCopy } from "helpers/functional";
 import { isFree, isBottomLine } from "./grid";
 
 // TODO: check if the piece can be inserted
 export function insertPiece(piece, grid, midGrid) {
-  const gridCopy = deepCopy(grid);
+  const gridCopy = shallowCopy(grid);
   const insertPos = midGrid - Math.ceil(piece[0].length / 2);
 
   const colLength = piece[0].length;
@@ -35,7 +35,7 @@ function canMove(grid, colLength, rowLength) {
 }
 
 export function moveDown(grid, colLength, rowLength) {
-  const gridCopy = deepCopy(grid);
+  const gridCopy = shallowCopy(grid);
 
   if (!canMove(gridCopy, colLength, rowLength)) {
     return null;
@@ -53,7 +53,7 @@ export function moveDown(grid, colLength, rowLength) {
 }
 
 export function putTetromino(tetromino, grid) {
-  const gridCopy = deepCopy(grid);
+  const gridCopy = shallowCopy(grid);
 
   return gridCopy.map((row) =>
     row.map((col) => (col === 1 ? tetromino.color : col)),
