@@ -134,6 +134,9 @@ export default function TestSockets() {
   };
 
   const callForPlayer = () => {
+    console.log("player socket id", myPlayer.socketId);
+    console.log("playerName", playerName);
+
     console.log("I'm asking for a new player!");
     if (myPlayer.socketId != "")
       socket.emit("player:delete", { socketId: myPlayer.id });

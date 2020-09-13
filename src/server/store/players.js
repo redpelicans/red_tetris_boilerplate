@@ -8,6 +8,7 @@ export const getPlayer = async (id) => {
 
 export const getPlayerId = async (socketId) => {
   const players = await getComplexObjectFromRedis("players");
+  if (players === null) return null;
   const playerId = Object.keys(players).find(
     (key) => players[key].socketId === socketId,
   );
@@ -15,13 +16,15 @@ export const getPlayerId = async (socketId) => {
 };
 
 export const pushPlayer = async (player) => {
-  const players = await getComplexObjectFromRedis("players");
+  let players = await getComplexObjectFromRedis("players");
+  if (players === null) players = {};
   players[player.id] = player;
   const res = await setComplexObjectToRedis("players", players);
 };
 
 export const popPlayer = async (id) => {
   const players = await getComplexObjectFromRedis("players");
+  if (players === null) return null;
   delete players[id];
   const res = await setComplexObjectToRedis("players", players);
 };

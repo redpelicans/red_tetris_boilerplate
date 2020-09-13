@@ -4,3 +4,8 @@ export {
   default as piecesReducer,
   initialState as initialPieces,
 } from "./pieces";
+
+export {
+  default as socketReducer,
+  initialState as initialSocket,
+} from "./socket";
