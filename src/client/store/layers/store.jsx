@@ -1,16 +1,22 @@
 import React from "react";
 import { storeReducer, initialStore } from "reducers";
-import { asyncMiddleware } from "./middlewares";
+import { asyncMiddleware } from "../middlewares";
 import PropTypes from "prop-types";
 
 export const StoreContext = React.createContext();
 
 export function StoreContextProvider({ children }) {
-  const [state, dispatch] = React.useReducer(storeReducer, initialStore);
+  const [storeState, storeDispatch] = React.useReducer(
+    storeReducer,
+    initialStore,
+  );
 
   return (
     <StoreContext.Provider
-      value={{ state, dispatch: asyncMiddleware(dispatch) }}
+      value={{
+        state: storeState,
+        dispatch: asyncMiddleware(storeDispatch),
+      }}
     >
       {children}
     </StoreContext.Provider>
