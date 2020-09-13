@@ -59,3 +59,9 @@ export function putTetromino(tetromino, grid) {
     row.map((col) => (col === 1 ? tetromino.color : col)),
   );
 }
+
+function rotate() {
+  return currentPiece[0].map((_, colIndex) =>
+    currentPiece.map((row) => row[colIndex]).reverse(),
+  );
+}
