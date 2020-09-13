@@ -1,6 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import PropTypes from "prop-types";
+import { GameContext } from "store";
 import "./Grid.scss";
 
 export default function TetrisGrid({ grid }) {
@@ -19,6 +20,9 @@ const TetrisRows = ({ rows }) =>
   ));
 
 const TetrisCols = ({ cols, rowIdx }) => {
+  const {
+    state: { currentPieceColor },
+  } = React.useContext(GameContext);
   const nbCol = cols.length;
 
   return cols.map((col, idx) => (
@@ -27,7 +31,9 @@ const TetrisCols = ({ cols, rowIdx }) => {
       direction="col"
       height={6}
       width={`1/${nbCol}`}
-      className={col === 1 ? "tetromino-red" : "border"}
+      className={
+        col === 1 ? `tetromino-${currentPieceColor}` : `tetromino-${col}`
+      }
     />
   ));
 };
