@@ -3,10 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
 import { grow } from "actions/store";
 import { Link } from "react-router-dom";
-
-function timeout(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+import { timeout } from "helpers/common";
 
 export default function Home() {
   const { state, dispatch } = React.useContext(StoreContext);
