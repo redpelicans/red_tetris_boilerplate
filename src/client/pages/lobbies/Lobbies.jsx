@@ -10,6 +10,7 @@ export default function Lobbies() {
     <FlexBox height="full" className="items-center justify-center">
       {state.playerResponse.payload ? (
         <FlexBox direction="col" className="">
+          <FlexBox className="">PLAYER INFORMATIONS</FlexBox>
           <FlexBox className="">
             playerName : {state.playerResponse.payload.name}
           </FlexBox>
