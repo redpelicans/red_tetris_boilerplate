@@ -1,13 +1,16 @@
-import { ADD_YEAR } from "actions/store";
+import { INIT_SOCKET, SET_PLAYER_RESPONSE } from "actions/store";
 
 export const initialState = {
-  age: 42,
+  socket: {},
+  playerResponse: {},
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case ADD_YEAR:
-      return { ...state, age: state.age + action.age };
+    case INIT_SOCKET:
+      return { ...state, socket: action.socket };
+    case SET_PLAYER_RESPONSE:
+      return { ...state, playerResponse: action.playerResponse };
     default:
       return state;
   }

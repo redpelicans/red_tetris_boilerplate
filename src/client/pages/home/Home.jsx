@@ -1,24 +1,26 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import CreatePlayer from "components/player/CreatePlayer";
-import { SocketContext } from "store";
 import { StoreContext } from "store";
-import { grow } from "actions/store";
-import { Link } from "react-router-dom";
-import { timeout } from "helpers/common";
 import socketIOClient from "socket.io-client";
-import { initSocket } from "actions/socket";
+import { initSocket, setPlayerResponse } from "actions/store";
 
 const endpoint = "http://0.0.0.0:3004";
 
 export default function Home() {
-  // const { state, dispatch } = React.useContext(StoreContext);
-  const { state, dispatch } = React.useContext(SocketContext);
+  const { state, dispatch } = React.useContext(StoreContext);
 
   React.useEffect(() => {
-    const socket = socketIOClient(endpoint);
-    console.log(socket);
-    dispatch(initSocket(socket));
+    if (
+      Object.keys(state.socket).length === 0 &&
+      state.socket.constructor === Object
+    ) {
+      const socket = socketIOClient(endpoint);
+      socket.on("player:response", (data) => {
+        dispatch(setPlayerResponse(data.response));
+      });
+      dispatch(initSocket(socket));
+    }
   }, []);
 
   return (

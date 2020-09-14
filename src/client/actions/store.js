@@ -1,6 +1,12 @@
-export const ADD_YEAR = "ADD_YEAR";
+export const INIT_SOCKET = "INIT_SOCKET";
+export const SET_PLAYER_RESPONSE = "SET_PLAYER_RESPONSE";
 
-export const grow = (age) => ({
-  type: ADD_YEAR,
-  age,
+export const initSocket = (socket) => ({
+  type: INIT_SOCKET,
+  socket: socket,
+});
+
+export const setPlayerResponse = (playerResponse) => ({
+  type: SET_PLAYER_RESPONSE,
+  playerResponse: playerResponse,
 });

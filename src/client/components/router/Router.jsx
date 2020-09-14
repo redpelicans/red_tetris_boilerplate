@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "pages/home/Home";
 import Game from "pages/game/Game";
+import Lobbies from "pages/lobbies/Lobbies";
+
 import { GameContextProvider } from "store";
 
 /*
@@ -19,6 +21,9 @@ export default function Router() {
           <GameContextProvider>
             <Game />
           </GameContextProvider>
+        </Route>
+        <Route path="/lobbies">
+          <Lobbies />
         </Route>
         <Route render={() => <h1>Not found!</h1>} />
       </Switch>
