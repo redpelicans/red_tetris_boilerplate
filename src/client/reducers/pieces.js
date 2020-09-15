@@ -1,6 +1,5 @@
 import {
-  INIT_NEXT_PIECES,
-  FETCH_PIECE,
+  FETCH_PIECES,
   PULL_CURRENT_PIECE_FROM_NEXT_PIECES,
 } from "actions/pieces";
 import { deepCopy } from "helpers/functional";
@@ -15,13 +14,13 @@ export const initialState = {
   },
 };
 
-// TODO: refactor --> MERGE INIT AND FETCH INTO A SINGLE ACTION
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case INIT_NEXT_PIECES:
-      return { ...state, nextPieces: action.nextPieces };
-    case FETCH_PIECE:
-      return { ...state, nextPieces: [...state.nextPieces, action.newPiece] };
+    case FETCH_PIECES:
+      return {
+        ...state,
+        nextPieces: [...state.nextPieces, ...action.newPieces],
+      };
     case PULL_CURRENT_PIECE_FROM_NEXT_PIECES:
       return {
         ...state,

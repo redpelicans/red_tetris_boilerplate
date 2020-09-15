@@ -1,18 +1,17 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { timeout } from "helpers/common";
-import { initNextPieces, pushNewPiece } from "actions/pieces";
+import { pushNewPiece } from "actions/pieces";
 import { GameContext } from "store";
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 
-export default function () {
+export default function NextPieces() {
   const { state, dispatch } = React.useContext(GameContext);
 
   React.useEffect(() => {
     const fetchInitPieces = async () => {
       const initPieces = await fetchFromMock(4);
-      // console.log(initPieces);
-      dispatch(initNextPieces(initPieces));
+      dispatch(pushNewPiece(initPieces));
     };
 
     fetchInitPieces();
@@ -21,7 +20,7 @@ export default function () {
   React.useEffect(() => {
     const fetchNewPiece = async () => {
       const newPiece = await fetchFromMock(1);
-      dispatch(pushNewPiece(newPiece[0]));
+      dispatch(pushNewPiece(newPiece));
     };
 
     if (state.nextPieces.length === 2) {
@@ -29,7 +28,6 @@ export default function () {
     }
   }, [state.nextPieces]);
 
-  // console.log(nextPieces);
   return (
     <FlexBox direction="col" className="mx-4">
       <h1>Next Pieces</h1>
@@ -48,15 +46,11 @@ function getRandomInt(max) {
 }
 
 async function fetchFromMock(n) {
-  // if (MOCK_TETROMINOES.length < n) {
-  //   console.log("END OF TETROMINOES");
-  // }
   const ret = [];
   for (let i = 0; i < n; i++) {
     ret.push(MOCK_TETROMINOES[getRandomInt(lengthMockTetrominoes - 1)]);
   }
 
   await timeout(500);
-  // return MOCK_TETROMINOES.splice(0, n);
   return ret;
 }
