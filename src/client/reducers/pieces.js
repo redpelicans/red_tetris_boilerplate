@@ -10,6 +10,8 @@ export const initialState = {
   currentPiece: {
     shape: [],
     color: "",
+    padding: { x: 0, y: 0 },
+    coord: { x: 0, y: 0 },
   },
 };
 
