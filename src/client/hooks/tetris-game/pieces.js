@@ -60,8 +60,8 @@ export function putTetromino(tetromino, grid) {
   );
 }
 
-function rotate() {
-  return currentPiece[0].map((_, colIndex) =>
-    currentPiece.map((row) => row[colIndex]).reverse(),
+function rotate(piece) {
+  return piece[0].map((_, colIndex) =>
+    piece.map((row) => row[colIndex]).reverse(),
   );
 }
