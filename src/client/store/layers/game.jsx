@@ -1,7 +1,8 @@
 import React from "react";
 import { piecesReducer, initialPieces } from "reducers";
-// import { asyncMiddleware } from "../middlewares";
 import PropTypes from "prop-types";
+
+// import { asyncMiddleware } from "../middlewares";
 
 export const GameContext = React.createContext();
 
