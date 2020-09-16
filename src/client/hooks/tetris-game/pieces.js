@@ -1,55 +1,54 @@
 import { shallowCopy } from "helpers/functional";
-import { isFree, isBottomLine } from "./grid";
+import * as Grid from "./grid";
 
-// TODO: check if the piece can be inserted
 export function insertPiece(piece, grid, midGrid) {
   const gridCopy = shallowCopy(grid);
-  const insertPos = midGrid - Math.ceil(piece[0].length / 2);
+  const insertPos =
+    midGrid - Math.ceil((piece.shape[0].length - piece.padding.x) / 2);
+  const newPiece = {
+    ...piece,
+    coord: { x: insertPos, y: 0 - piece.padding.y },
+  };
+  const { shape, padding, coord } = newPiece;
 
-  const colLength = piece[0].length;
-  const rowLength = piece.length;
-  for (let col = 0; col < colLength; col++) {
-    for (let row = 0; row < rowLength; row++) {
-      gridCopy[row][insertPos + col] = piece[row][col];
-    }
-  }
-  return gridCopy;
-}
-
-function isPartOfPiece(element) {
-  return element === 1;
-}
-
-function canMove(grid, colLength, rowLength) {
-  for (let col = 0; col < colLength; col++) {
-    for (let row = 0; row < rowLength; row++) {
-      if (
-        isPartOfPiece(grid[row][col]) &&
-        (isBottomLine(grid, row) || !isFree(grid, row, col))
-      ) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
-export function moveDown(grid, colLength, rowLength) {
-  const gridCopy = shallowCopy(grid);
-
-  if (!canMove(gridCopy, colLength, rowLength)) {
+  if (!Grid.canPutLayer(grid, newPiece)) {
     return null;
   }
 
-  for (let col = 0; col < colLength; col++) {
-    for (let row = rowLength - 1; row >= 0; row--) {
-      if (isPartOfPiece(gridCopy[row][col])) {
+  const colLength = shape[0].length - padding.x;
+  const rowLength = shape.length - padding.y;
+  for (let col = padding.x; col < colLength; col++) {
+    for (let row = padding.y; row < rowLength; row++) {
+      if (Grid.isPartOfPiece(shape[row][col])) {
+        gridCopy[row - padding.y][coord.x + col - padding.x] = shape[row][col];
+      }
+    }
+  }
+  return [gridCopy, newPiece];
+}
+
+export function moveDown(grid, colLength, rowLength, piece) {
+  const gridCopy = shallowCopy(grid);
+  const newPiece = {
+    ...piece,
+    coord: { ...piece.coord, y: piece.coord.y + 1 },
+  };
+
+  const check = Grid.canPutLayer(gridCopy, newPiece);
+  if (!check) {
+    return null;
+  }
+
+  const upperRowLimit = piece.coord.y >= 0 ? piece.coord.y : 0;
+  for (let col = piece.coord.x; col < colLength; col++) {
+    for (let row = rowLength - 1; row >= upperRowLimit; row--) {
+      if (Grid.isPartOfPiece(gridCopy[row][col])) {
         gridCopy[row][col] = 0;
         gridCopy[row + 1][col] = 1;
       }
     }
   }
-  return gridCopy;
+  return [gridCopy, newPiece];
 }
 
 export function putTetromino(tetromino, grid) {
