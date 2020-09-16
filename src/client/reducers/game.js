@@ -17,6 +17,7 @@ export const initialState = {
     color: "",
     padding: { x: 0, y: 0 },
     coord: { x: 0, y: 0 },
+    dim: { height: 0, width: 0 },
   },
 };
 
