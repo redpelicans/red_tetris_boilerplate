@@ -18,7 +18,7 @@ export default function Game() {
       className="justify-center items-center"
     >
       <Link to="/">Retour accueil</Link>
-      <button onClick={tetris.toggleShortcuts}>Toggle Shortcuts</button>
+      {state.alive ? <h1>Still alive</h1> : <h1>GAME OVER</h1>}
       <FlexBox direction="row" className="mt-4">
         <FlexBox
           direction="col"
