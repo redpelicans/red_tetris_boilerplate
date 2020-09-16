@@ -8,8 +8,10 @@ export const pushNewPiece = (newPieces) => ({
   newPieces,
 });
 
-export const updateCurrentPiece = () => ({
+let autoIncrementId = 0;
+export const pullCurrentPiece = () => ({
   type: PULL_CURRENT_PIECE_FROM_NEXT_PIECES,
+  id: autoIncrementId++,
 });
 
 export const updateGrid = (newGrid) => ({
