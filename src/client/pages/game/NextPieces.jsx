@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { timeout } from "helpers/common";
-import { pushNewPiece } from "actions/pieces";
+import { pushNewPiece } from "actions/game";
 import { GameContext } from "store";
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 

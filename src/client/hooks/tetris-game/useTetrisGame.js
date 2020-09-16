@@ -2,8 +2,9 @@ import React from "react";
 import { insertPiece, moveDown, putTetromino } from "./pieces";
 import { isEmpty } from "helpers/functional";
 import { GameContext } from "store";
-import { updateCurrentPiece } from "actions/pieces";
+import { updateCurrentPiece, updateGrid } from "actions/game";
 import useAutoMove from "./useAutoMove";
+import useEventListener from "../useEventListener";
 
 const INTERVAL_MS = 1250;
 
@@ -17,23 +18,19 @@ const INTERVAL_MS = 1250;
 function useTetrisGame(cols = 10, rows = 20) {
   const { state, dispatch } = React.useContext(GameContext);
   const autoMoveTimer = useAutoMove(movePieceDown);
+  useEventListener("keydown", movePiece);
 
-  // The board game and its initialization
-  const [tetrisGrid, setTetrisGrid] = React.useState(() => {
-    try {
-      return createGrid(cols, rows);
-    } catch (err) {
-      console.error(err);
-      return createGrid(10, 20);
-    }
-  });
+  React.useEffect(() => {
+    const initGrid = createGrid(cols, rows);
+    dispatch(updateGrid(initGrid));
+  }, []);
 
   const midGrid = React.useMemo(() => getMidGrid(cols), [cols]);
 
   // Methods
-  function insertNewPiece(piece, grid = tetrisGrid) {
+  function insertNewPiece(piece, grid = state.grid) {
     const newGrid = insertPiece(piece, grid, midGrid);
-    setTetrisGrid(newGrid);
+    dispatch(updateGrid(newGrid));
   }
 
   React.useEffect(() => {
@@ -52,25 +49,26 @@ function useTetrisGame(cols = 10, rows = 20) {
 
   function movePiece(action) {
     autoMoveTimer.stop();
-    if (action === "DOWN") {
+    if (action.key === "ArrowDown") {
       movePieceDown();
     }
     autoMoveTimer.start(INTERVAL_MS);
   }
 
   function movePieceDown() {
-    let newGrid = moveDown(tetrisGrid, cols, rows);
+    let newGrid = moveDown(state.grid, cols, rows);
+
     if (isEmpty(newGrid)) {
       autoMoveTimer.stop();
-      newGrid = putTetromino(state.currentPiece, tetrisGrid);
-      setTetrisGrid(newGrid);
+      newGrid = putTetromino(state.currentPiece, state.grid);
+      dispatch(updateGrid(newGrid));
       dispatch(updateCurrentPiece());
     } else {
-      setTetrisGrid(newGrid);
+      dispatch(updateGrid(newGrid));
     }
   }
 
-  return { tetrisGrid, insertNewPiece, movePiece };
+  return { movePiece };
 }
 
 export default useTetrisGame;

@@ -1,11 +1,13 @@
 import {
   FETCH_PIECES,
   PULL_CURRENT_PIECE_FROM_NEXT_PIECES,
-} from "actions/pieces";
+  UPDATE_GRID,
+} from "actions/game";
 import { deepCopy } from "helpers/functional";
 
 export const initialState = {
   nextPieces: [],
+  grid: [],
   currentPiece: {
     shape: [],
     color: "",
@@ -26,6 +28,11 @@ export default function reducer(state = initialState, action) {
         ...state,
         currentPiece: deepCopy(state.nextPieces[0]),
         nextPieces: state.nextPieces.filter((_, idx) => idx !== 0),
+      };
+    case UPDATE_GRID:
+      return {
+        ...state,
+        grid: action.newGrid,
       };
     default:
       return state;
