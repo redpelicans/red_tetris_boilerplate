@@ -8,6 +8,7 @@ export default [
     ],
     color: "red",
     padding: { x: 0, y: 1 },
+    dim: { height: 1, width: 4 },
   },
   {
     shape: [
@@ -17,6 +18,7 @@ export default [
     ],
     color: "green",
     padding: { x: 0, y: 0 },
+    dim: { height: 2, width: 3 },
   },
   {
     shape: [
@@ -25,6 +27,7 @@ export default [
     ],
     color: "yellow",
     padding: { x: 0, y: 0 },
+    dim: { height: 2, width: 2 },
   },
   {
     shape: [
@@ -34,6 +37,7 @@ export default [
     ],
     color: "blue",
     padding: { x: 0, y: 0 },
+    dim: { height: 2, width: 3 },
   },
   {
     shape: [
@@ -43,6 +47,7 @@ export default [
     ],
     color: "purple",
     padding: { x: 0, y: 0 },
+    dim: { height: 2, width: 3 },
   },
   {
     shape: [
@@ -52,6 +57,7 @@ export default [
     ],
     color: "orange",
     padding: { x: 0, y: 0 },
+    dim: { height: 3, width: 2 },
   },
   {
     shape: [
@@ -61,5 +67,6 @@ export default [
     ],
     color: "cyan",
     padding: { x: 0, y: 0 },
+    dim: { height: 3, width: 2 },
   },
 ];
