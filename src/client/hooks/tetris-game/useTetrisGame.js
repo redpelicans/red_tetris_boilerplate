@@ -1,5 +1,6 @@
 import React from "react";
-import { insertPiece, moveDown, putTetromino } from "./pieces";
+import { bindPieceToGrid } from "./grid";
+import { insertPiece, moveDown, rotatePiece } from "./pieces";
 import { isEmpty } from "helpers/functional";
 import { GameContext } from "store";
 import {
@@ -11,7 +12,7 @@ import {
 import useAutoMove from "./useAutoMove";
 import useEventListener from "../useEventListener";
 
-const INTERVAL_MS = 500;
+const INTERVAL_MS = 1250;
 
 /*
  ** This custom hook is used to manage the game board.
@@ -58,7 +59,7 @@ function useTetrisGame(cols = 10, rows = 20) {
 
       return () => autoMoveTimer.stop();
     }
-  }, [state.currentPiece.coord]);
+  }, [state.currentPiece.coord, state.currentPiece.shape]);
 
   // At start only
   React.useEffect(() => {
@@ -74,18 +75,30 @@ function useTetrisGame(cols = 10, rows = 20) {
     autoMoveTimer.stop();
     if (action === "DOWN" || action?.key === "ArrowDown") {
       movePieceDown();
+    } else if (action === "ROTATE" || action?.key === "ArrowUp") {
+      rotatePieceClockwise();
     }
-    autoMoveTimer.start(INTERVAL_MS);
   }
 
   function movePieceDown() {
-    const newObj = moveDown(state.grid, cols, rows, state.currentPiece);
+    const newObj = moveDown(state.grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
-      autoMoveTimer.stop();
-      const newGrid = putTetromino(state.currentPiece, state.grid);
+      const newGrid = bindPieceToGrid(state.grid, state.currentPiece);
       dispatch(updateGrid(newGrid));
       dispatch(pullCurrentPiece());
+    } else {
+      const [newGrid, newPiece] = newObj;
+      dispatch(updateGrid(newGrid));
+      dispatch(updateCurrentPiece(newPiece));
+    }
+  }
+
+  function rotatePieceClockwise() {
+    const newObj = rotatePiece(state.currentPiece, state.grid);
+
+    if (isEmpty(newObj)) {
+      // Cannot rotate
     } else {
       const [newGrid, newPiece] = newObj;
       dispatch(updateGrid(newGrid));
