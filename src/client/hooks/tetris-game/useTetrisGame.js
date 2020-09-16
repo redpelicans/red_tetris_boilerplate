@@ -1,6 +1,6 @@
 import React from "react";
 import { bindPieceToGrid } from "./grid";
-import { insertPiece, moveDown, rotatePiece } from "./pieces";
+import { insertPiece, moveDown, rotatePiece, moveLateral } from "./pieces";
 import { isEmpty } from "helpers/functional";
 import { GameContext } from "store";
 import {
@@ -13,6 +13,8 @@ import useAutoMove from "./useAutoMove";
 import useEventListener from "../useEventListener";
 
 const INTERVAL_MS = 1250;
+const MOVE_LEFT = -1;
+const MOVE_RIGHT = 1;
 
 /*
  ** This custom hook is used to manage the game board.
@@ -75,8 +77,32 @@ function useTetrisGame(cols = 10, rows = 20) {
     autoMoveTimer.stop();
     if (action === "DOWN" || action?.key === "ArrowDown") {
       movePieceDown();
+    } else if (action === "LEFT" || action?.key === "ArrowLeft") {
+      movePieceLeft();
+    } else if (action === "RIGHT" || action?.key === "ArrowRight") {
+      movePieceRight();
     } else if (action === "ROTATE" || action?.key === "ArrowUp") {
       rotatePieceClockwise();
+    }
+  }
+
+  function movePieceLeft() {
+    const newObj = moveLateral(state.grid, state.currentPiece, MOVE_LEFT);
+
+    if (!isEmpty(newObj)) {
+      const [newGrid, newPiece] = newObj;
+      dispatch(updateGrid(newGrid));
+      dispatch(updateCurrentPiece(newPiece));
+    }
+  }
+
+  function movePieceRight() {
+    const newObj = moveLateral(state.grid, state.currentPiece, MOVE_RIGHT);
+
+    if (!isEmpty(newObj)) {
+      const [newGrid, newPiece] = newObj;
+      dispatch(updateGrid(newGrid));
+      dispatch(updateCurrentPiece(newPiece));
     }
   }
 

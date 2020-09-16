@@ -31,6 +31,21 @@ export function moveDown(grid, piece) {
   return [newGrid, newPiece];
 }
 
+export function moveLateral(grid, piece, direction) {
+  const newPiece = {
+    ...piece,
+    coord: { ...piece.coord, x: piece.coord.x + direction },
+  };
+
+  const cleanGrid = Grid.clearPieceFromGrid(grid);
+  if (!Grid.canPutLayer(cleanGrid, newPiece)) {
+    return null;
+  }
+
+  const newGrid = Grid.writePieceInGrid(cleanGrid, newPiece);
+  return [newGrid, newPiece];
+}
+
 function rotation(piece) {
   return piece[0].map((_, colIndex) =>
     piece.map((row) => row[colIndex]).reverse(),
