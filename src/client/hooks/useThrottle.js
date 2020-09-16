@@ -3,6 +3,8 @@ import React from "react";
 function useThrottle(func, wait) {
   const waiting = React.useRef(false);
 
+  React.useEffect(() => clearTimeout(waiting.current), [func, wait]);
+
   return React.useCallback(
     function wrapper() {
       const ctx = this;
