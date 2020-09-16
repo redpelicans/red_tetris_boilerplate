@@ -7,7 +7,6 @@ function useAutoMove(func) {
     if (timer.current) {
       clearInterval(timer.current);
       timer.current = null;
-      // console.log("STOPPED", timer.current);
     }
   };
 
@@ -15,7 +14,6 @@ function useAutoMove(func) {
     if (!timer.current) {
       stop();
       timer.current = setInterval(func, ms);
-      // console.log("STARTED", timer.current);
     }
   };
 
