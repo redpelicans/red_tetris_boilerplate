@@ -27,6 +27,7 @@ export default function Game() {
         >
           <TetrisGrid grid={state.grid} />
           <button onClick={() => tetris.movePiece("DOWN")}>go down</button>
+          <button onClick={() => tetris.movePiece("ROTATE")}>rotation</button>
         </FlexBox>
         <NextPieces />
       </FlexBox>
