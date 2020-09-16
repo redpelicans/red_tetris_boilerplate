@@ -10,11 +10,13 @@ import {
   setPlayerIsAlive,
 } from "actions/game";
 import useAutoMove from "./useAutoMove";
-import useEventListener from "../useEventListener";
+import useEventListener from "hooks/useEventListener";
+import useThrottle from "hooks/useThrottle";
 
-const INTERVAL_MS = 1250;
+const INTERVAL_MS = 1000;
 const MOVE_LEFT = -1;
 const MOVE_RIGHT = 1;
+const DEFAULT_REPEAT_TIMEOUT = 5;
 
 /*
  ** This custom hook is used to manage the game board.
@@ -26,7 +28,8 @@ const MOVE_RIGHT = 1;
 function useTetrisGame(cols = 10, rows = 20) {
   const { state, dispatch } = React.useContext(GameContext);
   const autoMoveTimer = useAutoMove(movePieceDown);
-  useEventListener("keyup", movePiece);
+  const throttledMove = useThrottle(movePiece, DEFAULT_REPEAT_TIMEOUT);
+  useEventListener("keydown", throttledMove);
 
   React.useEffect(() => {
     const initGrid = createGrid(cols, rows);
