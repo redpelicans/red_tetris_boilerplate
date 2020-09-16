@@ -12,6 +12,7 @@ import { GameContextProvider } from "store";
  **     must be passed as children.
  **   Documentation: https://reactrouter.com/web/guides/quick-start
  */
+
 export default function Router() {
   return (
     <BrowserRouter>

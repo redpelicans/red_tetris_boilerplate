@@ -40,6 +40,7 @@ const runSocketIo = (httpServer) => {
       /* else the socket will automatically try to reconnect */
       console.log(socket.id);
       const playerId = await getPlayerId(socket.id);
+      console.log("I got playerId", playerId);
       await popPlayer(playerId);
 
       /* const players = getPlayers(); */

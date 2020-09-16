@@ -1,12 +1,12 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
-import { Redirect } from "react-router-dom";
+import { useNavigation } from "helpers/navigate";
 
 export default function () {
   const { state, dispatch } = React.useContext(StoreContext);
   const [playerName, setPlayerName] = React.useState("");
-  const [redirect, setRedirect] = React.useState(false);
+  const { navigate } = useNavigation();
   const handlePlayerName = (e) => {
     setPlayerName(e.target.value);
   };
@@ -16,7 +16,8 @@ export default function () {
       console.log("There was an error with player:response");
     else if (state.playerResponse.type === "success") {
       console.log("New player created :", state.playerResponse.payload);
-      setRedirect(true);
+      // reset player:response
+      navigate("lobbies");
     }
   }, [state.playerResponse]);
 
@@ -26,7 +27,6 @@ export default function () {
 
   return (
     <FlexBox direction="col" className="">
-      {redirect && <Redirect to="/lobbies" />}
       <div className="flex items-center border-teal-500 py-2">
         <input
           className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg mr-3 py-1 px-2 block w-full appearance-none leading-normal"

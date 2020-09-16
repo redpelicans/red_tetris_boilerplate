@@ -17,7 +17,8 @@ export const handlerAddLobby = async (
   socket.emit(LOBBIES.RESPONSE, { response });
 
   const lobbies = getLobbies();
-  socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
+  socket.broadcast.emit(LOBBIES.PUBLISH, { lobbies });
+  // socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
   socket.emit(LOBBIES.PUBLISH, { lobbies });
 };
 

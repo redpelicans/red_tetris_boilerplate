@@ -22,5 +22,6 @@ export const pushPlayer = (player) => {
 };
 
 export const popPlayer = (id) => {
+  zzz;
   delete players[id];
 };

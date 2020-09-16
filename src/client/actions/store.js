@@ -1,12 +1,42 @@
-export const INIT_SOCKET = "INIT_SOCKET";
 export const SET_PLAYER_RESPONSE = "SET_PLAYER_RESPONSE";
-
-export const initSocket = (socket) => ({
-  type: INIT_SOCKET,
-  socket: socket,
-});
+export const SET_PLAYER = "SET_PLAYER";
+export const SET_PLAYERS = "SET_PLAYERS";
+export const SET_LOBBIES = "SET_LOBBIES";
+export const SET_LOBBIES_RESPONSE = "SET_LOBBIES_RESPONSE";
+export const SET_LOBBY_RESPONSE = "SET_LOBBY_RESPONSE";
+export const SET_LOBBY = "SET_LOBBY";
 
 export const setPlayerResponse = (playerResponse) => ({
   type: SET_PLAYER_RESPONSE,
   playerResponse: playerResponse,
+});
+
+export const setPlayer = (player) => ({
+  type: SET_PLAYER,
+  player: player,
+});
+
+export const setPlayers = (players) => ({
+  type: SET_PLAYERS,
+  players: players,
+});
+
+export const setLobbies = (lobbies) => ({
+  type: SET_LOBBIES,
+  lobbies: lobbies,
+});
+
+export const setLobby = (lobby) => ({
+  type: SET_LOBBY,
+  lobby: lobby,
+});
+
+export const setLobbyResponse = (lobbyResponse) => ({
+  type: SET_LOBBY_RESPONSE,
+  lobbyResponse: lobbyResponse,
+});
+
+export const setLobbiesResponse = (lobbiesResponse) => ({
+  type: SET_LOBBIES_RESPONSE,
+  lobbiesResponse: lobbiesResponse,
 });

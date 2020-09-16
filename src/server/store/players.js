@@ -23,8 +23,9 @@ export const pushPlayer = async (player) => {
 };
 
 export const popPlayer = async (id) => {
-  const players = await getComplexObjectFromRedis("players");
+  let players = await getComplexObjectFromRedis("players");
   if (players === null) return null;
   delete players[id];
+  console.log("player", id, "deleted");
   const res = await setComplexObjectToRedis("players", players);
 };
