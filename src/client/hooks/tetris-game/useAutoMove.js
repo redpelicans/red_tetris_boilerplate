@@ -3,24 +3,32 @@ import React from "react";
 function useAutoMove(func) {
   const timer = React.useRef(null);
 
-  const stop = () => {
+  React.useEffect(() => stop, []);
+
+  const stop = React.useCallback(() => {
     if (timer.current) {
       clearInterval(timer.current);
       timer.current = null;
     }
-  };
+  }, [func]);
 
-  const start = (ms) => {
-    if (!timer.current) {
+  const start = React.useCallback(
+    (ms) => {
+      if (!timer.current) {
+        stop();
+        timer.current = setInterval(func, ms);
+      }
+    },
+    [func],
+  );
+
+  const reset = React.useCallback(
+    (ms) => {
       stop();
-      timer.current = setInterval(func, ms);
-    }
-  };
-
-  const reset = (ms) => {
-    stop();
-    start(ms);
-  };
+      start(ms);
+    },
+    [func],
+  );
 
   return { stop, start, reset };
 }
