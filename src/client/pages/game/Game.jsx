@@ -26,6 +26,7 @@ export default function Game() {
           className="justify-center align-center"
         >
           <TetrisGrid grid={state.grid} />
+          <button onClick={() => tetris.movePiece("DOWN")}>go down</button>
         </FlexBox>
         <NextPieces />
       </FlexBox>
