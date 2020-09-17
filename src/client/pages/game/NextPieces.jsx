@@ -2,12 +2,9 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { timeout } from "helpers/common";
 import { pushNewPiece } from "actions/game";
-import { GameContext } from "store";
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 
-export default function NextPieces() {
-  const { state, dispatch } = React.useContext(GameContext);
-
+const NextPieces = React.memo(({ nextPieces, dispatch }) => {
   React.useEffect(() => {
     const fetchInitPieces = async () => {
       const initPieces = await fetchFromMock(4);
@@ -23,21 +20,23 @@ export default function NextPieces() {
       dispatch(pushNewPiece(newPiece));
     };
 
-    if (state.nextPieces.length === 2) {
+    if (nextPieces.length === 2) {
       fetchNewPiece();
     }
-  }, [state.nextPieces]);
+  }, [nextPieces]);
 
   return (
     <FlexBox direction="col" className="mx-4">
       <h1>Next Pieces</h1>
       <ol>
-        <li>1. {state.nextPieces[0]?.color}</li>
-        <li>2. {state.nextPieces[1]?.color}</li>
+        <li>1. {nextPieces[0]?.color}</li>
+        <li>2. {nextPieces[1]?.color}</li>
       </ol>
     </FlexBox>
   );
-}
+});
+
+export default NextPieces;
 
 // Function for test env
 const lengthMockTetrominoes = MOCK_TETROMINOES.length;

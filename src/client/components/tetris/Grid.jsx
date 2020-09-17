@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { GameContext } from "store";
 import "./Grid.scss";
 
-export default function TetrisGrid({ grid }) {
-  return <TetrisRows rows={grid} />;
-}
+const TetrisGrid = React.memo(({ grid }) => <TetrisRows rows={grid} />);
+
+export default TetrisGrid;
 
 TetrisGrid.propTypes = {
   grid: PropTypes.array.isRequired,

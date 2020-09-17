@@ -7,7 +7,7 @@ import { GameContext } from "store";
 import NextPieces from "./NextPieces";
 
 export default function Game() {
-  const { state } = React.useContext(GameContext);
+  const { state, dispatch } = React.useContext(GameContext);
   const tetris = useTetrisGame(10, 20);
 
   return (
@@ -29,7 +29,10 @@ export default function Game() {
           <button onClick={() => tetris.movePiece("DOWN")}>go down</button>
           <button onClick={() => tetris.movePiece("ROTATE")}>rotation</button>
         </FlexBox>
-        <NextPieces />
+        <FlexBox direction="col" className="items-center">
+          <Score score={state.score} />
+          <NextPieces nextPieces={state.nextPieces} dispatch={dispatch} />
+        </FlexBox>
       </FlexBox>
     </FlexBox>
   );
