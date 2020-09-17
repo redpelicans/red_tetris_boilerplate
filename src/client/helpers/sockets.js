@@ -3,6 +3,7 @@ import { PLAYER } from "../../config/actions/player";
 import { LOBBY } from "../../config/actions/lobby";
 import { LOBBIES } from "../../config/actions/lobbies";
 import { PIECE } from "../../config/actions/piece";
+import { MESSAGE } from "../../config/actions/message";
 
 import {
   setPlayerResponse,
@@ -10,6 +11,7 @@ import {
   setLobbies,
   setLobbiesResponse,
   setLobby,
+  setLobbyResponse,
   addMessage,
 } from "actions/store";
 
@@ -34,7 +36,7 @@ export function setupSocket(socket, dispatch) {
   socket.on("players:publish", (data) => {
     dispatch(setPlayers(data.players));
   });
-  socket.on("message:publish", (data) => {
+  socket.on(MESSAGE.PUBLISH, (data) => {
     dispatch(addMessage(data.messageObject));
   });
   socket.on(PIECE.SEND, (data) => {});

@@ -3,6 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
 import { useNavigation } from "helpers/navigate";
 import { setPlayer, setPlayerResponse } from "actions/store";
+import { PLAYER } from "../../../config/actions/player";
 
 export default function () {
   const { state, dispatch } = React.useContext(StoreContext);
@@ -27,7 +28,7 @@ export default function () {
   }, [state.playerResponse]);
 
   const createPlayer = (playerName) => {
-    state.socket.emit("player:create", { name: playerName });
+    state.socket.emit(PLAYER.CREATE, { name: playerName });
   };
 
   const submit = (event) => {
@@ -55,7 +56,7 @@ export default function () {
           Create player
         </button>
       </form>
-      <span>{error}</span>
+      <span className="text-red-600">{error}</span>
     </FlexBox>
   );
 }

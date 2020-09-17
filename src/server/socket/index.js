@@ -3,6 +3,7 @@ import * as piece from "socket/piece";
 import * as player from "socket/player";
 import * as players from "socket/players";
 import * as lobbies from "socket/lobbies";
+import * as lobby from "socket/lobby";
 import * as message from "socket/message";
 
 import { LOBBIES } from "./../../config/actions/lobbies";
@@ -16,6 +17,7 @@ const handlers = Object.values({
   ...player,
   ...players,
   ...lobbies,
+  ...lobby,
   ...message,
 });
 

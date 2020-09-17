@@ -3,8 +3,8 @@ export const SET_PLAYER = "SET_PLAYER";
 export const SET_PLAYERS = "SET_PLAYERS";
 export const SET_LOBBIES = "SET_LOBBIES";
 export const SET_LOBBIES_RESPONSE = "SET_LOBBIES_RESPONSE";
-export const SET_LOBBY_RESPONSE = "SET_LOBBY_RESPONSE";
 export const SET_LOBBY = "SET_LOBBY";
+export const SET_LOBBY_RESPONSE = "SET_LOBBY_RESPONSE";
 export const ADD_MESSAGE = "ADD_MESSAGE";
 
 export const setPlayerResponse = (playerResponse) => ({
@@ -27,6 +27,11 @@ export const setLobbies = (lobbies) => ({
   lobbies: lobbies,
 });
 
+export const setLobbiesResponse = (lobbiesResponse) => ({
+  type: SET_LOBBIES_RESPONSE,
+  lobbiesResponse: lobbiesResponse,
+});
+
 export const setLobby = (lobby) => ({
   type: SET_LOBBY,
   lobby: lobby,
@@ -35,11 +40,6 @@ export const setLobby = (lobby) => ({
 export const setLobbyResponse = (lobbyResponse) => ({
   type: SET_LOBBY_RESPONSE,
   lobbyResponse: lobbyResponse,
-});
-
-export const setLobbiesResponse = (lobbiesResponse) => ({
-  type: SET_LOBBIES_RESPONSE,
-  lobbiesResponse: lobbiesResponse,
 });
 
 export const addMessage = (message) => ({

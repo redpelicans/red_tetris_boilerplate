@@ -23,7 +23,7 @@ export function StoreContextProvider({ children }) {
     <StoreContext.Provider
       value={{
         state: storeState,
-        dispatch: dispatch,
+        dispatch: asyncMiddleware(dispatch),
       }}
     >
       {children}

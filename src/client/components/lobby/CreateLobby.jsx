@@ -1,10 +1,10 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-import { StoreContext } from "store";
 import { setLobby, setLobbiesResponse } from "actions/store";
+import { LOBBY } from "../../../config/actions/lobby";
+import { LOBBIES } from "../../../config/actions/lobbies";
 
-export default function () {
-  const { state, dispatch } = React.useContext(StoreContext);
+export default function ({ state, dispatch }) {
   const [myLobby, setMyLobby] = React.useState({
     maxPlayer: 4,
     owner: state.player,
@@ -28,16 +28,17 @@ export default function () {
       console.log("New lobby created :", state.lobbiesResponse.payload);
       dispatch(setLobby(state.lobbiesResponse.payload));
       dispatch(setLobbiesResponse({}));
-      state.socket.emit("lobby:subscribe", {
+      // to put outside to get the new Lobby Object
+      state.socket.emit(LOBBY.SUBSCRIBE, {
         playerId: state.player.id,
-        lobbyId: state.lobby.id,
+        lobbyId: state.lobbiesResponse.payload.id,
       });
     }
   }, [state.lobbiesResponse]);
 
   const createLobby = (myLobby) => {
     console.log(myLobby);
-    state.socket.emit("lobbies:add", myLobby);
+    state.socket.emit(LOBBIES.ADD, myLobby);
   };
 
   return (
@@ -84,7 +85,7 @@ export default function () {
         >
           Create lobby
         </button>
-        <span>{error}</span>
+        <span className="text-red-600">{error}</span>
       </FlexBox>
     </FlexBox>
   );

@@ -1,11 +1,8 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-import { StoreContext } from "store";
-import { setLobby, setLobbiesResponse } from "actions/store";
-import { List } from "components/list/List";
+import { MESSAGE } from "../../../config/actions/message";
 
-export default function () {
-  const { state, dispatch } = React.useContext(StoreContext);
+export default function ({ state }) {
   const [message, setMessage] = React.useState("");
 
   const handleMessage = (e) => {
@@ -28,7 +25,7 @@ export default function () {
   const sendMessage = () => {
     if (message && message !== "") {
       const sender = state.player.name;
-      state.socket.emit("message:send", { message, sender });
+      state.socket.emit(MESSAGE.SEND, { message, sender });
       setMessage("");
     }
   };

@@ -4,12 +4,9 @@ import { StoreContext } from "store";
 import { setLobby, setLobbiesResponse } from "actions/store";
 import { List } from "components/list/List";
 
-export default function () {
-  const { state, dispatch } = React.useContext(StoreContext);
-
+export default function ({ state }) {
   return (
     <FlexBox direction="col">
-      <span>JOINED LOBBY</span>
       <span>Name : {state?.lobby?.name}</span>
       <span>Id : {state?.lobby?.id}</span>
       <span>Hash : {state?.lobby?.hash}</span>
