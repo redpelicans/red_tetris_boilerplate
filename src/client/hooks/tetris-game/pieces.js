@@ -76,7 +76,7 @@ function fixCoord(piece, padding, dim, colMax) {
   let newX = piece.coord.x;
   let newY = piece.coord.y;
 
-  const overflowTop = newY + padding.newY;
+  const overflowTop = newY + padding.y;
   if (overflowTop < 0) {
     newY = 0;
   }
