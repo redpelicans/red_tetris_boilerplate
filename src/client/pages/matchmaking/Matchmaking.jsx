@@ -8,6 +8,7 @@ import Lobby from "components/lobby/Lobby";
 import Lobbies from "components/lobbies/Lobbies";
 import Players from "components/players/Players";
 import Player from "components/player/Player";
+import Chat from "components/chat/Chat";
 
 import { useNavigation } from "helpers/navigate";
 
@@ -61,6 +62,7 @@ export default function Matchmaking() {
           className="border border-black p-5 max-h-11/12"
         >
           <span>CHAT</span>
+          <Chat />
         </FlexBox>
       </FlexBox>
       <FlexBox

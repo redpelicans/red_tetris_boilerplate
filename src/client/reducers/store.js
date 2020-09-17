@@ -8,6 +8,7 @@ import {
   SET_LOBBY,
   SET_LOBBY_RESPONSE,
   SET_LOBBIES_RESPONSE,
+  ADD_MESSAGE,
 } from "actions/store";
 
 export const initialState = {
@@ -19,6 +20,7 @@ export const initialState = {
   lobby: {},
   lobbyResponse: {},
   lobbiesResponse: {},
+  messages: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -37,6 +39,8 @@ export default function reducer(state = initialState, action) {
       return { ...state, lobbyResponse: action.lobbyResponse };
     case SET_LOBBIES_RESPONSE:
       return { ...state, lobbiesResponse: action.lobbiesResponse };
+    case ADD_MESSAGE:
+      return { ...state, messages: [...state.messages, action.message] };
     default:
       return state;
   }

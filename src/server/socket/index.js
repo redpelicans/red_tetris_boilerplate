@@ -3,6 +3,8 @@ import * as piece from "socket/piece";
 import * as player from "socket/player";
 import * as players from "socket/players";
 import * as lobbies from "socket/lobbies";
+import * as message from "socket/message";
+
 import { LOBBIES } from "./../../config/actions/lobbies";
 import { getPlayers, popPlayer, getPlayerId } from "store/players";
 import { getComplexObjectFromRedis } from "store";
@@ -14,6 +16,7 @@ const handlers = Object.values({
   ...player,
   ...players,
   ...lobbies,
+  ...message,
 });
 
 const runSocketIo = (httpServer) => {

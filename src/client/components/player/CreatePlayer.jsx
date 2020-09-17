@@ -30,9 +30,17 @@ export default function () {
     state.socket.emit("player:create", { name: playerName });
   };
 
+  const submit = (event) => {
+    event.preventDefault();
+    createPlayer(playerName);
+  };
+
   return (
     <FlexBox direction="col" className="">
-      <div className="flex items-center border-teal-500 py-2">
+      <form
+        className="flex items-center border-teal-500 py-2"
+        onSubmit={submit}
+      >
         <input
           className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg mr-3 py-1 px-2 block w-full appearance-none leading-normal"
           type="text"
@@ -42,12 +50,11 @@ export default function () {
         />
         <button
           className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
-          type="button"
-          onClick={() => createPlayer(playerName)}
+          type="submit"
         >
           Create player
         </button>
-      </div>
+      </form>
       <span>{error}</span>
     </FlexBox>
   );

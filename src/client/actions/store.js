@@ -5,6 +5,7 @@ export const SET_LOBBIES = "SET_LOBBIES";
 export const SET_LOBBIES_RESPONSE = "SET_LOBBIES_RESPONSE";
 export const SET_LOBBY_RESPONSE = "SET_LOBBY_RESPONSE";
 export const SET_LOBBY = "SET_LOBBY";
+export const ADD_MESSAGE = "ADD_MESSAGE";
 
 export const setPlayerResponse = (playerResponse) => ({
   type: SET_PLAYER_RESPONSE,
@@ -39,4 +40,9 @@ export const setLobbyResponse = (lobbyResponse) => ({
 export const setLobbiesResponse = (lobbiesResponse) => ({
   type: SET_LOBBIES_RESPONSE,
   lobbiesResponse: lobbiesResponse,
+});
+
+export const addMessage = (message) => ({
+  type: ADD_MESSAGE,
+  message: message,
 });

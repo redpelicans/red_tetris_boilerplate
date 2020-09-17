@@ -10,6 +10,7 @@ import {
   setLobbies,
   setLobbiesResponse,
   setLobby,
+  addMessage,
 } from "actions/store";
 
 const endpoint = "http://0.0.0.0:3004";
@@ -32,6 +33,9 @@ export function setupSocket(socket, dispatch) {
   });
   socket.on("players:publish", (data) => {
     dispatch(setPlayers(data.players));
+  });
+  socket.on("message:publish", (data) => {
+    dispatch(addMessage(data.messageObject));
   });
   socket.on(PIECE.SEND, (data) => {});
 }
