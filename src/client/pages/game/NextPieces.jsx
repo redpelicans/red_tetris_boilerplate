@@ -26,17 +26,42 @@ const NextPieces = React.memo(({ nextPieces, dispatch }) => {
   }, [nextPieces]);
 
   return (
-    <FlexBox direction="col" className="mx-4">
-      <h1>Next Pieces</h1>
-      <ol>
-        <li>1. {nextPieces[0]?.color}</li>
-        <li>2. {nextPieces[1]?.color}</li>
-      </ol>
+    <FlexBox direction="col">
+      <h1 className="font-bold">Next Pieces</h1>
+      {nextPieces[0] && <Previsualisation nextPiece={nextPieces[0]} size={4} />}
+      {nextPieces[1] && <Previsualisation nextPiece={nextPieces[1]} size={2} />}
     </FlexBox>
   );
 });
 
 export default NextPieces;
+
+const Previsualisation = React.memo(({ nextPiece, size }) => {
+  const piece = React.useMemo(
+    () =>
+      nextPiece.shape.map((row) =>
+        row.map((col) => (col === 1 ? nextPiece.color : col)),
+      ),
+    [nextPiece],
+  );
+
+  return (
+    <FlexBox direction="col" className="items-center mb-4">
+      {piece.map((row, rowIdx) => (
+        <FlexBox key={`next-piece-row-${rowIdx}`} direction="row" height={size}>
+          {row.map((col, colIdx) => (
+            <FlexBox
+              key={`next-piece-row${rowIdx}-col-${colIdx}`}
+              direction="col"
+              width={size}
+              className={col === 0 ? "" : `tetromino-${col}`}
+            />
+          ))}
+        </FlexBox>
+      ))}
+    </FlexBox>
+  );
+});
 
 // Function for test env
 const lengthMockTetrominoes = MOCK_TETROMINOES.length;
