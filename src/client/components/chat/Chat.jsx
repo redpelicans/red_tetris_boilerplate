@@ -40,12 +40,19 @@ export default function () {
 
   return (
     <FlexBox direction="col" width="full">
-      <ul id="lol" className="overflow-y-scroll max-h-64 max-w-100 min-h-12">
+      <ul id="lol" className="overflow-y-scroll max-h-64 max-w-80 min-h-12">
         {state.messages.map((message, index) => {
           return (
-            <li key={message.id}>
-              <div className="text-xs text-blue-600 ">{message.sender}</div>
-              <div className="text-sm ">{message.message}</div>
+            <li
+              key={message.id}
+              className={`flex flex-col mr-1 ml-1 ${
+                message.sender == state.player.name
+                  ? "items-end"
+                  : "items-start"
+              } break-words`}
+            >
+              <span className="text-xs text-blue-600">{message.sender}</span>
+              <span className="text-sm">{message.message}</span>
             </li>
           );
         })}
