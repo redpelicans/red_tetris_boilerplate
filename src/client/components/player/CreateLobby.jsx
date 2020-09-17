@@ -6,7 +6,7 @@ export default function () {
   const { state, dispatch } = React.useContext(StoreContext);
   const [lobby, setLobby] = React.useState({
     maxPlayer: 4,
-    owner: state.playerResponse.payload,
+    owner: state.player,
   });
 
   const handleLobby = (e) => {

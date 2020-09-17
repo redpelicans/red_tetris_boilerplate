@@ -4,7 +4,6 @@ import * as player from "socket/player";
 import * as players from "socket/players";
 import * as lobbies from "socket/lobbies";
 import { LOBBIES } from "./../../config/actions/lobbies";
-import { getLobbies } from "service/lobbies";
 import { getPlayers, popPlayer, getPlayerId } from "store/players";
 import { getComplexObjectFromRedis } from "store";
 import { logerror, loginfo } from "utils/log";
@@ -27,7 +26,7 @@ const runSocketIo = (httpServer) => {
     const players = await getComplexObjectFromRedis("players");
     socket.emit("players:publish", { players });
 
-    const lobbies = getLobbies();
+    const lobbies = await getComplexObjectFromRedis("lobbies");
     socket.emit(LOBBIES.PUBLISH, { lobbies });
 
     /* Test on disconnect */

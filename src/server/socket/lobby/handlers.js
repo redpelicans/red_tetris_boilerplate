@@ -1,7 +1,7 @@
 import Response from "models/response";
 import { logerror, loginfo } from "utils/log";
 import { getPlayer } from "store/players";
-import { joinLobby, leaveLobby } from "service/lobbies";
+import { joinLobby, leaveLobby } from "store/lobbies";
 import { LOBBY } from "./../../../config/actions/lobby";
 
 export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {

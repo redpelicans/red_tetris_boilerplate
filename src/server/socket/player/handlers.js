@@ -8,10 +8,16 @@ import { PLAYER } from "./../../../config/actions/player";
 export const handlerCreatePlayer = async (socket, { name }) => {
   const socketId = socket.id;
   const player = new Player({ name, socketId });
-  await pushPlayer(player);
-  const response = Response.success(PLAYER.CREATE, player);
-  loginfo("Player", response.payload.name, "created!");
-  socket.emit(PLAYER.RESPONSE, { response });
+  const res = await pushPlayer(player);
+  if (res) {
+    const response = Response.success(PLAYER.CREATE, player);
+    loginfo("Player", response.payload.name, "created!");
+    socket.emit(PLAYER.RESPONSE, { response });
+  } else {
+    const response = Response.error(PLAYER.CREATE, "There was an error!", {});
+    loginfo("Error creating player", name);
+    socket.emit(PLAYER.RESPONSE, { response });
+  }
 
   /* Sending all players */
   const players = await getComplexObjectFromRedis("players");

@@ -12,7 +12,7 @@ export default function Lobbies() {
 
   React.useEffect(() => {
     // use player
-    if (!Object.keys(state?.playerResponse.payload || {}).length) navigate("");
+    if (!Object.keys(state?.player || {}).length) navigate("");
   }, []);
 
   React.useEffect(() => {
@@ -24,24 +24,22 @@ export default function Lobbies() {
       <FlexBox
         height="6/12"
         width="full"
-        className="justify-center items-center sm:w-6/12 sm:h-6/12"
+        className="justify-center items-center sm:w-1/3 sm:h-1/3"
       >
         <FlexBox
           direction="col"
           className="border border-black p-5 max-h-11/12"
         >
           <span>PLAYER INFORMATIONS</span>
-          <span>playerName : {state?.playerResponse?.payload?.name}</span>
-          <span>playerId : {state?.playerResponse?.payload?.id}</span>
-          <span>
-            playerSocketId : {state?.playerResponse?.payload?.socketId}
-          </span>
+          <span>playerName : {state?.player?.name}</span>
+          <span>playerId : {state?.player?.id}</span>
+          <span>playerSocketId : {state?.player?.socketId}</span>
         </FlexBox>
       </FlexBox>
       <FlexBox
         height="6/12"
         width="full"
-        className="justify-center items-center sm:w-6/12 sm:h-6/12"
+        className="justify-center items-center sm:w-1/3 sm:h-1/3"
       >
         <FlexBox
           direction="col"
@@ -56,7 +54,19 @@ export default function Lobbies() {
       <FlexBox
         height="6/12"
         width="full"
-        className="justify-center items-center sm:w-6/12 sm:h-6/12"
+        className="justify-center items-center sm:w-1/3 sm:h-1/3"
+      >
+        <FlexBox
+          direction="col"
+          className="border border-black p-5 max-h-11/12"
+        >
+          <span>CHAT</span>
+        </FlexBox>
+      </FlexBox>
+      <FlexBox
+        height="6/12"
+        width="full"
+        className="justify-center items-center sm:w-1/3 sm:h-1/3"
       >
         <FlexBox
           direction="col"
@@ -69,13 +79,26 @@ export default function Lobbies() {
       <FlexBox
         height="6/12"
         width="full"
-        className="justify-center items-center sm:w-6/12 sm:h-6/12"
+        className="justify-center items-center sm:w-1/3 sm:h-1/3"
       >
         <FlexBox
           direction="col"
           className="border border-black p-5 max-h-11/12"
         >
+          <span>CREATE LOBBY</span>
           <CreateLobby />
+        </FlexBox>
+      </FlexBox>
+      <FlexBox
+        height="6/12"
+        width="full"
+        className="justify-center items-center sm:w-1/3 sm:h-1/3"
+      >
+        <FlexBox
+          direction="col"
+          className="border border-black p-5 max-h-11/12"
+        >
+          <span>MY LOBBY</span>
         </FlexBox>
       </FlexBox>
     </FlexBox>
