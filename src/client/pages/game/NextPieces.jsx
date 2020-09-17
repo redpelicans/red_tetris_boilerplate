@@ -48,7 +48,7 @@ function getRandomInt(max) {
 async function fetchFromMock(n) {
   const ret = [];
   for (let i = 0; i < n; i++) {
-    ret.push(MOCK_TETROMINOES[getRandomInt(lengthMockTetrominoes - 1)]);
+    ret.push(MOCK_TETROMINOES[getRandomInt(lengthMockTetrominoes)]);
     // ret.push(MOCK_TETROMINOES[0]);
   }
 

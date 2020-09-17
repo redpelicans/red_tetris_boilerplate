@@ -51,13 +51,13 @@ export default [
   },
   {
     shape: [
-      [1, 0, 0],
       [1, 1, 0],
-      [0, 1, 0],
+      [0, 1, 1],
+      [0, 0, 0],
     ],
     color: "orange",
     padding: { x: 0, y: 0 },
-    dim: { height: 3, width: 2 },
+    dim: { height: 2, width: 3 },
   },
   {
     shape: [
