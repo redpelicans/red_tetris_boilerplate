@@ -2,22 +2,27 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { Link } from "react-router-dom";
 import { StoreContext } from "store";
-import { List } from "components/player/List";
-import CreateLobby from "components/player/CreateLobby";
+import { List } from "components/list/List";
+import CreateLobby from "components/lobby/CreateLobby";
+import Lobby from "components/lobby/Lobby";
+import Lobbies from "components/lobbies/Lobbies";
+import Players from "components/players/Players";
+import Player from "components/player/Player";
+
 import { useNavigation } from "helpers/navigate";
 
-export default function Lobbies() {
+export default function Matchmaking() {
   const { state, dispatch } = React.useContext(StoreContext);
   const { navigate } = useNavigation();
 
   React.useEffect(() => {
-    // use player
     if (!Object.keys(state?.player || {}).length) navigate("");
+    state.socket.emit("lobbies:subscribe");
   }, []);
 
-  React.useEffect(() => {
-    console.log(state?.players);
-  }, [state?.players]);
+  // React.useEffect(() => {
+  //   console.log(state?.players);
+  // }, [state?.players]);
 
   return (
     <FlexBox height="full" width="full">
@@ -30,10 +35,7 @@ export default function Lobbies() {
           direction="col"
           className="border border-black p-5 max-h-11/12"
         >
-          <span>PLAYER INFORMATIONS</span>
-          <span>playerName : {state?.player?.name}</span>
-          <span>playerId : {state?.player?.id}</span>
-          <span>playerSocketId : {state?.player?.socketId}</span>
+          <Player />
         </FlexBox>
       </FlexBox>
       <FlexBox
@@ -46,9 +48,7 @@ export default function Lobbies() {
           className="border border-black p-5 max-h-11/12"
         >
           <span>PLAYERS CONNECTED</span>
-          <FlexBox direction="col" className="overflow-y-scroll max-h-64">
-            <List type="players" object={state} />
-          </FlexBox>
+          <Players />
         </FlexBox>
       </FlexBox>
       <FlexBox
@@ -73,7 +73,7 @@ export default function Lobbies() {
           className="border border-black p-5 max-h-11/12"
         >
           <span>LOBBIES</span>
-          <List type="lobbies" object={state} />
+          <Lobbies />
         </FlexBox>
       </FlexBox>
       <FlexBox
@@ -98,7 +98,7 @@ export default function Lobbies() {
           direction="col"
           className="border border-black p-5 max-h-11/12"
         >
-          <span>MY LOBBY</span>
+          <Lobby />
         </FlexBox>
       </FlexBox>
     </FlexBox>

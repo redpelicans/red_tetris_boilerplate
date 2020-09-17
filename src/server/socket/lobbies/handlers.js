@@ -11,16 +11,49 @@ export const handlerAddLobby = async (
   { hash, name, maxPlayer, owner },
 ) => {
   const lobby = new Lobby({ hash, name, maxPlayer, owner });
-  await pushLobby(lobby);
-  const response = Response.success(LOBBIES.ADD, lobby);
-  loginfo("Lobby", response.payload.name, "created!");
-  socket.join("group:" + lobby.id);
-  socket.emit(LOBBIES.RESPONSE, { response });
+  const res = await pushLobby(lobby, socket.id);
+  switch (res) {
+    case 0:
+      {
+        const response = Response.success(LOBBIES.ADD, lobby);
+        loginfo("Lobby", response.payload.name, "created!");
+        socket.join("group:" + lobby.id);
+        socket.emit(LOBBIES.RESPONSE, { response });
 
-  const lobbies = await getComplexObjectFromRedis("lobbies");
-  socket.broadcast.emit(LOBBIES.PUBLISH, { lobbies });
-  // socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
-  socket.emit(LOBBIES.PUBLISH, { lobbies });
+        /* Sending all lobbies */
+        const lobbies = await getComplexObjectFromRedis("lobbies");
+        socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
+        socket.emit(LOBBIES.PUBLISH, { lobbies });
+      }
+      break;
+    case 1:
+      {
+        const response = Response.error(
+          LOBBIES.ADD,
+          "You already have an active lobby!",
+          {},
+        );
+        loginfo("You already have an active lobby!", name);
+        socket.emit(LOBBIES.RESPONSE, { response });
+      }
+      break;
+    case 2:
+      {
+        const response = Response.error(
+          LOBBIES.ADD,
+          "lobbyName is not available!",
+          {},
+        );
+        loginfo("lobbyName is not available!", name);
+        socket.emit(LOBBIES.RESPONSE, { response });
+      }
+      break;
+    default: {
+      const response = Response.error(LOBBIES.ADD, "There was an error!", {});
+      loginfo("Error creating lobby", name);
+      socket.emit(LOBBIES.RESPONSE, { response });
+    }
+  }
 };
 
 export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
@@ -41,9 +74,9 @@ export const handlerSubscribeLobbies = async (socket) => {
   socket.join(GROUP.LOBBIES);
   loginfo(socket.id, "joined group:lobbies");
 
-  const lobbies = await getComplexObjectFromRedis("lobbies");
-  const response = Response.success(LOBBIES.SUBSCRIBE, lobbies);
-  socket.emit(LOBBIES.RESPONSE, { response });
+  // const lobbies = await getComplexObjectFromRedis("lobbies");
+  // const response = Response.success(LOBBIES.SUBSCRIBE, lobbies);
+  // socket.emit(LOBBIES.RESPONSE, { response });
 };
 
 export const handlerUnsubscribeLobbies = async (socket) => {

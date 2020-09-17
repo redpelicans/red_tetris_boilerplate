@@ -14,10 +14,6 @@ export const validationDeleteLobby = {
   ownerId: Joi.string().required().description("The id of the user"),
 };
 
-export const validationSubscribeLobbies = {
-  ownerId: Joi.string().required().description("The id of the user"),
-};
+export const validationSubscribeLobbies = {};
 
-export const validationunsubscribeLobbies = {
-  ownerId: Joi.string().required().description("The id of the user"),
-};
+export const validationunsubscribeLobbies = {};

@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "pages/home/Home";
 import Game from "pages/game/Game";
-import Lobbies from "pages/lobbies/Lobbies";
+import Matchmaking from "pages/matchmaking/Matchmaking";
 
 import { GameContextProvider } from "store";
 
@@ -23,8 +23,8 @@ export default function Router() {
             <Game />
           </GameContextProvider>
         </Route>
-        <Route path="/lobbies">
-          <Lobbies />
+        <Route path="/matchmaking">
+          <Matchmaking />
         </Route>
         <Route render={() => <h1>Not found!</h1>} />
       </Switch>

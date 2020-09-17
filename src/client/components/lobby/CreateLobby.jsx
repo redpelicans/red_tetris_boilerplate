@@ -1,34 +1,43 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
+import { setLobby, setLobbiesResponse } from "actions/store";
 
 export default function () {
   const { state, dispatch } = React.useContext(StoreContext);
-  const [lobby, setLobby] = React.useState({
+  const [myLobby, setMyLobby] = React.useState({
     maxPlayer: 4,
     owner: state.player,
   });
+  const [error, setError] = React.useState("");
 
   const handleLobby = (e) => {
     const value = e.target.value;
     const property = e.target.name;
-    // propre ca
-    setLobby((lobby) => ({
-      ...lobby,
+    setMyLobby((myLobby) => ({
+      ...myLobby,
       [property]: value,
     }));
   };
 
   React.useEffect(() => {
-    if (state.lobbyResponse.type === "error")
+    if (state.lobbiesResponse.type === "error") {
       console.log("There was an error with lobbies:response");
-    else if (state.lobbyResponse.type === "success") {
-      console.log("New player created :", state.lobbyResponse.payload);
+      setError(state?.lobbiesResponse?.reason);
+    } else if (state.lobbiesResponse.type === "success") {
+      console.log("New lobby created :", state.lobbiesResponse.payload);
+      dispatch(setLobby(state.lobbiesResponse.payload));
+      dispatch(setLobbiesResponse({}));
+      state.socket.emit("lobby:subscribe", {
+        playerId: state.player.id,
+        lobbyId: state.lobby.id,
+      });
     }
-  }, [state.lobbyResponse]);
+  }, [state.lobbiesResponse]);
 
-  const createLobby = (lobby) => {
-    state.socket.emit("lobbies:add", lobby);
+  const createLobby = (myLobby) => {
+    console.log(myLobby);
+    state.socket.emit("lobbies:add", myLobby);
   };
 
   return (
@@ -39,7 +48,7 @@ export default function () {
           type="text"
           name="hash"
           placeholder="Lobby hash"
-          value={lobby?.hash || ""}
+          value={myLobby?.hash || ""}
           onChange={handleLobby}
         />
         <input
@@ -47,7 +56,7 @@ export default function () {
           type="text"
           name="name"
           placeholder="Lobby name"
-          value={lobby?.name || ""}
+          value={myLobby?.name || ""}
           onChange={handleLobby}
         />
         <input
@@ -55,24 +64,27 @@ export default function () {
           type="number"
           name="maxPlayer"
           placeholder="Max Players"
-          value={lobby?.maxPlayer || 4}
+          value={myLobby?.maxPlayer || 4}
           onChange={handleLobby}
           min="2"
           max="12"
         />
         <button
           disabled={
-            !lobby?.hash?.length || !lobby?.name?.length || !lobby?.maxPlayer
+            !myLobby?.hash?.length ||
+            !myLobby?.name?.length ||
+            !myLobby?.maxPlayer
           }
           className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
           type="button"
           onClick={() => {
-            createLobby(lobby);
-            setLobby({ maxPlayer: 4 });
+            createLobby(myLobby);
+            setMyLobby({ maxPlayer: 4 });
           }}
         >
           Create lobby
         </button>
+        <span>{error}</span>
       </FlexBox>
     </FlexBox>
   );

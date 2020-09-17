@@ -2,7 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
 import { useNavigation } from "helpers/navigate";
-import { setPlayerResponse, setPlayer } from "actions/store";
+import { setPlayer, setPlayerResponse } from "actions/store";
 
 export default function () {
   const { state, dispatch } = React.useContext(StoreContext);
@@ -22,7 +22,7 @@ export default function () {
       console.log("New player created :", state.playerResponse.payload);
       dispatch(setPlayer(state.playerResponse.payload));
       dispatch(setPlayerResponse({}));
-      navigate("lobbies");
+      navigate("matchmaking");
     }
   }, [state.playerResponse]);
 
