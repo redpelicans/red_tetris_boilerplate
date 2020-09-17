@@ -25,11 +25,11 @@ export default function Game() {
           width={64}
           className="justify-center align-center"
         >
-          <TetrisGrid grid={state.grid} />
+          <TetrisGrid grid={state.grid} rowHeight={6} colHeight={6} />
           <button onClick={() => tetris.movePiece("DOWN")}>go down</button>
           <button onClick={() => tetris.movePiece("ROTATE")}>rotation</button>
         </FlexBox>
-        <FlexBox direction="col" className="items-center">
+        <FlexBox direction="col" className="items-center mx-4">
           <Score score={state.score} />
           <NextPieces nextPieces={state.nextPieces} dispatch={dispatch} />
         </FlexBox>
