@@ -1,6 +1,6 @@
 import React from "react";
 import { bindPieceToGrid } from "./grid";
-import { insertPiece, moveDown, rotatePiece, moveLateral } from "./pieces";
+import { insertPiece, softDrop, rotatePiece, moveLateral } from "./pieces";
 import { isEmpty } from "helpers/functional";
 import { GameContext } from "store";
 import {
@@ -8,6 +8,7 @@ import {
   updateCurrentPiece,
   updateGrid,
   setPlayerIsAlive,
+  addScore,
 } from "actions/game";
 import useAutoMove from "./useAutoMove";
 import useEventListener from "hooks/useEventListener";
@@ -27,7 +28,7 @@ const DEFAULT_REPEAT_TIMEOUT = 5;
  */
 function useTetrisGame(cols = 10, rows = 20) {
   const { state, dispatch } = React.useContext(GameContext);
-  const autoMoveTimer = useAutoMove(movePieceDown);
+  const autoMoveTimer = useAutoMove(gravity);
   const throttledMove = useThrottle(movePiece, DEFAULT_REPEAT_TIMEOUT);
   useEventListener("keydown", throttledMove);
 
@@ -79,7 +80,7 @@ function useTetrisGame(cols = 10, rows = 20) {
     }
     autoMoveTimer.stop();
     if (action === "DOWN" || action?.key === "ArrowDown") {
-      movePieceDown();
+      doSoftDrop();
     } else if (action === "LEFT" || action?.key === "ArrowLeft") {
       movePieceLeft();
     } else if (action === "RIGHT" || action?.key === "ArrowRight") {
@@ -109,18 +110,32 @@ function useTetrisGame(cols = 10, rows = 20) {
     }
   }
 
-  function movePieceDown() {
-    const newObj = moveDown(state.grid, state.currentPiece);
+  function doSoftDrop() {
+    const hasMoved = gravity();
+    if (hasMoved) {
+      dispatch(addScore(1));
+    }
+  }
+
+  function gravity() {
+    let hasMoved = false;
+    const newObj = softDrop(state.grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
-      const newGrid = bindPieceToGrid(state.grid, state.currentPiece);
+      const [newGrid, additionalScore] = bindPieceToGrid(
+        state.grid,
+        state.currentPiece,
+      );
       dispatch(updateGrid(newGrid));
       dispatch(pullCurrentPiece());
+      dispatch(addScore(additionalScore));
     } else {
       const [newGrid, newPiece] = newObj;
       dispatch(updateGrid(newGrid));
       dispatch(updateCurrentPiece(newPiece));
+      hasMoved = true;
     }
+    return hasMoved;
   }
 
   function rotatePieceClockwise() {

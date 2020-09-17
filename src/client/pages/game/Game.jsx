@@ -37,3 +37,10 @@ export default function Game() {
     </FlexBox>
   );
 }
+
+const Score = React.memo(({ score }) => (
+  <FlexBox direction="col" className="items-center">
+    <h1 className="font-bold">SCORE</h1>
+    <span>{score}</span>
+  </FlexBox>
+));

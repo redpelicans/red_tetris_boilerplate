@@ -4,6 +4,7 @@ export const PULL_CURRENT_PIECE_FROM_NEXT_PIECES =
 export const UPDATE_GRID = "UPDATE_GRID";
 export const UPDATE_CURRENT_PIECE = "UPDATE_CURRENT_PIECE";
 export const SET_PLAYER_IS_ALIVE = "SET_PLAYER_IS_ALIVE";
+export const SET_SCORE = "SET_SCORE";
 
 export const pushNewPiece = (newPieces) => ({
   type: FETCH_PIECES,
@@ -29,4 +30,9 @@ export const updateCurrentPiece = (newPiece) => ({
 export const setPlayerIsAlive = (alive) => ({
   type: SET_PLAYER_IS_ALIVE,
   alive,
+});
+
+export const addScore = (score) => ({
+  type: SET_SCORE,
+  score,
 });

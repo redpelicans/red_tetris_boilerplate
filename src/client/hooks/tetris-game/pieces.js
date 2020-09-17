@@ -16,7 +16,7 @@ export function insertPiece(piece, grid, midGrid) {
   return [gridCopy, newPiece];
 }
 
-export function moveDown(grid, piece) {
+export function softDrop(grid, piece) {
   const newPiece = {
     ...piece,
     coord: { ...piece.coord, y: piece.coord.y + 1 },

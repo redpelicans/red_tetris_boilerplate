@@ -2,6 +2,13 @@ import { shallowCopy } from "helpers/functional";
 
 const FREE = 0;
 const CURRENT_PIECE = 1;
+const COMBO = {
+  0: 0,
+  1: 100,
+  2: 300,
+  3: 500,
+  4: 800,
+};
 
 export function isPartOfPiece(element) {
   return element === CURRENT_PIECE;
@@ -61,23 +68,28 @@ function removeCompletedRows(grid) {
     grid[0] = Array(grid[0].length).fill(0);
   }
 
+  let linesRemoved = 0;
   let row = grid.length - 1;
   while (isNotAnEmptyRow(grid[row])) {
     if (isACompleteRow(grid[row])) {
       dropDownAllFollowingRows(grid, row);
+      linesRemoved++;
     } else {
       row--;
     }
   }
-  return grid;
+
+  const additionalScore = COMBO[linesRemoved];
+
+  return [grid, additionalScore];
 }
 
 export function bindPieceToGrid(grid, piece) {
   const newGrid = grid.map((row) =>
     row.map((col) => (col === CURRENT_PIECE ? piece.color : col)),
   );
-  const newGridAfterScore = removeCompletedRows(newGrid);
-  return newGridAfterScore;
+  const [newGridAfterScore, additionalScore] = removeCompletedRows(newGrid);
+  return [newGridAfterScore, additionalScore];
 }
 
 export function clearPieceFromGrid(grid) {

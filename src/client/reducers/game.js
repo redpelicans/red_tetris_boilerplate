@@ -4,6 +4,7 @@ import {
   UPDATE_GRID,
   UPDATE_CURRENT_PIECE,
   SET_PLAYER_IS_ALIVE,
+  SET_SCORE,
 } from "actions/game";
 import { deepCopy } from "helpers/functional";
 
@@ -11,6 +12,7 @@ export const initialState = {
   nextPieces: [],
   grid: [],
   alive: true,
+  score: 0,
   currentPiece: {
     id: null,
     shape: [],
@@ -48,6 +50,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         alive: action.alive,
+      };
+    case SET_SCORE:
+      return {
+        ...state,
+        score: state.score + action.score,
       };
     default:
       return state;
