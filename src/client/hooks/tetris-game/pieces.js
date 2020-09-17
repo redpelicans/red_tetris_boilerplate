@@ -72,14 +72,40 @@ function getPadding(shape) {
   return { x: getPaddingLeft(), y: getPaddingTop() };
 }
 
+function fixCoord(piece, padding, dim, colMax) {
+  let newX = piece.coord.x;
+  let newY = piece.coord.y;
+
+  const overflowTop = newY + padding.newY;
+  if (overflowTop < 0) {
+    newY = 0;
+  }
+
+  const overflowLeft = newX + padding.x;
+  if (overflowLeft < 0) {
+    newX = 0;
+  }
+
+  const overflowRight = newX + padding.x + dim.width - colMax;
+  if (overflowRight > 0) {
+    newX = newX - overflowRight;
+  }
+
+  return { x: newX, y: newY };
+}
+
 export function rotatePiece(piece, grid) {
   const newShape = rotation(piece.shape);
   const newPadding = getPadding(newShape);
+  const newDim = { width: piece.dim.height, height: piece.dim.width };
+  const newCoord = fixCoord(piece, newPadding, newDim, grid[0].length);
+
   const newPiece = {
     ...piece,
     shape: newShape,
     padding: newPadding,
-    dim: { width: piece.dim.height, height: piece.dim.width },
+    coord: newCoord,
+    dim: newDim,
   };
 
   const cleanGrid = Grid.clearPieceFromGrid(grid);
