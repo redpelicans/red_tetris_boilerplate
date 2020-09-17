@@ -43,10 +43,41 @@ export function canPutLayer(grid, piece) {
   return true;
 }
 
+function removeCompletedRows(grid) {
+  function isNotAnEmptyRow(row) {
+    return row.some((value) => value !== 0);
+  }
+
+  function isACompleteRow(row) {
+    return row.every((value) => value !== 0);
+  }
+
+  function dropDownAllFollowingRows(grid, row) {
+    for (let i = row; i > 0; i--) {
+      grid[i] = grid[i - 1];
+    }
+
+    // Recreate the first row -- else it would be the same ref as the second
+    grid[0] = Array(grid[0].length).fill(0);
+  }
+
+  let row = grid.length - 1;
+  while (isNotAnEmptyRow(grid[row])) {
+    if (isACompleteRow(grid[row])) {
+      dropDownAllFollowingRows(grid, row);
+    } else {
+      row--;
+    }
+  }
+  return grid;
+}
+
 export function bindPieceToGrid(grid, piece) {
-  return grid.map((row) =>
+  const newGrid = grid.map((row) =>
     row.map((col) => (col === CURRENT_PIECE ? piece.color : col)),
   );
+  const newGridAfterScore = removeCompletedRows(newGrid);
+  return newGridAfterScore;
 }
 
 export function clearPieceFromGrid(grid) {
