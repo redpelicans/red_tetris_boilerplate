@@ -81,6 +81,11 @@ module.exports = () => {
           include: path.resolve(CLIENT_DIR, "assets/fonts"),
           use: require.resolve("file-loader"),
         },
+        {
+          test: /\.(ogg|mp3)$/,
+          include: path.resolve(CLIENT_DIR, "assets/music"),
+          use: require.resolve("file-loader"),
+        },
       ],
     },
 
@@ -88,6 +93,7 @@ module.exports = () => {
       symlinks: false,
       alias: {
         actions: path.resolve(CLIENT_DIR, "actions"),
+        assets: path.resolve(CLIENT_DIR, "assets"),
         components: path.resolve(CLIENT_DIR, "components"),
         helpers: path.resolve(CLIENT_DIR, "helpers"),
         hooks: path.resolve(CLIENT_DIR, "hooks"),
