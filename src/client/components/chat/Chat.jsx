@@ -28,6 +28,7 @@ export default function ({ state }) {
       state.socket.emit(MESSAGE.SEND, { message, sender });
       setMessage("");
     }
+    state.socket.emit("piece:get", { nb: 2 });
   };
 
   const submit = (event) => {

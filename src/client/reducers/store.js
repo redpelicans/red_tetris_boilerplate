@@ -55,7 +55,7 @@ export default function reducer(state = initialState, action) {
     case RESET_MESSAGES:
       return { ...state, messages: [] };
     case SET_NEXT_PIECES:
-      return { ...state, nextPieces: [...state.nextPieces, action.piece] };
+      return { ...state, nextPieces: [...state.nextPieces, ...action.pieces] };
     default:
       return state;
   }

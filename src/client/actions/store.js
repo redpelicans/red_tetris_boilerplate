@@ -53,7 +53,7 @@ export const resetMessages = () => ({
   type: RESET_MESSAGES,
 });
 
-export const setNextPieces = (piece) => ({
+export const setNextPieces = (pieces) => ({
   type: SET_NEXT_PIECES,
-  piece: piece,
+  pieces: pieces,
 });
