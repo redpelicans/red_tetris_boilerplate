@@ -9,4 +9,7 @@ export default {
   players: {
     change: "onPlayersChange",
   },
+  player: {
+    disconnect: "onPlayerDisconnect",
+  },
 };

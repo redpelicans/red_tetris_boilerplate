@@ -31,7 +31,7 @@ export const subscribeLobbies = createEvent(
   handlerSubscribeLobbies,
 );
 
-export const unsuscribeLobbies = createEvent(
+export const unsubscribeLobbies = createEvent(
   LOBBIES.UNSUBSCRIBE,
   validationUnsubscribeLobbies,
   handlerUnsubscribeLobbies,

@@ -44,7 +44,6 @@ export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
 
 export const handlerSubscribeLobbies = async (socket) => {
   socket.join(GROUP.LOBBIES);
-  loginfo(socket.id, "joined group:lobbies");
 
   eventEmitter.emit(event.lobbies.subscribe, {
     socket,
@@ -53,5 +52,4 @@ export const handlerSubscribeLobbies = async (socket) => {
 
 export const handlerUnsubscribeLobbies = async (socket) => {
   socket.leave(GROUP.LOBBIES);
-  loginfo(socket.id, "left group:lobbies");
 };

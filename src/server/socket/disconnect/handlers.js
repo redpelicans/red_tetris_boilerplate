@@ -1,4 +1,3 @@
-import { popPlayer, getPlayerId } from "store/players";
 import { logerror, loginfo } from "utils/log";
 import eventEmitter from "listeners";
 import event from "listeners/events";
@@ -9,10 +8,7 @@ export const handlerOnDisconnect = async (socket, reason) => {
     socket.connect();
   }
 
-  const playerId = await getPlayerId(socket.id);
-  await popPlayer(playerId);
-
-  eventEmitter.emit(event.players.change, {
+  eventEmitter.emit(event.player.disconnect, {
     socket,
   });
 };
