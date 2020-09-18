@@ -35,7 +35,8 @@ export const popLobby = async (lobbyId, ownerId) => {
     return Response.error(LOBBIES.DELETE, "Lobby doesn't exists!");
   }
 
-  if (lobby?.owner?.id !== ownerId) {
+  const owner = isOwner(lobby, ownerId);
+  if (!owner) {
     return Response.error(
       LOBBIES.DELETE,
       "You are not the owner of this lobby!",
@@ -81,10 +82,27 @@ export const leaveLobby = async (playerId, lobbyId) => {
     return Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!");
   }
 
-  const players = lobby.players;
-  const newPlayers = players.filter((player) => {
-    return player.id !== playerId;
-  });
+  const lastPlayer = isLastPlayerInLobby(lobby);
+  if (lastPlayer) {
+    const response = await popLobby(lobbyId, playerId);
+    if (response.type === "success") {
+      return Response.success(LOBBY.UNSUBSCRIBE, {});
+    } else {
+      // Mouais?
+      return Response.error(
+        LOBBY.UNSUBSCRIBE,
+        "You are the last player but not the owner there is a problem!",
+      );
+    }
+  }
+
+  const owner = isOwner(lobby, playerId);
+  if (owner) {
+    lobby.owner = getNextOwner(lobby.players, playerId);
+    // dispatch the info?
+  }
+
+  const newPlayers = deletePlayerFromPlayers(lobby.players, playerId);
 
   lobby.players = newPlayers;
   lobbies[lobbyId] = lobby;
@@ -116,6 +134,22 @@ const checkIfPlayerIsOnLobbyBySocket = (lobbies, socketId) => {
     lobbies[key].players.some((player) => player.socketId === socketId),
   );
   return res;
+};
+
+const isOwner = (lobby, playerId) => {
+  return lobby?.owner?.id === playerId;
+};
+
+const isLastPlayerInLobby = (lobby) => {
+  return lobby?.players.length <= 1;
+};
+
+const deletePlayerFromPlayers = (players, playerId) => {
+  return players.filter((player) => player.id !== playerId);
+};
+
+const getNextOwner = (players, playerId) => {
+  return players.find((player) => player.id !== playerId);
 };
 
 const checkIfOwnerHasLobby = (lobbies, socketId) => {
