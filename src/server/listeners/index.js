@@ -26,17 +26,18 @@ eventEmitter.on(
       .emit(LOBBY.PUBLISH, { lobby });
     if (self) {
       socket.emit(LOBBY.PUBLISH, { lobby });
-      console.log("YOOOOOOO");
     }
   },
 );
 
 // Players
-eventEmitter.on(event.players.change, async ({ socket }) => {
+eventEmitter.on(event.players.change, async ({ socket, self = true }) => {
   const players = await getComplexObjectFromRedis("players");
 
   socket.broadcast.emit("players:publish", { players });
-  socket.emit("players:publish", { players });
+  if (self) {
+    socket.emit("players:publish", { players });
+  }
 });
 
 // Lobbies Subscribe

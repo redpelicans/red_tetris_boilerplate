@@ -3,7 +3,6 @@ import { getPlayer } from "store/players";
 import { joinLobby, leaveLobby } from "store/lobbies";
 import { LOBBY } from "../../../config/actions/lobby";
 import GROUP_DOMAIN from "../../../config/actions/group";
-
 import eventEmitter from "listeners";
 import event from "listeners/events";
 
