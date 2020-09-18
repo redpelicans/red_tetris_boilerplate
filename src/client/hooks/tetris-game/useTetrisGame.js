@@ -14,7 +14,7 @@ import useAutoMove from "./useAutoMove";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
 
-const INTERVAL_MS = 1000;
+const INTERVAL_MS = 750;
 const MOVE_LEFT = -1;
 const MOVE_RIGHT = 1;
 const DEFAULT_REPEAT_TIMEOUT = 5;
@@ -78,15 +78,19 @@ function useTetrisGame(cols = 10, rows = 20) {
     if (!state.alive) {
       return;
     }
-    autoMoveTimer.stop();
-    if (action === "DOWN" || action?.key === "ArrowDown") {
-      doSoftDrop();
-    } else if (action === "LEFT" || action?.key === "ArrowLeft") {
-      movePieceLeft();
-    } else if (action === "RIGHT" || action?.key === "ArrowRight") {
-      movePieceRight();
-    } else if (action === "ROTATE" || action?.key === "ArrowUp") {
-      rotatePieceClockwise();
+    if (
+      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(action.key)
+    ) {
+      autoMoveTimer.stop();
+      if (action.key === "ArrowDown") {
+        doSoftDrop();
+      } else if (action.key === "ArrowLeft") {
+        movePieceLeft();
+      } else if (action.key === "ArrowRight") {
+        movePieceRight();
+      } else if (action.key === "ArrowUp") {
+        rotatePieceClockwise();
+      }
     }
   }
 
@@ -142,7 +146,7 @@ function useTetrisGame(cols = 10, rows = 20) {
     const newObj = rotatePiece(state.currentPiece, state.grid);
 
     if (isEmpty(newObj)) {
-      // Cannot rotate
+      autoMoveTimer.start(INTERVAL_MS);
     } else {
       const [newGrid, newPiece] = newObj;
       dispatch(updateGrid(newGrid));
