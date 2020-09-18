@@ -1,8 +1,6 @@
 import Player from "models/player";
-import Response from "models/response";
 import { logerror, loginfo } from "utils/log";
 import { pushPlayer, popPlayer } from "store/players";
-import { getComplexObjectFromRedis } from "store";
 import { PLAYER } from "./../../../config/actions/player";
 import eventEmitter from "listeners";
 import event from "listeners/events";
@@ -11,7 +9,7 @@ export const handlerCreatePlayer = async (socket, { name }) => {
   const socketId = socket.id;
   const player = new Player({ name, socketId });
   const response = await pushPlayer(player);
-  socket.emit(PLAYER.RESPONSE, { response });
+  socket.emit(PLAYER.RESPONSE, response);
 
   if (response.type === "success") {
     eventEmitter.emit(event.players.change, {

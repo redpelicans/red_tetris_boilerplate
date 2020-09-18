@@ -9,7 +9,7 @@ import event from "listeners/events";
 export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
   const player = await getPlayer(playerId);
   const response = await joinLobby(player, lobbyId);
-  socket.emit(LOBBY.RESPONSE, { response });
+  socket.emit(LOBBY.RESPONSE, response);
 
   if (response.type === "success") {
     socket.join(`${GROUP_DOMAIN}:${lobbyId}`);
@@ -31,7 +31,7 @@ export const handlerUnsubscribeLobby = async (
   { playerId, lobbyId },
 ) => {
   const response = await leaveLobby(playerId, lobbyId);
-  socket.emit(LOBBY.RESPONSE, { response });
+  socket.emit(LOBBY.RESPONSE, response);
 
   if (response.type === "success") {
     socket.leave(`${GROUP_DOMAIN}:${lobbyId}`);

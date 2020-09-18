@@ -4,7 +4,6 @@ import socketIO from "socket.io";
 
 import * as piece from "socket/piece";
 import * as player from "socket/player";
-import * as players from "socket/players";
 import * as lobbies from "socket/lobbies";
 import * as lobby from "socket/lobby";
 import * as message from "socket/message";
@@ -13,7 +12,6 @@ import * as disconnect from "socket/disconnect";
 const handlers = Object.values({
   ...piece,
   ...player,
-  ...players,
   ...lobbies,
   ...lobby,
   ...message,

@@ -3,5 +3,5 @@ import { PIECE } from "./../../../config/actions/piece";
 
 export const handlerGetPiece = async (socket) => {
   const response = new Piece();
-  socket.emit(PIECE.SEND, { response });
+  socket.emit(PIECE.SEND, response);
 };
