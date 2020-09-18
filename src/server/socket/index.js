@@ -22,7 +22,7 @@ const runSocketIo = (httpServer) => {
   const io = socketIO(httpServer);
 
   io.on("connection", async (socket) => {
-    loginfo("A new user has connected!");
+    loginfo("A new socket has connected!");
 
     /* Test on reconnect */
     socket.on("reconnect", (attemptNumber) => {

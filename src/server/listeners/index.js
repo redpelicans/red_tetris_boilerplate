@@ -1,11 +1,11 @@
 import { EventEmitter } from "events";
 import event from "listeners/events";
 import { getComplexObjectFromRedis } from "store";
-import { getLobby } from "store/lobbies";
-import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
 import { LOBBIES } from "../../config/actions/lobbies";
 import { LOBBY } from "../../config/actions/lobby";
 import { PLAYERS } from "../../config/actions/players";
+import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
+import { getLobby, clearPlayerFromLobbies } from "store/lobbies";
 import { popPlayer, getPlayerId } from "store/players";
 
 const eventEmitter = new EventEmitter();
@@ -56,13 +56,24 @@ eventEmitter.on(event.lobbies.subscribe, async ({ socket }) => {
 // Player disconnect
 eventEmitter.on(event.player.disconnect, async ({ socket }) => {
   const playerId = await getPlayerId(socket.id);
+  const lobbyId = await clearPlayerFromLobbies(playerId);
+  if (lobbyId) {
+    socket.leave(`${GROUP_DOMAIN}:${lobbyId}`);
+    eventEmitter.emit(event.lobbies.change, {
+      socket,
+      self: false,
+    });
+    eventEmitter.emit(event.lobby.change, {
+      socket,
+      lobbyId,
+      self: false,
+    });
+  }
+
   await popPlayer(playerId);
-
-  // check if is on lobby
-  // check if is owner
-
   eventEmitter.emit(event.players.change, {
     socket,
+    self: false,
   });
 });
 

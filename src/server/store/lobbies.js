@@ -12,7 +12,7 @@ export const getLobby = async (id) => {
 export const pushLobby = async (lobby, socketId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
-  const alreadyOnLobby = checkIfPlayerIsOnLobbyBySocket(lobbies, socketId);
+  const alreadyOnLobby = checkIfPlayerIsOnLobbyBySocketId(lobbies, socketId);
   if (alreadyOnLobby) {
     return Response.error(LOBBIES.ADD, "You already have an active lobby !");
   }
@@ -111,6 +111,19 @@ export const leaveLobby = async (playerId, lobbyId) => {
   return Response.success(LOBBY.UNSUBSCRIBE, {});
 };
 
+export const clearPlayerFromLobbies = async (playerId) => {
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+  const isOnLobby = checkIfPlayerIsOnLobbyByPlayerId(lobbies, playerId);
+  if (isOnLobby) {
+    const lobbyId = getLobbyIdByPlayerId(lobbies, playerId);
+    const response = await leaveLobby(playerId, lobbyId);
+    if (response.type === "success") {
+      return lobbyId;
+    }
+  }
+  return null;
+};
+
 const checkIfLobbyNameTaken = (lobbies, name) => {
   const res = Object.keys(lobbies).some((key) => lobbies[key].name === name);
   return res;
@@ -129,11 +142,16 @@ const checkIfPlayerIsOnLobby = (lobbies, playerId) => {
   return res;
 };
 
-const checkIfPlayerIsOnLobbyBySocket = (lobbies, socketId) => {
-  const res = Object.keys(lobbies).some((key) =>
+const checkIfPlayerIsOnLobbyBySocketId = (lobbies, socketId) => {
+  return Object.keys(lobbies).some((key) =>
     lobbies[key].players.some((player) => player.socketId === socketId),
   );
-  return res;
+};
+
+const checkIfPlayerIsOnLobbyByPlayerId = (lobbies, playerId) => {
+  return Object.keys(lobbies).some((key) =>
+    lobbies[key].players.some((player) => player.id === playerId),
+  );
 };
 
 const isOwner = (lobby, playerId) => {
@@ -150,6 +168,13 @@ const deletePlayerFromPlayers = (players, playerId) => {
 
 const getNextOwner = (players, playerId) => {
   return players.find((player) => player.id !== playerId);
+};
+
+const getLobbyIdByPlayerId = (lobbies, playerId) => {
+  const lobbyId = Object.keys(lobbies).find((key) =>
+    lobbies[key].players.find((player) => player.id === playerId),
+  );
+  return lobbyId;
 };
 
 const checkIfOwnerHasLobby = (lobbies, socketId) => {

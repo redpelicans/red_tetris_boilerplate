@@ -15,17 +15,13 @@ export const handlerCreatePlayer = async (socket, { name }) => {
     eventEmitter.emit(event.players.change, {
       socket,
     });
+    loginfo("A new player named", player.name, "has been created!");
   }
 };
 
 export const handlerDeletePlayer = async (socket, { socketId }) => {
-  await popPlayer(socketId);
-  loginfo("Player with socketId", socketId, "deleted!");
-
-  if (response.type === "success") {
-    eventEmitter.emit(event.players.change, {
-      socket,
-      self: false,
-    });
-  }
+  eventEmitter.emit(event.player.disconnect, {
+    socket,
+  });
+  loginfo("Player with socketId", socketId, "has been deleted!");
 };
