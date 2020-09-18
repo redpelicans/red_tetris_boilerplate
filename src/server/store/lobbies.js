@@ -4,13 +4,11 @@ import Response from "models/response";
 
 export const getLobby = async (id) => {
   const lobbies = await getComplexObjectFromRedis("lobbies");
-  console.log("I found lobby", lobbies?.[id]);
   return lobbies?.[id];
 };
 
 export const pushLobby = async (lobby, socketId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
-  console.log(lobbies);
 
   // const hasLobby = checkIfOwnerHasLobby(lobbies, socketId);
   // if (hasLobby) {
@@ -33,13 +31,23 @@ export const pushLobby = async (lobby, socketId) => {
 };
 
 export const popLobby = async (lobbyId, ownerId) => {
-  const lobbies = (await getComplexObjectFromRedis("lobbies")) || {};
-  const lobby = lobbies[lobbyId];
-  if (lobby?.owner?.id !== ownerId) return false;
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+  const lobby = lobbies?.[lobbyId];
+  if (!lobby) {
+    return Response.error(LOBBIES.DELETE, "Lobby doesn't exists!");
+  }
+
+  if (lobby?.owner?.id !== ownerId) {
+    return Response.error(
+      LOBBIES.DELETE,
+      "You are not the owner of this lobby!",
+    );
+  }
+
   delete lobbies[lobbyId];
   await setComplexObjectToRedis("lobbies", lobbies);
-  console.log("lobby", lobbyId, "deleted");
-  return true;
+  // to check payload
+  return Response.success(LOBBIES.DELETE, {});
 };
 
 export const joinLobby = async (player, lobbyId) => {

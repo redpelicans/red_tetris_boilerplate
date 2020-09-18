@@ -1,16 +1,14 @@
-import { createEvent, bindEvent } from "helpers/socket";
+import { bindEvent } from "helpers/socket";
+import { logerror, loginfo } from "utils/log";
+import socketIO from "socket.io";
+
 import * as piece from "socket/piece";
 import * as player from "socket/player";
 import * as players from "socket/players";
 import * as lobbies from "socket/lobbies";
 import * as lobby from "socket/lobby";
 import * as message from "socket/message";
-
-import { LOBBIES } from "./../../config/actions/lobbies";
-import { getPlayers, popPlayer, getPlayerId } from "store/players";
-import { getComplexObjectFromRedis } from "store";
-import { logerror, loginfo } from "utils/log";
-import socketIO from "socket.io";
+import * as disconnect from "socket/disconnect";
 
 const handlers = Object.values({
   ...piece,
@@ -19,6 +17,7 @@ const handlers = Object.values({
   ...lobbies,
   ...lobby,
   ...message,
+  ...disconnect,
 });
 
 const runSocketIo = (httpServer) => {
@@ -26,32 +25,6 @@ const runSocketIo = (httpServer) => {
 
   io.on("connection", async (socket) => {
     loginfo("A new user has connected!");
-
-    /* Test on connection */
-    const players = await getComplexObjectFromRedis("players");
-    socket.emit("players:publish", { players });
-
-    const lobbies = await getComplexObjectFromRedis("lobbies");
-    socket.emit(LOBBIES.PUBLISH, { lobbies });
-
-    /* Test on disconnect */
-    socket.on("disconnect", async (reason) => {
-      loginfo(socket.id, "disconnect with reason", reason);
-      if (reason === "io server disconnect") {
-        /* the disconnection was initiated by the server, you need to reconnect manually */
-        socket.connect();
-      }
-      /* else the socket will automatically try to reconnect */
-      console.log(socket.id);
-      const playerId = await getPlayerId(socket.id);
-      console.log("I got playerId", playerId);
-      await popPlayer(playerId);
-
-      /* const players = getPlayers(); */
-      const players = await getComplexObjectFromRedis("players");
-      socket.emit("players:publish", { players });
-      socket.broadcast.emit("players:publish", { players });
-    });
 
     /* Test on reconnect */
     socket.on("reconnect", (attemptNumber) => {

@@ -1,8 +1,12 @@
 export default {
   lobbies: {
     change: "onLobbiesChange",
+    subscribe: "onLobbiesSubscribe",
   },
-  errors: {
-    catch: "onCatchError",
+  lobby: {
+    change: "onLobbyChange",
+  },
+  players: {
+    change: "onPlayersChange",
   },
 };
