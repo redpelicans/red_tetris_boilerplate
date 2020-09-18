@@ -5,17 +5,21 @@ export default class Response {
     return {
       type: "success",
       action,
-      reason: "",
       payload,
     };
   }
 
-  static error(action, reason, payload) {
-    return {
+  static error(action, reason, payload = null) {
+    const res = {
       type: "error",
       action,
       reason,
-      payload,
     };
+
+    if (payload) {
+      res.payload = payload;
+    }
+
+    return res;
   }
 }

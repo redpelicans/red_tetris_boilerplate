@@ -18,9 +18,9 @@ export const getPlayerId = async (socketId) => {
 };
 
 export const pushPlayer = async (player) => {
-  const players = (await getComplexObjectFromRedis("players")) || {};
+  const players = (await getComplexObjectFromRedis("players")) ?? {};
   const res = checkPlayerNameAvailability(players, player.name);
-  if (res) {
+  if (!res) {
     players[player.id] = player;
     await setComplexObjectToRedis("players", players);
     console.log("player", player.name, "added");
@@ -31,15 +31,12 @@ export const pushPlayer = async (player) => {
 };
 
 export const popPlayer = async (id) => {
-  let players = (await getComplexObjectFromRedis("players")) || {};
+  let players = (await getComplexObjectFromRedis("players")) ?? {};
   delete players[id];
   await setComplexObjectToRedis("players", players);
   console.log("player", id, "deleted");
 };
 
 const checkPlayerNameAvailability = (players, name) => {
-  const playerName = Object.keys(players).find(
-    (key) => players[key].name === name,
-  );
-  return playerName ? false : true;
+  return Object.keys(players).some((key) => players[key].name === name);
 };

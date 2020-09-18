@@ -1,5 +1,6 @@
-import Lobby from "models/lobby";
+import { LOBBIES } from "../../config/actions/lobbies";
 import { getComplexObjectFromRedis, setComplexObjectToRedis } from "store";
+import Response from "models/response";
 
 export const getLobby = async (id) => {
   const lobbies = await getComplexObjectFromRedis("lobbies");
@@ -8,17 +9,27 @@ export const getLobby = async (id) => {
 };
 
 export const pushLobby = async (lobby, socketId) => {
-  const lobbies = (await getComplexObjectFromRedis("lobbies")) || {};
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
   console.log(lobbies);
-  const hasLobby = checkIfOwnerHasLobby(lobbies, socketId);
-  if (hasLobby) return 1;
+
+  // const hasLobby = checkIfOwnerHasLobby(lobbies, socketId);
+  // if (hasLobby) {
+  //   return ERROR_ALREADY_IN_LOBBY;
+  // }
+
   const alreadyOnLobby = checkIfPlayerIsOnLobbyBySocket(lobbies, socketId);
-  if (alreadyOnLobby) return 1;
+  if (alreadyOnLobby) {
+    return Response.error(LOBBIES.ADD, "You already have an active lobby !");
+  }
+
   const nameTaken = checkIfLobbyNameTaken(lobbies, lobby.name);
-  if (nameTaken) return 2;
+  if (nameTaken) {
+    return Response.error(LOBBIES.ADD, "lobbyName is not available!");
+  }
+
   lobbies[lobby.id] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
-  return 0;
+  return Response.success(LOBBIES.ADD, lobby);
 };
 
 export const popLobby = async (lobbyId, ownerId) => {
