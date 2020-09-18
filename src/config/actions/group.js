@@ -1,3 +1,6 @@
+const domain = "group";
+export default domain;
+
 export const GROUP = {
-  LOBBIES: "group:lobbies",
+  LOBBIES: `${domain}:lobbies`,
 };

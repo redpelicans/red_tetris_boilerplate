@@ -1,6 +1,9 @@
+const domain = "player";
+export default domain;
+
 export const PLAYER = {
-  CREATE: "player:create",
-  RESTORE: "player:create",
-  DELETE: "player:delete",
-  RESPONSE: "player:response",
+  CREATE: `${domain}:create`,
+  RESTORE: `${domain}:create`,
+  DELETE: `${domain}:delete`,
+  RESPONSE: `${domain}:response`,
 };

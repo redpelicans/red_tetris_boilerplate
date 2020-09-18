@@ -1,8 +1,11 @@
+const domain = "lobbies";
+export default domain;
+
 export const LOBBIES = {
-  ADD: "lobbies:add",
-  DELETE: "lobbies:delete",
-  SUBSCRIBE: "lobbies:subscribe",
-  UNSUBSCRIBE: "lobbies:unsubscribe",
-  PUBLISH: "lobbies:publish",
-  RESPONSE: "lobbies:response",
+  ADD: `${domain}:add`,
+  DELETE: `${domain}:delete`,
+  SUBSCRIBE: `${domain}:subscribe`,
+  UNSUBSCRIBE: `${domain}:unsubscribe`,
+  PUBLISH: `${domain}:publish`,
+  RESPONSE: `${domain}:response`,
 };

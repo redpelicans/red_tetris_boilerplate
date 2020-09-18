@@ -1,4 +1,7 @@
+const domain = "message";
+export default domain;
+
 export const MESSAGE = {
-  SEND: "message:send",
-  PUBLISH: "message:publish",
+  SEND: `${domain}:send`,
+  PUBLISH: `${domain}:publish`,
 };
