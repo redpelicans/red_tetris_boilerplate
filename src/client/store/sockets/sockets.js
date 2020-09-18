@@ -14,6 +14,7 @@ import {
   setLobby,
   setLobbyResponse,
   addMessage,
+  setNextPieces,
 } from "actions/store";
 
 const endpoint = "http://0.0.0.0:3004";
@@ -47,7 +48,9 @@ export function setupSocket(socket, dispatch) {
     dispatch(addMessage(data));
   });
 
-  socket.on(PIECE.SEND, (data) => {});
+  socket.on(PIECE.SEND, (data) => {
+    dispatch(setNextPieces(data));
+  });
 }
 
 export function initSocket() {

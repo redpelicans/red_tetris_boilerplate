@@ -6,6 +6,8 @@ export const SET_LOBBIES_RESPONSE = "SET_LOBBIES_RESPONSE";
 export const SET_LOBBY = "SET_LOBBY";
 export const SET_LOBBY_RESPONSE = "SET_LOBBY_RESPONSE";
 export const ADD_MESSAGE = "ADD_MESSAGE";
+export const RESET_MESSAGES = "RESET_MESSAGES";
+export const SET_NEXT_PIECES = "SET_NEXT_PIECES";
 
 export const setPlayerResponse = (playerResponse) => ({
   type: SET_PLAYER_RESPONSE,
@@ -45,4 +47,13 @@ export const setLobbyResponse = (lobbyResponse) => ({
 export const addMessage = (message) => ({
   type: ADD_MESSAGE,
   message: message,
+});
+
+export const resetMessages = () => ({
+  type: RESET_MESSAGES,
+});
+
+export const setNextPieces = (piece) => ({
+  type: SET_NEXT_PIECES,
+  piece: piece,
 });

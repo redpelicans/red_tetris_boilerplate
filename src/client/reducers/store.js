@@ -9,6 +9,8 @@ import {
   SET_LOBBY_RESPONSE,
   SET_LOBBIES_RESPONSE,
   ADD_MESSAGE,
+  RESET_MESSAGES,
+  SET_NEXT_PIECES,
 } from "actions/store";
 
 export const initialState = {
@@ -21,6 +23,7 @@ export const initialState = {
   lobby: {},
   lobbyResponse: {},
   messages: [],
+  nextPieces: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -49,9 +52,10 @@ export default function reducer(state = initialState, action) {
         ...state,
         messages: newMessages,
       };
-    // action a ajouter
-    case RESET_MESSAGE:
+    case RESET_MESSAGES:
       return { ...state, messages: [] };
+    case SET_NEXT_PIECES:
+      return { ...state, nextPieces: [...state.nextPieces, action.piece] };
     default:
       return state;
   }
