@@ -72,9 +72,9 @@ function getPadding(shape) {
   return { x: getPaddingLeft(), y: getPaddingTop() };
 }
 
-function fixCoord(piece, padding, dim, colMax) {
-  let newX = piece.coord.x;
-  let newY = piece.coord.y;
+function fixCoord(coord, padding, dim, colMax) {
+  let newX = coord.x;
+  let newY = coord.y;
 
   const overflowTop = newY + padding.y;
   if (overflowTop < 0) {
@@ -94,22 +94,44 @@ function fixCoord(piece, padding, dim, colMax) {
   return { x: newX, y: newY };
 }
 
+function shiftPieceHorizontally(coord, shift) {
+  return { ...coord, x: coord.x + shift };
+}
+
+function testMultiplePositions(testedPiece, grid) {
+  const { coord, dim } = testedPiece;
+
+  const testable = Math.floor(dim.width / 2);
+  const toTest = [coord];
+
+  for (let i = 1; i <= testable; i++) {
+    toTest.push(shiftPieceHorizontally(coord, -i));
+  }
+  for (let i = 1; i <= testable; i++) {
+    toTest.push(shiftPieceHorizontally(coord, i));
+  }
+
+  for (const coordToTest of toTest) {
+    testedPiece.coord = coordToTest;
+    if (Grid.canPutLayer(grid, testedPiece)) {
+      return testedPiece;
+    }
+  }
+  return null;
+}
+
 export function rotatePiece(piece, grid) {
   const newShape = rotation(piece.shape);
   const newPadding = getPadding(newShape);
   const newDim = { width: piece.dim.height, height: piece.dim.width };
-  const newCoord = fixCoord(piece, newPadding, newDim, grid[0].length);
-
-  const newPiece = {
-    ...piece,
-    shape: newShape,
-    padding: newPadding,
-    coord: newCoord,
-    dim: newDim,
-  };
 
   const cleanGrid = Grid.clearPieceFromGrid(grid);
-  if (!Grid.canPutLayer(cleanGrid, newPiece)) {
+
+  const newPiece = testMultiplePositions(
+    { ...piece, shape: newShape, padding: newPadding, dim: newDim },
+    cleanGrid,
+  );
+  if (!newPiece) {
     return null;
   }
 
