@@ -17,15 +17,21 @@ eventEmitter.on(event.lobbies.change, async ({ socket }) => {
 });
 
 // Lobby
-eventEmitter.on(event.lobby.change, async ({ socket, lobbyId }) => {
-  const lobby = (await getLobby(lobbyId)) ?? {};
-  socket.broadcast
-    .to(`${GROUP_DOMAIN}:${lobbyId}`)
-    .emit(LOBBY.PUBLISH, { lobby });
-  socket.emit(LOBBY.PUBLISH, { lobby });
-});
+eventEmitter.on(
+  event.lobby.change,
+  async ({ socket, lobbyId, self = true }) => {
+    const lobby = (await getLobby(lobbyId)) ?? {};
+    socket.broadcast
+      .to(`${GROUP_DOMAIN}:${lobbyId}`)
+      .emit(LOBBY.PUBLISH, { lobby });
+    if (self) {
+      socket.emit(LOBBY.PUBLISH, { lobby });
+      console.log("YOOOOOOO");
+    }
+  },
+);
 
-// Lobby
+// Players
 eventEmitter.on(event.players.change, async ({ socket }) => {
   const players = await getComplexObjectFromRedis("players");
 

@@ -1,4 +1,6 @@
 import { LOBBIES } from "../../config/actions/lobbies";
+import { LOBBY } from "../../config/actions/lobby";
+
 import { getComplexObjectFromRedis, setComplexObjectToRedis } from "store";
 import Response from "models/response";
 
@@ -9,11 +11,6 @@ export const getLobby = async (id) => {
 
 export const pushLobby = async (lobby, socketId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
-
-  // const hasLobby = checkIfOwnerHasLobby(lobbies, socketId);
-  // if (hasLobby) {
-  //   return ERROR_ALREADY_IN_LOBBY;
-  // }
 
   const alreadyOnLobby = checkIfPlayerIsOnLobbyBySocket(lobbies, socketId);
   if (alreadyOnLobby) {
@@ -32,6 +29,7 @@ export const pushLobby = async (lobby, socketId) => {
 
 export const popLobby = async (lobbyId, ownerId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+
   const lobby = lobbies?.[lobbyId];
   if (!lobby) {
     return Response.error(LOBBIES.DELETE, "Lobby doesn't exists!");
@@ -51,45 +49,48 @@ export const popLobby = async (lobbyId, ownerId) => {
 };
 
 export const joinLobby = async (player, lobbyId) => {
-  const lobbies = (await getComplexObjectFromRedis("lobbies")) || {};
-  // const alreadyOwner = checkIfPlayerIsOwner(lobbies, player.id);
-  // if (alreadyOwner) return 1;
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+
   const alreadyOnLobby = checkIfPlayerIsOnLobby(lobbies, player.id);
-  if (alreadyOnLobby) return 2;
+  if (alreadyOnLobby) {
+    return Response.error(LOBBY.SUBSCRIBE, "You already are in another lobby!");
+  }
+
   const lobby = lobbies?.[lobbyId];
-  if (!lobby) return 3;
+  if (!lobby) {
+    return Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!");
+  }
+
   const lobbyFull = checkIfLobbyIsFull(lobby);
-  if (lobbyFull) return 4;
+  if (lobbyFull) {
+    return Response.error(LOBBY.SUBSCRIBE, "The lobby is full!");
+  }
+
   lobby.players.push(player);
   lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
-  console.log("player", player.name, "joined", lobby.name);
-  return 0;
+
+  return Response.success(LOBBY.SUBSCRIBE, lobby);
 };
 
 export const leaveLobby = async (playerId, lobbyId) => {
-  console.log("playerId", playerId);
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
-  const lobbies = (await getComplexObjectFromRedis("lobbies")) || {};
-  const players = lobbies[lobbyId].players;
+  const lobby = lobbies?.[lobbyId];
+  if (!lobby) {
+    return Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!");
+  }
+
+  const players = lobby.players;
   const newPlayers = players.filter((player) => {
     return player.id !== playerId;
   });
-  console.log("newPlayers", newPlayers);
-  const lobby = lobbies?.[lobbyId];
-  if (!lobby) return 1;
+
   lobby.players = newPlayers;
   lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
-  console.log("player", playerId, "left", lobbies[lobbyId].name);
-  return 0;
-};
 
-const checkIfOwnerHasLobby = (lobbies, socketId) => {
-  const res = Object.keys(lobbies).some(
-    (key) => lobbies[key]?.owner?.socketId === socketId,
-  );
-  return res;
+  return Response.success(LOBBY.UNSUBSCRIBE, {});
 };
 
 const checkIfLobbyNameTaken = (lobbies, name) => {
@@ -113,6 +114,13 @@ const checkIfPlayerIsOnLobby = (lobbies, playerId) => {
 const checkIfPlayerIsOnLobbyBySocket = (lobbies, socketId) => {
   const res = Object.keys(lobbies).some((key) =>
     lobbies[key].players.some((player) => player.socketId === socketId),
+  );
+  return res;
+};
+
+const checkIfOwnerHasLobby = (lobbies, socketId) => {
+  const res = Object.keys(lobbies).some(
+    (key) => lobbies[key]?.owner?.socketId === socketId,
   );
   return res;
 };

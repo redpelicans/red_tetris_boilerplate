@@ -1,11 +1,8 @@
 import Lobby from "models/lobby";
-
 import { logerror, loginfo } from "utils/log";
 import { pushLobby, popLobby } from "store/lobbies";
-
-import { LOBBIES } from "./../../../config/actions/lobbies";
-import GROUP_DOMAIN, { GROUP } from "./../../../config/actions/group";
-
+import { LOBBIES } from "../../../config/actions/lobbies";
+import GROUP_DOMAIN, { GROUP } from "../../../config/actions/group";
 import eventEmitter from "listeners";
 import event from "listeners/events";
 
@@ -29,9 +26,11 @@ export const handlerAddLobby = async (
 export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
   const response = await popLobby(lobbyId, ownerId);
   socket.emit(LOBBIES.RESPONSE, response);
+
   if (response.type === "success") {
     socket.leave(`${GROUP_DOMAIN}:${lobbyId}`);
     // Make everyone leave???
+    // Sending empty lobby
     eventEmitter.emit(event.lobby.change, {
       socket,
       lobbyId,
