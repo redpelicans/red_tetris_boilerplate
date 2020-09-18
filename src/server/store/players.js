@@ -17,9 +17,15 @@ export const getPlayerId = async (socketId) => {
 
 export const pushPlayer = async (player) => {
   const players = (await getComplexObjectFromRedis("players")) ?? {};
-  const res = checkPlayerNameAvailability(players, player.name);
-  if (res) {
-    return Response.error(PLAYER.CREATE, "playerName already exists!");
+
+  const valid = isValid(player.name);
+  if (!valid) {
+    return Response.error(PLAYER.CREATE, "Invalid username!");
+  }
+
+  const available = isAvailable(players, player.name);
+  if (!available) {
+    return Response.error(PLAYER.CREATE, "Username already exists!");
   }
 
   players[player.id] = player;
@@ -33,6 +39,10 @@ export const popPlayer = async (id) => {
   await setComplexObjectToRedis("players", players);
 };
 
-const checkPlayerNameAvailability = (players, name) => {
-  return Object.keys(players).some((key) => players[key].name === name);
+const isAvailable = (players, username) => {
+  return !Object.keys(players).some((key) => players[key].name === username);
+};
+
+const isValid = (username) => {
+  return RegExp("^[a-z0-9_-]{3,16}$").test(username);
 };
