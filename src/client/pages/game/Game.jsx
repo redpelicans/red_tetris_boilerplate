@@ -5,10 +5,35 @@ import { useTetrisGame } from "hooks";
 import { Link } from "react-router-dom";
 import { GameContext } from "store";
 import NextPieces from "./NextPieces";
+import TetrisTheme from "assets/music/Tetris_theme.ogg";
+import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 
 export default function Game() {
   const { state, dispatch } = React.useContext(GameContext);
   const tetris = useTetrisGame(10, 20);
+
+  const audioRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (state.alive) {
+      audioRef.current.src = TetrisTheme;
+      audioRef.current.volume = 0.2;
+      // TODO: speed up rate
+      // setInterval(() => (audioRef.current.playbackRate += 0.1), 500);
+
+      audioRef.current.loop = true;
+      // audioRef.current.play();
+    } else {
+      audioRef.current.loop = false;
+      audioRef.current.src = TetrisGameOverTheme;
+      audioRef.current.volume = 1.0;
+      // audioRef.current.play();
+    }
+
+    return () => {
+      audioRef.current.src = null;
+    };
+  }, [state.alive]);
 
   return (
     <FlexBox
@@ -17,8 +42,14 @@ export default function Game() {
       height={"full"}
       className="justify-center items-center"
     >
-      <Link to="/">Retour accueil</Link>
-      {state.alive ? <h1>Still alive</h1> : <h1>GAME OVER</h1>}
+      <audio ref={audioRef} />
+      <Link
+        to="/"
+        className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
+      >
+        Retour accueil
+      </Link>
+      <h1 className="font-bold">{state.alive ? "Still alive" : "GAME OVER"}</h1>
       <FlexBox direction="row" className="mt-4">
         <FlexBox
           direction="col"
@@ -26,8 +57,6 @@ export default function Game() {
           className="justify-center align-center"
         >
           <TetrisGrid grid={state.grid} rowHeight={6} colHeight={6} />
-          <button onClick={() => tetris.movePiece("DOWN")}>go down</button>
-          <button onClick={() => tetris.movePiece("ROTATE")}>rotation</button>
         </FlexBox>
         <FlexBox direction="col" className="items-center mx-4">
           <Score score={state.score} />
