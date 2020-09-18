@@ -10,12 +10,12 @@ export const getLobby = async (id) => {
 export const pushLobby = async (lobby, socketId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) || {};
   console.log(lobbies);
-  const lobbyAvailable = checkIfOwnerHasNoLobby(lobbies, socketId);
-  if (!lobbyAvailable) return 1;
+  const hasLobby = checkIfOwnerHasLobby(lobbies, socketId);
+  if (hasLobby) return 1;
   const alreadyOnLobby = checkIfPlayerIsOnLobbyBySocket(lobbies, socketId);
   if (alreadyOnLobby) return 1;
-  const nameAvailable = checkLobbyNameAvailability(lobbies, lobby.name);
-  if (!nameAvailable) return 2;
+  const nameTaken = checkIfLobbyNameTaken(lobbies, lobby.name);
+  if (nameTaken) return 2;
   lobbies[lobby.id] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
   return 0;
@@ -39,7 +39,8 @@ export const joinLobby = async (player, lobbyId) => {
   if (alreadyOnLobby) return 2;
   const lobby = lobbies?.[lobbyId];
   if (!lobby) return 3;
-  // check if lobby is full
+  const lobbyFull = checkIfLobbyIsFull(lobby);
+  if (lobbyFull) return 4;
   lobby.players.push(player);
   lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
@@ -48,25 +49,39 @@ export const joinLobby = async (player, lobbyId) => {
 };
 
 export const leaveLobby = async (playerId, lobbyId) => {
+  console.log("playerId", playerId);
+
   const lobbies = (await getComplexObjectFromRedis("lobbies")) || {};
   const players = lobbies[lobbyId].players;
-  const newPlayers = players.map((player) => player.id !== playerId);
-  lobbies[lobbyId].players = newPlayers;
+  const newPlayers = players.filter((player) => {
+    return player.id !== playerId;
+  });
+  console.log("newPlayers", newPlayers);
+  const lobby = lobbies?.[lobbyId];
+  if (!lobby) return 1;
+  lobby.players = newPlayers;
+  lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
-  console.log("player", player.id, "left", lobbies[lobbyId].name);
+  console.log("player", playerId, "left", lobbies[lobbyId].name);
+  return 0;
 };
 
-const checkIfOwnerHasNoLobby = (lobbies, socketId) => {
+const checkIfOwnerHasLobby = (lobbies, socketId) => {
   const res = Object.keys(lobbies).some(
     (key) => lobbies[key]?.owner?.socketId === socketId,
   );
-  console.log("CHECK IF OWNER HAS NO LOBBY", res);
-  return !res;
+  return res;
 };
 
-const checkLobbyNameAvailability = (lobbies, name) => {
+const checkIfLobbyNameTaken = (lobbies, name) => {
   const res = Object.keys(lobbies).some((key) => lobbies[key].name === name);
-  return !res;
+  return res;
+};
+
+const checkIfLobbyIsFull = (lobby) => {
+  const maxPlayer = lobby?.maxPlayer;
+  const nbPlayers = lobby.players.length;
+  return maxPlayer <= nbPlayers;
 };
 
 const checkIfPlayerIsOnLobby = (lobbies, playerId) => {

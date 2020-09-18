@@ -3,6 +3,9 @@ import { logerror, loginfo } from "utils/log";
 import { getPlayer } from "store/players";
 import { joinLobby, leaveLobby, getLobby } from "store/lobbies";
 import { LOBBY } from "./../../../config/actions/lobby";
+import { LOBBIES } from "./../../../config/actions/lobbies";
+import { getComplexObjectFromRedis } from "store";
+import { GROUP } from "./../../../config/actions/group";
 
 export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
   const player = await getPlayer(playerId);
@@ -18,6 +21,10 @@ export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
         const response = Response.success(LOBBY.SUBSCRIBE, lobby);
         socket.emit(LOBBY.RESPONSE, { response });
         socket.broadcast.to("group:" + lobbyId).emit(LOBBY.PUBLISH, { lobby });
+        // get info to everyone
+        const lobbies = await getComplexObjectFromRedis("lobbies");
+        socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
+        socket.emit(LOBBIES.PUBLISH, { lobbies });
       }
       break;
     case 1:
@@ -53,6 +60,17 @@ export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
         socket.emit(LOBBY.RESPONSE, { response });
       }
       break;
+    case 4:
+      {
+        const response = Response.error(
+          LOBBY.SUBSCRIBE,
+          "The lobby is full!",
+          {},
+        );
+        loginfo("The lobby is full!", lobbyId);
+        socket.emit(LOBBY.RESPONSE, { response });
+      }
+      break;
     default: {
       const response = Response.error(
         LOBBY.SUBSCRIBE,
@@ -69,8 +87,31 @@ export const handlerUnsubscribeLobby = async (
   socket,
   { playerId, lobbyId },
 ) => {
-  const player = await getPlayer(playerId);
-  await leaveLobby(player, lobbyId);
-  loginfo("Player", player.name, "left lobby", lobbyId);
-  socket.leave("group:" + lobbyId);
+  const res = await leaveLobby(playerId, lobbyId);
+
+  switch (res) {
+    case 0:
+      {
+        socket.leave("group:" + lobbyId);
+        loginfo("Player", playerId, "left lobby", lobbyId);
+        const response = Response.success(LOBBY.UNSUBSCRIBE, {});
+        socket.emit(LOBBY.RESPONSE, { response });
+        const lobby = await getLobby(lobbyId);
+        socket.broadcast.to("group:" + lobbyId).emit(LOBBY.PUBLISH, { lobby });
+        // give info to everyone
+        const lobbies = await getComplexObjectFromRedis("lobbies");
+        socket.broadcast.to(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, { lobbies });
+        socket.emit(LOBBIES.PUBLISH, { lobbies });
+      }
+      break;
+    default: {
+      const response = Response.error(
+        LOBBY.UNSUBSCRIBE,
+        "There was an error!",
+        {},
+      );
+      loginfo("Error leaving lobby", name);
+      socket.emit(LOBBY.RESPONSE, { response });
+    }
+  }
 };

@@ -17,7 +17,7 @@ export default function ({ state, dispatch }) {
       title: "CREATE LOBBY",
       comp: <CreateLobby state={state} dispatch={dispatch} />,
     },
-    { title: "LOBBY", comp: <Lobby state={state} /> },
+    { title: "LOBBY", comp: <Lobby state={state} dispatch={dispatch} /> },
   ];
 
   return (

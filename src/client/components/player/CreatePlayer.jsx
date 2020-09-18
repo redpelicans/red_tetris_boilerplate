@@ -16,14 +16,16 @@ export default function () {
   };
 
   React.useEffect(() => {
-    if (state.playerResponse.type === "error") {
-      console.log("There was an error with player:response");
-      setError(state?.playerResponse?.reason);
-    } else if (state.playerResponse.type === "success") {
-      console.log("New player created :", state.playerResponse.payload);
-      dispatch(setPlayer(state.playerResponse.payload));
-      dispatch(setPlayerResponse({}));
-      navigate("matchmaking");
+    if (state.playerResponse.action === PLAYER.CREATE) {
+      if (state.playerResponse.type === "error") {
+        console.log("There was an error with player:response");
+        setError(state?.playerResponse?.reason);
+      } else if (state.playerResponse.type === "success") {
+        console.log("New player created :", state.playerResponse.payload);
+        dispatch(setPlayer(state.playerResponse.payload));
+        dispatch(setPlayerResponse({}));
+        navigate("matchmaking");
+      }
     }
   }, [state.playerResponse]);
 

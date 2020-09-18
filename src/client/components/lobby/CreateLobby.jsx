@@ -21,24 +21,29 @@ export default function ({ state, dispatch }) {
   };
 
   React.useEffect(() => {
-    if (state.lobbiesResponse.type === "error") {
-      console.log("There was an error with lobbies:response");
-      setError(state?.lobbiesResponse?.reason);
-    } else if (state.lobbiesResponse.type === "success") {
-      console.log("New lobby created :", state.lobbiesResponse.payload);
-      dispatch(setLobby(state.lobbiesResponse.payload));
-      dispatch(setLobbiesResponse({}));
-      // to put outside to get the new Lobby Object
-      state.socket.emit(LOBBY.SUBSCRIBE, {
-        playerId: state.player.id,
-        lobbyId: state.lobbiesResponse.payload.id,
-      });
+    if (state.lobbiesResponse.action === LOBBIES.ADD) {
+      if (state.lobbiesResponse.type === "error") {
+        console.log("There was an error with lobbies:response");
+        setError(state?.lobbiesResponse?.reason);
+      } else if (state.lobbiesResponse.type === "success") {
+        console.log("New lobby created :", state.lobbiesResponse.payload);
+        dispatch(setLobby(state.lobbiesResponse.payload));
+        dispatch(setLobbiesResponse({}));
+        // to put outside to get the new Lobby Object
+        state.socket.emit(LOBBY.SUBSCRIBE, {
+          playerId: state.player.id,
+          lobbyId: state.lobbiesResponse.payload.id,
+        });
+      }
     }
   }, [state.lobbiesResponse]);
 
   const createLobby = (myLobby) => {
-    console.log(myLobby);
     state.socket.emit(LOBBIES.ADD, myLobby);
+    setMyLobby({
+      maxPlayer: 4,
+      owner: state.player,
+    });
   };
 
   return (
@@ -78,10 +83,7 @@ export default function ({ state, dispatch }) {
           }
           className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
           type="button"
-          onClick={() => {
-            createLobby(myLobby);
-            setMyLobby({ maxPlayer: 4 });
-          }}
+          onClick={() => createLobby(myLobby)}
         >
           Create lobby
         </button>
