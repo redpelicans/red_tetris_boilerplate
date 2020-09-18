@@ -4,6 +4,7 @@ import { getComplexObjectFromRedis } from "store";
 import { LOBBIES } from "../../config/actions/lobbies";
 import { LOBBY } from "../../config/actions/lobby";
 import { PLAYERS } from "../../config/actions/players";
+import { MESSAGE } from "../../config/actions/message";
 import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
 import { getLobby, clearPlayerFromLobbies } from "store/lobbies";
 import { popPlayer, getPlayerId } from "store/players";
@@ -75,6 +76,17 @@ eventEmitter.on(event.player.disconnect, async ({ socket }) => {
     socket,
     self: false,
   });
+
+  // Message
+  eventEmitter.on(
+    event.message.new,
+    async ({ socket, messageObject, self = true }) => {
+      socket.broadcast.to(GROUP.LOBBIES).emit(MESSAGE.PUBLISH, messageObject);
+      if (self) {
+        socket.emit(MESSAGE.PUBLISH, messageObject);
+      }
+    },
+  );
 });
 
 export default eventEmitter;

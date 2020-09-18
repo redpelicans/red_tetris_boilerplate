@@ -12,4 +12,7 @@ export default {
   player: {
     disconnect: "onPlayerDisconnect",
   },
+  message: {
+    new: "onNewMessage",
+  },
 };
