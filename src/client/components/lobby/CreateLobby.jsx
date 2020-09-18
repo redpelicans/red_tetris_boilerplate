@@ -49,14 +49,7 @@ export default function ({ state, dispatch }) {
   return (
     <FlexBox direction="row" className="">
       <FlexBox direction="col" className="items-center border-teal-500 py-2">
-        <input
-          className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg mb-2 mr-3 py-1 px-2 block w-full appearance-none leading-normal"
-          type="text"
-          name="hash"
-          placeholder="Lobby hash"
-          value={myLobby?.hash || ""}
-          onChange={handleLobby}
-        />
+        <InputHash value={myLobby?.hash || ""} onChange={handleLobby} />
         <input
           className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg mb-2 mr-3 py-1 px-2 block w-full appearance-none leading-normal"
           type="text"
@@ -92,3 +85,14 @@ export default function ({ state, dispatch }) {
     </FlexBox>
   );
 }
+
+const InputHash = ({ value, onChange }) => (
+  <input
+    className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg mb-2 mr-3 py-1 px-2 block w-full appearance-none leading-normal"
+    type="text"
+    name="hash"
+    placeholder="Lobby hash"
+    value={value}
+    onChange={onChange}
+  />
+);

@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
-import { useNavigation } from "helpers/navigate";
+import useNavigate from "hooks/useNavigate";
 import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 
@@ -10,7 +10,7 @@ export default function () {
   const [playerName, setPlayerName] = React.useState("");
   const [error, setError] = React.useState("");
 
-  const { navigate } = useNavigation();
+  const { navigate } = useNavigate();
   const handlePlayerName = (e) => {
     setPlayerName(e.target.value);
   };
@@ -24,7 +24,7 @@ export default function () {
         console.log("New player created :", state.playerResponse.payload);
         dispatch(setPlayer(state.playerResponse.payload));
         dispatch(setPlayerResponse({}));
-        navigate("matchmaking");
+        navigate("/matchmaking");
       }
     }
   }, [state.playerResponse]);
