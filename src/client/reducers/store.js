@@ -1,4 +1,4 @@
-import { initSocket } from "helpers/sockets";
+import { initSocket } from "store/sockets/sockets";
 
 import {
   SET_PLAYER_RESPONSE,
@@ -13,13 +13,13 @@ import {
 
 export const initialState = {
   socket: initSocket(),
-  playerResponse: {},
   player: {},
+  playerResponse: {},
   players: {},
   lobbies: {},
+  lobbiesResponse: {},
   lobby: {},
   lobbyResponse: {},
-  lobbiesResponse: {},
   messages: [],
 };
 
@@ -40,7 +40,18 @@ export default function reducer(state = initialState, action) {
     case SET_LOBBIES_RESPONSE:
       return { ...state, lobbiesResponse: action.lobbiesResponse };
     case ADD_MESSAGE:
-      return { ...state, messages: [...state.messages, action.message] };
+      const allMessages = [...state.messages, action.message];
+      const newMessages = allMessages.slice(
+        Math.max(allMessages.length - 50, 0),
+      );
+
+      return {
+        ...state,
+        messages: newMessages,
+      };
+    // action a ajouter
+    case RESET_MESSAGE:
+      return { ...state, messages: [] };
     default:
       return state;
   }

@@ -1,9 +1,9 @@
 import socketIOClient from "socket.io-client";
-import { PLAYER } from "../../config/actions/player";
-import { LOBBY } from "../../config/actions/lobby";
-import { LOBBIES } from "../../config/actions/lobbies";
-import { PIECE } from "../../config/actions/piece";
-import { MESSAGE } from "../../config/actions/message";
+import { PLAYER } from "../../../config/actions/player";
+import { LOBBY } from "../../../config/actions/lobby";
+import { LOBBIES } from "../../../config/actions/lobbies";
+import { PIECE } from "../../../config/actions/piece";
+import { MESSAGE } from "../../../config/actions/message";
 
 import {
   setPlayerResponse,
@@ -25,7 +25,7 @@ export function setupSocket(socket, dispatch) {
     dispatch(setLobbies(data.lobbies));
   });
   socket.on(LOBBIES.RESPONSE, (data) => {
-    dispatch(setLobbiesResponse(data.response));
+    dispatch(setLobbiesResponse(data));
   });
   socket.on(LOBBY.RESPONSE, (data) => {
     dispatch(setLobbyResponse(data.response));
@@ -43,6 +43,5 @@ export function setupSocket(socket, dispatch) {
 }
 
 export function initSocket() {
-  const socket = socketIOClient(endpoint);
-  return socket;
+  return socketIOClient(endpoint);
 }
