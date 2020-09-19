@@ -25,7 +25,7 @@ function removeCompletedRows(grid) {
 
   const additionalScore = COMBO[linesRemoved];
 
-  return [grid, additionalScore];
+  return [grid, additionalScore, linesRemoved];
 }
 
 function bind(grid, piece) {
@@ -42,8 +42,12 @@ function bind(grid, piece) {
     }
   }
 
-  const [newGridAfterScore, additionalScore] = removeCompletedRows(grid);
-  return [newGridAfterScore, additionalScore];
+  const [
+    newGridAfterScore,
+    additionalScore,
+    nbRowsRemoved,
+  ] = removeCompletedRows(grid);
+  return [newGridAfterScore, additionalScore, nbRowsRemoved];
 }
 
 export default bind;

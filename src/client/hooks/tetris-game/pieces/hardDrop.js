@@ -10,9 +10,12 @@ function hardDrop(grid, piece) {
   const newPiece = getDropPosition(cleanGrid, piece);
 
   const newGrid = Grid.write(cleanGrid, newPiece, CURRENT_PIECE);
-  const [gridAfterBind, additionalScore] = Grid.bind(newGrid, newPiece);
+  const [gridAfterBind, additionalScore, nbRowsRemoved] = Grid.bind(
+    newGrid,
+    newPiece,
+  );
   const score = (newPiece.coord.y - initialY) * 2 + additionalScore;
-  return [gridAfterBind, score];
+  return [gridAfterBind, score, nbRowsRemoved];
 }
 
 export default hardDrop;

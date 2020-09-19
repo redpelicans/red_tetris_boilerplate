@@ -18,22 +18,24 @@ export default function Game() {
     if (state.alive) {
       audioRef.current.src = TetrisTheme;
       audioRef.current.volume = 0.2;
-      // TODO: speed up rate
-      // setInterval(() => (audioRef.current.playbackRate += 0.1), 500);
-
       audioRef.current.loop = true;
-      // audioRef.current.play();
+      audioRef.current.play();
     } else {
       audioRef.current.loop = false;
       audioRef.current.src = TetrisGameOverTheme;
+      audioRef.current.playbackRate = 1.0;
       audioRef.current.volume = 1.0;
-      // audioRef.current.play();
+      audioRef.current.play();
     }
 
     return () => {
       audioRef.current.src = null;
     };
   }, [state.alive]);
+
+  React.useEffect(() => {
+    audioRef.current.playbackRate = state.speedRate;
+  }, [state.speedRate]);
 
   return (
     <FlexBox

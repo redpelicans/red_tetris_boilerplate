@@ -9,6 +9,7 @@ import {
   updateGrid,
   setPlayerIsAlive,
   addScore,
+  increaseSpeedRate,
 } from "actions/game";
 import useAutoMove from "./useAutoMove";
 import useEventListener from "hooks/useEventListener";
@@ -38,6 +39,10 @@ function useTetrisGame(cols = 10, rows = 20) {
     dispatch(updateGrid(initGrid));
   }, []);
 
+  const gravityInterval = React.useMemo(() => INTERVAL_MS / state.speedRate, [
+    state.speedRate,
+  ]);
+
   const midGrid = React.useMemo(() => getMidGrid(cols), [cols]);
 
   // Methods
@@ -63,7 +68,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   // Set a new Timer after each move
   React.useEffect(() => {
     if (!isEmpty(state.currentPiece.shape) && state.currentPiece.coord) {
-      autoMoveTimer.start(INTERVAL_MS);
+      autoMoveTimer.start(gravityInterval);
 
       return () => autoMoveTimer.stop();
     }
@@ -117,10 +122,11 @@ function useTetrisGame(cols = 10, rows = 20) {
     if (isEmpty(newObj)) {
       dispatch(setPlayerIsAlive(false));
     } else {
-      const [newGrid, score] = newObj;
+      const [newGrid, score, nbRowsRemoved] = newObj;
       dispatch(updateGrid(newGrid));
       dispatch(pullCurrentPiece());
       dispatch(addScore(score));
+      dispatch(increaseSpeedRate(nbRowsRemoved));
     }
   }
 
@@ -136,13 +142,14 @@ function useTetrisGame(cols = 10, rows = 20) {
     const newObj = Piece.softDrop(state.grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
-      const [newGrid, additionalScore] = Grid.bind(
+      const [newGrid, additionalScore, nbRowsRemoved] = Grid.bind(
         state.grid,
         state.currentPiece,
       );
       dispatch(updateGrid(newGrid));
       dispatch(pullCurrentPiece());
       dispatch(addScore(additionalScore));
+      dispatch(increaseSpeedRate(nbRowsRemoved));
     } else {
       const [newGrid, newPiece] = newObj;
       const newGridWithShadow = Piece.shadow(newGrid, newPiece);
@@ -157,7 +164,7 @@ function useTetrisGame(cols = 10, rows = 20) {
     const newObj = Piece.rotation(state.currentPiece, state.grid);
 
     if (isEmpty(newObj)) {
-      autoMoveTimer.start(INTERVAL_MS);
+      autoMoveTimer.start(gravityInterval);
     } else {
       const [newGrid, newPiece] = newObj;
       const newGridWithShadow = Piece.shadow(newGrid, newPiece);

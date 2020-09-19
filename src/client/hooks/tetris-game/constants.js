@@ -29,5 +29,5 @@ export const MOVE_RIGHT = 1;
  ** TIMERS
  */
 
-export const INTERVAL_MS = 750;
+export const INTERVAL_MS = 1000;
 export const DEFAULT_REPEAT_TIMEOUT = 5;
