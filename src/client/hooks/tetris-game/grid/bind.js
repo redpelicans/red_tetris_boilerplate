@@ -14,7 +14,7 @@ function removeCompletedRows(grid) {
   let linesRemoved = 0;
   let row = grid.length - 1;
 
-  while (Check.isNotAnEmptyRow(grid[row])) {
+  while (row >= 0 && Check.isNotAnEmptyRow(grid[row])) {
     if (Check.isACompleteRow(grid[row])) {
       dropDownAllFollowingRows(grid, row);
       linesRemoved++;
