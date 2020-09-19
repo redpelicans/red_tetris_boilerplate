@@ -80,23 +80,27 @@ function useTetrisGame(cols = 10, rows = 20) {
       return;
     }
     if (
-      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(action.key)
+      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp", "Space"].includes(
+        action.code,
+      )
     ) {
       autoMoveTimer.stop();
-      if (action.key === "ArrowDown") {
+      if (action.code === "ArrowDown") {
         doSoftDrop();
-      } else if (action.key === "ArrowLeft") {
-        movePieceLeft();
-      } else if (action.key === "ArrowRight") {
-        movePieceRight();
-      } else if (action.key === "ArrowUp") {
+      } else if (action.code === "ArrowLeft") {
+        movePieceLateral(MOVE_LEFT);
+      } else if (action.code === "ArrowRight") {
+        movePieceLateral(MOVE_RIGHT);
+      } else if (action.code === "ArrowUp") {
         rotatePieceClockwise();
+      } else if (action.code === "Space") {
+        doHardDrop();
       }
     }
   }
 
-  function movePieceLeft() {
-    const newObj = Piece.lateralMove(state.grid, state.currentPiece, MOVE_LEFT);
+  function movePieceLateral(direction) {
+    const newObj = Piece.lateralMove(state.grid, state.currentPiece, direction);
 
     if (!isEmpty(newObj)) {
       const [newGrid, newPiece] = newObj;
@@ -105,17 +109,16 @@ function useTetrisGame(cols = 10, rows = 20) {
     }
   }
 
-  function movePieceRight() {
-    const newObj = Piece.lateralMove(
-      state.grid,
-      state.currentPiece,
-      MOVE_RIGHT,
-    );
+  function doHardDrop() {
+    const newObj = Piece.hardDrop(state.grid, state.currentPiece);
 
-    if (!isEmpty(newObj)) {
-      const [newGrid, newPiece] = newObj;
+    if (isEmpty(newObj)) {
+      dispatch(setPlayerIsAlive(false));
+    } else {
+      const [newGrid, score] = newObj;
       dispatch(updateGrid(newGrid));
-      dispatch(updateCurrentPiece(newPiece));
+      dispatch(pullCurrentPiece());
+      dispatch(addScore(score));
     }
   }
 
