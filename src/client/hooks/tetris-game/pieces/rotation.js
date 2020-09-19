@@ -1,52 +1,6 @@
-import * as Grid from "./grid";
+import * as Grid from "../grid";
 
-export function insertPiece(piece, grid, midGrid) {
-  const insertPos =
-    midGrid - Math.ceil((piece.shape[0].length - piece.padding.x) / 2);
-  const newPiece = {
-    ...piece,
-    coord: { x: insertPos, y: 0 - piece.padding.y },
-  };
-
-  if (!Grid.canPutLayer(grid, newPiece)) {
-    return null;
-  }
-
-  const gridCopy = Grid.writePieceInGrid(grid, newPiece);
-  return [gridCopy, newPiece];
-}
-
-export function softDrop(grid, piece) {
-  const newPiece = {
-    ...piece,
-    coord: { ...piece.coord, y: piece.coord.y + 1 },
-  };
-
-  const cleanGrid = Grid.clearPieceFromGrid(grid);
-  if (!Grid.canPutLayer(cleanGrid, newPiece)) {
-    return null;
-  }
-
-  const newGrid = Grid.writePieceInGrid(cleanGrid, newPiece);
-  return [newGrid, newPiece];
-}
-
-export function moveLateral(grid, piece, direction) {
-  const newPiece = {
-    ...piece,
-    coord: { ...piece.coord, x: piece.coord.x + direction },
-  };
-
-  const cleanGrid = Grid.clearPieceFromGrid(grid);
-  if (!Grid.canPutLayer(cleanGrid, newPiece)) {
-    return null;
-  }
-
-  const newGrid = Grid.writePieceInGrid(cleanGrid, newPiece);
-  return [newGrid, newPiece];
-}
-
-function rotation(piece) {
+function rotatePiece(piece) {
   return piece[0].map((_, colIndex) =>
     piece.map((row) => row[colIndex]).reverse(),
   );
@@ -123,19 +77,19 @@ function testMultiplePositions(testedPiece, grid) {
 
   for (const testedCoord of positions) {
     testedPiece.coord = testedCoord;
-    if (Grid.canPutLayer(grid, testedPiece)) {
+    if (Grid.Check.canPutLayer(grid, testedPiece)) {
       return testedPiece;
     }
   }
   return null;
 }
 
-export function rotatePiece(piece, grid) {
-  const newShape = rotation(piece.shape);
+function rotation(piece, grid) {
+  const newShape = rotatePiece(piece.shape);
   const newPadding = getPadding(newShape);
   const newDim = { width: piece.dim.height, height: piece.dim.width };
 
-  const cleanGrid = Grid.clearPieceFromGrid(grid);
+  const cleanGrid = Grid.clear(grid);
 
   const newPiece = testMultiplePositions(
     { ...piece, shape: newShape, padding: newPadding, dim: newDim },
@@ -145,6 +99,8 @@ export function rotatePiece(piece, grid) {
     return null;
   }
 
-  const newGrid = Grid.writePieceInGrid(cleanGrid, newPiece);
+  const newGrid = Grid.write(cleanGrid, newPiece);
   return [newGrid, newPiece];
 }
+
+export default rotation;

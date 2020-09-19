@@ -1,6 +1,6 @@
 import React from "react";
-import { bindPieceToGrid } from "./grid";
-import { insertPiece, softDrop, rotatePiece, moveLateral } from "./pieces";
+import * as Grid from "./grid";
+import * as Piece from "./pieces";
 import { isEmpty } from "helpers/functional";
 import { GameContext } from "store";
 import {
@@ -13,11 +13,12 @@ import {
 import useAutoMove from "./useAutoMove";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
-
-const INTERVAL_MS = 750;
-const MOVE_LEFT = -1;
-const MOVE_RIGHT = 1;
-const DEFAULT_REPEAT_TIMEOUT = 5;
+import {
+  INTERVAL_MS,
+  MOVE_LEFT,
+  MOVE_RIGHT,
+  DEFAULT_REPEAT_TIMEOUT,
+} from "./constants";
 
 /*
  ** This custom hook is used to manage the game board.
@@ -41,7 +42,7 @@ function useTetrisGame(cols = 10, rows = 20) {
 
   // Methods
   function insertNewPiece(piece, grid = state.grid) {
-    const newObj = insertPiece(piece, grid, midGrid);
+    const newObj = Piece.insertion(piece, grid, midGrid);
     if (newObj) {
       const [newGrid, newPiece] = newObj;
       dispatch(updateGrid(newGrid));
@@ -95,7 +96,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   }
 
   function movePieceLeft() {
-    const newObj = moveLateral(state.grid, state.currentPiece, MOVE_LEFT);
+    const newObj = Piece.lateralMove(state.grid, state.currentPiece, MOVE_LEFT);
 
     if (!isEmpty(newObj)) {
       const [newGrid, newPiece] = newObj;
@@ -105,7 +106,11 @@ function useTetrisGame(cols = 10, rows = 20) {
   }
 
   function movePieceRight() {
-    const newObj = moveLateral(state.grid, state.currentPiece, MOVE_RIGHT);
+    const newObj = Piece.lateralMove(
+      state.grid,
+      state.currentPiece,
+      MOVE_RIGHT,
+    );
 
     if (!isEmpty(newObj)) {
       const [newGrid, newPiece] = newObj;
@@ -123,10 +128,10 @@ function useTetrisGame(cols = 10, rows = 20) {
 
   function gravity() {
     let hasMoved = false;
-    const newObj = softDrop(state.grid, state.currentPiece);
+    const newObj = Piece.softDrop(state.grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
-      const [newGrid, additionalScore] = bindPieceToGrid(
+      const [newGrid, additionalScore] = Grid.bind(
         state.grid,
         state.currentPiece,
       );
@@ -143,7 +148,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   }
 
   function rotatePieceClockwise() {
-    const newObj = rotatePiece(state.currentPiece, state.grid);
+    const newObj = Piece.rotation(state.currentPiece, state.grid);
 
     if (isEmpty(newObj)) {
       autoMoveTimer.start(INTERVAL_MS);
