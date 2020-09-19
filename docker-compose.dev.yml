@@ -33,7 +33,6 @@ services:
     ports:
       - "3000:3000"
     restart: always
-    stdin_open: true
     volumes:
       - ./:/redtetris/client/
       - /redtetris/client/node_modules
