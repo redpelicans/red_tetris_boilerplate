@@ -11,7 +11,7 @@ import { popPlayer, getPlayerId } from "store/players";
 
 const eventEmitter = new EventEmitter();
 
-// Lobbies
+// Lobbies change
 eventEmitter.on(event.lobbies.change, async ({ socket, self = true }) => {
   const lobbies = await getComplexObjectFromRedis("lobbies");
 
@@ -21,7 +21,7 @@ eventEmitter.on(event.lobbies.change, async ({ socket, self = true }) => {
   }
 });
 
-// Lobby
+// Lobby change
 eventEmitter.on(
   event.lobby.change,
   async ({ socket, lobbyId, self = true }) => {
@@ -35,7 +35,7 @@ eventEmitter.on(
   },
 );
 
-// Players
+// Players change
 eventEmitter.on(event.players.change, async ({ socket, self = true }) => {
   const players = await getComplexObjectFromRedis("players");
 
@@ -77,7 +77,7 @@ eventEmitter.on(event.player.disconnect, async ({ socket }) => {
     self: false,
   });
 
-  // Message
+  // Message new
   eventEmitter.on(
     event.message.new,
     async ({ socket, messageObject, self = true }) => {

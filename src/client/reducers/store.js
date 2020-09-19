@@ -47,7 +47,6 @@ export default function reducer(state = initialState, action) {
       const newMessages = allMessages.slice(
         Math.max(allMessages.length - 50, 0),
       );
-
       return {
         ...state,
         messages: newMessages,
