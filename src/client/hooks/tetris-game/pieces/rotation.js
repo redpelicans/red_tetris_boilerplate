@@ -1,4 +1,5 @@
 import * as Grid from "../grid";
+import { CURRENT_PIECE } from "../constants";
 
 function rotatePiece(piece) {
   return piece[0].map((_, colIndex) =>
@@ -99,7 +100,7 @@ function rotation(piece, grid) {
     return null;
   }
 
-  const newGrid = Grid.write(cleanGrid, newPiece);
+  const newGrid = Grid.write(cleanGrid, newPiece, CURRENT_PIECE);
   return [newGrid, newPiece];
 }
 

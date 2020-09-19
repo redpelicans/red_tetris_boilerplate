@@ -1,4 +1,5 @@
 import * as Grid from "../grid";
+import { CURRENT_PIECE } from "../constants";
 
 function insertion(piece, grid, midGrid) {
   const insertPos =
@@ -12,7 +13,7 @@ function insertion(piece, grid, midGrid) {
     return null;
   }
 
-  const gridCopy = Grid.write(grid, newPiece);
+  const gridCopy = Grid.write(grid, newPiece, CURRENT_PIECE);
   return [gridCopy, newPiece];
 }
 

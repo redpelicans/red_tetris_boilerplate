@@ -2,6 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import PropTypes from "prop-types";
 import { GameContext } from "store";
+import { CURRENT_PIECE, SHADOW_PIECE } from "hooks/tetris-game/constants";
 import "./Grid.scss";
 
 const TetrisGrid = React.memo(({ grid, rowHeight, colWidth, colHeight }) => (
@@ -43,9 +44,18 @@ const TetrisCols = ({ cols, rowIdx, colHeight }) => {
       direction="col"
       height={colHeight}
       width={`1/${nbCol}`}
-      className={
-        col === 1 ? `tetromino-${currentPiece.color}` : `tetromino-${col}`
-      }
+      className={getTetroColor(col, currentPiece)}
     />
   ));
+};
+
+const getTetroColor = (col, currentPiece) => {
+  switch (col) {
+    case CURRENT_PIECE:
+      return `tetromino-${currentPiece.color}`;
+    case SHADOW_PIECE:
+      return `tetromino-${currentPiece.color} opacity-50`;
+    default:
+      return `tetromino-${col}`;
+  }
 };

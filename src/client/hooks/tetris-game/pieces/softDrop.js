@@ -1,4 +1,5 @@
 import * as Grid from "../grid";
+import { CURRENT_PIECE } from "../constants";
 
 function softDrop(grid, piece) {
   const newPiece = {
@@ -11,7 +12,7 @@ function softDrop(grid, piece) {
     return null;
   }
 
-  const newGrid = Grid.write(cleanGrid, newPiece);
+  const newGrid = Grid.write(cleanGrid, newPiece, CURRENT_PIECE);
   return [newGrid, newPiece];
 }
 

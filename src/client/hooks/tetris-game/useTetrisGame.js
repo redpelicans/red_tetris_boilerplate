@@ -45,7 +45,8 @@ function useTetrisGame(cols = 10, rows = 20) {
     const newObj = Piece.insertion(piece, grid, midGrid);
     if (newObj) {
       const [newGrid, newPiece] = newObj;
-      dispatch(updateGrid(newGrid));
+      const newGridWithShadow = Piece.shadow(newGrid, newPiece);
+      dispatch(updateGrid(newGridWithShadow));
       dispatch(updateCurrentPiece(newPiece));
       return true;
     }
@@ -104,7 +105,8 @@ function useTetrisGame(cols = 10, rows = 20) {
 
     if (!isEmpty(newObj)) {
       const [newGrid, newPiece] = newObj;
-      dispatch(updateGrid(newGrid));
+      const newGridWithShadow = Piece.shadow(newGrid, newPiece);
+      dispatch(updateGrid(newGridWithShadow));
       dispatch(updateCurrentPiece(newPiece));
     }
   }
@@ -143,7 +145,8 @@ function useTetrisGame(cols = 10, rows = 20) {
       dispatch(addScore(additionalScore));
     } else {
       const [newGrid, newPiece] = newObj;
-      dispatch(updateGrid(newGrid));
+      const newGridWithShadow = Piece.shadow(newGrid, newPiece);
+      dispatch(updateGrid(newGridWithShadow));
       dispatch(updateCurrentPiece(newPiece));
       hasMoved = true;
     }
@@ -157,7 +160,8 @@ function useTetrisGame(cols = 10, rows = 20) {
       autoMoveTimer.start(INTERVAL_MS);
     } else {
       const [newGrid, newPiece] = newObj;
-      dispatch(updateGrid(newGrid));
+      const newGridWithShadow = Piece.shadow(newGrid, newPiece);
+      dispatch(updateGrid(newGridWithShadow));
       dispatch(updateCurrentPiece(newPiece));
     }
   }

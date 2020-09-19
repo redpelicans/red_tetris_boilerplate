@@ -1,7 +1,14 @@
-import { CURRENT_PIECE } from "../constants";
 import * as Check from "./checks";
+import { CURRENT_PIECE } from "../constants";
 
-function write(grid, piece) {
+/*
+ ** Write a piece on the Tetris grid.
+ ** Type can be one of the following constants:
+ **   - CURRENT_PIECE
+ **   - SHADOW_PIECE
+ */
+
+function write(grid, piece, type) {
   const { shape, padding, coord } = piece;
 
   const colLength = shape[0].length;
@@ -9,8 +16,11 @@ function write(grid, piece) {
 
   for (let col = padding.x; col < colLength; col++) {
     for (let row = padding.y; row < rowLength; row++) {
-      if (Check.isPartOfPiece(shape[row][col])) {
-        grid[coord.y + row][coord.x + col] = CURRENT_PIECE;
+      if (
+        Check.isPartOfPiece(shape[row][col]) &&
+        grid[coord.y + row][coord.x + col] !== CURRENT_PIECE
+      ) {
+        grid[coord.y + row][coord.x + col] = type;
       }
     }
   }

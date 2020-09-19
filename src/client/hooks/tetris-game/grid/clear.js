@@ -1,8 +1,13 @@
-import { CURRENT_PIECE, FREE } from "../constants";
+import { CURRENT_PIECE, SHADOW_PIECE, FREE } from "../constants";
 
 function clear(grid) {
   return grid.map((row) =>
-    row.map((col) => (col === CURRENT_PIECE ? FREE : col)),
+    row.map((col) => {
+      if (col === CURRENT_PIECE || col === SHADOW_PIECE) {
+        return FREE;
+      }
+      return col;
+    }),
   );
 }
 

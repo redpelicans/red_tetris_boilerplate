@@ -1,4 +1,5 @@
 import * as Grid from "../grid";
+import { CURRENT_PIECE } from "../constants";
 
 function lateralMove(grid, piece, direction) {
   const newPiece = {
@@ -11,7 +12,7 @@ function lateralMove(grid, piece, direction) {
     return null;
   }
 
-  const newGrid = Grid.write(cleanGrid, newPiece);
+  const newGrid = Grid.write(cleanGrid, newPiece, CURRENT_PIECE);
   return [newGrid, newPiece];
 }
 
