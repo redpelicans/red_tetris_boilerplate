@@ -1,4 +1,4 @@
-import { CURRENT_PIECE, COMBO } from "../constants";
+import { COMBO } from "../constants";
 import * as Check from "./checks";
 
 function dropDownAllFollowingRows(grid, row) {
@@ -29,10 +29,20 @@ function removeCompletedRows(grid) {
 }
 
 function bind(grid, piece) {
-  const newGrid = grid.map((row) =>
-    row.map((col) => (col === CURRENT_PIECE ? piece.color : col)),
-  );
-  const [newGridAfterScore, additionalScore] = removeCompletedRows(newGrid);
+  const { shape, padding, coord } = piece;
+
+  const colLength = shape[0].length;
+  const rowLength = shape.length;
+
+  for (let col = padding.x; col < colLength; col++) {
+    for (let row = padding.y; row < rowLength; row++) {
+      if (Check.isPartOfPiece(shape[row][col])) {
+        grid[coord.y + row][coord.x + col] = piece.color;
+      }
+    }
+  }
+
+  const [newGridAfterScore, additionalScore] = removeCompletedRows(grid);
   return [newGridAfterScore, additionalScore];
 }
 
