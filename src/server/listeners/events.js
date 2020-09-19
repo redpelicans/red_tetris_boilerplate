@@ -15,4 +15,7 @@ export default {
   message: {
     new: "onNewMessage",
   },
+  room: {
+    clear: "onClearRoom",
+  },
 };

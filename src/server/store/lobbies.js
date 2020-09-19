@@ -5,7 +5,7 @@ import { getComplexObjectFromRedis, setComplexObjectToRedis } from "store";
 import Response from "models/response";
 
 export const getLobby = async (id) => {
-  const lobbies = await getComplexObjectFromRedis("lobbies");
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
   return lobbies?.[id];
 };
 

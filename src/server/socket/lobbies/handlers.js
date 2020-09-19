@@ -28,9 +28,6 @@ export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
   socket.emit(LOBBIES.RESPONSE, response);
 
   if (response.type === "success") {
-    socket.leave(`${GROUP_DOMAIN}:${lobbyId}`);
-    // Make everyone leave???
-    // Sending empty lobby
     eventEmitter.emit(event.lobby.change, {
       socket,
       lobbyId,

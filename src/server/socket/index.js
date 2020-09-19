@@ -35,7 +35,7 @@ const runSocketIo = (httpServer) => {
   });
 
   loginfo("Sockets have been initialized!");
-  return { httpServer, io };
+  return io;
 };
 
 export default runSocketIo;

@@ -17,7 +17,6 @@ export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
     eventEmitter.emit(event.lobby.change, {
       socket,
       lobbyId,
-      self: false,
     });
 
     eventEmitter.emit(event.lobbies.change, {
@@ -39,7 +38,6 @@ export const handlerUnsubscribeLobby = async (
     eventEmitter.emit(event.lobby.change, {
       socket,
       lobbyId,
-      self: false,
     });
 
     eventEmitter.emit(event.lobbies.change, {
