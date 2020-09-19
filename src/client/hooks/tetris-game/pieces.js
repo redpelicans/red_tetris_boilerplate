@@ -72,7 +72,8 @@ function getPadding(shape) {
   return { x: getPaddingLeft(), y: getPaddingTop() };
 }
 
-function fixCoord(coord, padding, dim, colMax) {
+function fixCoord(piece, colMax) {
+  const { coord, padding, dim } = piece;
   let newX = coord.x;
   let newY = coord.y;
 
@@ -101,18 +102,27 @@ function shiftPieceHorizontally(coord, shift) {
 function testMultiplePositions(testedPiece, grid) {
   const { coord, dim } = testedPiece;
 
-  const testable = Math.floor(dim.width / 2);
-  const toTest = [coord];
+  function getPossiblePositions() {
+    const coordToTest = [coord];
+    const testable = Math.floor(dim.width / 2);
 
-  for (let i = 1; i <= testable; i++) {
-    toTest.push(shiftPieceHorizontally(coord, -i));
-  }
-  for (let i = 1; i <= testable; i++) {
-    toTest.push(shiftPieceHorizontally(coord, i));
+    for (let i = 1; i <= testable; i++) {
+      coordToTest.push(shiftPieceHorizontally(coord, -i));
+    }
+    for (let i = 1; i <= testable; i++) {
+      coordToTest.push(shiftPieceHorizontally(coord, i));
+    }
+    return coordToTest;
   }
 
-  for (const coordToTest of toTest) {
-    testedPiece.coord = coordToTest;
+  const possiblePositions = getPossiblePositions();
+  const colMax = grid[0].length;
+  const positions = possiblePositions.map((pos) =>
+    fixCoord({ ...testedPiece, coord: pos }, colMax),
+  );
+
+  for (const testedCoord of positions) {
+    testedPiece.coord = testedCoord;
     if (Grid.canPutLayer(grid, testedPiece)) {
       return testedPiece;
     }
