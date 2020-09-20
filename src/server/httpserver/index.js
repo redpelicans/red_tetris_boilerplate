@@ -2,7 +2,7 @@ import { logerror, loginfo } from "utils/log";
 import express from "express";
 import http from "http";
 import path from "path";
-import params from "../../config/params";
+import params from "../../config/params/params";
 
 const app = express();
 const httpServer = http.createServer(app);

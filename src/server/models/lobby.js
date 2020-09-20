@@ -1,10 +1,11 @@
+import { nanoid } from "nanoid";
 export default class Lobby {
-  constructor({ id, hash, name, maxPlayer, players, owner }) {
-    this.id = id;
+  constructor({ hash, name, maxPlayer, owner }) {
+    this.id = nanoid();
     this.hash = hash;
     this.name = name;
     this.maxPlayer = maxPlayer;
-    this.players = players;
-    this.owner = owner; // Object Player
+    this.players = [];
+    this.owner = owner;
   }
 }

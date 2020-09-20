@@ -1,25 +1,15 @@
-import { TETROMINO } from "./../../config/models/piece";
+import TETROMINOES from "./../../config/models/piece";
 
-const randomShape = () => {
-  return TETROMINO.shape[
-    Math.floor(Math.random() * Math.floor(TETROMINO.shape.length))
-  ];
-};
-
-const randomColor = () => {
-  return TETROMINO.color[
-    Math.floor(Math.random() * Math.floor(TETROMINO.color.length))
-  ];
+const randomNumber = () => {
+  return Math.floor(Math.random() * Math.floor(TETROMINOES.length));
 };
 
 export default class Piece {
   constructor() {
-    this.shape = randomShape();
-    this.color = randomColor();
+    const random = randomNumber();
+    this.shape = TETROMINOES[random].shape;
+    this.color = TETROMINOES[random].color;
+    this.padding = TETROMINOES[random].padding;
+    this.dim = TETROMINOES[random].dim;
   }
 }
-
-// export const Piece = () => ({
-//   piece: randomShape(),
-//   color: randomColor(),
-// });
