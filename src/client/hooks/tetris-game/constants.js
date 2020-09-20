@@ -22,6 +22,13 @@ export const COMBO = {
  ** MOVES
  */
 
+export const KEYBOARD_ACTIONS = [
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "Space",
+];
 export const MOVE_LEFT = -1;
 export const MOVE_RIGHT = 1;
 

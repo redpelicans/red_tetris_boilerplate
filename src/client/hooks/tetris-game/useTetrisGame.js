@@ -12,7 +12,12 @@ import {
   increaseSpeedRate,
 } from "actions/game";
 import useAutoMove from "./useAutoMove";
-import { INTERVAL_MS, MOVE_LEFT, MOVE_RIGHT } from "./constants";
+import {
+  INTERVAL_MS,
+  MOVE_LEFT,
+  MOVE_RIGHT,
+  KEYBOARD_ACTIONS,
+} from "./constants";
 
 /*
  ** This custom hook is used to manage the game board.
@@ -72,11 +77,7 @@ function useTetrisGame(cols = 10, rows = 20) {
     if (!state.alive) {
       return;
     }
-    if (
-      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp", "Space"].includes(
-        action.code,
-      )
-    ) {
+    if (KEYBOARD_ACTIONS.includes(action.code)) {
       autoMoveTimer.stop();
       if (action.code === "ArrowDown") {
         doSoftDrop();
