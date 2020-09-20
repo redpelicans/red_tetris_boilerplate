@@ -12,30 +12,19 @@ import {
   increaseSpeedRate,
 } from "actions/game";
 import useAutoMove from "./useAutoMove";
-import useEventListener from "hooks/useEventListener";
-import useThrottle from "hooks/useThrottle";
-import {
-  INTERVAL_MS,
-  MOVE_LEFT,
-  MOVE_RIGHT,
-  DEFAULT_REPEAT_TIMEOUT,
-} from "./constants";
+import { INTERVAL_MS, MOVE_LEFT, MOVE_RIGHT } from "./constants";
 
 /*
  ** This custom hook is used to manage the game board.
  ** It exposed the following:
- **  - tetrisGrid: An actualized version of the game board;
- **  - insertNewPiece: A method to insert a new tetromino in the board.
- **  - movePieceDown: A method to move the current piece one row down.
+ **  - movePiece: A dispatcher to all possible actions;
  */
 function useTetrisGame(cols = 10, rows = 20) {
   const { state, dispatch } = React.useContext(GameContext);
   const autoMoveTimer = useAutoMove(gravity);
-  const throttledMove = useThrottle(movePiece, DEFAULT_REPEAT_TIMEOUT);
-  useEventListener("keydown", throttledMove);
 
   React.useEffect(() => {
-    const initGrid = createGrid(cols, rows);
+    const initGrid = Grid.create(cols, rows);
     dispatch(updateGrid(initGrid));
   }, []);
 
@@ -43,11 +32,9 @@ function useTetrisGame(cols = 10, rows = 20) {
     state.speedRate,
   ]);
 
-  const midGrid = React.useMemo(() => getMidGrid(cols), [cols]);
-
   // Methods
   function insertNewPiece(piece, grid = state.grid) {
-    const newObj = Piece.insertion(piece, grid, midGrid);
+    const newObj = Piece.insertion(piece, grid);
     if (newObj) {
       const [newGrid, newPiece] = newObj;
       const newGridWithShadow = Piece.shadow(newGrid, newPiece);
@@ -177,14 +164,3 @@ function useTetrisGame(cols = 10, rows = 20) {
 }
 
 export default useTetrisGame;
-
-function createGrid(col, row) {
-  if (col < 10 || row < 10) {
-    throw new Error("X or Y dimension shouldn't be under 10");
-  }
-  return Array.from(Array(row), () => new Array(col).fill(0));
-}
-
-function getMidGrid(colLength) {
-  return Math.floor(colLength / 2);
-}

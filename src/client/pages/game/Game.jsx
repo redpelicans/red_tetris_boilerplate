@@ -8,9 +8,15 @@ import NextPieces from "./NextPieces";
 import TetrisTheme from "assets/music/Tetris_theme.ogg";
 import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 
+import useEventListener from "hooks/useEventListener";
+import useThrottle from "hooks/useThrottle";
+import { DEFAULT_REPEAT_TIMEOUT } from "hooks/tetris-game/constants";
+
 export default function Game() {
   const { state, dispatch } = React.useContext(GameContext);
-  const tetris = useTetrisGame(10, 20);
+  const { movePiece } = useTetrisGame(10, 20);
+  const throttledMove = useThrottle(movePiece, DEFAULT_REPEAT_TIMEOUT);
+  useEventListener("keydown", throttledMove);
 
   const audioRef = React.useRef(null);
 
