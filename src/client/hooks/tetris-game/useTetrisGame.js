@@ -3,14 +3,7 @@ import * as Grid from "./grid";
 import * as Piece from "./pieces";
 import { isEmpty } from "helpers/functional";
 import { GameContext } from "store";
-import {
-  pullCurrentPiece,
-  updateCurrentPiece,
-  updateGrid,
-  setPlayerIsAlive,
-  addScore,
-  increaseSpeedRate,
-} from "actions/game";
+import { pullCurrentPiece, updateGrid, addScore } from "actions/game";
 import useAutoMove from "./useAutoMove";
 import {
   INTERVAL_MS,
@@ -18,6 +11,7 @@ import {
   MOVE_RIGHT,
   KEYBOARD_ACTIONS,
 } from "./constants";
+import useTetrisState from "./useTetrisState";
 
 /*
  ** This custom hook is used to manage the game board.
@@ -26,31 +20,24 @@ import {
  */
 function useTetrisGame(cols = 10, rows = 20) {
   const { state, dispatch } = React.useContext(GameContext);
+  const {
+    updateStateAfterMove,
+    updateStateAfterBind,
+    setGameOver,
+  } = useTetrisState();
   const autoMoveTimer = useAutoMove(gravity);
-
-  React.useEffect(() => {
-    const initGrid = Grid.create(cols, rows);
-    dispatch(updateGrid(initGrid));
-  }, []);
 
   const gravityInterval = React.useMemo(() => INTERVAL_MS / state.speedRate, [
     state.speedRate,
   ]);
 
-  // Methods
-  function insertNewPiece(piece, grid = state.grid) {
-    const newObj = Piece.insertion(piece, grid);
-    if (newObj) {
-      const [newGrid, newPiece] = newObj;
-      const newGridWithShadow = Piece.shadow(newGrid, newPiece);
-      dispatch(updateGrid(newGridWithShadow));
-      dispatch(updateCurrentPiece(newPiece));
-      return true;
-    }
-    dispatch(setPlayerIsAlive(false));
-    return false;
-  }
+  // On component did mount
+  React.useEffect(() => {
+    const initGrid = Grid.create(cols, rows);
+    dispatch(updateGrid(initGrid));
+  }, []);
 
+  // On new piece
   React.useEffect(() => {
     if (!isEmpty(state.currentPiece.shape)) {
       insertNewPiece(state.currentPiece);
@@ -73,10 +60,23 @@ function useTetrisGame(cols = 10, rows = 20) {
     }
   }, [state.nextPieces]);
 
+  // Methods
+  function insertNewPiece(piece, grid = state.grid) {
+    const newObj = Piece.insertion(piece, grid);
+    if (newObj) {
+      updateStateAfterMove(newObj);
+      return true;
+    }
+    setGameOver();
+    return false;
+  }
+
+  // Dispatcher to Tetris Actions
   function movePiece(action) {
     if (!state.alive) {
       return;
     }
+
     if (KEYBOARD_ACTIONS.includes(action.code)) {
       autoMoveTimer.stop();
       if (action.code === "ArrowDown") {
@@ -86,21 +86,19 @@ function useTetrisGame(cols = 10, rows = 20) {
       } else if (action.code === "ArrowRight") {
         movePieceLateral(MOVE_RIGHT);
       } else if (action.code === "ArrowUp") {
-        rotatePieceClockwise();
+        rotatePiece();
       } else if (action.code === "Space") {
         doHardDrop();
       }
     }
   }
 
+  // Tetris Actions
   function movePieceLateral(direction) {
     const newObj = Piece.lateralMove(state.grid, state.currentPiece, direction);
 
     if (!isEmpty(newObj)) {
-      const [newGrid, newPiece] = newObj;
-      const newGridWithShadow = Piece.shadow(newGrid, newPiece);
-      dispatch(updateGrid(newGridWithShadow));
-      dispatch(updateCurrentPiece(newPiece));
+      updateStateAfterMove(newObj);
     }
   }
 
@@ -108,18 +106,15 @@ function useTetrisGame(cols = 10, rows = 20) {
     const newObj = Piece.hardDrop(state.grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
-      dispatch(setPlayerIsAlive(false));
+      setGameOver();
     } else {
-      const [newGrid, score, nbRowsRemoved] = newObj;
-      dispatch(updateGrid(newGrid));
-      dispatch(pullCurrentPiece());
-      dispatch(addScore(score));
-      dispatch(increaseSpeedRate(nbRowsRemoved));
+      updateStateAfterBind(newObj);
     }
   }
 
   function doSoftDrop() {
     const hasMoved = gravity();
+
     if (hasMoved) {
       dispatch(addScore(1));
     }
@@ -127,37 +122,25 @@ function useTetrisGame(cols = 10, rows = 20) {
 
   function gravity() {
     let hasMoved = false;
-    const newObj = Piece.softDrop(state.grid, state.currentPiece);
+    let newObj = Piece.softDrop(state.grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
-      const [newGrid, additionalScore, nbRowsRemoved] = Grid.bind(
-        state.grid,
-        state.currentPiece,
-      );
-      dispatch(updateGrid(newGrid));
-      dispatch(pullCurrentPiece());
-      dispatch(addScore(additionalScore));
-      dispatch(increaseSpeedRate(nbRowsRemoved));
+      newObj = Grid.bind(state.grid, state.currentPiece);
+      updateStateAfterBind(newObj);
     } else {
-      const [newGrid, newPiece] = newObj;
-      const newGridWithShadow = Piece.shadow(newGrid, newPiece);
-      dispatch(updateGrid(newGridWithShadow));
-      dispatch(updateCurrentPiece(newPiece));
+      updateStateAfterMove(newObj);
       hasMoved = true;
     }
     return hasMoved;
   }
 
-  function rotatePieceClockwise() {
+  function rotatePiece() {
     const newObj = Piece.rotation(state.currentPiece, state.grid);
 
     if (isEmpty(newObj)) {
       autoMoveTimer.start(gravityInterval);
     } else {
-      const [newGrid, newPiece] = newObj;
-      const newGridWithShadow = Piece.shadow(newGrid, newPiece);
-      dispatch(updateGrid(newGridWithShadow));
-      dispatch(updateCurrentPiece(newPiece));
+      updateStateAfterMove(newObj);
     }
   }
 
