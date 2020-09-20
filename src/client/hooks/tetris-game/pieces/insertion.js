@@ -1,9 +1,8 @@
 import * as Grid from "../grid";
 import { CURRENT_PIECE } from "../constants";
 
-function insertion(piece, grid, midGrid) {
-  const insertPos =
-    midGrid - Math.ceil((piece.shape[0].length - piece.padding.x) / 2);
+function insertion(piece, grid) {
+  const insertPos = getInsertPos(piece, grid);
   const newPiece = {
     ...piece,
     coord: { x: insertPos, y: 0 - piece.padding.y },
@@ -18,3 +17,12 @@ function insertion(piece, grid, midGrid) {
 }
 
 export default insertion;
+
+function getMidGrid(colLength) {
+  return Math.floor(colLength / 2);
+}
+
+function getInsertPos(piece, grid) {
+  const midGrid = getMidGrid(grid[0].length);
+  return midGrid - Math.ceil((piece.shape[0].length - piece.padding.x) / 2);
+}
