@@ -67,7 +67,8 @@ function useTetrisGame(cols = 10, rows = 20) {
       updateStateAfterMove(newObj);
       return true;
     }
-    setGameOver();
+    const newGrid = Piece.forceInsertion(piece, grid);
+    setGameOver(newGrid);
     return false;
   }
 
@@ -106,7 +107,7 @@ function useTetrisGame(cols = 10, rows = 20) {
     const newObj = Piece.hardDrop(state.grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
-      setGameOver();
+      setGameOver(null);
     } else {
       updateStateAfterBind(newObj);
     }
@@ -121,17 +122,15 @@ function useTetrisGame(cols = 10, rows = 20) {
   }
 
   function gravity() {
-    let hasMoved = false;
     let newObj = Piece.softDrop(state.grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
       newObj = Grid.bind(state.grid, state.currentPiece);
       updateStateAfterBind(newObj);
-    } else {
-      updateStateAfterMove(newObj);
-      hasMoved = true;
+      return false;
     }
-    return hasMoved;
+    updateStateAfterMove(newObj);
+    return true;
   }
 
   function rotatePiece() {

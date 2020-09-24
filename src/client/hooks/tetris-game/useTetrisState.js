@@ -28,7 +28,10 @@ function useTetrisState() {
     dispatch(increaseSpeedRate(nbRowsRemoved));
   }, []);
 
-  const setGameOver = React.useCallback(() => {
+  const setGameOver = React.useCallback((newGrid) => {
+    if (newGrid) {
+      dispatch(updateGrid(newGrid));
+    }
     dispatch(setPlayerIsAlive(false));
   }, []);
 
