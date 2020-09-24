@@ -9,10 +9,10 @@ import { CURRENT_PIECE } from "../constants";
  */
 
 function write(grid, piece, type) {
-  const { shape, padding, coord } = piece;
+  const { shape, padding, coord, dim } = piece;
 
-  const colLength = shape[0].length;
-  const rowLength = shape.length;
+  const colLength = padding.x + dim.width;
+  const rowLength = padding.y + dim.height;
 
   for (let col = padding.x; col < colLength; col++) {
     for (let row = padding.y; row < rowLength; row++) {
