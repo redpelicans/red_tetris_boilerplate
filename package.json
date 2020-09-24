@@ -6,7 +6,7 @@
   "scripts": {
     "eslint": "eslint src",
     "client-dist": "NODE_ENV=production webpack --progress --colors",
-    "client-dev": "webpack-dev-server --colors --hot --inline --open --port 3000",
+    "client-dev": "webpack-dev-server --colors --hot --inline --open --host 0.0.0.0 --port 3000",
     "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
     "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
     "test": "mocha --require babel-core/register --reporter spec",
@@ -22,12 +22,14 @@
     "helmet": "^4.1.0",
     "joi": "^14.3.1",
     "multer": "^1.4.2",
+    "nanoid": "^3.1.12",
     "prettier": "^2.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.7.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
+    "redis": "^3.0.2",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "tailwindcss": "^1.7.6"
