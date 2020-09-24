@@ -6,13 +6,17 @@ import {
   SET_PLAYER_IS_ALIVE,
   SET_SCORE,
   INCREASE_SPEED_RATE,
+  INCREASE_ROWS_REMOVED,
 } from "actions/game";
-import { deepCopy } from "helpers/functional";
+import { deepCopy, pipe } from "helpers/functional";
+import { lowerOrEqualThan, divideBy } from "helpers/currying";
 
 export const initialState = {
   nextPieces: [],
   grid: [],
   alive: true,
+  level: 1,
+  rowsRemoved: 0,
   score: 0,
   speedRate: 1.0,
   currentPiece: {
@@ -62,6 +66,19 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         speedRate: state.speedRate + action.increment,
+      };
+    case INCREASE_ROWS_REMOVED:
+      const newRowsRemoved = state.rowsRemoved + action.increment;
+      const newLevel = pipe(
+        divideBy(10),
+        Math.floor,
+        lowerOrEqualThan(9),
+      )(newRowsRemoved);
+
+      return {
+        ...state,
+        rowsRemoved: newRowsRemoved,
+        level: newLevel,
       };
     default:
       return state;
