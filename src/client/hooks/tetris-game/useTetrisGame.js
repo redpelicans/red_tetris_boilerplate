@@ -1,7 +1,7 @@
 import React from "react";
 import * as Grid from "./grid";
 import * as Piece from "./pieces";
-import { isEmpty } from "helpers/functional";
+import { isEmpty } from "helpers/common";
 import { GameContext } from "store";
 import { pullCurrentPiece, updateGrid, addScore } from "actions/game";
 import useAutoMove from "./useAutoMove";
