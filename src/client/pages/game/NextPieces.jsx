@@ -1,6 +1,6 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-import { timeout } from "helpers/common";
+// import { timeout } from "helpers/common";
 import { pushNewPiece } from "actions/game";
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 
@@ -76,6 +76,6 @@ async function fetchFromMock(n) {
     // ret.push(MOCK_TETROMINOES[0]);
   }
 
-  await timeout(500);
+  // await timeout(500);
   return ret;
 }
