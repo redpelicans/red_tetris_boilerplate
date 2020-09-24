@@ -5,7 +5,6 @@ import {
   UPDATE_CURRENT_PIECE,
   SET_PLAYER_IS_ALIVE,
   SET_SCORE,
-  INCREASE_SPEED_RATE,
   INCREASE_ROWS_REMOVED,
 } from "actions/game";
 import { deepCopy, pipe } from "helpers/functional";
@@ -15,7 +14,7 @@ export const initialState = {
   nextPieces: [],
   grid: [],
   alive: true,
-  level: 1,
+  level: 0,
   rowsRemoved: 0,
   score: 0,
   speedRate: 1.0,
@@ -62,23 +61,19 @@ export default function reducer(state = initialState, action) {
         ...state,
         score: state.score + action.score,
       };
-    case INCREASE_SPEED_RATE:
-      return {
-        ...state,
-        speedRate: state.speedRate + action.increment,
-      };
     case INCREASE_ROWS_REMOVED:
       const newRowsRemoved = state.rowsRemoved + action.increment;
       const newLevel = pipe(
         divideBy(10),
         Math.floor,
-        lowerOrEqualThan(9),
+        lowerOrEqualThan(10),
       )(newRowsRemoved);
 
       return {
         ...state,
         rowsRemoved: newRowsRemoved,
         level: newLevel,
+        speedRate: 1.0 + newLevel * 0.05,
       };
     default:
       return state;

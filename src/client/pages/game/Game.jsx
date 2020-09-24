@@ -44,6 +44,8 @@ export default function Game() {
         </FlexBox>
         <FlexBox direction="col" className="items-center mx-4">
           <Score score={state.score} />
+          <Level level={state.level} />
+          <LinesRemoved lines={state.rowsRemoved} />
           <NextPieces nextPieces={state.nextPieces} dispatch={dispatch} />
         </FlexBox>
       </FlexBox>
@@ -56,4 +58,10 @@ const Score = React.memo(({ score }) => (
     <h1 className="font-bold">SCORE</h1>
     <span>{score}</span>
   </FlexBox>
+));
+
+const LinesRemoved = React.memo(({ lines }) => <p>{lines} Lines removed</p>);
+
+const Level = React.memo(({ level }) => (
+  <h1 className="font-bold">Level {level}</h1>
 ));

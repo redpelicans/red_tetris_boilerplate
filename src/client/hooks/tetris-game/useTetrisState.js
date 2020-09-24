@@ -7,7 +7,7 @@ import {
   updateGrid,
   setPlayerIsAlive,
   addScore,
-  increaseSpeedRate,
+  inscreaseRowsRemoved,
 } from "actions/game";
 
 function useTetrisState() {
@@ -25,7 +25,7 @@ function useTetrisState() {
     dispatch(updateGrid(newGrid));
     dispatch(pullCurrentPiece());
     dispatch(addScore(score));
-    dispatch(increaseSpeedRate(nbRowsRemoved));
+    dispatch(inscreaseRowsRemoved(nbRowsRemoved));
   }, []);
 
   const setGameOver = React.useCallback((newGrid) => {

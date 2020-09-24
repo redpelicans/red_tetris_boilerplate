@@ -39,11 +39,6 @@ export const addScore = (score) => ({
   score,
 });
 
-export const increaseSpeedRate = (nbRowsRemoved) => ({
-  type: INCREASE_SPEED_RATE,
-  increment: nbRowsRemoved * 0.025,
-});
-
 export const inscreaseRowsRemoved = (nbRowsRemoved) => ({
   type: INCREASE_ROWS_REMOVED,
   increment: nbRowsRemoved,
