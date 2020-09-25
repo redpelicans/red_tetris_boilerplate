@@ -107,7 +107,9 @@ function useTetrisGame(cols = 10, rows = 20) {
   function movePieceLateral(direction) {
     const newObj = Piece.lateralMove(state.grid, state.currentPiece, direction);
 
-    if (!isEmpty(newObj)) {
+    if (isEmpty(newObj)) {
+      autoMoveTimer.start(gravityInterval);
+    } else {
       updateStateAfterMove(newObj);
     }
   }
