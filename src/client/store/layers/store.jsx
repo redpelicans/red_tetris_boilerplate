@@ -14,9 +14,9 @@ export function StoreContextProvider({ children }) {
   // const [dispatch] = React.useState(() => asyncMiddleware(storeDispatch));
 
   /* Check if we need to do it when storeState and Dispatch are 'up' */
-  React.useEffect(() => {
-    setupSocket(storeState.socket, storeDispatch);
-  }, []);
+  // React.useEffect(() => {
+  //   setupSocket(storeState.socket, storeDispatch);
+  // }, []);
 
   return (
     <StoreContext.Provider
