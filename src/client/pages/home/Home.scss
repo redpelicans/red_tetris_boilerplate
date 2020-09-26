@@ -1,0 +1,19 @@
+.home-modal {
+  @apply flex flex-col justify-center items-center bg-white rounded py-10 px-20;
+
+  h1 {
+    @apply text-4xl font-bold text-red-600 mb-10;
+  }
+
+  h2 {
+    @apply text-2xl my-2 font-bold;
+  }
+}
+
+.home-game-pad {
+  @apply flex justify-center h-32;
+
+  .hovered {
+    @apply flex flex-col items-center;
+  }
+}
