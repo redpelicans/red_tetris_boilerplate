@@ -13,17 +13,29 @@ export default function AnimatedBackground() {
     <FlexBox className="absolute h-full w-full overflow-hidden">
       <Layer className="-ml-5">
         {BG_LAYER_SEQUENCE.map((duration, idx) => (
-          <RandomTetromino key={`bg-layer-${idx}`} duration={duration} />
+          <RandomTetromino
+            key={`bg-layer-${idx}`}
+            duration={duration}
+            size={4}
+          />
         ))}
       </Layer>
       <Layer className="z-10">
         {MID_LAYER_SEQUENCE.map((duration, idx) => (
-          <RandomTetromino key={`bg-layer-${idx}`} duration={duration} />
+          <RandomTetromino
+            key={`bg-layer-${idx}`}
+            duration={duration}
+            size={5}
+          />
         ))}
       </Layer>
       <Layer className="z-20 ml-5">
         {FG_LAYER_SEQUENCE.map((duration, idx) => (
-          <RandomTetromino key={`bg-layer-${idx}`} duration={duration} />
+          <RandomTetromino
+            key={`bg-layer-${idx}`}
+            duration={duration}
+            size={6}
+          />
         ))}
       </Layer>
     </FlexBox>
@@ -40,13 +52,14 @@ const Layer = ({ children, className = "" }) => (
   </FlexBox>
 );
 
-const RandomTetromino = ({ duration }) => {
+const RandomTetromino = ({ duration, size }) => {
   const { color, shape } = randomPick(pieces);
 
   return (
     <Tetromino
       shape={shape}
       color={color}
+      size={size}
       className={`relative animation-duration-${duration} drop-animation`}
     />
   );
