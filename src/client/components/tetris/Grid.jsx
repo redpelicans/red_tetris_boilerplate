@@ -17,6 +17,12 @@ export default TetrisGrid;
 
 TetrisGrid.propTypes = {
   grid: PropTypes.array.isRequired,
+  rowHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
+  colWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
+  colHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
 };
 
 const TetrisRows = ({ rows, rowHeight, colWidth, colHeight }) =>
