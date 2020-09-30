@@ -4,14 +4,14 @@ import PropTypes from "prop-types";
 import { GameContext } from "store";
 import { CURRENT_PIECE, SHADOW_PIECE } from "hooks/tetris-game/constants";
 
-const TetrisGrid = React.memo(({ grid, rowHeight, colWidth, colHeight }) => (
+const TetrisGrid = ({ grid, rowHeight, colWidth, colHeight }) => (
   <TetrisRows
     rows={grid}
     rowHeight={rowHeight}
     colWidth={colWidth}
     colHeight={colHeight}
   />
-));
+);
 
 export default TetrisGrid;
 
