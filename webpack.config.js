@@ -95,6 +95,7 @@ module.exports = () => {
         actions: path.resolve(CLIENT_DIR, "actions"),
         assets: path.resolve(CLIENT_DIR, "assets"),
         components: path.resolve(CLIENT_DIR, "components"),
+        constants: path.resolve(CLIENT_DIR, "constants"),
         helpers: path.resolve(CLIENT_DIR, "helpers"),
         hooks: path.resolve(CLIENT_DIR, "hooks"),
         mocks: path.resolve(CLIENT_DIR, "mocks"),
