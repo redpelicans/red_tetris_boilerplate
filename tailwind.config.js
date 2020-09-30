@@ -1,3 +1,5 @@
+const plugin = require("tailwindcss/plugin");
+
 module.exports = {
   future: {
     removeDeprecatedGapUtilities: true,
@@ -125,5 +127,25 @@ module.exports = {
     backgroundColor: ["responsive", "hover", "focus", "active", "disabled"],
     textColor: ["responsive", "hover", "focus", "group-hover"],
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      const newUtilities = [setAnimationDurations(10)];
+
+      addUtilities(newUtilities);
+    }),
+  ],
 };
+
+function setAnimationDurations(maxDurationInSeconds) {
+  const animationDurations = {};
+
+  for (let i = 1; i <= maxDurationInSeconds; i++) {
+    const key = `.animation-duration-${i}`;
+    const value = {
+      "animation-duration": `${i}s`,
+    };
+    animationDurations[key] = value;
+  }
+
+  return animationDurations;
+}
