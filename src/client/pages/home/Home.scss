@@ -11,9 +11,20 @@
 }
 
 .home-game-pad {
-  @apply flex justify-center h-32;
+  @apply flex flex-col items-center justify-center h-32;
+}
 
-  .hovered {
-    @apply flex flex-col items-center;
+.drop-animation {
+  animation-name: infinite-drop;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes infinite-drop {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 100%;
   }
 }
