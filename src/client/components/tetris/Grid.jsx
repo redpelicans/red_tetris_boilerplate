@@ -3,7 +3,6 @@ import FlexBox from "components/flexbox/FlexBox";
 import PropTypes from "prop-types";
 import { GameContext } from "store";
 import { CURRENT_PIECE, SHADOW_PIECE } from "hooks/tetris-game/constants";
-import "./Grid.scss";
 
 const TetrisGrid = React.memo(({ grid, rowHeight, colWidth, colHeight }) => (
   <TetrisRows
