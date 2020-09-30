@@ -36,7 +36,6 @@ function useTetrisGame(cols = 10, rows = 20) {
       interval = interval - divideByThree(interval);
     }
 
-    console.log(interval);
     return interval;
   }, [state.level]);
 

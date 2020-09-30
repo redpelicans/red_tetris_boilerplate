@@ -35,7 +35,6 @@ function partialWrite(grid, piece, type, remainingHeight) {
 
   for (let col = padding.x; col < colLength; col++) {
     for (let row = 0; row < remainingHeight; row++) {
-      console.log(col, row);
       if (
         Check.isPartOfPiece(shape[drawablePartOfPiece + row][col]) &&
         grid[coord.y + row][coord.x + col] !== CURRENT_PIECE

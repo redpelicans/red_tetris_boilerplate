@@ -4,13 +4,8 @@ import PropTypes from "prop-types";
 import { GameContext } from "store";
 import { CURRENT_PIECE, SHADOW_PIECE } from "hooks/tetris-game/constants";
 
-const TetrisGrid = ({ grid, rowHeight, colWidth, colHeight }) => (
-  <TetrisRows
-    rows={grid}
-    rowHeight={rowHeight}
-    colWidth={colWidth}
-    colHeight={colHeight}
-  />
+const TetrisGrid = ({ grid, rowHeight, colHeight }) => (
+  <TetrisRows rows={grid} rowHeight={rowHeight} colHeight={colHeight} />
 );
 
 export default TetrisGrid;
@@ -19,21 +14,14 @@ TetrisGrid.propTypes = {
   grid: PropTypes.array.isRequired,
   rowHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
-  colWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
   colHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
 };
 
-const TetrisRows = ({ rows, rowHeight, colWidth, colHeight }) =>
+const TetrisRows = ({ rows, rowHeight, colHeight }) =>
   rows.map((row, idx) => (
     <FlexBox key={`row-${idx}`} direction="row" height={rowHeight}>
-      <TetrisCols
-        cols={row}
-        rowIdx={idx}
-        colWidth={colWidth}
-        colHeight={colHeight}
-      />
+      <TetrisCols cols={row} rowIdx={idx} colHeight={colHeight} />
     </FlexBox>
   ));
 
