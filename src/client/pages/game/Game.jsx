@@ -97,6 +97,7 @@ const Level = React.memo(({ level }) => (
 ));
 
 const Timer = React.memo(() => {
+  const { state } = React.useContext(GameContext);
   const startTime = new Date();
 
   const [elapsedTime, setElapsedTime] = React.useState("00:00");
@@ -117,8 +118,15 @@ const Timer = React.memo(() => {
       return newElapsedTimeFormatted;
     };
 
-    setInterval(() => setElapsedTime(getNewElapsedTime()), 1000);
-  }, []);
+    if (state.alive) {
+      const timerInterval = setInterval(
+        () => setElapsedTime(getNewElapsedTime()),
+        1000,
+      );
+
+      return () => clearInterval(timerInterval);
+    }
+  }, [state.alive]);
 
   return <p>{elapsedTime}</p>;
 });
