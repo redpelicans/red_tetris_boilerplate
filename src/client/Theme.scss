@@ -92,3 +92,20 @@ $tetrominoes: (
 .tetromino-0 {
   @apply border;
 }
+
+.growing-text {
+  @apply text-sm;
+  animation-name: grow;
+  animation-duration: 0.75s;
+  animation-timing-function: ease-out;
+}
+
+@keyframes grow {
+  0% {
+    @apply opacity-25;
+    top: 20px;
+  }
+  100% {
+    @apply text-2xl opacity-100 top-0;
+  }
+}

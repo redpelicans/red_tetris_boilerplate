@@ -8,7 +8,10 @@ import NextPieces from "./NextPieces";
 import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
-import { DEFAULT_REPEAT_TIMEOUT } from "hooks/tetris-game/constants";
+import {
+  DEFAULT_REPEAT_TIMEOUT,
+  COMBO_TEXT,
+} from "hooks/tetris-game/constants";
 import AudioTheme from "./AudioTheme";
 
 export default function Game() {
@@ -54,12 +57,38 @@ export default function Game() {
   );
 }
 
-const Score = React.memo(({ score }) => (
-  <FlexBox direction="col" className="items-center">
-    <h1 className="font-bold">SCORE</h1>
-    <span>{score}</span>
-  </FlexBox>
-));
+const Score = React.memo(({ score }) => {
+  const [combo, setCombo] = React.useState(null);
+  React.useEffect(() => {
+    if (combo !== null) {
+      setTimeout(() => setCombo(null), 750);
+    }
+  }, [combo]);
+
+  React.useEffect(() => {
+    const customEventHandler = (evt) => {
+      console.log("custom event triggered", evt.detail, "removed");
+      setCombo(COMBO_TEXT[evt.detail]);
+    };
+    window.addEventListener("custom", customEventHandler);
+
+    return () => {
+      window.removeEventListener("custom", customEventHandler);
+    };
+  }, []);
+
+  return (
+    <FlexBox direction="col" className="relative items-center">
+      <h1 className="font-bold w-32 text-center">SCORE</h1>
+      {combo && (
+        <span className="absolute text-bold text-red-600 growing-text">
+          {combo}
+        </span>
+      )}
+      <span>{score}</span>
+    </FlexBox>
+  );
+});
 
 const LinesRemoved = React.memo(({ lines }) => <p>{lines} Lines removed</p>);
 

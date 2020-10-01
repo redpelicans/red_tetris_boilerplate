@@ -1,4 +1,4 @@
-import { COMBO } from "../constants";
+import { COMBO_SCORE } from "../constants";
 import * as Check from "./checks";
 
 function dropDownAllFollowingRows(grid, row) {
@@ -23,7 +23,7 @@ function removeCompletedRows(grid) {
     }
   }
 
-  const additionalScore = COMBO[linesRemoved];
+  const additionalScore = COMBO_SCORE[linesRemoved];
 
   return [grid, additionalScore, linesRemoved];
 }
@@ -47,6 +47,10 @@ function bind(grid, piece) {
     additionalScore,
     nbRowsRemoved,
   ] = removeCompletedRows(grid);
+  if (nbRowsRemoved > 0) {
+    const custom = new CustomEvent("custom", { detail: nbRowsRemoved });
+    window.dispatchEvent(custom);
+  }
   return [newGridAfterScore, additionalScore, nbRowsRemoved];
 }
 
