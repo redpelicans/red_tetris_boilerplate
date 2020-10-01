@@ -1,9 +1,4 @@
-import { randomPick } from "../../helpers/common";
-import toBeInArray from "../../../jest-custom-matchers/toBeInArray";
-
-expect.extend({
-  toBeInArray,
-});
+import { randomPick } from "client/helpers/common";
 
 test("randomPick() should be an item from the list", () => {
   const list = ["Sherlock", "Watson", "Moriarty", "Molly", "Mary"];

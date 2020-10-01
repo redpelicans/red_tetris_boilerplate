@@ -1,10 +1,4 @@
-import { expectCt } from "helmet";
-import { randomNumber } from "../../helpers/common";
-import toBeWithinRange from "../../../jest-custom-matchers/toBeWithinRange";
-
-expect.extend({
-  toBeWithinRange,
-});
+import { randomNumber } from "client/helpers/common";
 
 test("randomNumber() should be in range [0, 10]", () => {
   const randomNb = randomNumber(10);
