@@ -9,8 +9,8 @@
     "client-dev": "webpack-dev-server --colors --hot --inline --open --host 0.0.0.0 --port 3000",
     "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
     "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
-    "test": "jest --watch",
-    "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov -r text --require babel-core/register mocha "
+    "test": "jest --watch --notify",
+    "coverage": "jest --coverage"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.11.5",
