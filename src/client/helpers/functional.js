@@ -15,18 +15,6 @@ export const deepCopy = (element) => {
   return copy;
 };
 
-export const isEmpty = (element) => element === null || element?.length === 0;
-
-export const throttle = (func, wait) => {
-  let waiting;
-
-  return function wrapper() {
-    const ctx = this;
-
-    if (!waiting) {
-      Reflect.apply(func, ctx, arguments);
-      waiting = true;
-      setTimeout(() => (waiting = false), wait);
-    }
-  };
-};
+export function pipe(...fns) {
+  return (initialValue) => fns.reduce((value, fn) => fn(value), initialValue);
+}

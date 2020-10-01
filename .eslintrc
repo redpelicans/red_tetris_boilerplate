@@ -291,7 +291,7 @@
     "react/no-set-state": 0, //Prevent usage of setState
     "react/no-unknown-property": 1, //Prevent usage of unknown DOM property
     "react/prefer-es6-class": 1, //Use ES6 Class instead of Reacy.createClass
-    "react/prop-types": 1, //Prevent missing props validation in a React component definition
+    "react/prop-types": 0, //Prevent missing props validation in a React component definition
     "react/react-in-jsx-scope": 1, //Prevent missing React when using JSX
     "react/require-extension": 1, //Restrict file extensions that may be required
     "react/self-closing-comp": 1, //Prevent extra closing tags for components without children

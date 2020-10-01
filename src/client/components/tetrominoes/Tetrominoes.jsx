@@ -1,24 +1,23 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import PropTypes from "prop-types";
-import "./Tetrominoes.scss";
 
-export default function Tetromino({ shape, color, size = "10" }) {
+export default function Tetromino({ shape, color, size = 5, ...rest }) {
   switch (shape) {
     case "I":
-      return <TetrominoI color={color} size={size} />;
+      return <TetrominoI color={color} size={size} {...rest} />;
     case "O":
-      return <TetrominoO color={color} size={size} />;
+      return <TetrominoO color={color} size={size} {...rest} />;
     case "T":
-      return <TetrominoT color={color} size={size} />;
+      return <TetrominoT color={color} size={size} {...rest} />;
     case "L":
-      return <TetrominoL color={color} size={size} />;
+      return <TetrominoL color={color} size={size} {...rest} />;
     case "J":
-      return <TetrominoJ color={color} size={size} />;
+      return <TetrominoJ color={color} size={size} {...rest} />;
     case "Z":
-      return <TetrominoZ color={color} size={size} />;
+      return <TetrominoZ color={color} size={size} {...rest} />;
     case "S":
-      return <TetrominoS color={color} size={size} />;
+      return <TetrominoS color={color} size={size} {...rest} />;
     default:
       throw new Error("Tetromino's shape not recognized.");
   }
@@ -35,13 +34,13 @@ Tetromino.propTypes = {
     "cyan",
   ]),
   shape: PropTypes.oneOf(["I", "O", "T", "L", "J", "Z", "S"]).isRequired,
-  size: PropTypes.string,
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 // eslint-disable-next-line
-function TetrominoI({ color, size }) {
+function TetrominoI({ color, size, ...rest }) {
   return (
-    <FlexBox>
+    <FlexBox {...rest}>
       <FlexBox height={size} width={size} className={`tetromino-${color}`} />
       <FlexBox height={size} width={size} className={`tetromino-${color}`} />
       <FlexBox height={size} width={size} className={`tetromino-${color}`} />
@@ -51,9 +50,9 @@ function TetrominoI({ color, size }) {
 }
 
 // eslint-disable-next-line
-function TetrominoO({ color, size }) {
+function TetrominoO({ color, size, ...rest }) {
   return (
-    <FlexBox direction="col">
+    <FlexBox {...rest} direction="col">
       <FlexBox>
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
@@ -67,9 +66,9 @@ function TetrominoO({ color, size }) {
 }
 
 // eslint-disable-next-line
-function TetrominoT({ color, size }) {
+function TetrominoT({ color, size, ...rest }) {
   return (
-    <FlexBox direction="col">
+    <FlexBox {...rest} direction="col">
       <FlexBox>
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
@@ -84,9 +83,9 @@ function TetrominoT({ color, size }) {
 }
 
 // eslint-disable-next-line
-function TetrominoL({ color, size }) {
+function TetrominoL({ color, size, ...rest }) {
   return (
-    <FlexBox direction="col">
+    <FlexBox {...rest} direction="col">
       <FlexBox>
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
@@ -100,9 +99,9 @@ function TetrominoL({ color, size }) {
 }
 
 // eslint-disable-next-line
-function TetrominoJ({ color, size }) {
+function TetrominoJ({ color, size, ...rest }) {
   return (
-    <FlexBox direction="col">
+    <FlexBox {...rest} direction="col">
       <FlexBox>
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
@@ -118,9 +117,9 @@ function TetrominoJ({ color, size }) {
 }
 
 // eslint-disable-next-line
-function TetrominoZ({ color, size }) {
+function TetrominoZ({ color, size, ...rest }) {
   return (
-    <FlexBox direction="col">
+    <FlexBox {...rest} direction="col">
       <FlexBox>
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />
@@ -135,9 +134,9 @@ function TetrominoZ({ color, size }) {
 }
 
 // eslint-disable-next-line
-function TetrominoS({ color, size }) {
+function TetrominoS({ color, size, ...rest }) {
   return (
-    <FlexBox direction="col">
+    <FlexBox {...rest} direction="col">
       <FlexBox>
         <FlexBox height={size} width={size} />
         <FlexBox height={size} width={size} className={`tetromino-${color}`} />

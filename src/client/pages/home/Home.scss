@@ -1,0 +1,30 @@
+.home-modal {
+  @apply flex flex-col justify-center items-center bg-white rounded py-10 px-20;
+
+  h1 {
+    @apply text-4xl font-bold text-red-600 mb-10;
+  }
+
+  h2 {
+    @apply text-2xl my-2 font-bold;
+  }
+}
+
+.home-game-pad {
+  @apply flex flex-col items-center justify-center h-32;
+}
+
+.drop-animation {
+  animation-name: infinite-drop;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes infinite-drop {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 100%;
+  }
+}
