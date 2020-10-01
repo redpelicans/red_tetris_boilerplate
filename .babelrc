@@ -3,7 +3,10 @@
     [
       "@babel/preset-env",
       {
-        "exclude": ["@babel/plugin-transform-regenerator"]
+        "exclude": ["@babel/plugin-transform-regenerator"],
+        "targets": {
+          "node": "current"
+        }
       }
     ],
     "@babel/preset-react"

@@ -33,7 +33,8 @@
       "jsx": true
     }
   },
-  "plugins": ["react"],
+  "plugins": ["react", "jest"],
+  "extends": ["plugin:jest/recommended", "plugin:jest/style"],
   "rules": {
     /* Possible Errors */
     "comma-dangle": [1, "always-multiline"], //disallow or enforce trailing commas (recommended)
@@ -296,6 +297,14 @@
     "react/require-extension": 1, //Restrict file extensions that may be required
     "react/self-closing-comp": 1, //Prevent extra closing tags for components without children
     "react/sort-comp": 1, //Enforce component methods order
-    "react/wrap-multilines": 0 //Prevent missing parentheses around multiline JSX
+    "react/wrap-multilines": 0, //Prevent missing parentheses around multiline JSX
+
+    /* Jest */
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error",
+    "jest/no-conditional-expect": "error"
   }
 }
