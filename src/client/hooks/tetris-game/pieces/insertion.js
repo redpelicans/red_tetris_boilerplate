@@ -61,7 +61,5 @@ function getHeightLeft(insertPos, piece, grid) {
       }
     }
   }
-
-  // ??
   return 0;
 }

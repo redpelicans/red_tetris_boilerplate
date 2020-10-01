@@ -10,12 +10,19 @@ export const SHADOW_PIECE = 2;
  ** SCORING
  */
 
-export const COMBO = {
+export const COMBO_SCORE = {
   0: 0,
   1: 100,
   2: 300,
   3: 500,
   4: 800,
+};
+
+export const COMBO_TEXT = {
+  1: "Row !",
+  2: "Double !",
+  3: "Triple !",
+  4: "Tetris !",
 };
 
 /*
@@ -36,5 +43,5 @@ export const MOVE_RIGHT = 1;
  ** TIMERS
  */
 
-export const INTERVAL_MS = 1000;
+export const INTERVAL_MS = 1500;
 export const DEFAULT_REPEAT_TIMEOUT = 5;

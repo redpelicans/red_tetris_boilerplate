@@ -31,8 +31,8 @@ export function canPutLayer(grid, piece) {
     return false;
   }
 
-  const colLength = shape[0].length;
-  const rowLength = shape.length;
+  const colLength = padding.x + dim.width;
+  const rowLength = padding.y + dim.height;
 
   for (let col = padding.x; col < colLength; col++) {
     for (let row = padding.y; row < rowLength; row++) {

@@ -6,6 +6,7 @@ export const UPDATE_CURRENT_PIECE = "UPDATE_CURRENT_PIECE";
 export const SET_PLAYER_IS_ALIVE = "SET_PLAYER_IS_ALIVE";
 export const SET_SCORE = "SET_SCORE";
 export const INCREASE_SPEED_RATE = "INCREASE_SPEED_RATE";
+export const INCREASE_ROWS_REMOVED = "INCREASE_ROWS_REMOVED";
 
 export const pushNewPiece = (newPieces) => ({
   type: FETCH_PIECES,
@@ -38,7 +39,7 @@ export const addScore = (score) => ({
   score,
 });
 
-export const increaseSpeedRate = (nbRowsRemoved) => ({
-  type: INCREASE_SPEED_RATE,
-  increment: nbRowsRemoved * 0.025,
+export const inscreaseRowsRemoved = (nbRowsRemoved) => ({
+  type: INCREASE_ROWS_REMOVED,
+  increment: nbRowsRemoved,
 });

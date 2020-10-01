@@ -24,3 +24,7 @@ export const throttle = (func, wait) => {
     }
   };
 };
+
+export function getElapsedTime(startTime) {
+  return new Date(new Date() - startTime);
+}

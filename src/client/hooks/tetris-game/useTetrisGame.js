@@ -1,7 +1,8 @@
 import React from "react";
 import * as Grid from "./grid";
 import * as Piece from "./pieces";
-import { isEmpty } from "helpers/functional";
+import { isEmpty } from "helpers/common";
+import { divideBy } from "helpers/currying";
 import { GameContext } from "store";
 import { pullCurrentPiece, updateGrid, addScore } from "actions/game";
 import useAutoMove from "./useAutoMove";
@@ -27,9 +28,16 @@ function useTetrisGame(cols = 10, rows = 20) {
   } = useTetrisState();
   const autoMoveTimer = useAutoMove(gravity);
 
-  const gravityInterval = React.useMemo(() => INTERVAL_MS / state.speedRate, [
-    state.speedRate,
-  ]);
+  const gravityInterval = React.useMemo(() => {
+    const divideByThree = divideBy(3);
+    let interval = INTERVAL_MS;
+
+    for (let i = 0; i < state.level; i++) {
+      interval = interval - divideByThree(interval);
+    }
+
+    return interval;
+  }, [state.level]);
 
   // On component did mount
   React.useEffect(() => {
@@ -98,7 +106,9 @@ function useTetrisGame(cols = 10, rows = 20) {
   function movePieceLateral(direction) {
     const newObj = Piece.lateralMove(state.grid, state.currentPiece, direction);
 
-    if (!isEmpty(newObj)) {
+    if (isEmpty(newObj)) {
+      autoMoveTimer.start(gravityInterval);
+    } else {
       updateStateAfterMove(newObj);
     }
   }
