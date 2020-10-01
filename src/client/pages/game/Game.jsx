@@ -112,7 +112,7 @@ const Timer = React.memo(() => {
     };
 
     const getNewElapsedTime = () => {
-      const newElapsedTime = getElapsedTime(startTime);
+      const newElapsedTime = new Date(getElapsedTime(startTime));
       const newElapsedTimeFormatted = formatElapsedTime(newElapsedTime);
       return newElapsedTimeFormatted;
     };
