@@ -9,6 +9,7 @@ export function randomNumber(max) {
 export function randomPick(list) {
   return list[randomNumber(list.length)];
 }
+
 export const isEmpty = (element) => element === null || element?.length === 0;
 
 export const throttle = (func, wait) => {
