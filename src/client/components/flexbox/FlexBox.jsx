@@ -17,6 +17,7 @@ export default function FlexBox({
   wrap = "wrap",
   height = "auto",
   width = "auto",
+  ...rest
 }) {
   return (
     <CustomTag
@@ -24,6 +25,7 @@ export default function FlexBox({
         w-${width} h-${height}
         ${className}`}
       tag="div"
+      {...rest}
     >
       {children}
     </CustomTag>
