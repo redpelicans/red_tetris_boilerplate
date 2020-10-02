@@ -13,10 +13,10 @@ test("getElapsedTime() one day diff", () => {
 
 test("getElapsedTime() one hour diff", () => {
   const today = new Date();
-  const yesterday = new Date(today.setHours(today.getHours() - 1));
+  const oneHourAgo = new Date(today.setHours(today.getHours() - 1));
 
   const hourLengthInMs = 1000 * 60 * 60;
-  expect(getElapsedTime(yesterday)).toBeWithinRange(
+  expect(getElapsedTime(oneHourAgo)).toBeWithinRange(
     hourLengthInMs - 1,
     hourLengthInMs + 1,
   );
@@ -24,10 +24,10 @@ test("getElapsedTime() one hour diff", () => {
 
 test("getElapsedTime() one minute diff", () => {
   const today = new Date();
-  const yesterday = new Date(today.setMinutes(today.getMinutes() - 1));
+  const oneMinuteAgo = new Date(today.setMinutes(today.getMinutes() - 1));
 
   const minuteLengthInMs = 1000 * 60;
-  expect(getElapsedTime(yesterday)).toBeWithinRange(
+  expect(getElapsedTime(oneMinuteAgo)).toBeWithinRange(
     minuteLengthInMs - 1,
     minuteLengthInMs + 1,
   );
@@ -35,10 +35,10 @@ test("getElapsedTime() one minute diff", () => {
 
 test("getElapsedTime() 30 seconds diff", () => {
   const today = new Date();
-  const yesterday = new Date(today.setSeconds(today.getSeconds() - 30));
+  const thirtySecondsAgo = new Date(today.setSeconds(today.getSeconds() - 30));
 
   const thirtySecondsLengthInMs = 1000 * 30;
-  expect(getElapsedTime(yesterday)).toBeWithinRange(
+  expect(getElapsedTime(thirtySecondsAgo)).toBeWithinRange(
     thirtySecondsLengthInMs - 1,
     thirtySecondsLengthInMs + 1,
   );
