@@ -19,10 +19,10 @@ export default function GamePad({ model, size, ...rest }) {
   return (
     <div {...rest}>
       {model.map((row, idxRow) => (
-        <FlexBox key={idxRow} flexDirection="row">
+        <FlexBox key={idxRow} direction="row">
           {row.map((col, idxCol) => (
             <FlexBox
-              flexDirection="col"
+              direction="col"
               key={(idxRow + 1) * idxCol}
               height={size}
               width={size}
