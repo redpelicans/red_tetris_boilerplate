@@ -1,8 +1,7 @@
 import TETROMINOES from "./../../config/models/piece";
 
-const randomNumber = () => {
-  return Math.floor(Math.random() * Math.floor(TETROMINOES.length));
-};
+const randomNumber = () =>
+  Math.floor(Math.random() * Math.floor(TETROMINOES.length));
 
 export default class Piece {
   constructor() {
