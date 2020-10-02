@@ -1,4 +1,4 @@
-import { pipe } from "client/helpers/functional";
+import { pipe } from "helpers/functional";
 
 describe("Pipe function", () => {
   const add = (curryValue) => (value) => value + curryValue;

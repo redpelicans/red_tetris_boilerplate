@@ -1,4 +1,4 @@
-import { randomPick } from "client/helpers/common";
+import { randomPick } from "helpers/common";
 
 test("randomPick() with filled list should be an item from the list", () => {
   const list = ["Sherlock", "Watson", "Moriarty", "Molly", "Mary"];

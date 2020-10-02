@@ -1,4 +1,4 @@
-import { getElapsedTime } from "client/helpers/common";
+import { getElapsedTime } from "helpers/common";
 
 test("getElapsedTime() one day diff", () => {
   const today = new Date();

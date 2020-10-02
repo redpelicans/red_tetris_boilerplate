@@ -1,4 +1,4 @@
-import { shallowCopy } from "client/helpers/functional";
+import { shallowCopy } from "helpers/functional";
 
 describe("ShallowCopy", () => {
   let refArray;

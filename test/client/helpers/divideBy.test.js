@@ -1,4 +1,4 @@
-import { divideBy } from "client/helpers/currying";
+import { divideBy } from "helpers/currying";
 
 describe("Curried with 10", () => {
   const divideByTen = divideBy(10);

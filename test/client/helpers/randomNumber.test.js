@@ -1,4 +1,4 @@
-import { randomNumber } from "client/helpers/common";
+import { randomNumber } from "helpers/common";
 
 test("randomNumber() should be in range [0, 10]", () => {
   const randomNb = randomNumber(10);

@@ -1,4 +1,4 @@
-import { lowerOrEqualThan } from "client/helpers/currying";
+import { lowerOrEqualThan } from "helpers/currying";
 
 describe("Curried with 10", () => {
   const lowerOrEqualThanTen = lowerOrEqualThan(10);
