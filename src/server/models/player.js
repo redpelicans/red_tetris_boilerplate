@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+
 export default class Player {
   constructor({ name, socketId }) {
     this.id = nanoid();
