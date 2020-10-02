@@ -7,4 +7,5 @@ export const LOBBY = {
   UPDATE: `${domain}:update`,
   PUBLISH: `${domain}:publish`,
   RESPONSE: `${domain}:response`,
+  LEAVER: `${domain}:leaver`,
 };

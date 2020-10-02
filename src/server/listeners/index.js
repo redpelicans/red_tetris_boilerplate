@@ -5,6 +5,7 @@ import { LOBBIES } from "../../config/actions/lobbies";
 import { LOBBY } from "../../config/actions/lobby";
 import { PLAYERS } from "../../config/actions/players";
 import { MESSAGE } from "../../config/actions/message";
+import { GAME } from "../../config/actions/game";
 import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
 import { getLobby, clearPlayerFromLobbies } from "storage/lobbies";
 import { popPlayer, getPlayerId } from "storage/players";
@@ -83,6 +84,58 @@ eventEmitter.on(event.room.clear, async ({ room }) => {
       });
     }
   });
+});
+
+// Game Board Change
+eventEmitter.on(event.game.board, ({ socket, lobbyId, boardGame }) => {
+  const socketId = socket.id;
+  socket.broadcast
+    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .emit(GAME.GET_BOARD, { socketId, boardGame });
+});
+
+// Game Penalty
+eventEmitter.on(event.game.penalty, ({ socket, lobbyId, nbLinePenalty }) => {
+  const socketId = socket.id;
+  socket.broadcast
+    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .emit(GAME.GET_PENALTY, { socketId, nbLinePenalty });
+});
+
+// Game Penalty
+// TODO
+eventEmitter.on(event.game.score, ({ socket, lobbyId, score }) => {
+  const socketId = socket.id;
+  socket.broadcast
+    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .emit(GAME.GET_SCORE, { socketId, score });
+});
+
+// Game Lose
+// TODO
+eventEmitter.on(event.game.lose, ({ socket, lobbyId }) => {
+  const socketId = socket.id;
+  socket.broadcast
+    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .emit(GAME.GET_LOSE, { socketId });
+});
+
+// Game Winner
+// TODO
+eventEmitter.on(event.game.winner, ({ socket, score }) => {
+  const socketId = socket.id;
+  // socket.broadcast
+  //   .to(`${GROUP_DOMAIN}:${lobbyId}`)
+  //   .emit(GAME.WINNER, { socketId, score });
+  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(GAME.WINNER, { socketId, score });
+});
+
+// Lobby Leaver
+// TODO
+eventEmitter.on(event.game.leaver, ({ socketId }) => {
+  socket.broadcast
+    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .emit(LOBBY.LEAVER, { socketId });
 });
 
 export default eventEmitter;
