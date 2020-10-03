@@ -33,6 +33,7 @@ module.exports = {
     "src/config/",
     "src/client/index.js",
     "src/client/constants/",
+    "src/client/hooks/tetris-game/constants.js",
     "src/client/mocks/",
     "src/server/models/",
   ],
