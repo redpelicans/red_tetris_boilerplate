@@ -1,7 +1,7 @@
-import * as Grid from "hooks/tetris-game/grid/checks";
+import * as Check from "hooks/tetris-game/grid/checks";
 import { SHADOW_PIECE, CURRENT_PIECE, FREE } from "constants/tetris";
 
-describe("Grid", () => {
+describe("Check", () => {
   const mockGrid = [
     [FREE, CURRENT_PIECE, CURRENT_PIECE, CURRENT_PIECE, CURRENT_PIECE],
     [FREE, FREE, FREE, FREE, FREE],
@@ -12,37 +12,37 @@ describe("Grid", () => {
 
   describe("isPartOfPiece", () => {
     test("is a part of piece", () => {
-      expect(Grid.isPartOfPiece(mockGrid[0][1])).toBe(true);
+      expect(Check.isPartOfPiece(mockGrid[0][1])).toBe(true);
     });
 
     test("is not a part of piece", () => {
-      expect(Grid.isPartOfPiece(mockGrid[1][0])).toBe(false);
-      expect(Grid.isPartOfPiece(mockGrid[2][2])).toBe(false);
-      expect(Grid.isPartOfPiece(mockGrid[4][0])).toBe(false);
+      expect(Check.isPartOfPiece(mockGrid[1][0])).toBe(false);
+      expect(Check.isPartOfPiece(mockGrid[2][2])).toBe(false);
+      expect(Check.isPartOfPiece(mockGrid[4][0])).toBe(false);
     });
   });
 
   describe("isPartOfShadowPiece", () => {
     test("is a part of shadow piece", () => {
-      expect(Grid.isPartOfShadowPiece(mockGrid[2][1])).toBe(true);
+      expect(Check.isPartOfShadowPiece(mockGrid[2][1])).toBe(true);
     });
 
     test("is not a part of shadow piece", () => {
-      expect(Grid.isPartOfShadowPiece(mockGrid[0][1])).toBe(false);
-      expect(Grid.isPartOfShadowPiece(mockGrid[1][2])).toBe(false);
-      expect(Grid.isPartOfShadowPiece(mockGrid[4][0])).toBe(false);
+      expect(Check.isPartOfShadowPiece(mockGrid[0][1])).toBe(false);
+      expect(Check.isPartOfShadowPiece(mockGrid[1][2])).toBe(false);
+      expect(Check.isPartOfShadowPiece(mockGrid[4][0])).toBe(false);
     });
   });
 
   describe("isFree", () => {
     test("is a free space in the grid", () => {
-      expect(Grid.isFree(mockGrid[0][0])).toBe(true);
+      expect(Check.isFree(mockGrid[0][0])).toBe(true);
     });
 
     test("is not a free space in the grid", () => {
-      expect(Grid.isFree(mockGrid[0][1])).toBe(false);
-      expect(Grid.isFree(mockGrid[2][1])).toBe(false);
-      expect(Grid.isFree(mockGrid[4][0])).toBe(false);
+      expect(Check.isFree(mockGrid[0][1])).toBe(false);
+      expect(Check.isFree(mockGrid[2][1])).toBe(false);
+      expect(Check.isFree(mockGrid[4][0])).toBe(false);
     });
   });
 
@@ -50,13 +50,13 @@ describe("Grid", () => {
     const lastRow = mockGrid.length - 1;
 
     test("is bottom line", () => {
-      expect(Grid.isBottomLine(mockGrid, lastRow)).toBe(true);
+      expect(Check.isBottomLine(mockGrid, lastRow)).toBe(true);
     });
 
     test("is not bottom line", () => {
-      expect(Grid.isBottomLine(mockGrid, lastRow - 1)).toBe(false);
-      expect(Grid.isBottomLine(mockGrid, lastRow + 1)).toBe(false);
-      expect(Grid.isBottomLine(mockGrid, -1)).toBe(false);
+      expect(Check.isBottomLine(mockGrid, lastRow - 1)).toBe(false);
+      expect(Check.isBottomLine(mockGrid, lastRow + 1)).toBe(false);
+      expect(Check.isBottomLine(mockGrid, -1)).toBe(false);
     });
   });
 
@@ -64,37 +64,37 @@ describe("Grid", () => {
     const gridLength = mockGrid.length;
 
     test("is bottom border", () => {
-      expect(Grid.isBottomBorder(mockGrid, gridLength)).toBe(true);
+      expect(Check.isBottomBorder(mockGrid, gridLength)).toBe(true);
     });
 
     test("is not bottom border", () => {
-      expect(Grid.isBottomBorder(mockGrid, gridLength - 1)).toBe(false);
-      expect(Grid.isBottomBorder(mockGrid, gridLength + 1)).toBe(false);
-      expect(Grid.isBottomBorder(mockGrid, -1)).toBe(false);
+      expect(Check.isBottomBorder(mockGrid, gridLength - 1)).toBe(false);
+      expect(Check.isBottomBorder(mockGrid, gridLength + 1)).toBe(false);
+      expect(Check.isBottomBorder(mockGrid, -1)).toBe(false);
     });
   });
 
   describe("isNotAnEmptyRow", () => {
     test("is an empty row", () => {
-      expect(Grid.isNotAnEmptyRow(mockGrid[1])).toBe(false);
-      expect(Grid.isNotAnEmptyRow(mockGrid[2])).toBe(false);
+      expect(Check.isNotAnEmptyRow(mockGrid[1])).toBe(false);
+      expect(Check.isNotAnEmptyRow(mockGrid[2])).toBe(false);
     });
 
     test("is not an empty row", () => {
-      expect(Grid.isNotAnEmptyRow(mockGrid[0])).toBe(true);
-      expect(Grid.isNotAnEmptyRow(mockGrid[3])).toBe(true);
+      expect(Check.isNotAnEmptyRow(mockGrid[0])).toBe(true);
+      expect(Check.isNotAnEmptyRow(mockGrid[3])).toBe(true);
     });
   });
 
   describe("isACompleteRow", () => {
     test("is a complete row", () => {
-      expect(Grid.isACompleteRow(mockGrid[3])).toBe(true);
+      expect(Check.isACompleteRow(mockGrid[3])).toBe(true);
     });
 
     test("is not a complete row", () => {
-      expect(Grid.isACompleteRow(mockGrid[0])).toBe(false);
-      expect(Grid.isACompleteRow(mockGrid[1])).toBe(false);
-      expect(Grid.isACompleteRow(mockGrid[2])).toBe(false);
+      expect(Check.isACompleteRow(mockGrid[0])).toBe(false);
+      expect(Check.isACompleteRow(mockGrid[1])).toBe(false);
+      expect(Check.isACompleteRow(mockGrid[2])).toBe(false);
     });
   });
 
@@ -128,7 +128,7 @@ describe("Grid", () => {
       ];
       for (const coord of validCoords) {
         mockPiece.coord = coord;
-        expect(Grid.canPutLayer(mockPlacementGrid, mockPiece)).toBe(true);
+        expect(Check.canPutLayer(mockPlacementGrid, mockPiece)).toBe(true);
       }
     });
 
@@ -145,7 +145,7 @@ describe("Grid", () => {
       ];
       for (const coord of validCoords) {
         mockPiece.coord = coord;
-        expect(Grid.canPutLayer(mockPlacementGrid, mockPiece)).toBe(false);
+        expect(Check.canPutLayer(mockPlacementGrid, mockPiece)).toBe(false);
       }
     });
   });
