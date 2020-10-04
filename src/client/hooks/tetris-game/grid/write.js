@@ -1,5 +1,5 @@
 import * as Check from "./checks";
-import { CURRENT_PIECE, SHADOW_PIECE } from "constants/tetris";
+import { CURRENT_PIECE, SHADOW_PIECE, FREE } from "constants/tetris";
 
 function shadowCanBeDraw(grid, coord) {
   return grid[coord.y][coord.x] !== CURRENT_PIECE;
@@ -42,8 +42,30 @@ function write(grid, piece, type) {
   return grid;
 }
 
-function partialWrite(grid, piece, type, remainingHeight) {
+function getHeightLeft(piece, grid) {
+  const {
+    dim: { height, width },
+    coord: { x },
+  } = piece;
+  const colLimit = x + width;
+
+  for (let row = 0; row < height; row++) {
+    for (let col = x; col < colLimit; col++) {
+      const element = grid[row][col];
+
+      if (!Check.isFree(element) && !Check.isPartOfShadowPiece(element)) {
+        return row;
+      }
+    }
+  }
+
+  return 0;
+}
+
+function partialWrite(grid, piece, type) {
   const { shape, padding, coord, dim } = piece;
+
+  const remainingHeight = getHeightLeft(piece, grid);
 
   const drawablePartOfPiece = padding.y + dim.height - remainingHeight;
   const colLength = padding.x + dim.width;
