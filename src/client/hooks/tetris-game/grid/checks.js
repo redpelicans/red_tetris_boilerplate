@@ -16,7 +16,7 @@ export function isBottomLine(grid, row) {
   return row === grid.length - 1;
 }
 
-export function isBorderBottom(grid, row) {
+export function isBottomBorder(grid, row) {
   return row === grid.length;
 }
 
@@ -44,7 +44,7 @@ export function canPutLayer(grid, piece) {
 
       if (
         isPartOfPiece(shape[row][col]) &&
-        (isBorderBottom(grid, y) || !isFree(grid[y][x]))
+        (isBottomBorder(grid, y) || !isFree(grid[y][x]))
       ) {
         return false;
       }
