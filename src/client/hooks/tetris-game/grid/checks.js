@@ -25,7 +25,7 @@ export function isNotAnEmptyRow(row) {
 }
 
 export function isACompleteRow(row) {
-  return row.every((value) => value !== 0);
+  return row.every((value) => value !== FREE && value !== SHADOW_PIECE);
 }
 
 export function canPutLayer(grid, piece) {
