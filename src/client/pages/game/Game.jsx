@@ -8,10 +8,7 @@ import NextPieces from "./NextPieces";
 import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
-import {
-  DEFAULT_REPEAT_TIMEOUT,
-  COMBO_TEXT,
-} from "hooks/tetris-game/constants";
+import { DEFAULT_REPEAT_TIMEOUT, COMBO_TEXT } from "constants/tetris";
 import AudioTheme from "./AudioTheme";
 
 export default function Game() {

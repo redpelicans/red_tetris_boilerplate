@@ -1,4 +1,4 @@
-import { COMBO_SCORE } from "../constants";
+import { COMBO_SCORE } from "constants/tetris";
 import * as Check from "./checks";
 import write from "./write";
 

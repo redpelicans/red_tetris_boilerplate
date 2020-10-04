@@ -1,4 +1,4 @@
-import { FREE } from "../constants";
+import { FREE } from "constants/tetris";
 import * as Check from "./checks";
 
 function isOverridable(element) {

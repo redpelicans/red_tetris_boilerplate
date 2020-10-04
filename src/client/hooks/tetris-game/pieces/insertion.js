@@ -1,5 +1,5 @@
 import * as Grid from "../grid";
-import { CURRENT_PIECE, FREE } from "../constants";
+import { CURRENT_PIECE, FREE } from "constants/tetris";
 
 function insertion(piece, grid) {
   const insertPos = getInsertPos(piece, grid);

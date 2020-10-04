@@ -1,5 +1,5 @@
 import * as Check from "./checks";
-import { CURRENT_PIECE, SHADOW_PIECE } from "../constants";
+import { CURRENT_PIECE, SHADOW_PIECE } from "constants/tetris";
 
 function shadowCanBeDraw(grid, coord) {
   return grid[coord.y][coord.x] !== CURRENT_PIECE;

@@ -2,7 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import PropTypes from "prop-types";
 import { GameContext } from "store";
-import { CURRENT_PIECE, SHADOW_PIECE } from "hooks/tetris-game/constants";
+import { CURRENT_PIECE, SHADOW_PIECE } from "constants/tetris";
 
 const TetrisGrid = ({ grid, rowHeight, colHeight }) => (
   <TetrisRows rows={grid} rowHeight={rowHeight} colHeight={colHeight} />

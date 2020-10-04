@@ -18,12 +18,7 @@ module.exports = {
   // collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: [
-    "src/**/*.{js,jsx}",
-    // "src/client/components/**/*.{js,jsx}",
-    // "src/client/pages/**/*.{js,jsx}",
-    // "src/client/hooks/**/*.{js,jsx}",
-  ],
+  collectCoverageFrom: ["src/**/*.{js,jsx}"],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
@@ -33,7 +28,6 @@ module.exports = {
     "src/config/",
     "src/client/index.js",
     "src/client/constants/",
-    "src/client/hooks/tetris-game/constants.js",
     "src/client/mocks/",
     "src/server/models/",
   ],

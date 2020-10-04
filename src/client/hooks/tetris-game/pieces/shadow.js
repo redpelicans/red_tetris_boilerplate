@@ -1,5 +1,5 @@
 import * as Grid from "../grid";
-import { SHADOW_PIECE } from "../constants";
+import { SHADOW_PIECE } from "constants/tetris";
 
 export function getDropPosition(grid, piece) {
   const maxY = grid.length;

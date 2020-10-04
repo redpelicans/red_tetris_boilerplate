@@ -1,4 +1,4 @@
-import { SHADOW_PIECE, CURRENT_PIECE, FREE } from "../constants";
+import { SHADOW_PIECE, CURRENT_PIECE, FREE } from "constants/tetris";
 
 export function isPartOfPiece(element) {
   return element === CURRENT_PIECE;
