@@ -1,11 +1,25 @@
 import * as Check from "./checks";
-import { CURRENT_PIECE } from "../constants";
+import { CURRENT_PIECE, SHADOW_PIECE } from "../constants";
+
+function shadowCanBeDraw(grid, coord) {
+  return grid[coord.y][coord.x] !== CURRENT_PIECE;
+}
+
+function canPaintPartOfPiece(grid, coord, type) {
+  const { x, y } = coord;
+
+  return (
+    type !== SHADOW_PIECE ||
+    (type === SHADOW_PIECE && shadowCanBeDraw(grid, { x, y }))
+  );
+}
 
 /*
  ** Write a piece on the Tetris grid.
  ** Type can be one of the following constants:
  **   - CURRENT_PIECE
  **   - SHADOW_PIECE
+ ** Or the piece.color attribute to definitely put it on the board game
  */
 
 function write(grid, piece, type) {
@@ -16,11 +30,12 @@ function write(grid, piece, type) {
 
   for (let col = padding.x; col < colLength; col++) {
     for (let row = padding.y; row < rowLength; row++) {
-      if (
-        Check.isPartOfPiece(shape[row][col]) &&
-        grid[coord.y + row][coord.x + col] !== CURRENT_PIECE
-      ) {
-        grid[coord.y + row][coord.x + col] = type;
+      if (Check.isPartOfPiece(shape[row][col])) {
+        const [x, y] = [coord.x + col, coord.y + row];
+
+        if (canPaintPartOfPiece(grid, { x, y }, type)) {
+          grid[y][x] = type;
+        }
       }
     }
   }
