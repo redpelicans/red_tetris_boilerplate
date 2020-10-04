@@ -1,5 +1,5 @@
 import * as Check from "./checks";
-import { CURRENT_PIECE, SHADOW_PIECE, FREE } from "constants/tetris";
+import { CURRENT_PIECE, SHADOW_PIECE } from "constants/tetris";
 
 function shadowCanBeDraw(grid, coord) {
   return grid[coord.y][coord.x] !== CURRENT_PIECE;
@@ -59,7 +59,7 @@ function getHeightLeft(piece, grid) {
     }
   }
 
-  return 0;
+  throw new Error("Tetromino has no valid informations");
 }
 
 function partialWrite(grid, piece, type) {
