@@ -8,8 +8,8 @@ export function isPartOfShadowPiece(element) {
   return element === SHADOW_PIECE;
 }
 
-export function isFree(grid, row, col) {
-  return grid[row][col] === FREE;
+export function isFree(element) {
+  return element === FREE;
 }
 
 export function isBottomLine(grid, row) {
@@ -40,10 +40,11 @@ export function canPutLayer(grid, piece) {
 
   for (let col = padding.x; col < colLength; col++) {
     for (let row = padding.y; row < rowLength; row++) {
+      const [x, y] = [coord.x + col, coord.y + row];
+
       if (
         isPartOfPiece(shape[row][col]) &&
-        (isBorderBottom(grid, coord.y + row) ||
-          !isFree(grid, coord.y + row, coord.x + col))
+        (isBorderBottom(grid, y) || !isFree(grid[y][x]))
       ) {
         return false;
       }
