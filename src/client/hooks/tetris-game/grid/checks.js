@@ -1,7 +1,11 @@
-import { CURRENT_PIECE, FREE } from "../constants";
+import { SHADOW_PIECE, CURRENT_PIECE, FREE } from "../constants";
 
 export function isPartOfPiece(element) {
   return element === CURRENT_PIECE;
+}
+
+export function isPartOfShadowPiece(element) {
+  return element === SHADOW_PIECE;
 }
 
 export function isFree(grid, row, col) {

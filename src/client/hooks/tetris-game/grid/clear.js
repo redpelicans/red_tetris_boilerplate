@@ -1,14 +1,12 @@
-import { CURRENT_PIECE, SHADOW_PIECE, FREE } from "../constants";
+import { FREE } from "../constants";
+import * as Check from "./checks";
+
+function isOverridable(element) {
+  return Check.isPartOfPiece(element) || Check.isPartOfShadowPiece(element);
+}
 
 function clear(grid) {
-  return grid.map((row) =>
-    row.map((col) => {
-      if (col === CURRENT_PIECE || col === SHADOW_PIECE) {
-        return FREE;
-      }
-      return col;
-    }),
-  );
+  return grid.map((row) => row.map((col) => (isOverridable(col) ? FREE : col)));
 }
 
 export default clear;
