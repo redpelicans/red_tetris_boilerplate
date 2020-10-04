@@ -28,10 +28,32 @@ export function isACompleteRow(row) {
   return row.every((value) => value !== FREE && value !== SHADOW_PIECE);
 }
 
+function isPieceInArrayBoundaries(grid, piece) {
+  const { coord, padding, dim } = piece;
+
+  if (coord.x + padding.x < 0) {
+    return false;
+  }
+
+  if (coord.y + padding.y < 0) {
+    return false;
+  }
+
+  if (coord.y + dim.height + padding.y > grid.length) {
+    return false;
+  }
+
+  if (coord.x + dim.width + padding.x > grid[0].length) {
+    return false;
+  }
+
+  return true;
+}
+
 export function canPutLayer(grid, piece) {
   const { shape, padding, coord, dim } = piece;
 
-  if (coord.y + dim.height > grid.length) {
+  if (!isPieceInArrayBoundaries(grid, piece)) {
     return false;
   }
 
