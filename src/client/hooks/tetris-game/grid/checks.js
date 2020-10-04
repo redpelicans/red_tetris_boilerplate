@@ -21,7 +21,7 @@ export function isBorderBottom(grid, row) {
 }
 
 export function isNotAnEmptyRow(row) {
-  return row.some((value) => value !== 0);
+  return row.some((value) => value !== FREE && value !== SHADOW_PIECE);
 }
 
 export function isACompleteRow(row) {
