@@ -3,7 +3,7 @@ import React from "react";
 function useAutoMove(func) {
   const timer = React.useRef(null);
 
-  React.useEffect(() => stop, []);
+  React.useEffect(() => stop(), []);
 
   const stop = React.useCallback(() => {
     if (timer.current) {
