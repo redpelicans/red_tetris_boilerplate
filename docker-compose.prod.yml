@@ -2,7 +2,7 @@ version: "3"
 services:
   redis:
     image: redis:latest
-    container_name: redtetris-redis-dev
+    container_name: redtetris-redis-prod
     ports:
       - "6379:6379"
     restart: always
@@ -11,7 +11,7 @@ services:
     build:
       context: .
       dockerfile: .docker/server/Dockerfile
-    container_name: redtetris-server-dev
+    container_name: redtetris-server-prod
     ports:
       - "3004:3004"
     environment:
@@ -28,12 +28,8 @@ services:
   client:
     build:
       context: .
-      dockerfile: .docker/client/Dockerfile.dev
-    container_name: redtetris-client-dev
+      dockerfile: .docker/client/Dockerfile.prod
+    container_name: redtetris-client-prod
     ports:
-      - "3000:3000"
+      - "8000:80"
     restart: always
-    stdin_open: true
-    volumes:
-      - ./:/redtetris/client/
-      - /redtetris/client/node_modules
