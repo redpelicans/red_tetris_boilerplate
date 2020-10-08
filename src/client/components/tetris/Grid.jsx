@@ -4,8 +4,13 @@ import PropTypes from "prop-types";
 import { GameContext } from "store";
 import { CURRENT_PIECE, SHADOW_PIECE } from "constants/tetris";
 
-const TetrisGrid = ({ grid, rowHeight, colHeight }) => (
-  <TetrisRows rows={grid} rowHeight={rowHeight} colHeight={colHeight} />
+const TetrisGrid = ({ grid, rowHeight, colHeight, ...rest }) => (
+  <TetrisRows
+    rows={grid}
+    rowHeight={rowHeight}
+    colHeight={colHeight}
+    {...rest}
+  />
 );
 
 export default TetrisGrid;
@@ -18,9 +23,9 @@ TetrisGrid.propTypes = {
     .isRequired,
 };
 
-const TetrisRows = ({ rows, rowHeight, colHeight }) =>
+const TetrisRows = ({ rows, rowHeight, colHeight, ...rest }) =>
   rows.map((row, idx) => (
-    <FlexBox key={`row-${idx}`} direction="row" height={rowHeight}>
+    <FlexBox key={`row-${idx}`} direction="row" height={rowHeight} {...rest}>
       <TetrisCols cols={row} rowIdx={idx} colHeight={colHeight} />
     </FlexBox>
   ));
