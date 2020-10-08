@@ -15,22 +15,13 @@ function useAutoMove(func) {
   const start = React.useCallback(
     (ms) => {
       if (!timer.current) {
-        stop();
         timer.current = setInterval(func, ms);
       }
     },
     [func],
   );
 
-  const reset = React.useCallback(
-    (ms) => {
-      stop();
-      start(ms);
-    },
-    [func],
-  );
-
-  return { stop, start, reset };
+  return { stop, start };
 }
 
 export default useAutoMove;
