@@ -1,7 +1,7 @@
 import React from "react";
 import { GameContext } from "store";
 import { divideBy } from "helpers/currying";
-import { INTERVAL_MS } from "./constants";
+import { INTERVAL_MS } from "constants/tetris";
 
 function useGravity() {
   const { state } = React.useContext(GameContext);

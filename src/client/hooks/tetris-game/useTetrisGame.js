@@ -4,7 +4,7 @@ import * as Piece from "./pieces";
 import { isEmpty } from "helpers/common";
 import { GameContext } from "store";
 import { pullCurrentPiece, addScore } from "actions/game";
-import { MOVE_LEFT, MOVE_RIGHT } from "./constants";
+import { MOVE_LEFT, MOVE_RIGHT } from "constants/tetris";
 import useTetrisState from "./useTetrisState";
 import WorkerTimer from "worker/timer.worker.js";
 import useWorker from "hooks/useWorker";
