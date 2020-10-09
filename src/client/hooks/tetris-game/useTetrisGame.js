@@ -2,13 +2,14 @@ import React from "react";
 import * as Grid from "./grid";
 import * as Piece from "./pieces";
 import { isEmpty } from "helpers/common";
-import { divideBy } from "helpers/currying";
 import { GameContext } from "store";
-import { pullCurrentPiece, updateGrid, addScore } from "actions/game";
-import { INTERVAL_MS, MOVE_LEFT, MOVE_RIGHT } from "./constants";
+import { pullCurrentPiece, addScore } from "actions/game";
+import { MOVE_LEFT, MOVE_RIGHT } from "./constants";
 import useTetrisState from "./useTetrisState";
 import WorkerTimer from "worker/timer.worker.js";
 import useWorker from "hooks/useWorker";
+import useGravity from "./useGravity";
+import useNewGrid from "./useNewGrid";
 
 /*
  ** This custom hook is used to manage the game board.
@@ -17,11 +18,16 @@ import useWorker from "hooks/useWorker";
  */
 function useTetrisGame(cols = 10, rows = 20) {
   const { state, dispatch } = React.useContext(GameContext);
+
+  useNewGrid(cols, rows);
+
   const {
     updateStateAfterMove,
     updateStateAfterBind,
     setGameOver,
   } = useTetrisState();
+
+  const gravityInterval = useGravity();
 
   const handleMessage = React.useCallback(() => {
     if (!state.currentPiece.coord || isEmpty(state.currentPiece.shape)) {
@@ -39,29 +45,12 @@ function useTetrisGame(cols = 10, rows = 20) {
     }
   }, [state.alive]);
 
-  const gravityInterval = React.useMemo(() => {
-    const divideByThree = divideBy(3);
-    let interval = INTERVAL_MS;
-
-    for (let i = 0; i < state.level; i++) {
-      interval = interval - divideByThree(interval);
-    }
-
-    return interval;
-  }, [state.level]);
-
   React.useEffect(() => {
     if (worker) {
       worker.postMessage({ type: "STOP_TIMER" });
       worker.postMessage({ type: "SET_TIMER", delay: gravityInterval });
     }
   }, [gravityInterval, worker]);
-
-  // On component did mount
-  React.useEffect(() => {
-    const initGrid = Grid.create(cols, rows);
-    dispatch(updateGrid(initGrid));
-  }, []);
 
   // On new piece
   React.useEffect(() => {
