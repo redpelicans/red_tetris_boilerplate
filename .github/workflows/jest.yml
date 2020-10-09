@@ -15,9 +15,7 @@ jobs:
   jest:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-        with:
-          ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: "13.8"
