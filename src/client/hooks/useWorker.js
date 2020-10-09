@@ -5,14 +5,20 @@ function useWorker(CustomWorker, messageHandler, errorHandler) {
 
   React.useEffect(() => {
     worker.current = new CustomWorker();
-    worker.current.onmessage = messageHandler;
-    worker.current.onerror = errorHandler;
 
     return () => {
       worker.current.terminate();
       worker.current = null;
     };
   }, []);
+
+  React.useEffect(() => {
+    worker.current.onmessage = messageHandler;
+  }, [messageHandler]);
+
+  React.useEffect(() => {
+    worker.current.onerror = errorHandler;
+  }, [errorHandler]);
 
   return worker.current;
 }

@@ -23,10 +23,13 @@ function useTetrisGame(cols = 10, rows = 20) {
     setGameOver,
   } = useTetrisState();
 
-  const [tick, setTick] = React.useState(0);
   const handleMessage = React.useCallback(() => {
-    setTick((oldTick) => oldTick + 1);
-  }, []);
+    if (!state.currentPiece.coord || isEmpty(state.currentPiece.shape)) {
+      return;
+    }
+
+    gravity();
+  }, [state.currentPiece.coord, state.currentPiece.shape]);
 
   const worker = useWorker(WorkerTimer, handleMessage);
 
@@ -35,13 +38,6 @@ function useTetrisGame(cols = 10, rows = 20) {
       worker.postMessage({ type: "STOP_TIMER" });
     }
   }, [state.alive]);
-
-  React.useEffect(() => {
-    if (!state.currentPiece.coord || isEmpty(state.currentPiece.shape)) {
-      return;
-    }
-    gravity();
-  }, [tick]);
 
   const gravityInterval = React.useMemo(() => {
     const divideByThree = divideBy(3);
