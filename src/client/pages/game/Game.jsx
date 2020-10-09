@@ -8,15 +8,33 @@ import NextPieces from "./NextPieces";
 import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
-import {
-  DEFAULT_REPEAT_TIMEOUT,
-  COMBO_TEXT,
-} from "hooks/tetris-game/constants";
-import AudioTheme from "./AudioTheme";
+import { DEFAULT_REPEAT_TIMEOUT, COMBO_TEXT } from "constants/tetris";
+import TetrisTheme from "assets/music/Tetris_theme.ogg";
+import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
+import useAudio from "hooks/useAudio";
 
 export default function Game() {
   const { state, dispatch } = React.useContext(GameContext);
   const { movePiece } = useTetrisGame(10, 20);
+
+  const options = {
+    volume: 0.2,
+    loop: true,
+    playbackRate: state.speedRate,
+  };
+  const [toggleMainAudio, setOptions] = useAudio(TetrisTheme, options);
+  const [toggleGameOverAudio] = useAudio(TetrisGameOverTheme);
+
+  React.useEffect(() => {
+    toggleMainAudio();
+    if (state.alive === false) {
+      toggleGameOverAudio();
+    }
+  }, [state.alive]);
+
+  React.useEffect(() => {
+    setOptions({ ...options, playbackRate: state.speedRate });
+  }, [state.speedRate]);
 
   // Add keyboard event
   const throttledMove = useThrottle(movePiece, DEFAULT_REPEAT_TIMEOUT);
@@ -29,7 +47,6 @@ export default function Game() {
       height={"full"}
       className="justify-center items-center"
     >
-      <AudioTheme alive={state.alive} speedRate={state.speedRate} />
       <Link
         to="/"
         className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
@@ -97,6 +114,7 @@ const Level = React.memo(({ level }) => (
 ));
 
 const Timer = React.memo(() => {
+  const { state } = React.useContext(GameContext);
   const startTime = new Date();
 
   const [elapsedTime, setElapsedTime] = React.useState("00:00");
@@ -112,13 +130,20 @@ const Timer = React.memo(() => {
     };
 
     const getNewElapsedTime = () => {
-      const newElapsedTime = getElapsedTime(startTime);
+      const newElapsedTime = new Date(getElapsedTime(startTime));
       const newElapsedTimeFormatted = formatElapsedTime(newElapsedTime);
       return newElapsedTimeFormatted;
     };
 
-    setInterval(() => setElapsedTime(getNewElapsedTime()), 1000);
-  }, []);
+    if (state.alive) {
+      const timerInterval = setInterval(
+        () => setElapsedTime(getNewElapsedTime()),
+        1000,
+      );
+
+      return () => clearInterval(timerInterval);
+    }
+  }, [state.alive]);
 
   return <p>{elapsedTime}</p>;
 });

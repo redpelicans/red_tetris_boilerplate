@@ -13,5 +13,5 @@ export function randomPick(list) {
 export const isEmpty = (element) => element === null || element?.length === 0;
 
 export function getElapsedTime(startTime) {
-  return new Date(new Date() - startTime);
+  return new Date() - startTime;
 }

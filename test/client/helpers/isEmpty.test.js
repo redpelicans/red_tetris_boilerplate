@@ -1,4 +1,4 @@
-import { isEmpty } from "../../helpers/common";
+import { isEmpty } from "helpers/common";
 
 test("isEmpty() on empty array to be true", () => {
   expect(isEmpty([])).toBe(true);

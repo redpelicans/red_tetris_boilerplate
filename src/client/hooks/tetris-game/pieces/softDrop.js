@@ -1,5 +1,5 @@
 import * as Grid from "../grid";
-import { CURRENT_PIECE } from "../constants";
+import { CURRENT_PIECE } from "constants/tetris";
 
 function softDrop(grid, piece) {
   const newPiece = {

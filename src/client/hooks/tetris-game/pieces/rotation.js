@@ -1,5 +1,5 @@
 import * as Grid from "../grid";
-import { CURRENT_PIECE } from "../constants";
+import { CURRENT_PIECE } from "constants/tetris";
 
 function rotatePiece(piece) {
   return piece[0].map((_, colIndex) =>

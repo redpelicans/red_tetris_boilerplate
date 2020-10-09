@@ -1,11 +1,9 @@
-import { expectCt } from "helmet";
-import { randomNumber } from "../../helpers/common";
+import { randomNumber } from "helpers/common";
 
 test("randomNumber() should be in range [0, 10]", () => {
   const randomNb = randomNumber(10);
 
-  expect(randomNb).toBeGreaterThanOrEqual(0);
-  expect(randomNb).toBeLessThanOrEqual(10);
+  expect(randomNb).toBeWithinRange(0, 10);
 });
 
 test("randomNumber() should be equal to 0", () => {

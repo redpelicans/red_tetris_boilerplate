@@ -18,15 +18,19 @@ module.exports = {
   // collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
+  collectCoverageFrom: ["src/**/*.{js,jsx}"],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
 
   // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
-  //   "/node_modules/"
-  // ],
+  coveragePathIgnorePatterns: [
+    "src/config/",
+    "src/client/index.js",
+    "src/client/constants/",
+    "src/client/mocks/",
+    "src/server/models/",
+  ],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
@@ -40,7 +44,14 @@ module.exports = {
   // ],
 
   // An object that configures minimum threshold enforcement for coverage results
-  // coverageThreshold: undefined,
+  coverageThreshold: {
+    global: {
+      statements: 70,
+      functions: 70,
+      lines: 70,
+      branches: 50,
+    },
+  },
 
   // A path to a custom dependency extractor
   // dependencyExtractor: undefined,
@@ -64,9 +75,7 @@ module.exports = {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  // moduleDirectories: [
-  //   "node_modules"
-  // ],
+  moduleDirectories: ["node_modules", "src/client"],
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [
@@ -79,7 +88,7 @@ module.exports = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: { "\\.(css|scss)$": "identity-obj-proxy" },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -115,7 +124,7 @@ module.exports = {
   // rootDir: undefined,
 
   // A list of paths to directories that Jest should use to search for files in
-  roots: ["<rootDir>/src/"],
+  roots: ["<rootDir>"],
 
   // Allows you to use a custom runner instead of Jest's default test runner
   // runner: "jest-runner",
@@ -124,7 +133,7 @@ module.exports = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ["<rootDir>/test/jest.setup.js"],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
@@ -168,7 +177,11 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
+  transform: {
+    "^.+\\.(js|jsx)$": "babel-jest",
+    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+      "<rootDir>/test/fileTransformer.js",
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [

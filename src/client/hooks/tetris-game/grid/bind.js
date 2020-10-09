@@ -1,5 +1,6 @@
-import { COMBO_SCORE } from "../constants";
+import { COMBO_SCORE } from "constants/tetris";
 import * as Check from "./checks";
+import write from "./write";
 
 function dropDownAllFollowingRows(grid, row) {
   for (let i = row; i > 0; i--) {
@@ -29,24 +30,13 @@ function removeCompletedRows(grid) {
 }
 
 function bind(grid, piece) {
-  const { shape, padding, coord } = piece;
-
-  const colLength = shape[0].length;
-  const rowLength = shape.length;
-
-  for (let col = padding.x; col < colLength; col++) {
-    for (let row = padding.y; row < rowLength; row++) {
-      if (Check.isPartOfPiece(shape[row][col])) {
-        grid[coord.y + row][coord.x + col] = piece.color;
-      }
-    }
-  }
+  const newGrid = write(grid, piece, piece.color);
 
   const [
     newGridAfterScore,
     additionalScore,
     nbRowsRemoved,
-  ] = removeCompletedRows(grid);
+  ] = removeCompletedRows(newGrid);
   if (nbRowsRemoved > 0) {
     const custom = new CustomEvent("custom", { detail: nbRowsRemoved });
     window.dispatchEvent(custom);

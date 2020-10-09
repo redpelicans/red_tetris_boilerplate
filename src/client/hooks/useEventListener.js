@@ -1,6 +1,6 @@
 import React from "react";
 
-function useShortcuts(eventName, handler) {
+function useEventListener(eventName, handler) {
   const savedHandler = React.useRef();
 
   React.useEffect(() => {
@@ -17,4 +17,4 @@ function useShortcuts(eventName, handler) {
   }, [eventName, handler]);
 }
 
-export default useShortcuts;
+export default useEventListener;

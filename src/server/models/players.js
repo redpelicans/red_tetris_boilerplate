@@ -3,5 +3,3 @@ export default class Players {
     this.players = players;
   }
 }
-
-export default players;

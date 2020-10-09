@@ -11,7 +11,7 @@ import {
   MOVE_LEFT,
   MOVE_RIGHT,
   KEYBOARD_ACTIONS,
-} from "./constants";
+} from "constants/tetris";
 import useTetrisState from "./useTetrisState";
 
 /*

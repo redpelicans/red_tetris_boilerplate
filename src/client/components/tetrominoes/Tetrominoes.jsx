@@ -19,7 +19,7 @@ export default function Tetromino({ shape, color, size = 5, ...rest }) {
     case "S":
       return <TetrominoS color={color} size={size} {...rest} />;
     default:
-      throw new Error("Tetromino's shape not recognized.");
+      return null;
   }
 }
 
