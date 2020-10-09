@@ -71,58 +71,13 @@ test("popLobby() should return an Error response `You are not the owner`", async
   quitRedis();
 });
 
-// test("pushLobby() should return an Error `already on another lobby` response", async () => {
-//   runRedis();
+test("popLobby() should return Error response `lobby doesn't exists` no lobbies", async () => {
+  runRedis();
 
-//   const lobby = {
-//     id: "2",
-//     name: "test2",
-//     owner: {},
-//     players: [{ socketId: "testSocketId" }],
-//   };
+  expect(await popLobby("1", "ownerId")).toEqual(
+    Response.error(LOBBIES.DELETE, "Lobby doesn't exists!"),
+  );
 
-//   const lobbies = {
-//     1: {
-//       id: "1",
-//       name: "test",
-//       owner: {},
-//       players: [{ socketId: "testSocketId" }],
-//     },
-//   };
-//   await setComplexObjectToRedis("lobbies", lobbies);
-
-//   expect(await pushLobby(lobby, "testSocketId")).toEqual(
-//     Response.error(LOBBIES.ADD, "You already have an active lobby !"),
-//   );
-
-//   await deleteKeyFromRedis("lobbies");
-//   quitRedis();
-// });
-
-// test("pushLobby() should return an Error `lobbyName not available` response", async () => {
-//   runRedis();
-
-//   const lobby = {
-//     id: "2",
-//     name: "test",
-//     owner: {},
-//     players: [{ socketId: "testSocketId" }],
-//   };
-
-//   const lobbies = {
-//     1: {
-//       id: "1",
-//       name: "test",
-//       owner: {},
-//       players: [{ socketId: "testSocketId2" }],
-//     },
-//   };
-//   await setComplexObjectToRedis("lobbies", lobbies);
-
-//   expect(await pushLobby(lobby, "testSocketId")).toEqual(
-//     Response.error(LOBBIES.ADD, "lobbyName is not available!"),
-//   );
-
-//   await deleteKeyFromRedis("lobbies");
-//   quitRedis();
-// });
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
+});

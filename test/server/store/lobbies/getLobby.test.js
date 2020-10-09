@@ -6,6 +6,14 @@ import {
   setComplexObjectToRedis,
 } from "../../../../src/server/store";
 
+test("getLobby() should return undefined", async () => {
+  runRedis();
+
+  expect(await getLobby("56")).toEqual(undefined);
+
+  quitRedis();
+});
+
 test("getLobby() should return a Lobby", async () => {
   runRedis();
 
