@@ -99,16 +99,19 @@ function useTetrisGame(cols = 10, rows = 20) {
       return;
     }
 
-    if (action.code === "ArrowDown") {
-      doSoftDrop();
-    } else if (action.code === "ArrowLeft") {
-      movePieceLateral(MOVE_LEFT);
-    } else if (action.code === "ArrowRight") {
-      movePieceLateral(MOVE_RIGHT);
-    } else if (action.code === "ArrowUp") {
-      rotatePiece();
-    } else if (action.code === "Space") {
-      doHardDrop();
+    switch (action.code) {
+      case "ArrowDown":
+        return doSoftDrop();
+      case "ArrowLeft":
+        return movePieceLateral(MOVE_LEFT);
+      case "ArrowRight":
+        return movePieceLateral(MOVE_RIGHT);
+      case "ArrowUp":
+        return rotatePiece();
+      case "Space":
+        return doHardDrop();
+      default:
+        return;
     }
   }
 
