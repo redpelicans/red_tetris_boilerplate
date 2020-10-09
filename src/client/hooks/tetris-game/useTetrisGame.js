@@ -8,6 +8,7 @@ import { pullCurrentPiece, updateGrid, addScore } from "actions/game";
 import { INTERVAL_MS, MOVE_LEFT, MOVE_RIGHT } from "./constants";
 import useTetrisState from "./useTetrisState";
 import WorkerTimer from "worker/timer.worker.js";
+import useWorker from "hooks/useWorker";
 
 /*
  ** This custom hook is used to manage the game board.
@@ -23,23 +24,15 @@ function useTetrisGame(cols = 10, rows = 20) {
   } = useTetrisState();
 
   const [tick, setTick] = React.useState(0);
-
-  const worker = React.useRef();
-  React.useEffect(() => {
-    worker.current = new WorkerTimer();
-    worker.current.onmessage = () => {
-      setTick((oldTick) => oldTick + 1);
-    };
-
-    return () => {
-      worker.current.postMessage({ type: "STOP_TIMER" });
-      worker.current.terminate();
-    };
+  const handleMessage = React.useCallback(() => {
+    setTick((oldTick) => oldTick + 1);
   }, []);
+
+  const worker = useWorker(WorkerTimer, handleMessage);
 
   React.useEffect(() => {
     if (state.alive === false) {
-      worker.current.postMessage({ type: "STOP_TIMER" });
+      worker.postMessage({ type: "STOP_TIMER" });
     }
   }, [state.alive]);
 
@@ -62,9 +55,11 @@ function useTetrisGame(cols = 10, rows = 20) {
   }, [state.level]);
 
   React.useEffect(() => {
-    worker.current.postMessage({ type: "STOP_TIMER" });
-    worker.current.postMessage({ type: "SET_TIMER", delay: gravityInterval });
-  }, [gravityInterval]);
+    if (worker) {
+      worker.postMessage({ type: "STOP_TIMER" });
+      worker.postMessage({ type: "SET_TIMER", delay: gravityInterval });
+    }
+  }, [gravityInterval, worker]);
 
   // On component did mount
   React.useEffect(() => {
