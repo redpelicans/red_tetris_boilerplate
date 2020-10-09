@@ -11,6 +11,14 @@ const runRedis = () => {
   });
 };
 
+export const quitRedis = () => {
+  redisClient.quit();
+};
+
+export const deleteKeyFromRedis = async (key) => {
+  redisClient.del(key);
+};
+
 export const getValueFromRedis = (message) => {
   return new Promise((resolve, reject) => {
     redisClient.get(message, (err, data) => {
