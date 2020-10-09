@@ -7,7 +7,7 @@ import { GameContext } from "store";
 import { pullCurrentPiece, updateGrid, addScore } from "actions/game";
 import { INTERVAL_MS, MOVE_LEFT, MOVE_RIGHT } from "./constants";
 import useTetrisState from "./useTetrisState";
-import WorkerTimer from "./timer.worker.js";
+import WorkerTimer from "worker/timer.worker.js";
 
 /*
  ** This custom hook is used to manage the game board.
