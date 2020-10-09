@@ -23,7 +23,7 @@ jobs:
       - name: Install modules
         run: npm install
       - name: Run format check
-        run: npm run format-check
+        run: npm run format-ci
 #      - name: Commit changes
 #        uses: stefanzweifel/git-auto-commit-action@v4.1.2
 #        with:
