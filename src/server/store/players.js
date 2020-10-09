@@ -1,4 +1,4 @@
-import { getComplexObjectFromRedis, setComplexObjectToRedis } from "store";
+import { getComplexObjectFromRedis, setComplexObjectToRedis } from "../store";
 import Response from "models/response";
 import { PLAYER } from "../../config/actions/player";
 
@@ -35,6 +35,7 @@ export const pushPlayer = async (player) => {
 
 export const popPlayer = async (id) => {
   let players = (await getComplexObjectFromRedis("players")) ?? {};
+  if (!players?.[id]) return null;
   delete players[id];
   await setComplexObjectToRedis("players", players);
 };

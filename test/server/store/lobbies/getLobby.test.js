@@ -1,10 +1,6 @@
 import { getLobby, pushLobby } from "store/lobbies";
 import runRedis from "../../../../src/server/store";
-import {
-  quitRedis,
-  deleteKeyFromRedis,
-  setComplexObjectToRedis,
-} from "../../../../src/server/store";
+import { quitRedis, deleteKeyFromRedis } from "../../../../src/server/store";
 
 test("getLobby() should return undefined", async () => {
   runRedis();
@@ -34,15 +30,7 @@ test("getLobby() should return a Lobby", async () => {
 test("getLobby() should return null", async () => {
   runRedis();
 
-  const lobby = {
-    id: "1",
-    name: "test",
-    owner: {},
-    players: [{}],
-  };
-
-  await pushLobby(lobby, "testSocketId");
-  expect(await getLobby("2")).toBe(undefined);
+  expect(await getLobby("222")).toBe(undefined);
 
   deleteKeyFromRedis("lobbies");
   quitRedis();

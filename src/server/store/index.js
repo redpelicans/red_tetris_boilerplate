@@ -19,27 +19,27 @@ export const deleteKeyFromRedis = async (key) => {
   redisClient.del(key);
 };
 
-export const getValueFromRedis = (message) => {
-  return new Promise((resolve, reject) => {
-    redisClient.get(message, (err, data) => {
-      if (err) reject(err);
-      /* Need to choose if we resolve data or object
-      else resolve({ message, data }); */ else
-        resolve(data);
-    });
-  });
-};
+// export const getValueFromRedis = (message) => {
+//   return new Promise((resolve, reject) => {
+//     redisClient.get(message, (err, data) => {
+//       if (err) reject(err);
+//       /* Need to choose if we resolve data or object
+//       else resolve({ message, data }); */ else
+//         resolve(data);
+//     });
+//   });
+// };
 
-export const getObjectFromRedis = (message) => {
-  return new Promise((resolve, reject) => {
-    redisClient.hgetall(message, (err, data) => {
-      if (err) reject(err);
-      /* Need to choose if we resolve data or object
-      else resolve({ message, data }); */ else
-        resolve(data);
-    });
-  });
-};
+// export const getObjectFromRedis = (message) => {
+//   return new Promise((resolve, reject) => {
+//     redisClient.hgetall(message, (err, data) => {
+//       if (err) reject(err);
+//       /* Need to choose if we resolve data or object
+//       else resolve({ message, data }); */ else
+//         resolve(data);
+//     });
+//   });
+// };
 
 export const getComplexObjectFromRedis = (message) => {
   return new Promise((resolve, reject) => {
@@ -52,21 +52,21 @@ export const getComplexObjectFromRedis = (message) => {
   });
 };
 
-export const setValueToRedis = (message, data) => {
-  return new Promise((resolve, reject) => {
-    redisClient.set(message, data, () => {
-      resolve(message);
-    });
-  });
-};
+// export const setValueToRedis = (message, data) => {
+//   return new Promise((resolve, reject) => {
+//     redisClient.set(message, data, () => {
+//       resolve(message);
+//     });
+//   });
+// };
 
-export const setObjectoToRedis = (message, data) => {
-  return new Promise((resolve, reject) => {
-    redisClient.hmset(message, data, () => {
-      resolve(message);
-    });
-  });
-};
+// export const setObjectoToRedis = (message, data) => {
+//   return new Promise((resolve, reject) => {
+//     redisClient.hmset(message, data, () => {
+//       resolve(message);
+//     });
+//   });
+// };
 
 export const setComplexObjectToRedis = (message, data) => {
   return new Promise((resolve, reject) => {

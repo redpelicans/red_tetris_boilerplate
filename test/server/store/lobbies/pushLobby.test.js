@@ -18,7 +18,7 @@ test("pushLobby() should return a Success response", async () => {
     players: [{}],
   };
 
-  expect(await pushLobby(lobby, "testSocketId")).toEqual(
+  expect(await pushLobby(lobby, "testSocketId12")).toEqual(
     Response.success(LOBBIES.ADD, lobby),
   );
 

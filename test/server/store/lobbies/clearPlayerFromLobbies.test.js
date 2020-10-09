@@ -3,15 +3,11 @@ import {
   quitRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
-  getComplexObjectFromRedis,
 } from "../../../../src/server/store";
-import Response from "models/response";
-import { LOBBIES } from "../../../../src/config/actions/lobbies";
-import { LOBBY } from "../../../../src/config/actions/lobby";
 
 import { clearPlayerFromLobbies } from "store/lobbies";
 
-test("clearPlayerFromLobbies() should return lobbyId", async () => {
+test("clearPlayerFromLobbies() should return lobbyId and get success from leaveLobby", async () => {
   runRedis();
 
   const lobbies = {
@@ -33,6 +29,33 @@ test("clearPlayerFromLobbies() should return lobbyId", async () => {
   await setComplexObjectToRedis("lobbies", lobbies);
 
   expect(await clearPlayerFromLobbies("1")).toEqual("1");
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
+});
+
+test("clearPlayerFromLobbies() should return null and get error from leaveLobby", async () => {
+  runRedis();
+
+  const lobbies = {
+    1: {
+      id: "1",
+      name: "test",
+      owner: { id: "2" },
+      maxPlayer: 4,
+      players: [{ id: "12" }],
+    },
+    2: {
+      id: "2",
+      name: "test2",
+      owner: { id: "5" },
+      maxPlayer: 4,
+      players: [{ id: "5" }],
+    },
+  };
+  await setComplexObjectToRedis("lobbies", lobbies);
+
+  expect(await clearPlayerFromLobbies("12")).toEqual(null);
 
   await deleteKeyFromRedis("lobbies");
   quitRedis();

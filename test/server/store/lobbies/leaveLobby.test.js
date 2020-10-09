@@ -6,7 +6,6 @@ import {
   getComplexObjectFromRedis,
 } from "../../../../src/server/store";
 import Response from "models/response";
-import { LOBBIES } from "../../../../src/config/actions/lobbies";
 import { LOBBY } from "../../../../src/config/actions/lobby";
 
 import { leaveLobby } from "store/lobbies";
