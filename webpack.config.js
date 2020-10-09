@@ -56,6 +56,10 @@ module.exports = () => {
           },
         },
         {
+          test: /\.worker\.js$/,
+          use: { loader: "worker-loader" },
+        },
+        {
           test: /\.html$/,
           include: path.resolve(__dirname, "public"),
           use: require.resolve("html-loader"),

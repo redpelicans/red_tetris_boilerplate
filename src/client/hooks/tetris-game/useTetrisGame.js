@@ -14,6 +14,7 @@ import {
 } from "constants/tetris";
 import useTetrisState from "./useTetrisState";
 import usePrevious from "hooks/usePrevious";
+import WorkerTimer from "./timer.worker.js";
 
 /*
  ** This custom hook is used to manage the game board.
@@ -28,6 +29,24 @@ function useTetrisGame(cols = 10, rows = 20) {
     setGameOver,
   } = useTetrisState();
   const autoMoveTimer = useAutoMove(gravity);
+
+  const [tick, setTick] = React.useState(0);
+
+  const [worker] = React.useState(new WorkerTimer());
+  React.useEffect(() => {
+    worker.postMessage({ type: "SET_TIMER", delay: gravityInterval });
+    worker.onmessage = ({ data }) => {
+      console.log(data);
+      setTick((oldTick) => oldTick + 1);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (!state.currentPiece.coord || isEmpty(state.currentPiece.shape)) {
+      return;
+    }
+    gravity();
+  }, [tick]);
 
   const previousY = usePrevious(state.currentPiece);
 
