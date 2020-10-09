@@ -4,7 +4,7 @@ import useGravity from "hooks/tetris-game/useGravity";
 import { GameContextProvider } from "store/layers/game";
 import { INTERVAL_MS } from "constants/tetris";
 
-describe("useAudio", () => {
+describe("useGravity", () => {
   const useContextStub = jest.spyOn(React, "useContext");
   const useMemoStub = jest.spyOn(React, "useMemo");
 
