@@ -5,15 +5,8 @@ import { isEmpty } from "helpers/common";
 import { divideBy } from "helpers/currying";
 import { GameContext } from "store";
 import { pullCurrentPiece, updateGrid, addScore } from "actions/game";
-import useAutoMove from "./useAutoMove";
-import {
-  INTERVAL_MS,
-  MOVE_LEFT,
-  MOVE_RIGHT,
-  KEYBOARD_ACTIONS,
-} from "constants/tetris";
+import { INTERVAL_MS, MOVE_LEFT, MOVE_RIGHT } from "./constants";
 import useTetrisState from "./useTetrisState";
-import usePrevious from "hooks/usePrevious";
 import WorkerTimer from "./timer.worker.js";
 
 /*
@@ -28,7 +21,6 @@ function useTetrisGame(cols = 10, rows = 20) {
     updateStateAfterBind,
     setGameOver,
   } = useTetrisState();
-  const autoMoveTimer = useAutoMove(gravity);
 
   const [tick, setTick] = React.useState(0);
 
@@ -47,8 +39,6 @@ function useTetrisGame(cols = 10, rows = 20) {
     }
     gravity();
   }, [tick]);
-
-  const previousY = usePrevious(state.currentPiece);
 
   const gravityInterval = React.useMemo(() => {
     const divideByThree = divideBy(3);
@@ -73,30 +63,6 @@ function useTetrisGame(cols = 10, rows = 20) {
       insertNewPiece(state.currentPiece);
     }
   }, [state.currentPiece.id]);
-
-  // Set a new Timer after each move
-  React.useEffect(() => {
-    if (!isEmpty(state.currentPiece.shape) && state.currentPiece.coord) {
-      if (
-        // state.currentPiece.coord.y > previousY?.coord?.y ||
-        // state.currentPiece.coord.y <= 0
-        autoMoveTimer.state === 0
-      ) {
-        autoMoveTimer.start(gravityInterval);
-
-        return () => {
-          console.log(autoMoveTimer.state);
-          if (
-            // (state.currentPiece.coord.y > previousY?.coord?.y ||
-            //   state.currentPiece.coord.y <= 0) &&
-            autoMoveTimer.state === 1
-          ) {
-            autoMoveTimer.stop();
-          }
-        };
-      }
-    }
-  }, [state.currentPiece.coord, state.currentPiece.shape]);
 
   // At start only
   React.useEffect(() => {
@@ -125,7 +91,6 @@ function useTetrisGame(cols = 10, rows = 20) {
       return;
     }
 
-    autoMoveTimer.pause();
     if (action.code === "ArrowDown") {
       doSoftDrop();
     } else if (action.code === "ArrowLeft") {
@@ -138,7 +103,6 @@ function useTetrisGame(cols = 10, rows = 20) {
     } else if (action.code === "Space") {
       doHardDrop();
     }
-    autoMoveTimer.resume();
   }
 
   function reallowAction() {
