@@ -24,14 +24,25 @@ function useTetrisGame(cols = 10, rows = 20) {
 
   const [tick, setTick] = React.useState(0);
 
-  const [worker] = React.useState(new WorkerTimer());
+  const worker = React.useRef();
   React.useEffect(() => {
-    worker.postMessage({ type: "SET_TIMER", delay: gravityInterval });
-    worker.onmessage = ({ data }) => {
+    worker.current = new WorkerTimer();
+    worker.current.onmessage = ({ data }) => {
       console.log(data);
       setTick((oldTick) => oldTick + 1);
     };
+
+    return () => {
+      worker.current.postMessage({ type: "STOP_TIMER" });
+      worker.current.terminate();
+    };
   }, []);
+
+  React.useEffect(() => {
+    if (state.alive === false) {
+      worker.current.postMessage({ type: "STOP_TIMER" });
+    }
+  }, [state.alive]);
 
   React.useEffect(() => {
     if (!state.currentPiece.coord || isEmpty(state.currentPiece.shape)) {
@@ -50,6 +61,11 @@ function useTetrisGame(cols = 10, rows = 20) {
 
     return interval;
   }, [state.level]);
+
+  React.useEffect(() => {
+    worker.current.postMessage({ type: "STOP_TIMER" });
+    worker.current.postMessage({ type: "SET_TIMER", delay: gravityInterval });
+  }, [gravityInterval]);
 
   // On component did mount
   React.useEffect(() => {
