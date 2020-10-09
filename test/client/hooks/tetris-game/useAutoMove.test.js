@@ -28,6 +28,8 @@ describe("useAutoMove", () => {
 
     jest.advanceTimersByTime(1000);
     expect(callback).toHaveBeenCalledTimes(2);
+
+    stop();
   });
 
   test("stop method should clear the timer", () => {
@@ -47,6 +49,8 @@ describe("useAutoMove", () => {
 
     jest.advanceTimersByTime(900);
     expect(callback).not.toHaveBeenCalled();
+
+    stop();
   });
 
   test("call start() twice must ignore second call", () => {
@@ -70,5 +74,7 @@ describe("useAutoMove", () => {
 
     jest.advanceTimersByTime(1000);
     expect(callback).toHaveBeenCalledTimes(1);
+
+    stop();
   });
 });
