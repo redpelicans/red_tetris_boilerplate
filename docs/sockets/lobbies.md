@@ -10,6 +10,7 @@ key value : lobby id
 ### **Server**
 
 `lobbies:publish`
+
 ```
 Send the actual state of lobbies to all subscribers of group 'group:lobbies'.
 ```

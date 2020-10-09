@@ -42,5 +42,3 @@ Ask server to delete player.
 Send : id
 Server will : delete the Object Player in players
 ```
-
-

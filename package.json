@@ -10,7 +10,9 @@
     "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
     "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
     "test": "jest --watch --notify",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "format": "prettier --write .",
+    "format-check": "prettier --check"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.11.5",

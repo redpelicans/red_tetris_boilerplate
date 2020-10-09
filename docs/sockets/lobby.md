@@ -27,6 +27,7 @@ Emit the actualized state of the Lobby.
 ```
 
 `lobby:ban`
+
 ```
 Emit a response with lobby:ban and the reason.
 ```
@@ -34,12 +35,14 @@ Emit a response with lobby:ban and the reason.
 ### **Client**
 
 `lobby:update`
+
 ```
 The owner change the current settings.
 Send : Objet Lobby, List playerId, userId
 ```
 
 `lobby:subscribe`
+
 ```
 Ask a subscription demand on 'group:lobby' to the server.
 Send : lobbyId, userId
@@ -47,6 +50,7 @@ Server will : add the player to the group 'group:lobbyid' and emit 'lobby:respon
 ```
 
 `lobby:unsubscribe`
+
 ```
 Ask an unsubscription demand on 'group:lobby' to the server.
 Send : lobbyId, userId
