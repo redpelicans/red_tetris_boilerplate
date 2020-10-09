@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - develop
+      - coverage-ci
   pull_request:
     branches:
       - master
@@ -24,3 +25,9 @@ jobs:
         run: npm install
       - name: Run tests
         run: npm run test-ci
+      - name: Run coverage
+        run: npm run coverage
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
