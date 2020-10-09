@@ -27,8 +27,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   const worker = React.useRef();
   React.useEffect(() => {
     worker.current = new WorkerTimer();
-    worker.current.onmessage = ({ data }) => {
-      console.log(data);
+    worker.current.onmessage = () => {
       setTick((oldTick) => oldTick + 1);
     };
 
