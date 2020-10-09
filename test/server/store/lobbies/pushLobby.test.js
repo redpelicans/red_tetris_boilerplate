@@ -1,8 +1,9 @@
-import runRedis, {
+import runRedis from "../../../../src/server/store";
+import {
   quitRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
-} from "store";
+} from "../../../../src/server/store";
 import Response from "models/response";
 import { LOBBIES } from "../../../../src/config/actions/lobbies";
 import { pushLobby } from "store/lobbies";

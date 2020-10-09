@@ -1,5 +1,10 @@
 import { getLobby, pushLobby } from "store/lobbies";
-import runRedis, { quitRedis, deleteKeyFromRedis } from "store";
+import runRedis from "../../../../src/server/store";
+import {
+  quitRedis,
+  deleteKeyFromRedis,
+  setComplexObjectToRedis,
+} from "../../../../src/server/store";
 
 test("getLobby() should return a Lobby", async () => {
   runRedis();
