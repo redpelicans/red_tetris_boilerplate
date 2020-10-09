@@ -1,4 +1,4 @@
-name: Build
+name: Build client
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - dev
 
 jobs:
-  build:
+  build-client:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,5 +22,5 @@ jobs:
           node-version: "13.8"
       - name: Install modules
         run: npm install
-      - name: Run build
-        run: npm run build
+      - name: Run build client
+        run: npm run client-dist
