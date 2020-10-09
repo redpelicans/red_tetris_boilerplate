@@ -15,7 +15,7 @@ import useAudio from "hooks/useAudio";
 
 export default function Game() {
   const { state, dispatch } = React.useContext(GameContext);
-  const { movePiece, reallowAction } = useTetrisGame(10, 20);
+  const { movePiece } = useTetrisGame(10, 20);
 
   const options = {
     volume: 0.2,
@@ -39,7 +39,6 @@ export default function Game() {
   // Add keyboard event
   const throttledMove = useThrottle(movePiece, DEFAULT_REPEAT_TIMEOUT);
   useEventListener("keydown", throttledMove);
-  useEventListener("keyup", reallowAction);
 
   return (
     <FlexBox

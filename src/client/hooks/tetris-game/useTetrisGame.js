@@ -83,8 +83,6 @@ function useTetrisGame(cols = 10, rows = 20) {
     return false;
   }
 
-  const [allowAction, setAllowAction] = React.useState(true);
-
   // Dispatcher to Tetris Actions
   function movePiece(action) {
     if (!state.alive) {
@@ -97,23 +95,20 @@ function useTetrisGame(cols = 10, rows = 20) {
       movePieceLateral(MOVE_LEFT);
     } else if (action.code === "ArrowRight") {
       movePieceLateral(MOVE_RIGHT);
-    } else if (action.code === "ArrowUp" && allowAction) {
-      setAllowAction(false);
+    } else if (action.code === "ArrowUp") {
       rotatePiece();
     } else if (action.code === "Space") {
       doHardDrop();
     }
   }
 
-  function reallowAction() {
-    setAllowAction(true);
-  }
-
   // Tetris Actions
   function movePieceLateral(direction) {
     const newObj = Piece.lateralMove(state.grid, state.currentPiece, direction);
 
-    updateStateAfterMove(newObj);
+    if (!isEmpty(newObj)) {
+      updateStateAfterMove(newObj);
+    }
   }
 
   function doHardDrop() {
@@ -149,10 +144,12 @@ function useTetrisGame(cols = 10, rows = 20) {
   function rotatePiece() {
     const newObj = Piece.rotation(state.currentPiece, state.grid);
 
-    updateStateAfterMove(newObj);
+    if (!isEmpty(newObj)) {
+      updateStateAfterMove(newObj);
+    }
   }
 
-  return { movePiece, reallowAction };
+  return { movePiece };
 }
 
 export default useTetrisGame;
