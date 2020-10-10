@@ -1,4 +1,4 @@
-import { bindEvent } from "helpers/socket";
+import { bindEvent } from "socket/helpers/socket";
 import { logerror, loginfo } from "utils/log";
 import socketIO from "socket.io";
 
@@ -18,10 +18,19 @@ const handlers = Object.values({
   ...disconnect,
 });
 
-const runSocketIo = (httpServer) => {
-  const io = socketIO(httpServer);
+export let io;
 
-  io.on("connection", async (socket) => {
+const runSocketIo = (httpServer) => {
+  io = socketIO(httpServer);
+  setupSocketIo(io);
+};
+
+export const setIo = (testio) => {
+  io = testio;
+};
+
+export const setupSocketIo = (ioToSetup) => {
+  ioToSetup.on("connection", async (socket) => {
     loginfo("A new socket has connected!");
 
     /* Test on reconnect */

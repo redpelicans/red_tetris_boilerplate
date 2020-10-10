@@ -1,10 +1,10 @@
-import { getPlayer, pushPlayer } from "store/players";
+import { getPlayer, pushPlayer } from "storage/players";
 import {
   quitRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
-} from "../../../../src/server/store";
-import runRedis from "../../../../src/server/store";
+} from "storage";
+import runRedis from "storage";
 
 test("getPlayer() should return undefined", async () => {
   runRedis();

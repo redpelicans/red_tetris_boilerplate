@@ -1,7 +1,7 @@
 import { LOBBIES } from "../../config/actions/lobbies";
 import { LOBBY } from "../../config/actions/lobby";
 
-import { getComplexObjectFromRedis, setComplexObjectToRedis } from "../store";
+import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
 import Response from "models/response";
 
 export const getLobby = async (id) => {

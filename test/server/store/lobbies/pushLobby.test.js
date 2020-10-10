@@ -1,12 +1,12 @@
-import runRedis from "../../../../src/server/store";
+import runRedis from "storage";
 import {
   quitRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
-} from "../../../../src/server/store";
+} from "storage";
 import Response from "models/response";
 import { LOBBIES } from "../../../../src/config/actions/lobbies";
-import { pushLobby } from "store/lobbies";
+import { pushLobby } from "storage/lobbies";
 
 test("pushLobby() should return a Success response", async () => {
   runRedis();

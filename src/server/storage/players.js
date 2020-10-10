@@ -1,4 +1,4 @@
-import { getComplexObjectFromRedis, setComplexObjectToRedis } from "../store";
+import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
 import Response from "models/response";
 import { PLAYER } from "../../config/actions/player";
 

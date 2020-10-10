@@ -1,7 +1,8 @@
 import runHttpServer from "httpserver";
-import runSocketIo from "socket";
-import runRedis from "store";
+import runSocketIo, { setupSocketIo } from "socket";
+import runRedis from "storage";
 
 runRedis();
 const httpServer = runHttpServer();
-export const io = runSocketIo(httpServer);
+runSocketIo(httpServer);
+// setupSocketIo();

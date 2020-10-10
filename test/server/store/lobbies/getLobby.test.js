@@ -1,6 +1,6 @@
-import { getLobby, pushLobby } from "store/lobbies";
-import runRedis from "../../../../src/server/store";
-import { quitRedis, deleteKeyFromRedis } from "../../../../src/server/store";
+import { getLobby, pushLobby } from "storage/lobbies";
+import runRedis from "storage";
+import { quitRedis, deleteKeyFromRedis } from "storage";
 
 test("getLobby() should return undefined", async () => {
   runRedis();

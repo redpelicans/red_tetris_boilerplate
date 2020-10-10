@@ -1,11 +1,11 @@
-import runRedis from "../../../../src/server/store";
+import runRedis from "storage";
 import {
   quitRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
-} from "../../../../src/server/store";
+} from "storage";
 
-import { clearPlayerFromLobbies } from "store/lobbies";
+import { clearPlayerFromLobbies } from "storage/lobbies";
 
 test("clearPlayerFromLobbies() should return lobbyId and get success from leaveLobby", async () => {
   runRedis();

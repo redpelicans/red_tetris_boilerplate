@@ -1,10 +1,10 @@
-import { getPlayerId, pushPlayer } from "store/players";
+import { getPlayerId, pushPlayer } from "storage/players";
 import {
   quitRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
-} from "../../../../src/server/store";
-import runRedis from "../../../../src/server/store";
+} from "storage";
+import runRedis from "storage";
 
 test("getPlayerId() should return null", async () => {
   runRedis();

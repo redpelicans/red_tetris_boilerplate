@@ -1,14 +1,14 @@
-import runRedis from "../../../../src/server/store";
+import runRedis from "storage";
 import {
   quitRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
   getComplexObjectFromRedis,
-} from "../../../../src/server/store";
+} from "storage";
 import Response from "models/response";
 import { LOBBY } from "../../../../src/config/actions/lobby";
 
-import { leaveLobby } from "store/lobbies";
+import { leaveLobby } from "storage/lobbies";
 
 test("leaveLobby() should return a Success response", async () => {
   runRedis();

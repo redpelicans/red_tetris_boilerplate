@@ -6,7 +6,6 @@ import params from "../../config/params/params";
 
 const app = express();
 const httpServer = http.createServer(app);
-
 const runHttpServer = () => {
   /* To check and remove if not needed */
   const file =

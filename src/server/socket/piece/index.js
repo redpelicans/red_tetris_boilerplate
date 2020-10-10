@@ -1,4 +1,4 @@
-import { createEvent } from "helpers/socket";
+import { createEvent } from "socket/helpers/socket";
 import { validationGetPiece } from "socket/piece/schemas";
 import { handlerGetPiece } from "socket/piece/handlers";
 import { PIECE } from "./../../../config/actions/piece";

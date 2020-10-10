@@ -1,11 +1,11 @@
-import { popPlayer } from "store/players";
+import { popPlayer } from "storage/players";
 import {
   quitRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
   getComplexObjectFromRedis,
-} from "../../../../src/server/store";
-import runRedis from "../../../../src/server/store";
+} from "storage";
+import runRedis from "storage";
 import Response from "models/response";
 import { PLAYER } from "../../../../src/config/actions/player";
 

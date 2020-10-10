@@ -1,6 +1,6 @@
 import Player from "models/player";
 import { loginfo } from "utils/log";
-import { pushPlayer } from "store/players";
+import { pushPlayer } from "storage/players";
 import { PLAYER } from "./../../../config/actions/player";
 import eventEmitter from "listeners";
 import event from "listeners/events";
