@@ -8,6 +8,7 @@ import * as lobbies from "socket/lobbies";
 import * as lobby from "socket/lobby";
 import * as message from "socket/message";
 import * as disconnect from "socket/disconnect";
+import { resolveConfig } from "prettier";
 
 const handlers = Object.values({
   ...piece,
@@ -22,15 +23,8 @@ export let io;
 
 const runSocketIo = (httpServer) => {
   io = socketIO(httpServer);
-  setupSocketIo(io);
-};
 
-export const setIo = (testio) => {
-  io = testio;
-};
-
-export const setupSocketIo = (ioToSetup) => {
-  ioToSetup.on("connection", async (socket) => {
+  io.on("connection", async (socket) => {
     loginfo("A new socket has connected!");
 
     /* Test on reconnect */
@@ -42,9 +36,16 @@ export const setupSocketIo = (ioToSetup) => {
       bindEvent(socket, handler);
     });
   });
+  loginfo("SocketIO initialized");
+};
 
-  loginfo("Sockets have been initialized!");
-  return io;
+export const quitSocketIo = () => {
+  return new Promise((resolve, reject) => {
+    io.close(() => resolve());
+    setTimeout(() => {
+      reject(new Error("Failed to quit SocketIo wihtin 5 seconds."));
+    }, 5000);
+  });
 };
 
 export default runSocketIo;

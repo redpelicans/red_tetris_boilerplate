@@ -1,54 +1,76 @@
-import SocketMock from "socket.io-mock";
-import { bindEvent } from "socket/helpers/socket";
-import runRedis from "storage";
+import runServer, { killServer } from "run";
+import socketIOClient from "socket.io-client";
+import { getPlayerId } from "../../../src/server/storage/players";
 
-import * as piece from "socket/piece";
-import * as player from "socket/player";
-import * as lobbies from "socket/lobbies";
-import * as lobby from "socket/lobby";
-import * as message from "socket/message";
-import * as disconnect from "socket/disconnect";
-const handlers = Object.values({
-  ...piece,
-  ...player,
-  ...lobbies,
-  ...lobby,
-  ...message,
-  ...disconnect,
-});
-
-let socket;
+let socketClient;
 
 beforeAll((done) => {
-  runRedis();
-  socket = new SocketMock();
+  socketClient = socketIOClient("http://0.0.0.0:3004");
+  runServer().then(() => done());
+});
 
-  handlers.forEach((handler) => {
-    bindEvent(socket, handler);
-  });
+afterAll(async (done) => {
+  socketClient.close();
   done();
+  // killServer().then(() => done());
 });
 
 describe("basic socket.io example", () => {
   test("Should create a player", (done) => {
-    socket.socketClient.on("player:response", (message) => {
-      expect(message.type).toBe("success");
+    socketClient.on("player:response", (response) => {
+      expect(response.type).toBe("success");
       done();
     });
-    socket.socketClient.emit("player:create", "nico");
+    socketClient.emit("player:create", "nico");
   });
-  //   test("Should create a player", (done) => {
-  //     socket.socketClient.on("player:response", (message) => {
-  //       expect(message.type).toBe("error");
-  //       done();
-  //     });
-  //     socket.socketClient.emit("player:create", "nico");
-  //   });
-  test("Should get new pieces", (done) => {
-    socket.socketClient.on("piece:send", (message) => {
-      expect(message.length).toEqual(3);
+
+  test("Should get lobbies", (done) => {
+    socketClient.on("lobbies:publish", (response) => {
+      // expect(response).toBe(null);
       done();
     });
-    socket.socketClient.emit("piece:get", { nb: 3 });
+    socketClient.emit("lobbies:subscribe");
+  });
+
+  test("Should create lobby", (done) => {
+    socketClient.on("lobbies:response", (response) => {
+      expect(response.type).toBe("success");
+      done();
+    });
+    socketClient.emit("lobbies:add", {
+      hash: "hash",
+      name: "name",
+      maxPlayer: 4,
+      owner: { name: "nico" },
+    });
+  });
+
+  test("Should join lobby", async (done) => {
+    socketClient.on("lobby:response", (response) => {
+      // expect(response.type).toBe("success");
+      done();
+    });
+    const playerId = await getPlayerId(socketClient.id);
+    socketClient.emit("lobby:subscribe", {
+      playerId: playerId,
+      lobbyId: "12",
+    });
+  });
+
+  test("Should send message", (done) => {
+    // socketClient.on("lobbies:publish", (response) => {
+    // expect(response).toBe(null);
+    // done();
+    // });
+    socketClient.emit("message:send");
+    done();
+  });
+
+  test("Should get new pieces", (done) => {
+    socketClient.on("piece:send", (response) => {
+      expect(response.length).toEqual(3);
+      done();
+    });
+    socketClient.emit("piece:get", { nb: 3 });
   });
 });

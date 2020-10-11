@@ -1,8 +1,5 @@
-import runHttpServer from "httpserver";
-import runSocketIo, { setupSocketIo } from "socket";
-import runRedis from "storage";
+import runServer from "run";
+import { logerror, loginfo } from "utils/log";
+import { io } from "socket";
 
-runRedis();
-const httpServer = runHttpServer();
-runSocketIo(httpServer);
-// setupSocketIo();
+runServer().then(() => loginfo("Redis server is ready to play!"));
