@@ -1,25 +1,15 @@
-import redismock from "redis-mock";
+import runRedis from "storage";
 import {
-  setRedis,
   quitRedis,
-  setComplexObjectToRedis,
   deleteKeyFromRedis,
+  setComplexObjectToRedis,
 } from "storage";
+
 import { clearPlayerFromLobbies } from "storage/lobbies";
 
-beforeAll(() => {
-  setRedis(redismock.createClient());
-});
-
-afterAll(() => {
-  quitRedis();
-});
-
-beforeEach(() => {
-  deleteKeyFromRedis("lobbies");
-});
-
 test("clearPlayerFromLobbies() should return lobbyId and get success from leaveLobby", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -39,9 +29,14 @@ test("clearPlayerFromLobbies() should return lobbyId and get success from leaveL
   await setComplexObjectToRedis("lobbies", lobbies);
 
   expect(await clearPlayerFromLobbies("1")).toEqual("1");
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("clearPlayerFromLobbies() should return null and get error from leaveLobby", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -61,9 +56,14 @@ test("clearPlayerFromLobbies() should return null and get error from leaveLobby"
   await setComplexObjectToRedis("lobbies", lobbies);
 
   expect(await clearPlayerFromLobbies("12")).toEqual(null);
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("clearPlayerFromLobbies() should return null", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -83,8 +83,16 @@ test("clearPlayerFromLobbies() should return null", async () => {
   await setComplexObjectToRedis("lobbies", lobbies);
 
   expect(await clearPlayerFromLobbies("12")).toEqual(null);
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("clearPlayerFromLobby() should return null no lobbies", async () => {
+  runRedis();
+
   expect(await clearPlayerFromLobbies("6")).toEqual(null);
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });

@@ -1,27 +1,16 @@
-import redismock from "redis-mock";
 import { pushPlayer } from "storage/players";
 import {
   quitRedis,
+  deleteKeyFromRedis,
   setComplexObjectToRedis,
   setRedis,
-  deleteKeyFromRedis,
 } from "storage";
 import Response from "models/response";
 import { PLAYER } from "../../../../src/config/actions/player";
-
-beforeAll(() => {
-  setRedis(redismock.createClient());
-});
-
-afterAll(() => {
-  quitRedis();
-});
-
-beforeEach(() => {
-  deleteKeyFromRedis("players");
-});
+import runRedis from "../../../../src/server/storage";
 
 test("pushPlayer() should return a Success response", async () => {
+  await runRedis();
   const player = {
     id: "4",
     name: "test4",
@@ -31,9 +20,13 @@ test("pushPlayer() should return a Success response", async () => {
   expect(await pushPlayer(player)).toEqual(
     Response.success(PLAYER.CREATE, player),
   );
+
+  await deleteKeyFromRedis("players");
+  quitRedis();
 });
 
 test("pushPlayer() should return an Error response `Invalid username`", async () => {
+  await runRedis();
   const player = {
     id: "4",
     name: "test4?",
@@ -58,9 +51,13 @@ test("pushPlayer() should return an Error response `Invalid username`", async ()
   expect(await pushPlayer(player)).toEqual(
     Response.error(PLAYER.CREATE, "Invalid username!"),
   );
+
+  await deleteKeyFromRedis("players");
+  quitRedis();
 });
 
 test("pushPlayer() should return an Error response `Username already exists!`", async () => {
+  await runRedis();
   const players = {
     5: {
       id: "5",
@@ -84,4 +81,7 @@ test("pushPlayer() should return an Error response `Username already exists!`", 
   expect(await pushPlayer(player, "si6")).toEqual(
     Response.error(PLAYER.CREATE, "Username already exists!"),
   );
+
+  await deleteKeyFromRedis("players");
+  quitRedis();
 });

@@ -9,7 +9,7 @@ const runServer = async () => {
 };
 
 export const killServer = async () => {
-  // quitRedis();
+  quitRedis();
   await quitSocketIo();
   await quitHttpServer();
 };

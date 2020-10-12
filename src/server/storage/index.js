@@ -17,9 +17,14 @@ const runRedis = () => {
   });
 };
 
+export const setRedis = (redis) => {
+  redisClient = redis;
+};
+
 export const quitRedis = () => {
   // should we need to wait for callback?
   redisClient.quit();
+  // redisClient.end();
 };
 
 export const deleteKeyFromRedis = async (key) => {

@@ -1,26 +1,17 @@
-import redismock from "redis-mock";
 import { popPlayer } from "storage/players";
 import {
   quitRedis,
-  setRedis,
   deleteKeyFromRedis,
   setComplexObjectToRedis,
   getComplexObjectFromRedis,
 } from "storage";
-
-beforeAll(() => {
-  setRedis(redismock.createClient());
-});
-
-afterAll(() => {
-  quitRedis();
-});
-
-beforeEach(() => {
-  deleteKeyFromRedis("players");
-});
+import runRedis from "storage";
+import Response from "models/response";
+import { PLAYER } from "../../../../src/config/actions/player";
 
 test("popPlayer() should pop", async () => {
+  await runRedis();
+
   const players = {
     7: {
       id: "7",
@@ -39,8 +30,16 @@ test("popPlayer() should pop", async () => {
   const playersFinal = await getComplexObjectFromRedis("players");
 
   expect(playersFinal["8"]).toEqual(undefined);
+
+  await deleteKeyFromRedis("players");
+  quitRedis();
 });
 
 test("popPlayer() should return null", async () => {
+  await runRedis();
+
   expect(await popPlayer("1")).toEqual(null);
+
+  await deleteKeyFromRedis("players");
+  quitRedis();
 });

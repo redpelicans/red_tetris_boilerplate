@@ -1,24 +1,18 @@
-import redismock from "redis-mock";
 import { getLobby, pushLobby } from "storage/lobbies";
-import { quitRedis, setRedis, deleteKeyFromRedis } from "storage";
+import runRedis from "storage";
+import { quitRedis, deleteKeyFromRedis } from "storage";
 
-beforeAll(() => {
-  setRedis(redismock.createClient());
-});
+test("getLobby() should return undefined", async () => {
+  runRedis();
 
-afterAll(() => {
+  expect(await getLobby("56")).toEqual(undefined);
+
   quitRedis();
 });
 
-beforeEach(() => {
-  deleteKeyFromRedis("lobbies");
-});
-
-test("getLobby() should return undefined", async () => {
-  expect(await getLobby("56")).toEqual(undefined);
-});
-
 test("getLobby() should return a Lobby", async () => {
+  runRedis();
+
   const lobby = {
     id: "1",
     name: "test",
@@ -28,8 +22,16 @@ test("getLobby() should return a Lobby", async () => {
 
   await pushLobby(lobby, "testSocketId");
   expect(await getLobby("1")).toEqual(lobby);
+
+  deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("getLobby() should return null", async () => {
+  runRedis();
+
   expect(await getLobby("222")).toBe(undefined);
+
+  deleteKeyFromRedis("lobbies");
+  quitRedis();
 });

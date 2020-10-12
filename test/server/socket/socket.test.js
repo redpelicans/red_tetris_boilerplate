@@ -1,21 +1,44 @@
 import runServer, { killServer } from "run";
 import socketIOClient from "socket.io-client";
+import {
+  quitRedis,
+  setComplexObjectToRedis,
+  setRedis,
+  deleteKeyFromRedis,
+} from "storage";
 import { getPlayerId } from "../../../src/server/storage/players";
+import runHttpServer, { quitHttpServer } from "httpserver";
+import runSocketIo, { quitSocketIo } from "socket";
+import redismock from "redis-mock";
 
 let socketClient;
 
 beforeAll((done) => {
+  runHttpServer().then((httpServer) => runSocketIo(httpServer));
+  setRedis(redismock.createClient());
   socketClient = socketIOClient("http://0.0.0.0:3004");
-  runServer().then(() => done());
+  done();
 });
 
 afterAll(async (done) => {
+  quitRedis();
   socketClient.close();
+  await quitSocketIo();
+  await quitHttpServer();
   done();
-  // killServer().then(() => done());
 });
 
-describe("basic socket.io example", () => {
+beforeEach(() => {
+  // socketClient = socketIOClient("http://0.0.0.0:3004");
+  // deleteKeyFromRedis("lobbies");
+  // deleteKeyFromRedis("players");
+});
+
+afterEach(() => {
+  // socketClient.close();
+});
+
+describe("Socket tests", () => {
   test("Should create a player", (done) => {
     socketClient.on("player:response", (response) => {
       expect(response.type).toBe("success");

@@ -1,27 +1,16 @@
-import redismock from "redis-mock";
+import runRedis from "storage";
 import {
-  setRedis,
   quitRedis,
-  setComplexObjectToRedis,
   deleteKeyFromRedis,
+  setComplexObjectToRedis,
 } from "storage";
 import Response from "models/response";
 import { LOBBIES } from "../../../../src/config/actions/lobbies";
 import { pushLobby } from "storage/lobbies";
 
-beforeAll(() => {
-  setRedis(redismock.createClient());
-});
-
-afterAll(() => {
-  quitRedis();
-});
-
-beforeEach(() => {
-  deleteKeyFromRedis("lobbies");
-});
-
 test("pushLobby() should return a Success response", async () => {
+  runRedis();
+
   const lobby = {
     id: "123",
     name: "123",
@@ -32,9 +21,14 @@ test("pushLobby() should return a Success response", async () => {
   expect(await pushLobby(lobby, "testSocketId12")).toEqual(
     Response.success(LOBBIES.ADD, lobby),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("pushLobby() should return an Error `already on another lobby` response", async () => {
+  runRedis();
+
   const lobby = {
     id: "2",
     name: "test2",
@@ -55,9 +49,14 @@ test("pushLobby() should return an Error `already on another lobby` response", a
   expect(await pushLobby(lobby, "testSocketId")).toEqual(
     Response.error(LOBBIES.ADD, "You already have an active lobby !"),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("pushLobby() should return an Error `lobbyName not available` response", async () => {
+  runRedis();
+
   const lobby = {
     id: "2",
     name: "test",
@@ -78,4 +77,7 @@ test("pushLobby() should return an Error `lobbyName not available` response", as
   expect(await pushLobby(lobby, "testSocketId")).toEqual(
     Response.error(LOBBIES.ADD, "lobbyName is not available!"),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });

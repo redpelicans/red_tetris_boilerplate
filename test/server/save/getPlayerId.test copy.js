@@ -1,29 +1,22 @@
-import redismock from "redis-mock";
-import { getPlayerId } from "storage/players";
+import { getPlayerId, pushPlayer } from "storage/players";
 import {
-  setRedis,
   quitRedis,
-  setComplexObjectToRedis,
   deleteKeyFromRedis,
+  setComplexObjectToRedis,
 } from "storage";
+import runRedis from "storage";
 
-beforeAll(() => {
-  setRedis(redismock.createClient());
-});
+test("getPlayerId() should return null", async () => {
+  await runRedis();
 
-afterAll(() => {
+  expect(await getPlayerId("56")).toEqual(null);
+
   quitRedis();
 });
 
-beforeEach(() => {
-  deleteKeyFromRedis("players");
-});
-
-test("getPlayerId() should return null", async () => {
-  expect(await getPlayerId("56")).toEqual(null);
-});
-
 test("getPlayerId() should return a Player", async () => {
+  await runRedis();
+
   const players = {
     2: {
       id: "2",
@@ -39,4 +32,7 @@ test("getPlayerId() should return a Player", async () => {
   await setComplexObjectToRedis("players", players);
 
   expect(await getPlayerId("si2")).toEqual("2");
+
+  deleteKeyFromRedis("players");
+  quitRedis();
 });

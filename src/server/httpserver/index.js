@@ -5,7 +5,7 @@ import path from "path";
 import params from "../../config/params/params";
 
 const app = express();
-const httpServer = http.createServer(app);
+export const httpServer = http.createServer(app);
 
 const runHttpServer = () => {
   return new Promise((resolve, reject) => {

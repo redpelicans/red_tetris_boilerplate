@@ -1,27 +1,17 @@
-import redismock from "redis-mock";
+import runRedis from "storage";
 import {
-  setRedis,
   quitRedis,
-  setComplexObjectToRedis,
   deleteKeyFromRedis,
+  setComplexObjectToRedis,
 } from "storage";
 import Response from "models/response";
 import { LOBBY } from "../../../../src/config/actions/lobby";
+
 import { joinLobby } from "storage/lobbies";
 
-beforeAll(() => {
-  setRedis(redismock.createClient());
-});
-
-afterAll(() => {
-  quitRedis();
-});
-
-beforeEach(() => {
-  deleteKeyFromRedis("lobbies");
-});
-
 test("joinLobby() should return a Success response", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -57,9 +47,14 @@ test("joinLobby() should return a Success response", async () => {
   expect(await joinLobby(player, "1")).toEqual(
     Response.success(LOBBY.SUBSCRIBE, lobbytest),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("joinLobby() should return an Error response `you already are in another lobby`", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -87,9 +82,14 @@ test("joinLobby() should return an Error response `you already are in another lo
   expect(await joinLobby(player, "1")).toEqual(
     Response.error(LOBBY.SUBSCRIBE, "You already are in another lobby!"),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("joinLobby() should return an Error response `Lobby doesn't exists!`", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -117,9 +117,14 @@ test("joinLobby() should return an Error response `Lobby doesn't exists!`", asyn
   expect(await joinLobby(player, "3")).toEqual(
     Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!"),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("joinLobby() should return an Error response `The lobby is full!`", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -147,9 +152,14 @@ test("joinLobby() should return an Error response `The lobby is full!`", async (
   expect(await joinLobby(player, "1")).toEqual(
     Response.error(LOBBY.SUBSCRIBE, "The lobby is full!"),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("joinLobby() should return Error response `lobby doesn't exists` no lobbies", async () => {
+  runRedis();
+
   const player = {
     id: "123",
     name: "123",
@@ -159,4 +169,7 @@ test("joinLobby() should return Error response `lobby doesn't exists` no lobbies
   expect(await joinLobby(player, "1")).toEqual(
     Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!"),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });

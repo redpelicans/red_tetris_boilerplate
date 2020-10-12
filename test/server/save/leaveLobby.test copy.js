@@ -1,28 +1,18 @@
-import redismock from "redis-mock";
+import runRedis from "storage";
 import {
   quitRedis,
-  setRedis,
+  deleteKeyFromRedis,
   setComplexObjectToRedis,
   getComplexObjectFromRedis,
-  deleteKeyFromRedis,
 } from "storage";
 import Response from "models/response";
 import { LOBBY } from "../../../../src/config/actions/lobby";
+
 import { leaveLobby } from "storage/lobbies";
 
-beforeAll(() => {
-  setRedis(redismock.createClient());
-});
-
-afterAll(() => {
-  quitRedis();
-});
-
-beforeEach(() => {
-  deleteKeyFromRedis("lobbies");
-});
-
 test("leaveLobby() should return a Success response", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -44,9 +34,14 @@ test("leaveLobby() should return a Success response", async () => {
   expect(await leaveLobby("1", "1")).toEqual(
     Response.success(LOBBY.UNSUBSCRIBE, {}),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("leaveLobby() should return an Error response `Lobby doesn't exists`", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -68,9 +63,14 @@ test("leaveLobby() should return an Error response `Lobby doesn't exists`", asyn
   expect(await leaveLobby("1", "3")).toEqual(
     Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!"),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("leaveLobby() should return a Success response and remove lobby", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -92,9 +92,14 @@ test("leaveLobby() should return a Success response and remove lobby", async () 
   expect(await leaveLobby("5", "2")).toEqual(
     Response.success(LOBBY.UNSUBSCRIBE, {}),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("leaveLobby() should return an Error response `last but not owner`", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -119,9 +124,14 @@ test("leaveLobby() should return an Error response `last but not owner`", async 
       "You are the last player but not the owner there is a problem!",
     ),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("leaveLobby() should return a Success response and change owner", async () => {
+  runRedis();
+
   const lobbies = {
     1: {
       id: "1",
@@ -150,9 +160,14 @@ test("leaveLobby() should return a Success response and change owner", async () 
 
   const lobbiesFinal = await getComplexObjectFromRedis("lobbies", lobbies);
   expect(lobbiesFinal[2].owner.id).toEqual("5");
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
 
 test("leaveLobby() should return Error response `lobby doesn't exists` no lobbies", async () => {
+  runRedis();
+
   const player = {
     id: "123",
     name: "123",
@@ -162,4 +177,7 @@ test("leaveLobby() should return Error response `lobby doesn't exists` no lobbie
   expect(await leaveLobby("6", "2")).toEqual(
     Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!"),
   );
+
+  await deleteKeyFromRedis("lobbies");
+  quitRedis();
 });
