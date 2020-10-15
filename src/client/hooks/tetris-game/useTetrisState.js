@@ -4,7 +4,6 @@ import { GameContext } from "store";
 import {
   pullCurrentPiece,
   updateCurrentPiece,
-  updateGrid,
   setPlayerIsAlive,
   addScore,
   inscreaseRowsRemoved,
