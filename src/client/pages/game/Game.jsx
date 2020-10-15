@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { useTetrisGame } from "hooks";
+import { useTetrisGame, useNewGrid } from "hooks";
 import { Link } from "react-router-dom";
 import { GameContext } from "store";
 import NextPieces from "./NextPieces";
@@ -15,7 +15,9 @@ import useAudio from "hooks/useAudio";
 
 export default function Game() {
   const { state, dispatch } = React.useContext(GameContext);
-  const { movePiece } = useTetrisGame(10, 20);
+  const initGrid = useNewGrid(10, 20);
+  const [grid, setGrid] = React.useState(initGrid);
+  const { movePiece } = useTetrisGame(grid, setGrid);
 
   const options = {
     volume: 0.2,
@@ -60,7 +62,7 @@ export default function Game() {
           width={64}
           className="justify-center align-center"
         >
-          <TetrisGrid grid={state.grid} rowHeight={6} colHeight={6} />
+          <TetrisGrid grid={grid} rowHeight={6} colHeight={6} />
         </FlexBox>
         <FlexBox direction="col" className="items-center mx-4">
           <Timer />

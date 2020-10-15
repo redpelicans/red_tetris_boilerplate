@@ -9,23 +9,20 @@ import useTetrisState from "./useTetrisState";
 import WorkerTimer from "worker/timer.worker.js";
 import useWorker from "hooks/useWorker";
 import useGravity from "./useGravity";
-import useNewGrid from "./useNewGrid";
 
 /*
  ** This custom hook is used to manage the game board.
  ** It exposed the following:
  **  - movePiece: A dispatcher to all possible actions;
  */
-function useTetrisGame(cols = 10, rows = 20) {
+function useTetrisGame(grid, setGrid) {
   const { state, dispatch } = React.useContext(GameContext);
-
-  useNewGrid(cols, rows);
 
   const {
     updateStateAfterMove,
     updateStateAfterBind,
     setGameOver,
-  } = useTetrisState();
+  } = useTetrisState(setGrid);
 
   const gravityInterval = useGravity();
 
@@ -55,7 +52,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   // On new piece
   React.useEffect(() => {
     if (!isEmpty(state.currentPiece.shape)) {
-      insertNewPiece(state.currentPiece);
+      insertNewPiece(state.currentPiece, grid);
     }
   }, [state.currentPiece.id]);
 
@@ -67,7 +64,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   }, [state.nextPieces]);
 
   // Methods
-  function insertNewPiece(piece, grid = state.grid) {
+  function insertNewPiece(piece, grid = grid) {
     const newObj = Piece.insertion(piece, grid);
     if (newObj) {
       updateStateAfterMove(newObj);
@@ -102,7 +99,7 @@ function useTetrisGame(cols = 10, rows = 20) {
 
   // Tetris Actions
   function movePieceLateral(direction) {
-    const newObj = Piece.lateralMove(state.grid, state.currentPiece, direction);
+    const newObj = Piece.lateralMove(grid, state.currentPiece, direction);
 
     if (!isEmpty(newObj)) {
       updateStateAfterMove(newObj);
@@ -110,7 +107,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   }
 
   function doHardDrop() {
-    const newObj = Piece.hardDrop(state.grid, state.currentPiece);
+    const newObj = Piece.hardDrop(grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
       setGameOver(null);
@@ -128,10 +125,10 @@ function useTetrisGame(cols = 10, rows = 20) {
   }
 
   function gravity() {
-    let newObj = Piece.softDrop(state.grid, state.currentPiece);
+    let newObj = Piece.softDrop(grid, state.currentPiece);
 
     if (isEmpty(newObj)) {
-      newObj = Grid.bind(state.grid, state.currentPiece);
+      newObj = Grid.bind(grid, state.currentPiece);
       updateStateAfterBind(newObj);
       return false;
     }
@@ -140,7 +137,7 @@ function useTetrisGame(cols = 10, rows = 20) {
   }
 
   function rotatePiece() {
-    const newObj = Piece.rotation(state.currentPiece, state.grid);
+    const newObj = Piece.rotation(state.currentPiece, grid);
 
     if (!isEmpty(newObj)) {
       updateStateAfterMove(newObj);
