@@ -17,6 +17,7 @@ import useGravity from "./useGravity";
  */
 function useTetrisGame(grid, setGrid) {
   const { state, dispatch } = React.useContext(GameContext);
+  const [coord, setCoord] = React.useState(null);
 
   const {
     updateStateAfterMove,
@@ -26,7 +27,7 @@ function useTetrisGame(grid, setGrid) {
 
   const gravityInterval = useGravity();
 
-  const handleMessage = React.useCallback(() => {
+  const handleTimerWorkerMessage = React.useCallback(() => {
     if (!state.currentPiece.coord || isEmpty(state.currentPiece.shape)) {
       return;
     }
@@ -34,20 +35,20 @@ function useTetrisGame(grid, setGrid) {
     gravity();
   }, [state.currentPiece.coord, state.currentPiece.shape]);
 
-  const worker = useWorker(WorkerTimer, handleMessage);
+  const timerWorker = useWorker(WorkerTimer, handleTimerWorkerMessage);
 
   React.useEffect(() => {
     if (state.alive === false) {
-      worker.postMessage({ type: "STOP_TIMER" });
+      timerWorker.postMessage({ type: "STOP_TIMER" });
     }
   }, [state.alive]);
 
   React.useEffect(() => {
-    if (worker) {
-      worker.postMessage({ type: "STOP_TIMER" });
-      worker.postMessage({ type: "SET_TIMER", delay: gravityInterval });
+    if (timerWorker) {
+      timerWorker.postMessage({ type: "STOP_TIMER" });
+      timerWorker.postMessage({ type: "SET_TIMER", delay: gravityInterval });
     }
-  }, [gravityInterval, worker]);
+  }, [gravityInterval, timerWorker]);
 
   // On new piece
   React.useEffect(() => {
@@ -67,6 +68,7 @@ function useTetrisGame(grid, setGrid) {
   function insertNewPiece(piece, grid = grid) {
     const newObj = Piece.insertion(piece, grid);
     if (newObj) {
+      setCoord(newObj[1].coord);
       updateStateAfterMove(newObj);
       return true;
     }
@@ -99,10 +101,24 @@ function useTetrisGame(grid, setGrid) {
 
   // Tetris Actions
   function movePieceLateral(direction) {
-    const newObj = Piece.lateralMove(grid, state.currentPiece, direction);
+    let newPiece = null;
+    const cleanGrid = Grid.clear(grid);
 
-    if (!isEmpty(newObj)) {
-      updateStateAfterMove(newObj);
+    setCoord((oldCoord) => {
+      newPiece = {
+        ...state.currentPiece,
+        coord: { ...oldCoord, x: oldCoord.x + direction },
+      };
+      if (canMove(cleanGrid, newPiece)) {
+        return newPiece.coord;
+      }
+      newPiece = null;
+      return oldCoord;
+    });
+
+    if (newPiece !== null) {
+      const newGrid = Piece.lateralMove(cleanGrid, newPiece);
+      updateStateAfterMove([newGrid, newPiece]);
     }
   }
 
@@ -125,14 +141,28 @@ function useTetrisGame(grid, setGrid) {
   }
 
   function gravity() {
-    let newObj = Piece.softDrop(grid, state.currentPiece);
+    let newPiece = null;
+    const cleanGrid = Grid.clear(grid);
 
-    if (isEmpty(newObj)) {
-      newObj = Grid.bind(grid, state.currentPiece);
+    setCoord((oldCoord) => {
+      newPiece = {
+        ...state.currentPiece,
+        coord: { ...oldCoord, y: oldCoord.y + 1 },
+      };
+      if (canMove(cleanGrid, newPiece)) {
+        return newPiece.coord;
+      }
+      newPiece = null;
+      return oldCoord;
+    });
+
+    if (newPiece === null) {
+      const newObj = Grid.bind(cleanGrid, state.currentPiece);
       updateStateAfterBind(newObj);
       return false;
     }
-    updateStateAfterMove(newObj);
+    const newGrid = Piece.softDrop(cleanGrid, newPiece);
+    updateStateAfterMove([newGrid, newPiece]);
     return true;
   }
 
@@ -148,3 +178,7 @@ function useTetrisGame(grid, setGrid) {
 }
 
 export default useTetrisGame;
+
+function canMove(grid, piece) {
+  return Grid.Check.canPutLayer(grid, piece);
+}
