@@ -12,7 +12,7 @@
     "test": "jest --watch --notify --runInBand",
     "coverage": "jest --coverage",
     "format": "prettier --write .",
-    "test-ci": "jest",
+    "test-ci": "jest --runInBand",
     "format-ci": "prettier --check ."
   },
   "dependencies": {
