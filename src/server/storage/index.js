@@ -5,10 +5,11 @@ export let redisClient;
 
 const runRedis = () =>
   new Promise((resolve, reject) => {
-    const host = process.env.REDIS_HOST ? process.env.REDIS_HOST : "127.0.0.1";
-    redisClient = redis.createClient({ host: host });
+    const host = process.env.REDIS_HOST || "127.0.0.1";
+    const port = process.env.REDIS_PORT || 6379;
+    redisClient = redis.createClient({ host: host, port: port });
     redisClient.on("connect", function () {
-      loginfo("Redis client listening on port: default");
+      loginfo("Redis client listening on port:", port);
       resolve();
     });
   });
