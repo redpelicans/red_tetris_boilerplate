@@ -25,13 +25,13 @@ jobs:
         run: npm install
       - name: Run tests
         env:
-          REACT_REDIS_HOST: redis
-          REACT_REDIS_PORT: 6379
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
         run: npm run test-ci
       - name: Run coverage
         env:
-          REACT_REDIS_HOST: redis
-          REACT_REDIS_PORT: 6379
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
         run: npm run coverage
       - name: Coveralls
         uses: coverallsapp/github-action@master
