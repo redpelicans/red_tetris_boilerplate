@@ -17,9 +17,6 @@ jobs:
       redis:
         image: redis
     steps:
-      - env:
-          REACT_REDIS_HOST: redis
-          REACT_REDIS_PORT: 6379
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
@@ -27,8 +24,14 @@ jobs:
       - name: Install modules
         run: npm install
       - name: Run tests
+        env:
+          REACT_REDIS_HOST: redis
+          REACT_REDIS_PORT: 6379
         run: npm run test-ci
       - name: Run coverage
+        env:
+          REACT_REDIS_HOST: redis
+          REACT_REDIS_PORT: 6379
         run: npm run coverage
       - name: Coveralls
         uses: coverallsapp/github-action@master
