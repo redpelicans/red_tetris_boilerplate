@@ -15,8 +15,7 @@ import useAudio from "hooks/useAudio";
 
 export default function Game() {
   const { state, dispatch } = React.useContext(GameContext);
-  const initGrid = useNewGrid(10, 20);
-  const [grid, setGrid] = React.useState(initGrid);
+  const [grid, setGrid] = useNewGrid(10, 20);
   const { movePiece } = useTetrisGame(grid, setGrid);
 
   const options = {
