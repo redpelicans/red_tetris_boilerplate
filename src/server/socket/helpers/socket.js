@@ -11,10 +11,10 @@ import Hoek from "@hapi/hoek";
  */
 
 export const createEvent = (name, rules, fn) => {
-  Hoek.assert(!!name, "helpers - socket.createEvent() must have a name");
+  Hoek.assert(!!name, "socket/helpers - socket.createEvent() must have a name");
   Hoek.assert(
     typeof fn === "function",
-    "helpers - socket.createEvent() must have a function",
+    "socket/helpers - socket.createEvent() must have a function",
   );
 
   return {

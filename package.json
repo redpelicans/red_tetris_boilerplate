@@ -9,10 +9,10 @@
     "client-dev": "webpack-dev-server --colors --hot --inline --open --host 0.0.0.0 --port 3000",
     "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
     "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
-    "test": "jest --watch --notify",
+    "test": "jest --watch --notify --runInBand",
     "coverage": "jest --coverage",
     "format": "prettier --write .",
-    "test-ci": "jest",
+    "test-ci": "jest --runInBand",
     "format-ci": "prettier --check ."
   },
   "dependencies": {
@@ -33,8 +33,11 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "redis": "^3.0.2",
+    "redis-mock": "^0.52.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
+    "socket.io-mock": "^1.3.1",
+    "supertest": "^5.0.0",
     "tailwindcss": "^1.7.6"
   },
   "devDependencies": {

@@ -6,6 +6,5 @@ export const handlerGetPiece = async (socket, { nb }) => {
   for (let i = 0; i < nb; i++) {
     tab.push(new Piece());
   }
-  console.log(tab);
   socket.emit(PIECE.SEND, tab);
 };

@@ -1,4 +1,4 @@
-import { bindEvent } from "helpers/socket";
+import { bindEvent } from "socket/helpers/socket";
 import { logerror, loginfo } from "utils/log";
 import socketIO from "socket.io";
 
@@ -18,8 +18,10 @@ const handlers = Object.values({
   ...disconnect,
 });
 
+export let io;
+
 const runSocketIo = (httpServer) => {
-  const io = socketIO(httpServer);
+  io = socketIO(httpServer);
 
   io.on("connection", async (socket) => {
     loginfo("A new socket has connected!");
@@ -33,9 +35,12 @@ const runSocketIo = (httpServer) => {
       bindEvent(socket, handler);
     });
   });
-
-  loginfo("Sockets have been initialized!");
-  return io;
+  loginfo("SocketIO initialized");
 };
+
+export const quitSocketIo = () =>
+  new Promise((resolve, reject) => {
+    io.close(resolve);
+  });
 
 export default runSocketIo;

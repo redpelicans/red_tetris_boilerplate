@@ -1,4 +1,4 @@
-import { createEvent } from "helpers/socket";
+import { createEvent } from "socket/helpers/socket";
 import { validationSendMessage } from "socket/message/schemas";
 import { handlerSendMessage } from "socket/message/handlers";
 import { MESSAGE } from "../../../config/actions/message";

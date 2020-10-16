@@ -1,6 +1,6 @@
 import { logerror, loginfo } from "utils/log";
-import { getPlayer } from "store/players";
-import { joinLobby, leaveLobby } from "store/lobbies";
+import { getPlayer } from "storage/players";
+import { joinLobby, leaveLobby } from "storage/lobbies";
 import { LOBBY } from "../../../config/actions/lobby";
 import GROUP_DOMAIN from "../../../config/actions/group";
 import eventEmitter from "listeners";

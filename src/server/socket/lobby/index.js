@@ -1,4 +1,4 @@
-import { createEvent } from "helpers/socket";
+import { createEvent } from "socket/helpers/socket";
 import {
   validationSubscribeLobby,
   validationUnsubscribeLobby,

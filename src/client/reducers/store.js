@@ -15,7 +15,7 @@ import {
 
 export const initialState = {
   socket: null,
-  // socket: initSocket(),
+  socket: initSocket(),
   player: {},
   playerResponse: {},
   players: {},

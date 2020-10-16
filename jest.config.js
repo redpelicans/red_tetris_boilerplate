@@ -30,6 +30,7 @@ module.exports = {
     "src/client/constants/",
     "src/client/mocks/",
     "src/server/models/",
+    "src/server/listeners/events.js",
   ],
 
   // Indicates which provider should be used to instrument code for coverage
@@ -75,7 +76,7 @@ module.exports = {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  moduleDirectories: ["node_modules", "src/client"],
+  moduleDirectories: ["node_modules", "src/client", "src/server"],
 
   // An array of file extensions your modules use
   // moduleFileExtensions: [

@@ -1,6 +1,6 @@
 import Lobby from "models/lobby";
 import { logerror, loginfo } from "utils/log";
-import { pushLobby, popLobby } from "store/lobbies";
+import { pushLobby, popLobby } from "storage/lobbies";
 import { LOBBIES } from "../../../config/actions/lobbies";
 import GROUP_DOMAIN, { GROUP } from "../../../config/actions/group";
 import eventEmitter from "listeners";

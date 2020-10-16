@@ -1,7 +1,4 @@
-import runHttpServer from "httpserver";
-import runSocketIo from "socket";
-import runRedis from "store";
+import runServer from "run";
+import { loginfo } from "utils/log";
 
-runRedis();
-const httpServer = runHttpServer();
-export const io = runSocketIo(httpServer);
+runServer().then(() => loginfo("redtetris server is ready to play!"));

@@ -1,14 +1,14 @@
 import { EventEmitter } from "events";
 import event from "listeners/events";
-import { getComplexObjectFromRedis } from "store";
+import { getComplexObjectFromRedis } from "storage";
 import { LOBBIES } from "../../config/actions/lobbies";
 import { LOBBY } from "../../config/actions/lobby";
 import { PLAYERS } from "../../config/actions/players";
 import { MESSAGE } from "../../config/actions/message";
 import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
-import { getLobby, clearPlayerFromLobbies } from "store/lobbies";
-import { popPlayer, getPlayerId } from "store/players";
-import { io } from "index";
+import { getLobby, clearPlayerFromLobbies } from "storage/lobbies";
+import { popPlayer, getPlayerId } from "storage/players";
+import { io } from "socket";
 
 const eventEmitter = new EventEmitter();
 
@@ -34,7 +34,8 @@ eventEmitter.on(event.lobby.change, async ({ socket, lobbyId }) => {
 // Players change
 eventEmitter.on(event.players.change, async ({ socket }) => {
   const players = await getComplexObjectFromRedis("players");
-  io.in(GROUP.LOBBIES).emit(PLAYERS.PUBLISH, players);
+  socket.emit(PLAYERS.PUBLISH, players);
+  // io.in(GROUP.LOBBIES).emit(PLAYERS.PUBLISH, players);
 });
 
 // Lobbies Subscribe
