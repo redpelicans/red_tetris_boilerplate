@@ -1,6 +1,6 @@
 ![Build client](https://github.com/jeremie-gauthier/Red-Tetris/workflows/Build%20client/badge.svg)
 ![Jest](https://github.com/jeremie-gauthier/Red-Tetris/workflows/Jest/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/jeremie-gauthier/Red-Tetris/badge.svg?branch=develop)](https://coveralls.io/github/jeremie-gauthier/Red-Tetris?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/jeremie-gauthier/Red-Tetris/badge.svg?branch=develop&service=github)](https://coveralls.io/github/jeremie-gauthier/Red-Tetris?branch=develop)
 ![Format](https://github.com/jeremie-gauthier/Red-Tetris/workflows/Format/badge.svg)
 # Red Tetris
 
