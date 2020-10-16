@@ -13,32 +13,34 @@ on:
 jobs:
   jest:
     runs-on: ubuntu-latest
-    services:
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    # services:
+    #   redis:
+    #     image: redis
+    #     options: >-
+    #       --health-cmd "redis-cli ping"
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: "13.8"
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.1.0
       - name: Install modules
         run: npm install
       - name: Run tests
         run: npm run test-ci
-        env:
-          REDIS_HOST: redis
-          REDIS_PORT: 6379
+        # env:
+        #   REDIS_HOST: redis
+        #   REDIS_PORT: 6379
       - name: Run coverage
         run: npm run coverage
-        env:
-          REDIS_HOST: redis
-          REDIS_PORT: 6379
+        # env:
+        #   REDIS_HOST: redis
+        #   REDIS_PORT: 6379
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
