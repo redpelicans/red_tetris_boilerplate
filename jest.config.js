@@ -30,6 +30,7 @@ module.exports = {
     "src/client/constants/",
     "src/client/mocks/",
     "src/server/models/",
+    "src/server/listeners/events.js",
   ],
 
   // Indicates which provider should be used to instrument code for coverage

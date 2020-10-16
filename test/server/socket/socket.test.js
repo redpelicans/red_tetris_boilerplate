@@ -1,15 +1,9 @@
-import runServer, { killServer } from "run";
+import redismock from "redis-mock";
 import socketIOClient from "socket.io-client";
-import {
-  quitRedis,
-  setComplexObjectToRedis,
-  setRedis,
-  deleteKeyFromRedis,
-} from "storage";
+import { quitRedis, setRedis } from "storage";
 import { getPlayerId } from "../../../src/server/storage/players";
 import runHttpServer, { quitHttpServer } from "httpserver";
 import runSocketIo, { quitSocketIo } from "socket";
-import redismock from "redis-mock";
 
 let socketClient;
 
@@ -47,9 +41,10 @@ describe("Socket tests", () => {
     socketClient.emit("player:create", "nico");
   });
 
-  test("Should get lobbies", (done) => {
+  test("Should subscribe to lobbies", (done) => {
     socketClient.on("lobbies:publish", (response) => {
-      // expect(response).toBe(null);
+      // if (response != null) expect(Object.keys(response)[0]).toBe(null);
+      // const key = Object.keys(response)[0];
       done();
     });
     socketClient.emit("lobbies:subscribe");
@@ -68,9 +63,9 @@ describe("Socket tests", () => {
     });
   });
 
-  test("Should join lobby", async (done) => {
+  test("Should fail to join lobby", async (done) => {
     socketClient.on("lobby:response", (response) => {
-      // expect(response.type).toBe("success");
+      expect(response.type).toEqual("error");
       done();
     });
     const playerId = await getPlayerId(socketClient.id);
@@ -81,11 +76,14 @@ describe("Socket tests", () => {
   });
 
   test("Should send message", (done) => {
-    // socketClient.on("lobbies:publish", (response) => {
-    // expect(response).toBe(null);
-    // done();
-    // });
-    socketClient.emit("message:send");
+    socketClient.on("message:publish", (response) => {
+      expect(response.message).toEqual("SALUT");
+      done();
+    });
+    socketClient.emit("message:send", {
+      message: "SALUT",
+      player: { name: "nico" },
+    });
     done();
   });
 
