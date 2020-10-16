@@ -16,6 +16,12 @@ jobs:
     services:
       redis:
         image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -24,15 +30,15 @@ jobs:
       - name: Install modules
         run: npm install
       - name: Run tests
-        env:
-          REDIS_HOST: redis
-          REDIS_PORT: 6379
         run: npm run test-ci
-      - name: Run coverage
         env:
           REDIS_HOST: redis
           REDIS_PORT: 6379
+      - name: Run coverage
         run: npm run coverage
+        env:
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
