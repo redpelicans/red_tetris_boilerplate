@@ -18,14 +18,18 @@ const runServer = async () => {
 
 export const killServer = async () => {
   quitRedis();
-  await promiseTimeout(
-    quitSocketIo,
-    "Failed to run quitSocketIo within 5 seconds.",
-  );
-  await promiseTimeout(
-    quitHttpServer,
-    "Failed to run quitHttpServer within 5 seconds.",
-  );
+  try {
+    await promiseTimeout(
+      quitSocketIo,
+      "Failed to run quitSocketIo within 5 seconds.",
+    );
+    await promiseTimeout(
+      quitHttpServer,
+      "Failed to run quitHttpServer within 5 seconds.",
+    );
+  } catch (error) {
+    console.log("Promise rejected:", error);
+  }
 };
 
 export default runServer;

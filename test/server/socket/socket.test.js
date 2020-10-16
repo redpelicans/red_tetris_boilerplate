@@ -4,21 +4,40 @@ import { quitRedis, setRedis } from "storage";
 import { getPlayerId } from "../../../src/server/storage/players";
 import runHttpServer, { quitHttpServer } from "httpserver";
 import runSocketIo, { quitSocketIo } from "socket";
+import { promiseTimeout } from "utils/promise";
 
 let socketClient;
 
-beforeAll((done) => {
-  runHttpServer().then((httpServer) => runSocketIo(httpServer));
-  setRedis(redismock.createClient());
-  socketClient = socketIOClient("http://0.0.0.0:3004");
+beforeAll(async (done) => {
+  try {
+    const httpServer = await promiseTimeout(
+      runHttpServer,
+      "Failed to run runHttpServer within 5 seconds.",
+    );
+    runSocketIo(httpServer);
+    setRedis(redismock.createClient());
+    socketClient = socketIOClient("http://0.0.0.0:3004");
+  } catch (error) {
+    console.log("Promise rejected:", error);
+  }
   done();
 });
 
 afterAll(async (done) => {
   quitRedis();
   socketClient.close();
-  await quitSocketIo();
-  await quitHttpServer();
+  try {
+    await promiseTimeout(
+      quitSocketIo,
+      "Failed to run quitSocketIo within 5 seconds.",
+    );
+    await promiseTimeout(
+      quitHttpServer,
+      "Failed to run quitHttpServer within 5 seconds.",
+    );
+  } catch (error) {
+    console.log("Promise rejected:", error);
+  }
   done();
 });
 

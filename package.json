@@ -9,7 +9,7 @@
     "client-dev": "webpack-dev-server --colors --hot --inline --open --host 0.0.0.0 --port 3000",
     "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
     "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
-    "test": "jest --watch --notify",
+    "test": "jest --watch --notify --runInBand",
     "coverage": "jest --coverage",
     "format": "prettier --write .",
     "test-ci": "jest",

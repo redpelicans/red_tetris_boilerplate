@@ -8,7 +8,6 @@ import * as lobbies from "socket/lobbies";
 import * as lobby from "socket/lobby";
 import * as message from "socket/message";
 import * as disconnect from "socket/disconnect";
-import { resolveConfig } from "prettier";
 
 const handlers = Object.values({
   ...piece,

@@ -1,5 +1,4 @@
 import runServer from "run";
-import { logerror, loginfo } from "utils/log";
-import { io } from "socket";
+import { loginfo } from "utils/log";
 
 runServer().then(() => loginfo("redtetris server is ready to play!"));
