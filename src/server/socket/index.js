@@ -39,13 +39,9 @@ const runSocketIo = (httpServer) => {
   loginfo("SocketIO initialized");
 };
 
-export const quitSocketIo = () => {
-  return new Promise((resolve, reject) => {
-    io.close(() => resolve());
-    setTimeout(() => {
-      reject(new Error("Failed to quit SocketIo wihtin 5 seconds."));
-    }, 5000);
+export const quitSocketIo = () =>
+  new Promise((resolve, reject) => {
+    io.close(resolve);
   });
-};
 
 export default runSocketIo;

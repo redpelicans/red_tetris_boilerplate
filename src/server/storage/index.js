@@ -3,19 +3,15 @@ import redis from "redis";
 
 export let redisClient;
 
-const runRedis = () => {
-  return new Promise((resolve, reject) => {
+const runRedis = () =>
+  new Promise((resolve, reject) => {
     const host = process.env.REDIS_HOST ? process.env.REDIS_HOST : "127.0.0.1";
     redisClient = redis.createClient({ host: host });
     redisClient.on("connect", function () {
       loginfo("Redis client listening on port: default");
       resolve();
     });
-    setTimeout(() => {
-      reject(new Error("Failed to run Redis wihtin 5 seconds."));
-    }, 5000);
   });
-};
 
 export const setRedis = (redis) => {
   redisClient = redis;

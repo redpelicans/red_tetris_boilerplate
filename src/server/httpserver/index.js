@@ -7,8 +7,8 @@ import params from "../../config/params/params";
 const app = express();
 export const httpServer = http.createServer(app);
 
-const runHttpServer = () => {
-  return new Promise((resolve, reject) => {
+const runHttpServer = () =>
+  new Promise((resolve, reject) => {
     /* To check and remove if not needed */
     const file =
       params.url === "/bundle.js" ? "/../../build/bundle.js" : "/../index.html";
@@ -21,21 +21,11 @@ const runHttpServer = () => {
       loginfo("Server listening on port:", params.server.port);
       resolve(httpServer);
     });
-
-    setTimeout(() => {
-      reject(new Error("Failed to run HttpServer wihtin 5 seconds."));
-    }, 5000);
   });
-};
 
-export const quitHttpServer = async () => {
-  return new Promise((resolve, reject) => {
-    httpServer.close(() => resolve());
-
-    setTimeout(() => {
-      reject(new Error("Failed to quit HttpServer wihtin 5 seconds."));
-    }, 5000);
+export const quitHttpServer = async () =>
+  new Promise((resolve, reject) => {
+    httpServer.close(resolve);
   });
-};
 
 export default runHttpServer;
