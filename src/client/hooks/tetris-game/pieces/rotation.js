@@ -1,13 +1,13 @@
 import * as Grid from "../grid";
 import { CURRENT_PIECE } from "constants/tetris";
 
-function rotatePiece(piece) {
+export function rotatePiece(piece) {
   return piece[0].map((_, colIndex) =>
     piece.map((row) => row[colIndex]).reverse(),
   );
 }
 
-function getPadding(shape) {
+export function getPadding(shape) {
   const getPaddingTop = () => {
     for (let row = 0; row < shape.length; row++) {
       if (!shape[row].every((col) => col === 0)) {
@@ -54,7 +54,7 @@ function shiftPieceHorizontally(coord, shift) {
   return { ...coord, x: coord.x + shift };
 }
 
-function testMultiplePositions(testedPiece, grid) {
+export function testMultiplePositions(testedPiece, grid) {
   const { coord, dim } = testedPiece;
 
   function getPossiblePositions() {
@@ -86,22 +86,22 @@ function testMultiplePositions(testedPiece, grid) {
 }
 
 function rotation(piece, grid) {
-  const newShape = rotatePiece(piece.shape);
-  const newPadding = getPadding(newShape);
-  const newDim = { width: piece.dim.height, height: piece.dim.width };
+  // const newShape = rotatePiece(piece.shape);
+  // const newPadding = getPadding(newShape);
+  // const newDim = { width: piece.dim.height, height: piece.dim.width };
 
-  const cleanGrid = Grid.clear(grid);
+  // const cleanGrid = Grid.clear(grid);
 
-  const newPiece = testMultiplePositions(
-    { ...piece, shape: newShape, padding: newPadding, dim: newDim },
-    cleanGrid,
-  );
-  if (!newPiece) {
-    return null;
-  }
+  // const newPiece = testMultiplePositions(
+  //   { ...piece, shape: newShape, padding: newPadding, dim: newDim },
+  //   cleanGrid,
+  // );
+  // if (!newPiece) {
+  //   return null;
+  // }
 
-  const newGrid = Grid.write(cleanGrid, newPiece, CURRENT_PIECE);
-  return [newGrid, newPiece];
+  const newGrid = Grid.write(grid, piece, CURRENT_PIECE);
+  return newGrid;
 }
 
 export default rotation;

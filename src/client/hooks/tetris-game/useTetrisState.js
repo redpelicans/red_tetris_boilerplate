@@ -15,13 +15,13 @@ function useTetrisState(setGrid) {
   const updateStateAfterMove = React.useCallback((newObj) => {
     const [newGrid, newPiece] = newObj;
     const newGridWithShadow = Piece.shadow(newGrid, newPiece);
-    setGrid(() => newGridWithShadow);
+    setGrid(newGridWithShadow);
     dispatch(updateCurrentPiece(newPiece));
   }, []);
 
   const updateStateAfterBind = React.useCallback((newObj) => {
     const [newGrid, score, nbRowsRemoved] = newObj;
-    setGrid(() => newGrid);
+    setGrid(newGrid);
     dispatch(pullCurrentPiece());
     dispatch(addScore(score));
     dispatch(inscreaseRowsRemoved(nbRowsRemoved));
@@ -29,7 +29,7 @@ function useTetrisState(setGrid) {
 
   const setGameOver = React.useCallback((newGrid) => {
     if (newGrid) {
-      setGrid(() => newGrid);
+      setGrid(newGrid);
     }
     dispatch(setPlayerIsAlive(false));
   }, []);

@@ -15,9 +15,9 @@ import useGravity from "./useGravity";
  ** It exposed the following:
  **  - movePiece: A dispatcher to all possible actions;
  */
-function useTetrisGame(grid, setGrid) {
+function useTetrisGame(grid, setGrid, piece, setPiece) {
   const { state, dispatch } = React.useContext(GameContext);
-  const [coord, setCoord] = React.useState(null);
+  // const [coord, setCoord] = React.useState(null);
 
   const {
     updateStateAfterMove,
@@ -68,7 +68,8 @@ function useTetrisGame(grid, setGrid) {
   function insertNewPiece(piece, grid = grid) {
     const newObj = Piece.insertion(piece, grid);
     if (newObj) {
-      setCoord(newObj[1].coord);
+      setPiece(newObj[1]);
+      // setCoord(newObj[1].coord);
       updateStateAfterMove(newObj);
       return true;
     }
@@ -104,16 +105,16 @@ function useTetrisGame(grid, setGrid) {
     let newPiece = null;
     const cleanGrid = Grid.clear(grid);
 
-    setCoord((oldCoord) => {
+    setPiece((oldPiece) => {
       newPiece = {
         ...state.currentPiece,
-        coord: { ...oldCoord, x: oldCoord.x + direction },
+        coord: { ...oldPiece.coord, x: oldPiece.coord.x + direction },
       };
       if (canMove(cleanGrid, newPiece)) {
-        return newPiece.coord;
+        return newPiece;
       }
       newPiece = null;
-      return oldCoord;
+      return oldPiece;
     });
 
     if (newPiece !== null) {
@@ -144,16 +145,16 @@ function useTetrisGame(grid, setGrid) {
     let newPiece = null;
     const cleanGrid = Grid.clear(grid);
 
-    setCoord((oldCoord) => {
+    setPiece((oldPiece) => {
       newPiece = {
         ...state.currentPiece,
-        coord: { ...oldCoord, y: oldCoord.y + 1 },
+        coord: { ...oldPiece.coord, y: oldPiece.coord.y + 1 },
       };
       if (canMove(cleanGrid, newPiece)) {
-        return newPiece.coord;
+        return newPiece;
       }
       newPiece = null;
-      return oldCoord;
+      return oldPiece;
     });
 
     if (newPiece === null) {
@@ -167,10 +168,28 @@ function useTetrisGame(grid, setGrid) {
   }
 
   function rotatePiece() {
-    const newObj = Piece.rotation(state.currentPiece, grid);
+    let newPiece = null;
+    const cleanGrid = Grid.clear(grid);
 
-    if (!isEmpty(newObj)) {
-      updateStateAfterMove(newObj);
+    setPiece((oldPiece) => {
+      const newShape = Piece.rotatePiece(oldPiece.shape);
+      const newPadding = Piece.getPadding(newShape);
+      const newDim = { width: oldPiece.dim.height, height: oldPiece.dim.width };
+
+      newPiece = Piece.testMultiplePositions(
+        { ...oldPiece, shape: newShape, padding: newPadding, dim: newDim },
+        cleanGrid,
+      );
+      if (newPiece) {
+        return newPiece;
+      }
+      newPiece = null;
+      return oldPiece;
+    });
+
+    if (newPiece) {
+      const newGrid = Piece.rotation(newPiece, cleanGrid);
+      updateStateAfterMove([newGrid, newPiece]);
     }
   }
 
