@@ -38,7 +38,7 @@ export default function Lobbies() {
     >
       <FlexBox direction="col">
         <SearchLobby />
-        <div clasName="overflow-y-scroll">
+        <div className="overflow-y-scroll">
           {lobbies.map(([key, el], index) => {
             return <Lobby lobby={el} key={index} />;
           })}

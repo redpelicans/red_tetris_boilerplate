@@ -7,6 +7,9 @@ module.exports = {
   purge: [],
   theme: {
     extend: {
+      "max-height": {
+        "3/5": "60%",
+      },
       width: {
         "7/10": "70%",
         "2.7/10": "27%",
