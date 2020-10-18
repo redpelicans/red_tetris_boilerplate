@@ -51,8 +51,7 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
 
     if (canPut(gameBoard.grid, newPiece)) {
       const newGrid = Insert.default(newPiece, gameBoard.grid);
-      const newPieceShadow = Shadow.getNewPiece(newGrid, newPiece);
-      const newGridWithShadow = Shadow.default(newGrid, newPieceShadow);
+      const newGridWithShadow = Shadow.default(newGrid, newPiece);
       setGameBoard({ ...gameBoard, grid: newGridWithShadow, piece: newPiece });
     } else {
       const newGrid = Insert.force(newPiece, gameBoard.grid);
