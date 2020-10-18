@@ -27,7 +27,7 @@ export default function Game() {
     gameOver,
     pullNextPiece,
   );
-  const { movePiece } = useTetrisGame(grid, piece, methods);
+  const { movePiece } = useTetrisGame(methods);
 
   const options = {
     volume: 0.2,
