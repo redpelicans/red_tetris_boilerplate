@@ -23,10 +23,11 @@ function useTetrisGame(methods) {
     if (!state.alive) {
       return;
     }
+    const manuallyTriggered = true;
 
     switch (action.code) {
       case "ArrowDown":
-        return methods.moveDown();
+        return methods.moveDown(manuallyTriggered);
       case "ArrowLeft":
         return methods.moveLateral(MOVE_LEFT);
       case "ArrowRight":

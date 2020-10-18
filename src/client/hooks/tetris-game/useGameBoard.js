@@ -24,7 +24,14 @@ const initialState = {
  ** This hook manage relations between pieces and grid
  */
 
-function useGameBoard(cols, rows, gameOver, pullNextPiece) {
+function useGameBoard(
+  cols,
+  rows,
+  gameOver,
+  pullNextPiece,
+  addScore,
+  addRemovedLines,
+) {
   const [gameBoard, setGameBoard] = React.useState(() => ({
     ...initialState,
     grid: Grid.create(cols, rows),
@@ -75,7 +82,7 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
     });
   }
 
-  function moveDown() {
+  function moveDown(manuallyTriggered) {
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = SoftDrop.getNewPiece(oldState.piece);
@@ -83,10 +90,19 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
       if (canPut(cleanGrid, newPiece)) {
         const newGrid = SoftDrop.default(cleanGrid, newPiece);
         const newGridWithShadow = Shadow.default(newGrid, newPiece);
+        if (manuallyTriggered) {
+          addScore(1);
+        }
+
         return { ...oldState, grid: newGridWithShadow, piece: newPiece };
       }
 
-      const newGrid = Grid.bind(cleanGrid, oldState.piece);
+      const newGrid = Grid.bind(
+        cleanGrid,
+        oldState.piece,
+        addScore,
+        addRemovedLines,
+      );
       const nextPiece = pullNextPiece();
       return {
         ...oldState,
@@ -102,7 +118,14 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
       const newPiece = HardDrop.getNewPiece(cleanGrid, oldState.piece);
 
       if (canPut(cleanGrid, newPiece)) {
-        const newGrid = Grid.bind(cleanGrid, newPiece);
+        addScore((newPiece.coord.y - oldState.piece.coord.y) * 2);
+
+        const newGrid = Grid.bind(
+          cleanGrid,
+          newPiece,
+          addScore,
+          addRemovedLines,
+        );
         const nextPiece = pullNextPiece();
         return {
           ...oldState,
@@ -110,7 +133,6 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
           piece: { ...deepCopy(nextPiece), id: pieceId.current++ },
         };
       }
-
       return oldState;
     });
   }

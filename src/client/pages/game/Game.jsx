@@ -8,7 +8,7 @@ import NextPieces from "./NextPieces";
 import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
-import { DEFAULT_REPEAT_TIMEOUT, COMBO_TEXT } from "constants/tetris";
+import { DEFAULT_REPEAT_TIMEOUT } from "constants/tetris";
 import TetrisTheme from "assets/music/Tetris_theme.ogg";
 import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
@@ -20,12 +20,24 @@ export default function Game() {
     dispatch(setPlayerIsAlive(false));
   };
 
+  const [linesRemoved, setLinesRemoved] = React.useState(0);
+  const addRemovedLines = React.useCallback((value) =>
+    setLinesRemoved((oldValue) => oldValue + value),
+  );
+
+  const [score, setScore] = React.useState(0);
+  const addScore = React.useCallback(
+    (value) => setScore((oldScore) => oldScore + value),
+    [],
+  );
   const { nextPieces, pullNextPiece } = useNextPieces();
   const { grid, piece, ...methods } = useGameBoard(
     10,
     20,
     gameOver,
     pullNextPiece,
+    addScore,
+    addRemovedLines,
   );
   const { movePiece } = useTetrisGame(methods);
 
@@ -81,9 +93,9 @@ export default function Game() {
         </FlexBox>
         <FlexBox direction="col" className="items-center mx-4">
           <Timer />
-          <Score score={state.score} />
+          <Score score={score} />
           <Level level={state.level} />
-          <LinesRemoved lines={state.rowsRemoved} />
+          <LinesRemoved lines={linesRemoved} />
           <NextPieces nextPieces={nextPieces} />
         </FlexBox>
       </FlexBox>
@@ -91,38 +103,12 @@ export default function Game() {
   );
 }
 
-const Score = React.memo(({ score }) => {
-  const [combo, setCombo] = React.useState(null);
-  React.useEffect(() => {
-    if (combo !== null) {
-      setTimeout(() => setCombo(null), 750);
-    }
-  }, [combo]);
-
-  React.useEffect(() => {
-    const customEventHandler = (evt) => {
-      console.log("custom event triggered", evt.detail, "removed");
-      setCombo(COMBO_TEXT[evt.detail]);
-    };
-    window.addEventListener("custom", customEventHandler);
-
-    return () => {
-      window.removeEventListener("custom", customEventHandler);
-    };
-  }, []);
-
-  return (
-    <FlexBox direction="col" className="relative items-center">
-      <h1 className="font-bold w-32 text-center">SCORE</h1>
-      {combo && (
-        <span className="absolute text-bold text-red-600 growing-text">
-          {combo}
-        </span>
-      )}
-      <span>{score}</span>
-    </FlexBox>
-  );
-});
+const Score = React.memo(({ score }) => (
+  <FlexBox direction="col" className="relative items-center">
+    <h1 className="font-bold w-32 text-center">SCORE</h1>
+    <span>{score}</span>
+  </FlexBox>
+));
 
 const LinesRemoved = React.memo(({ lines }) => <p>{lines} Lines removed</p>);
 
