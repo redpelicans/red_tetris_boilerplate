@@ -1,7 +1,12 @@
 import React from "react";
 import { deepCopy } from "helpers/functional";
 import * as Grid from "./grid";
-import * as Piece from "./pieces";
+import * as Insert from "./pieces/insertion";
+import * as Shadow from "./pieces/shadow";
+import * as SoftDrop from "./pieces/softDrop";
+import * as HardDrop from "./pieces/hardDrop";
+import * as Rotation from "./pieces/rotation";
+import * as LatMove from "./pieces/lateralMove";
 
 const initialState = {
   grid: [],
@@ -14,6 +19,10 @@ const initialState = {
     dim: { height: 0, width: 0 },
   },
 };
+
+/*
+ ** This hook manage relations between pieces and grid
+ */
 
 function useGameBoard(cols, rows, gameOver, pullNextPiece) {
   const [gameBoard, setGameBoard] = React.useState(() => ({
@@ -31,16 +40,22 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
     });
   }, []);
 
+  React.useEffect(() => {
+    if (gameBoard.piece.id !== null) {
+      insertNewPiece();
+    }
+  }, [gameBoard.piece.id]);
+
   function insertNewPiece() {
-    const newPiece = Piece.getNewInsertedPiece(gameBoard.piece, gameBoard.grid);
+    const newPiece = Insert.getNewPiece(gameBoard.piece, gameBoard.grid);
 
     if (canPut(gameBoard.grid, newPiece)) {
-      const newGrid = Piece.insertion(newPiece, gameBoard.grid);
-      const newPieceShadow = Piece.getNewShadowPiece(newGrid, newPiece);
-      const newGridWithShadow = Piece.shadow(newGrid, newPieceShadow);
+      const newGrid = Insert.default(newPiece, gameBoard.grid);
+      const newPieceShadow = Shadow.getNewPiece(newGrid, newPiece);
+      const newGridWithShadow = Shadow.default(newGrid, newPieceShadow);
       setGameBoard({ ...gameBoard, grid: newGridWithShadow, piece: newPiece });
     } else {
-      const newGrid = Piece.forceInsertion(newPiece, gameBoard.grid);
+      const newGrid = Insert.force(newPiece, gameBoard.grid);
       setGameBoard({ ...gameBoard, grid: newGrid, piece: newPiece });
       gameOver();
     }
@@ -49,11 +64,11 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
   function moveLateral(direction) {
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
-      const newPiece = Piece.getNewLateralMovedPiece(oldState.piece, direction);
+      const newPiece = LatMove.getNewPiece(oldState.piece, direction);
 
       if (canPut(cleanGrid, newPiece)) {
-        const newGrid = Piece.lateralMove(cleanGrid, newPiece);
-        const newGridWithShadow = Piece.shadow(newGrid, newPiece);
+        const newGrid = LatMove.default(cleanGrid, newPiece);
+        const newGridWithShadow = Shadow.default(newGrid, newPiece);
         return { ...oldState, grid: newGridWithShadow, piece: newPiece };
       }
 
@@ -64,11 +79,11 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
   function moveDown() {
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
-      const newPiece = Piece.getNewDownMovedPiece(oldState.piece);
+      const newPiece = SoftDrop.getNewPiece(oldState.piece);
 
       if (canPut(cleanGrid, newPiece)) {
-        const newGrid = Piece.softDrop(cleanGrid, newPiece);
-        const newGridWithShadow = Piece.shadow(newGrid, newPiece);
+        const newGrid = SoftDrop.default(cleanGrid, newPiece);
+        const newGridWithShadow = Shadow.default(newGrid, newPiece);
         return { ...oldState, grid: newGridWithShadow, piece: newPiece };
       }
 
@@ -85,7 +100,7 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
   function dropDown() {
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
-      const newPiece = Piece.getNewDropPiece(cleanGrid, oldState.piece);
+      const newPiece = HardDrop.getNewPiece(cleanGrid, oldState.piece);
 
       if (canPut(cleanGrid, newPiece)) {
         const newGrid = Grid.bind(cleanGrid, newPiece);
@@ -104,11 +119,11 @@ function useGameBoard(cols, rows, gameOver, pullNextPiece) {
   function rotation() {
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
-      const newPiece = Piece.getNewRotatePiece(oldState.piece, cleanGrid);
+      const newPiece = Rotation.getNewPiece(oldState.piece, cleanGrid);
 
       if (newPiece && canPut(cleanGrid, newPiece)) {
-        const newGrid = Piece.rotation(newPiece, cleanGrid);
-        const newGridWithShadow = Piece.shadow(newGrid, newPiece);
+        const newGrid = Rotation.default(newPiece, cleanGrid);
+        const newGridWithShadow = Shadow.default(newGrid, newPiece);
         return { ...oldState, grid: newGridWithShadow, piece: newPiece };
       }
 
