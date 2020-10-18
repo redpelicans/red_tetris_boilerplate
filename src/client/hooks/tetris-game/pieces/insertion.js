@@ -7,7 +7,7 @@ function insertion(piece, grid) {
   return gridCopy;
 }
 
-function forceInsertion(piece, grid) {
+function force(piece, grid) {
   const gridCopy = Grid.partialWrite(grid, piece, piece.color);
 
   return gridCopy;
@@ -23,7 +23,7 @@ function getNewPiece(piece, grid) {
   return newPiece;
 }
 
-export { forceInsertion, getNewPiece };
+export { force, getNewPiece };
 export default insertion;
 
 function getMidGrid(colLength) {
