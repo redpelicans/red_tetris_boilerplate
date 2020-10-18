@@ -1,13 +1,13 @@
 import * as Grid from "../grid";
 import { CURRENT_PIECE } from "constants/tetris";
 
-export function rotatePiece(piece) {
+function rotatePiece(piece) {
   return piece[0].map((_, colIndex) =>
     piece.map((row) => row[colIndex]).reverse(),
   );
 }
 
-export function getPadding(shape) {
+function getPadding(shape) {
   const getPaddingTop = () => {
     for (let row = 0; row < shape.length; row++) {
       if (!shape[row].every((col) => col === 0)) {
@@ -54,7 +54,7 @@ function shiftPieceHorizontally(coord, shift) {
   return { ...coord, x: coord.x + shift };
 }
 
-export function testMultiplePositions(testedPiece, grid) {
+function testMultiplePositions(testedPiece, grid) {
   const { coord, dim } = testedPiece;
 
   function getPossiblePositions() {
@@ -104,4 +104,18 @@ function rotation(piece, grid) {
   return newGrid;
 }
 
+function getNewPiece(piece, grid) {
+  const newShape = rotatePiece(piece.shape);
+  const newPadding = getPadding(newShape);
+  const newDim = { width: piece.dim.height, height: piece.dim.width };
+
+  const newPiece = testMultiplePositions(
+    { ...piece, shape: newShape, padding: newPadding, dim: newDim },
+    grid,
+  );
+
+  return newPiece;
+}
+
+export { getNewPiece };
 export default rotation;

@@ -5,7 +5,6 @@ import { isEmpty } from "helpers/common";
 import { GameContext } from "store";
 import { pullCurrentPiece, addScore } from "actions/game";
 import { MOVE_LEFT, MOVE_RIGHT } from "constants/tetris";
-import useTetrisState from "./useTetrisState";
 import WorkerTimer from "worker/timer.worker.js";
 import useWorker from "hooks/useWorker";
 import useGravity from "./useGravity";
@@ -15,25 +14,18 @@ import useGravity from "./useGravity";
  ** It exposed the following:
  **  - movePiece: A dispatcher to all possible actions;
  */
-function useTetrisGame(grid, setGrid, piece, setPiece) {
+function useTetrisGame(grid, piece, methods) {
   const { state, dispatch } = React.useContext(GameContext);
-  // const [coord, setCoord] = React.useState(null);
-
-  const {
-    updateStateAfterMove,
-    updateStateAfterBind,
-    setGameOver,
-  } = useTetrisState(setGrid);
 
   const gravityInterval = useGravity();
 
   const handleTimerWorkerMessage = React.useCallback(() => {
-    if (!state.currentPiece.coord || isEmpty(state.currentPiece.shape)) {
+    if (!piece.coord || isEmpty(piece.shape)) {
       return;
     }
 
-    gravity();
-  }, [state.currentPiece.coord, state.currentPiece.shape]);
+    methods.moveDown();
+  }, [piece.coord, piece.shape]);
 
   const timerWorker = useWorker(WorkerTimer, handleTimerWorkerMessage);
 
@@ -52,17 +44,20 @@ function useTetrisGame(grid, setGrid, piece, setPiece) {
 
   // On new piece
   React.useEffect(() => {
-    if (!isEmpty(state.currentPiece.shape)) {
-      insertNewPiece(state.currentPiece, grid);
+    if (!isEmpty(piece.shape)) {
+      methods.insertNewPiece();
     }
-  }, [state.currentPiece.id]);
+  }, [piece.id]);
 
   // At start only
-  React.useEffect(() => {
-    if (state.nextPieces.length === 4) {
-      dispatch(pullCurrentPiece());
-    }
-  }, [state.nextPieces]);
+  // React.useEffect(() => {
+  //   if (state.nextPieces.length === 4) {
+  //     methods.setNewPiece(state.nextPieces[0]);
+
+  //     // old name for method, it now only remove first piece from nextPieces
+  //     dispatch(pullCurrentPiece());
+  //   }
+  // }, [state.nextPieces]);
 
   // Methods
   function insertNewPiece(piece, grid = grid) {
@@ -86,15 +81,15 @@ function useTetrisGame(grid, setGrid, piece, setPiece) {
 
     switch (action.code) {
       case "ArrowDown":
-        return doSoftDrop();
+        return methods.moveDown();
       case "ArrowLeft":
-        return movePieceLateral(MOVE_LEFT);
+        return methods.moveLateral(MOVE_LEFT);
       case "ArrowRight":
-        return movePieceLateral(MOVE_RIGHT);
+        return methods.moveLateral(MOVE_RIGHT);
       case "ArrowUp":
-        return rotatePiece();
+        return methods.rotation();
       case "Space":
-        return doHardDrop();
+        return methods.dropDown();
       default:
         return;
     }
@@ -107,7 +102,7 @@ function useTetrisGame(grid, setGrid, piece, setPiece) {
 
     setPiece((oldPiece) => {
       newPiece = {
-        ...state.currentPiece,
+        ...oldPiece,
         coord: { ...oldPiece.coord, x: oldPiece.coord.x + direction },
       };
       if (canMove(cleanGrid, newPiece)) {
@@ -124,7 +119,7 @@ function useTetrisGame(grid, setGrid, piece, setPiece) {
   }
 
   function doHardDrop() {
-    const newObj = Piece.hardDrop(grid, state.currentPiece);
+    const newObj = Piece.hardDrop(grid, piece);
 
     if (isEmpty(newObj)) {
       setGameOver(null);
@@ -147,7 +142,7 @@ function useTetrisGame(grid, setGrid, piece, setPiece) {
 
     setPiece((oldPiece) => {
       newPiece = {
-        ...state.currentPiece,
+        ...oldPiece,
         coord: { ...oldPiece.coord, y: oldPiece.coord.y + 1 },
       };
       if (canMove(cleanGrid, newPiece)) {
@@ -158,7 +153,7 @@ function useTetrisGame(grid, setGrid, piece, setPiece) {
     });
 
     if (newPiece === null) {
-      const newObj = Grid.bind(cleanGrid, state.currentPiece);
+      const newObj = Grid.bind(cleanGrid, piece);
       updateStateAfterBind(newObj);
       return false;
     }

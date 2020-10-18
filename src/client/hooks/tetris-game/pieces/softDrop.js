@@ -6,4 +6,14 @@ function softDrop(grid, piece) {
   return newGrid;
 }
 
+function getNewPiece(piece) {
+  const newPiece = {
+    ...piece,
+    coord: { ...piece.coord, y: piece.coord.y + 1 },
+  };
+
+  return newPiece;
+}
+
+export { getNewPiece };
 export default softDrop;

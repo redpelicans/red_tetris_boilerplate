@@ -6,4 +6,14 @@ function lateralMove(grid, piece) {
   return newGrid;
 }
 
+function getNewPiece(piece, direction) {
+  const newPiece = {
+    ...piece,
+    coord: { ...piece.coord, x: piece.coord.x + direction },
+  };
+
+  return newPiece;
+}
+
+export { getNewPiece };
 export default lateralMove;

@@ -1,38 +1,16 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 // import { timeout } from "helpers/common";
-import { pushNewPiece } from "actions/game";
+// import { pushNewPiece } from "actions/game";
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 
-const NextPieces = React.memo(({ nextPieces, dispatch }) => {
-  React.useEffect(() => {
-    const fetchInitPieces = async () => {
-      const initPieces = await fetchFromMock(4);
-      dispatch(pushNewPiece(initPieces));
-    };
-
-    fetchInitPieces();
-  }, []);
-
-  React.useEffect(() => {
-    const fetchNewPiece = async () => {
-      const newPiece = await fetchFromMock(1);
-      dispatch(pushNewPiece(newPiece));
-    };
-
-    if (nextPieces.length === 2) {
-      fetchNewPiece();
-    }
-  }, [nextPieces]);
-
-  return (
-    <FlexBox direction="col">
-      <h1 className="font-bold">Next Pieces</h1>
-      {nextPieces[0] && <Previsualisation nextPiece={nextPieces[0]} size={4} />}
-      {nextPieces[1] && <Previsualisation nextPiece={nextPieces[1]} size={2} />}
-    </FlexBox>
-  );
-});
+const NextPieces = React.memo(({ nextPieces }) => (
+  <FlexBox direction="col">
+    <h1 className="font-bold">Next Pieces</h1>
+    {nextPieces[0] && <Previsualisation nextPiece={nextPieces[0]} size={4} />}
+    {nextPieces[1] && <Previsualisation nextPiece={nextPieces[1]} size={2} />}
+  </FlexBox>
+));
 
 export default NextPieces;
 

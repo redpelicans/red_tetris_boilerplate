@@ -38,7 +38,7 @@ export default function reducer(state = initialState, action) {
     case PULL_CURRENT_PIECE_FROM_NEXT_PIECES:
       return {
         ...state,
-        currentPiece: { ...deepCopy(state.nextPieces[0]), id: action.id },
+        // currentPiece: { ...deepCopy(state.nextPieces[0]), id: action.id },
         nextPieces: state.nextPieces.filter((_, idx) => idx !== 0),
       };
     case UPDATE_GRID:

@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { useTetrisGame, useGrid, usePiece } from "hooks";
+import { useTetrisGame, useGameBoard, useNextPieces } from "hooks";
 import { Link } from "react-router-dom";
 import { GameContext } from "store";
 import NextPieces from "./NextPieces";
@@ -12,12 +12,22 @@ import { DEFAULT_REPEAT_TIMEOUT, COMBO_TEXT } from "constants/tetris";
 import TetrisTheme from "assets/music/Tetris_theme.ogg";
 import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
+import { setPlayerIsAlive } from "actions/game";
 
 export default function Game() {
   const { state, dispatch } = React.useContext(GameContext);
-  const [grid, setGrid] = useGrid(10, 20);
-  const [piece, setPiece] = usePiece();
-  const { movePiece } = useTetrisGame(grid, setGrid, piece, setPiece);
+  const gameOver = () => {
+    dispatch(setPlayerIsAlive(false));
+  };
+
+  const { nextPieces, pullNextPiece } = useNextPieces();
+  const { grid, piece, ...methods } = useGameBoard(
+    10,
+    20,
+    gameOver,
+    pullNextPiece,
+  );
+  const { movePiece } = useTetrisGame(grid, piece, methods);
 
   const options = {
     volume: 0.2,
@@ -62,14 +72,19 @@ export default function Game() {
           width={64}
           className="justify-center align-center"
         >
-          <TetrisGrid grid={grid} rowHeight={6} colHeight={6} />
+          <TetrisGrid
+            grid={grid}
+            currentPieceColor={piece.color}
+            rowHeight={6}
+            colHeight={6}
+          />
         </FlexBox>
         <FlexBox direction="col" className="items-center mx-4">
           <Timer />
           <Score score={state.score} />
           <Level level={state.level} />
           <LinesRemoved lines={state.rowsRemoved} />
-          <NextPieces nextPieces={state.nextPieces} dispatch={dispatch} />
+          <NextPieces nextPieces={nextPieces} />
         </FlexBox>
       </FlexBox>
     </FlexBox>

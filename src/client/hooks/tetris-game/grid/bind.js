@@ -31,17 +31,18 @@ function removeCompletedRows(grid) {
 
 function bind(grid, piece) {
   const newGrid = write(grid, piece, piece.color);
-
   const [
     newGridAfterScore,
     additionalScore,
     nbRowsRemoved,
   ] = removeCompletedRows(newGrid);
-  if (nbRowsRemoved > 0) {
-    const custom = new CustomEvent("custom", { detail: nbRowsRemoved });
-    window.dispatchEvent(custom);
-  }
-  return [newGridAfterScore, additionalScore, nbRowsRemoved];
+  return newGridAfterScore;
+
+  // if (nbRowsRemoved > 0) {
+  //   const custom = new CustomEvent("custom", { detail: nbRowsRemoved });
+  //   window.dispatchEvent(custom);
+  // }
+  // return [newGridAfterScore, additionalScore, nbRowsRemoved];
 }
 
 export default bind;
