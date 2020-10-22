@@ -12,12 +12,16 @@ function useTetrisGame(methods) {
 
   const gravityInterval = useGravity();
   React.useEffect(() => {
+    if (!state.alive) {
+      return;
+    }
+
     const gravityTimer = setInterval(methods.moveDown, gravityInterval);
 
     return () => {
       clearInterval(gravityTimer);
     };
-  }, [gravityInterval]);
+  }, [gravityInterval, state.alive]);
 
   function movePiece(action) {
     if (!state.alive) {
