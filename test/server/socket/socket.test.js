@@ -7,6 +7,7 @@ import runSocketIo, { quitSocketIo } from "socket";
 import { promiseTimeout } from "utils/promise";
 
 let socketClient;
+let player;
 
 beforeAll(async (done) => {
   try {
@@ -55,9 +56,11 @@ describe("Socket tests", () => {
   test("Should create a player", (done) => {
     socketClient.on("player:response", (response) => {
       expect(response.type).toBe("success");
+      player = response.payload;
+      console.log(player);
       done();
     });
-    socketClient.emit("player:create", "nico");
+    socketClient.emit("player:create", "player1");
   });
 
   test("Should subscribe to lobbies", (done) => {

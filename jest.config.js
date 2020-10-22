@@ -30,6 +30,7 @@ module.exports = {
     "src/client/constants/",
     "src/client/mocks/",
     "src/server/models/",
+    "src/server/index.js",
     "src/server/listeners/events.js",
   ],
 
