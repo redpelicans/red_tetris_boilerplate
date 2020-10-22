@@ -31,8 +31,7 @@ export const getPlayerId = async (socketId) => {
 export const pushPlayer = async (player) => {
   const players = (await getComplexObjectFromRedis("players")) ?? {};
 
-  const valid = isValid(player.name);
-  if (!valid) {
+  if (!player?.name || !isValid(player?.name)) {
     return Response.error(PLAYER.CREATE, "Invalid username!");
   }
 

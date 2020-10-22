@@ -1,13 +1,17 @@
 import redismock from "redis-mock";
 import socketIOClient from "socket.io-client";
-import { quitRedis, setRedis } from "storage";
-import { getPlayerId } from "../../../src/server/storage/players";
+import { setRedis, quitRedis, deleteKeyFromRedis } from "storage";
+import { getPlayerId, getPlayer } from "../../../src/server/storage/players";
+import {
+  getLobbyIdByPlayerId,
+  getLobbies,
+} from "../../../src/server/storage/lobbies";
 import runHttpServer, { quitHttpServer } from "httpserver";
 import runSocketIo, { quitSocketIo } from "socket";
 import { promiseTimeout } from "utils/promise";
+import { lobby1mock, lobby2mock } from "../mocks";
 
 let socketClient;
-let player;
 
 beforeAll(async (done) => {
   try {
@@ -56,62 +60,105 @@ describe("Socket tests", () => {
   test("Should create a player", (done) => {
     socketClient.on("player:response", (response) => {
       expect(response.type).toBe("success");
-      player = response.payload;
-      console.log(player);
+      socketClient.off("player:response");
       done();
     });
-    socketClient.emit("player:create", "player1");
+    socketClient.emit("player:create", { name: "player1" });
   });
 
   test("Should subscribe to lobbies", (done) => {
     socketClient.on("lobbies:publish", (response) => {
-      // if (response != null) expect(Object.keys(response)[0]).toBe(null);
-      // const key = Object.keys(response)[0];
+      socketClient.off("lobbies:publish");
+      done();
+    });
+    socketClient.on("players:publish", (response) => {
+      socketClient.off("players:publish");
+
       done();
     });
     socketClient.emit("lobbies:subscribe");
   });
 
-  test("Should create lobby", (done) => {
-    socketClient.on("lobbies:response", (response) => {
-      expect(response.type).toBe("success");
-      done();
-    });
-    socketClient.emit("lobbies:add", {
-      hash: "hash",
-      name: "name",
-      maxPlayer: 4,
-      owner: { name: "nico" },
-    });
-  });
-
   test("Should fail to join lobby", async (done) => {
     socketClient.on("lobby:response", (response) => {
       expect(response.type).toEqual("error");
+      socketClient.off("lobby:response");
       done();
     });
     const playerId = await getPlayerId(socketClient.id);
     socketClient.emit("lobby:subscribe", {
       playerId: playerId,
-      lobbyId: "12",
+      lobbyId: "2",
+    });
+  });
+
+  test("Should create lobby", async (done) => {
+    socketClient.on("lobbies:response", (response) => {
+      expect(response.type).toBe("success");
+      socketClient.off("lobbies:response");
+      done();
+    });
+    const playerId = await getPlayerId(socketClient.id);
+    const player = await getPlayer(playerId);
+
+    socketClient.emit("lobbies:add", {
+      hash: "hash",
+      name: "lobby1",
+      maxPlayer: 4,
+      owner: player,
+    });
+  });
+
+  test("Should subscribe to lobby", async (done) => {
+    socketClient.on("lobby:response", (response) => {
+      expect(response.type).toBe("success");
+      socketClient.off("lobby:response");
+      done();
+    });
+
+    const playerId = await getPlayerId(socketClient.id);
+    const lobbies = await getLobbies();
+    const lobbyId = Object.keys(lobbies)[0];
+
+    socketClient.emit("lobby:subscribe", {
+      playerId: playerId,
+      lobbyId: lobbyId,
+    });
+  });
+
+  test("Should leave lobby", async (done) => {
+    socketClient.on("lobby:response", (response) => {
+      expect(response.type).toBe("success");
+      socketClient.off("lobby:response");
+      done();
+    });
+
+    const playerId = await getPlayerId(socketClient.id);
+    const lobbies = await getLobbies();
+    const lobbyId = Object.keys(lobbies)[0];
+
+    socketClient.emit("lobby:unsubscribe", {
+      playerId: playerId,
+      lobbyId: lobbyId,
     });
   });
 
   test("Should send message", (done) => {
     socketClient.on("message:publish", (response) => {
-      expect(response.message).toEqual("SALUT");
+      expect(response.message).toEqual("message");
+      socketClient.off("message:publish");
       done();
     });
     socketClient.emit("message:send", {
-      message: "SALUT",
-      player: { name: "nico" },
+      message: "message",
+      player: { name: "player1" },
     });
-    done();
   });
 
   test("Should get new pieces", (done) => {
     socketClient.on("piece:send", (response) => {
       expect(response.length).toEqual(3);
+      socketClient.off("piece:send");
       done();
     });
     socketClient.emit("piece:get", { nb: 3 });

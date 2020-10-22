@@ -173,7 +173,7 @@ const getNextOwner = (players, playerId) => {
   return players.find((player) => player.id !== playerId);
 };
 
-const getLobbyIdByPlayerId = (lobbies, playerId) => {
+export const getLobbyIdByPlayerId = (lobbies, playerId) => {
   const lobbyId = Object.keys(lobbies).find((key) =>
     lobbies[key].players.find((player) => player.id === playerId),
   );
