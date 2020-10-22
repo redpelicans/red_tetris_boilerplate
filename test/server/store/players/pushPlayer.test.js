@@ -7,81 +7,68 @@ import {
   deleteKeyFromRedis,
 } from "storage";
 import Response from "models/response";
+import Player from "models/player";
+
 import { PLAYER } from "../../../../src/config/actions/player";
+import {
+  player1mock,
+  player2mock,
+  playerInvalid1mock,
+  playerInvalid2mock,
+  playerInvalid3mock,
+  playerInvalid4mock,
+} from "../../mocks";
 
 beforeAll(() => {
   setRedis(redismock.createClient());
 });
 
 afterAll(() => {
+  deleteKeyFromRedis("players");
   quitRedis();
 });
 
-beforeEach(() => {
-  deleteKeyFromRedis("players");
-});
+describe("pushPlayer function", () => {
+  test("Should return a Success response", async () => {
+    const player = new Player(player1mock);
 
-test("pushPlayer() should return a Success response", async () => {
-  const player = {
-    id: "4",
-    name: "test4",
-    socketId: "si4",
-  };
+    expect(await pushPlayer(player)).toEqual(
+      Response.success(PLAYER.CREATE, player),
+    );
+  });
 
-  expect(await pushPlayer(player)).toEqual(
-    Response.success(PLAYER.CREATE, player),
-  );
-});
+  test("Should return an Error response `Invalid username`", async () => {
+    const player1 = new Player(playerInvalid1mock);
+    const player2 = new Player(playerInvalid2mock);
+    const player3 = new Player(playerInvalid3mock);
+    const player4 = new Player(playerInvalid4mock);
 
-test("pushPlayer() should return an Error response `Invalid username`", async () => {
-  const player = {
-    id: "4",
-    name: "test4?",
-    socketId: "si4",
-  };
+    expect(await pushPlayer(player1)).toEqual(
+      Response.error(PLAYER.CREATE, "Invalid username!"),
+    );
 
-  expect(await pushPlayer(player)).toEqual(
-    Response.error(PLAYER.CREATE, "Invalid username!"),
-  );
+    expect(await pushPlayer(player2)).toEqual(
+      Response.error(PLAYER.CREATE, "Invalid username!"),
+    );
 
-  player.name = "cc";
-  expect(await pushPlayer(player)).toEqual(
-    Response.error(PLAYER.CREATE, "Invalid username!"),
-  );
+    expect(await pushPlayer(player3)).toEqual(
+      Response.error(PLAYER.CREATE, "Invalid username!"),
+    );
 
-  player.name = "ccdwdwadawdawdawdawdawdawdw";
-  expect(await pushPlayer(player)).toEqual(
-    Response.error(PLAYER.CREATE, "Invalid username!"),
-  );
+    expect(await pushPlayer(player4)).toEqual(
+      Response.error(PLAYER.CREATE, "Invalid username!"),
+    );
+  });
 
-  player.name = "";
-  expect(await pushPlayer(player)).toEqual(
-    Response.error(PLAYER.CREATE, "Invalid username!"),
-  );
-});
+  test("Should return an Error response `Username already exists!`", async () => {
+    const player2 = new Player(player2mock);
 
-test("pushPlayer() should return an Error response `Username already exists!`", async () => {
-  const players = {
-    5: {
-      id: "5",
-      name: "test5",
-      socketId: "si5",
-    },
-    6: {
-      id: "6",
-      name: "test6",
-      socketId: "si6",
-    },
-  };
-  await setComplexObjectToRedis("players", players);
+    expect(await pushPlayer(player2)).toEqual(
+      Response.success(PLAYER.CREATE, player2),
+    );
 
-  const player = {
-    id: "8",
-    name: "test6",
-    socketId: "si6",
-  };
-
-  expect(await pushPlayer(player, "si6")).toEqual(
-    Response.error(PLAYER.CREATE, "Username already exists!"),
-  );
+    expect(await pushPlayer(player2)).toEqual(
+      Response.error(PLAYER.CREATE, "Username already exists!"),
+    );
+  });
 });

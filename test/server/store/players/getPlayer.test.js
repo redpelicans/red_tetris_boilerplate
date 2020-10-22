@@ -1,34 +1,31 @@
 import redismock from "redis-mock";
 import { getPlayer, pushPlayer } from "storage/players";
 import { quitRedis, setRedis, deleteKeyFromRedis } from "storage";
+import Player from "models/player";
+import { player1mock } from "../../mocks";
 
 beforeAll(() => {
   setRedis(redismock.createClient());
 });
 
 afterAll(() => {
+  deleteKeyFromRedis("players");
   quitRedis();
 });
 
-beforeEach(() => {
-  deleteKeyFromRedis("players");
-});
+describe("getPlayer function", () => {
+  test("No players, should return null", async () => {
+    expect(await getPlayer("1")).toEqual(null);
+  });
 
-test("getPlayer() should return undefined", async () => {
-  expect(await getPlayer("56")).toEqual(undefined);
-});
+  test("player1 added, should return a Player", async () => {
+    const player = new Player(player1mock);
 
-test("getPlayer() should return a Player", async () => {
-  const player = {
-    id: "1",
-    name: "test",
-    socketId: "si1",
-  };
+    await pushPlayer(player);
+    expect(await getPlayer(player.id)).toEqual(player);
+  });
 
-  await pushPlayer(player);
-  expect(await getPlayer("1")).toEqual(player);
-});
-
-test("getPlayer() should return null", async () => {
-  expect(await getPlayer("2")).toBe(undefined);
+  test("player2 not added, should return null", async () => {
+    expect(await getPlayer("2")).toBe(null);
+  });
 });

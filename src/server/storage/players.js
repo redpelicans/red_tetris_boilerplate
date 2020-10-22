@@ -2,17 +2,33 @@ import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
 import Response from "models/response";
 import { PLAYER } from "../../config/actions/player";
 
+export const getPlayers = async () => {
+  return (await getComplexObjectFromRedis("players")) ?? {};
+};
+
 export const getPlayer = async (id) => {
-  const players = await getComplexObjectFromRedis("players");
-  return players?.[id];
+  const players = (await getComplexObjectFromRedis("players")) ?? {};
+  const player = players?.[id];
+  if (!player) {
+    return null;
+  } else {
+    return player;
+  }
 };
 
 export const getPlayerId = async (socketId) => {
-  const players = await getComplexObjectFromRedis("players");
+  const players = (await getComplexObjectFromRedis("players")) ?? {};
   if (!players) {
     return null;
   }
-  return Object.keys(players).find((key) => players[key].socketId === socketId);
+  const playerId = Object.keys(players).find(
+    (key) => players[key].socketId === socketId,
+  );
+  if (!playerId) {
+    return null;
+  } else {
+    return playerId;
+  }
 };
 
 export const pushPlayer = async (player) => {
@@ -35,9 +51,10 @@ export const pushPlayer = async (player) => {
 
 export const popPlayer = async (id) => {
   let players = (await getComplexObjectFromRedis("players")) ?? {};
-  if (!players?.[id]) return null;
+  if (!players?.[id]) return false;
   delete players[id];
   await setComplexObjectToRedis("players", players);
+  return true;
 };
 
 const isAvailable = (players, username) => {

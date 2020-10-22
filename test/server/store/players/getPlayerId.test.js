@@ -1,42 +1,31 @@
 import redismock from "redis-mock";
-import { getPlayerId } from "storage/players";
-import {
-  setRedis,
-  quitRedis,
-  setComplexObjectToRedis,
-  deleteKeyFromRedis,
-} from "storage";
+import { getPlayerId, pushPlayer } from "storage/players";
+import { setRedis, quitRedis, deleteKeyFromRedis } from "storage";
+import Player from "models/player";
+import { player1mock } from "../../mocks";
 
 beforeAll(() => {
   setRedis(redismock.createClient());
 });
 
 afterAll(() => {
+  deleteKeyFromRedis("players");
   quitRedis();
 });
 
-beforeEach(() => {
-  deleteKeyFromRedis("players");
-});
+describe("getPlayerId function", () => {
+  test("No players, should return null", async () => {
+    expect(await getPlayerId("1")).toEqual(null);
+  });
 
-test("getPlayerId() should return null", async () => {
-  expect(await getPlayerId("56")).toEqual(null);
-});
+  test("player1 added should return a Player", async () => {
+    const player = new Player(player1mock);
 
-test("getPlayerId() should return a Player", async () => {
-  const players = {
-    2: {
-      id: "2",
-      name: "test2",
-      socketId: "si2",
-    },
-    3: {
-      id: "3",
-      name: "test3",
-      socketId: "si3",
-    },
-  };
-  await setComplexObjectToRedis("players", players);
+    await pushPlayer(player);
+    expect(await getPlayerId(player.socketId)).toEqual(player.id);
+  });
 
-  expect(await getPlayerId("si2")).toEqual("2");
+  test("player2 not added, should return null", async () => {
+    expect(await getPlayerId("2")).toBe(null);
+  });
 });
