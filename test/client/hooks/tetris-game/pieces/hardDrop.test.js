@@ -1,21 +1,13 @@
-import hardDrop from "hooks/tetris-game/pieces/hardDrop";
-import { CURRENT_PIECE, FREE } from "constants/tetris";
+import hardDrop, { getNewPiece } from "hooks/tetris-game/pieces/hardDrop";
+import { FREE } from "constants/tetris";
 
 describe("Hard Drop", () => {
   const mockGrid = [
-    [FREE, CURRENT_PIECE, FREE, FREE, FREE],
-    [CURRENT_PIECE, CURRENT_PIECE, CURRENT_PIECE, FREE, FREE],
     [FREE, FREE, FREE, FREE, FREE],
     [FREE, FREE, FREE, FREE, FREE],
     [FREE, FREE, FREE, FREE, FREE],
-  ];
-
-  const mockGridWithDeletion = [
-    [FREE, CURRENT_PIECE, FREE, FREE, FREE],
-    [CURRENT_PIECE, CURRENT_PIECE, CURRENT_PIECE, FREE, FREE],
     [FREE, FREE, FREE, FREE, FREE],
     [FREE, FREE, FREE, FREE, FREE],
-    [FREE, FREE, FREE, "red", "red"],
   ];
 
   const mockPiece = {
@@ -38,29 +30,15 @@ describe("Hard Drop", () => {
       [FREE, "green", FREE, FREE, FREE],
       ["green", "green", "green", FREE, FREE],
     ];
+    const expectedPiece = {
+      ...mockPiece,
+      coord: { x: 0, y: 3 },
+    };
 
-    const [newGrid, score, rowsRemoved] = hardDrop(mockGrid, mockPiece);
+    const newPiece = getNewPiece(mockGrid, mockPiece);
+    expect(newPiece).toEqual(expectedPiece);
+    const newGrid = hardDrop(mockGrid, newPiece);
     expect(newGrid).toEqual(expectedGrid);
-    expect(score).toEqual(6);
-    expect(rowsRemoved).toEqual(0);
-  });
-
-  test("Valid drop with deletion", () => {
-    const expectedGrid = [
-      [FREE, FREE, FREE, FREE, FREE],
-      [FREE, FREE, FREE, FREE, FREE],
-      [FREE, FREE, FREE, FREE, FREE],
-      [FREE, FREE, FREE, FREE, FREE],
-      [FREE, "green", FREE, FREE, FREE],
-    ];
-
-    const [newGrid, score, rowsRemoved] = hardDrop(
-      mockGridWithDeletion,
-      mockPiece,
-    );
-    expect(newGrid).toEqual(expectedGrid);
-    expect(score).toEqual(106);
-    expect(rowsRemoved).toEqual(1);
   });
 
   test("Type Error", () => {

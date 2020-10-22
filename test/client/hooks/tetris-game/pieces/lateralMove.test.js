@@ -1,10 +1,10 @@
-import lateralMove from "hooks/tetris-game/pieces/lateralMove";
-import { CURRENT_PIECE, FREE, MOVE_LEFT, MOVE_RIGHT } from "constants/tetris";
+import lateralMove, { getNewPiece } from "hooks/tetris-game/pieces/lateralMove";
+import { CURRENT_PIECE, FREE, MOVE_RIGHT } from "constants/tetris";
 
 describe("Lateral Move", () => {
   const mockGrid = [
-    [FREE, CURRENT_PIECE, FREE, FREE, FREE],
-    [CURRENT_PIECE, CURRENT_PIECE, CURRENT_PIECE, FREE, FREE],
+    [FREE, FREE, FREE, FREE, FREE],
+    [FREE, FREE, FREE, FREE, FREE],
     [FREE, FREE, FREE, FREE, FREE],
     [FREE, FREE, FREE, FREE, FREE],
     [FREE, FREE, FREE, FREE, FREE],
@@ -40,13 +40,10 @@ describe("Lateral Move", () => {
       coord: { ...mockPiece.coord, x: mockPiece.coord.x + 1 },
     };
 
-    const [newGrid, newPiece] = lateralMove(mockGrid, mockPiece, MOVE_RIGHT);
-    expect(newGrid).toEqual(expectedGrid);
+    const newPiece = getNewPiece(mockPiece, MOVE_RIGHT);
     expect(newPiece).toEqual(expectedPiece);
-  });
-
-  test("Invalid Lateral Move", () => {
-    expect(lateralMove(mockGrid, mockPiece, MOVE_LEFT)).toBeNull();
+    const newGrid = lateralMove(mockGrid, newPiece);
+    expect(newGrid).toEqual(expectedGrid);
   });
 
   test("Type Error", () => {
