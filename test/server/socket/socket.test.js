@@ -126,7 +126,7 @@ describe("Socket tests", () => {
     });
   });
 
-  test("Should leave lobby", async (done) => {
+  test("Should leave lobby and lobby should be deleted", async (done) => {
     socketClient.on("lobby:response", (response) => {
       expect(response.type).toBe("success");
       socketClient.off("lobby:response");
@@ -141,6 +141,59 @@ describe("Socket tests", () => {
       playerId: playerId,
       lobbyId: lobbyId,
     });
+  });
+
+  test("Should create, join and then delete lobby", async (done) => {
+    socketClient.on("lobbies:response", async (response) => {
+      if (response.action == "lobbies:delete") {
+        expect(response.type).toBe("success");
+        expect(response.payload).toEqual({});
+        expect(await getLobbies()).toEqual({});
+
+        socketClient.off("lobbies:response");
+        done();
+      }
+      if ((response.action = "lobbies:add")) {
+        subscribeToLobby();
+      }
+    });
+
+    socketClient.on("lobby:response", (response) => {
+      if (response.action == "lobby:subscribe") {
+        deleteLobby();
+        socketClient.off("lobby:response");
+      }
+    });
+
+    const playerId = await getPlayerId(socketClient.id);
+    const player = await getPlayer(playerId);
+    socketClient.emit("lobbies:add", {
+      hash: "hash",
+      name: "lobby1",
+      maxPlayer: 4,
+      owner: player,
+    });
+
+    const subscribeToLobby = async () => {
+      const playerId = await getPlayerId(socketClient.id);
+      const lobbies = await getLobbies();
+      const lobbyId = Object.keys(lobbies)[0];
+
+      socketClient.emit("lobby:subscribe", {
+        playerId: playerId,
+        lobbyId: lobbyId,
+      });
+    };
+
+    const deleteLobby = async () => {
+      const playerId = await getPlayerId(socketClient.id);
+      const lobbies = await getLobbies();
+      const lobbyId = Object.keys(lobbies)[0];
+      socketClient.emit("lobbies:delete", {
+        ownerId: playerId,
+        lobbyId: lobbyId,
+      });
+    };
   });
 
   test("Should send message", (done) => {
@@ -162,5 +215,49 @@ describe("Socket tests", () => {
       done();
     });
     socketClient.emit("piece:get", { nb: 3 });
+  });
+
+  test("Should create, join and then lobby should be deleted on disconnect", async (done) => {
+    socketClient.on("lobbies:response", async (response) => {
+      if ((response.action = "lobbies:add")) {
+        subscribeToLobby();
+        socketClient.off("lobbies:response");
+      }
+    });
+
+    socketClient.on("lobby:response", async (response) => {
+      if (response.action == "lobby:subscribe") {
+        disconnectClient();
+        socketClient.off("lobby:response");
+      }
+    });
+
+    const playerId = await getPlayerId(socketClient.id);
+    const player = await getPlayer(playerId);
+    socketClient.emit("lobbies:add", {
+      hash: "hash",
+      name: "lobby1",
+      maxPlayer: 4,
+      owner: player,
+    });
+
+    const subscribeToLobby = async () => {
+      const playerId = await getPlayerId(socketClient.id);
+      const lobbies = await getLobbies();
+      const lobbyId = Object.keys(lobbies)[0];
+
+      socketClient.emit("lobby:subscribe", {
+        playerId: playerId,
+        lobbyId: lobbyId,
+      });
+    };
+
+    const disconnectClient = async () => {
+      socketClient.disconnect();
+      setTimeout(async () => {
+        expect(await getLobbies()).toEqual({});
+        done();
+      }, 500);
+    };
   });
 });
