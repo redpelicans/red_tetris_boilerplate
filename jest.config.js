@@ -32,7 +32,6 @@ module.exports = {
     "src/server/models/",
     "src/server/index.js",
     "src/server/listeners/events.js",
-    "src/client",
   ],
 
   // Indicates which provider should be used to instrument code for coverage
