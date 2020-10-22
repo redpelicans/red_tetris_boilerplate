@@ -1,35 +1,29 @@
 import redismock from "redis-mock";
 import { getLobby, pushLobby } from "storage/lobbies";
 import { quitRedis, setRedis, deleteKeyFromRedis } from "storage";
+import { lobby1mock } from "../../mocks";
 
 beforeAll(() => {
   setRedis(redismock.createClient());
 });
 
 afterAll(() => {
+  deleteKeyFromRedis("lobbies");
   quitRedis();
 });
 
-beforeEach(() => {
-  deleteKeyFromRedis("lobbies");
-});
+describe("getLobby function", () => {
+  test("No lobbies, should return null", async () => {
+    expect(await getLobby("1")).toEqual(null);
+  });
 
-test("getLobby() should return undefined", async () => {
-  expect(await getLobby("56")).toEqual(undefined);
-});
+  test("lobby1 added, should return a Lobby", async () => {
+    await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
-test("getLobby() should return a Lobby", async () => {
-  const lobby = {
-    id: "1",
-    name: "test",
-    owner: {},
-    players: [{}],
-  };
+    expect(await getLobby(lobby1mock.id)).toEqual(lobby1mock);
+  });
 
-  await pushLobby(lobby, "testSocketId");
-  expect(await getLobby("1")).toEqual(lobby);
-});
-
-test("getLobby() should return null", async () => {
-  expect(await getLobby("222")).toBe(undefined);
+  test("lobby2 not added, should return null", async () => {
+    expect(await getLobby("2")).toBe(null);
+  });
 });

@@ -1,13 +1,15 @@
 import redismock from "redis-mock";
-import {
-  setRedis,
-  quitRedis,
-  setComplexObjectToRedis,
-  deleteKeyFromRedis,
-} from "storage";
+import { setRedis, quitRedis, deleteKeyFromRedis } from "storage";
 import Response from "models/response";
 import { LOBBY } from "../../../../src/config/actions/lobby";
-import { joinLobby } from "storage/lobbies";
+import { joinLobby, pushLobby } from "storage/lobbies";
+import {
+  lobby1mock,
+  lobby2mock,
+  playerObject3mock,
+  playerObject4mock,
+} from "../../mocks";
+import { deepCopy } from "helpers/functional";
 
 beforeAll(() => {
   setRedis(redismock.createClient());
@@ -21,142 +23,52 @@ beforeEach(() => {
   deleteKeyFromRedis("lobbies");
 });
 
-test("joinLobby() should return a Success response", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ socketId: "testSocketId" }],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
+describe("joinLobby function", () => {
+  test("Should return a Success response", async () => {
+    await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
-  const lobbytest = {
-    id: "1",
-    name: "test",
-    owner: {},
-    maxPlayer: 4,
-    players: [
-      { socketId: "testSocketId" },
-      {
-        id: "123",
-        name: "123",
-        socketId: "testSocketId2",
-      },
-    ],
-  };
+    const lobby = deepCopy(lobby1mock);
+    lobby.players.push(playerObject3mock);
 
-  const player = {
-    id: "123",
-    name: "123",
-    socketId: "testSocketId2",
-  };
+    expect(await joinLobby(playerObject3mock, lobby1mock.id)).toEqual(
+      Response.success(LOBBY.SUBSCRIBE, lobby),
+    );
+  });
 
-  expect(await joinLobby(player, "1")).toEqual(
-    Response.success(LOBBY.SUBSCRIBE, lobbytest),
-  );
-});
+  test("Should return an Error response `you already are in another lobby`", async () => {
+    await pushLobby(lobby1mock, lobby1mock.owner.socketId);
+    await pushLobby(lobby2mock, lobby2mock.owner.socketId);
 
-test("joinLobby() should return an Error response `you already are in another lobby`", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "1" }],
-    },
-    2: {
-      id: "2",
-      name: "test2",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "123" }],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
+    expect(await joinLobby(playerObject3mock, lobby1mock.id)).toEqual(
+      Response.error(LOBBY.SUBSCRIBE, "You already are in another lobby!"),
+    );
+  });
 
-  const player = {
-    id: "123",
-    name: "123",
-    socketId: "testSocketId2",
-  };
+  test("No lobbies : should return an Error response `Lobby doesn't exists!`", async () => {
+    expect(await joinLobby(playerObject3mock, lobby1mock.id)).toEqual(
+      Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!"),
+    );
+  });
 
-  expect(await joinLobby(player, "1")).toEqual(
-    Response.error(LOBBY.SUBSCRIBE, "You already are in another lobby!"),
-  );
-});
+  test("No lobby : should return an Error response `Lobby doesn't exists!`", async () => {
+    await pushLobby(lobby1mock, lobby1mock.owner.socketId);
+    expect(await joinLobby(playerObject3mock, lobby2mock.id)).toEqual(
+      Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!"),
+    );
+  });
 
-test("joinLobby() should return an Error response `Lobby doesn't exists!`", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "1" }],
-    },
-    2: {
-      id: "2",
-      name: "test2",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "2" }],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
+  test("Should return an Error response `The lobby is full!`", async () => {
+    await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
-  const player = {
-    id: "123",
-    name: "123",
-    socketId: "testSocketId2",
-  };
+    const lobby = deepCopy(lobby1mock);
+    lobby.players.push(playerObject3mock);
 
-  expect(await joinLobby(player, "3")).toEqual(
-    Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!"),
-  );
-});
+    expect(await joinLobby(playerObject3mock, lobby1mock.id)).toEqual(
+      Response.success(LOBBY.SUBSCRIBE, lobby),
+    );
 
-test("joinLobby() should return an Error response `The lobby is full!`", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }],
-    },
-    2: {
-      id: "2",
-      name: "test2",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "5" }],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
-
-  const player = {
-    id: "123",
-    name: "123",
-    socketId: "testSocketId2",
-  };
-
-  expect(await joinLobby(player, "1")).toEqual(
-    Response.error(LOBBY.SUBSCRIBE, "The lobby is full!"),
-  );
-});
-
-test("joinLobby() should return Error response `lobby doesn't exists` no lobbies", async () => {
-  const player = {
-    id: "123",
-    name: "123",
-    socketId: "testSocketId2",
-  };
-
-  expect(await joinLobby(player, "1")).toEqual(
-    Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!"),
-  );
+    expect(await joinLobby(playerObject4mock, lobby1mock.id)).toEqual(
+      Response.error(LOBBY.SUBSCRIBE, "The lobby is full!"),
+    );
+  });
 });

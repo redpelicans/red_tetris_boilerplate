@@ -4,9 +4,18 @@ import { LOBBY } from "../../config/actions/lobby";
 import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
 import Response from "models/response";
 
+export const getLobbies = async () => {
+  return (await getComplexObjectFromRedis("lobbies")) ?? {};
+};
+
 export const getLobby = async (id) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
-  return lobbies?.[id];
+  const lobby = lobbies?.[id];
+  if (!lobby) {
+    return null;
+  } else {
+    return lobby;
+  }
 };
 
 export const pushLobby = async (lobby, socketId) => {

@@ -1,14 +1,10 @@
 import redismock from "redis-mock";
-import {
-  quitRedis,
-  setRedis,
-  setComplexObjectToRedis,
-  getComplexObjectFromRedis,
-  deleteKeyFromRedis,
-} from "storage";
+import { quitRedis, setRedis, deleteKeyFromRedis } from "storage";
 import Response from "models/response";
 import { LOBBY } from "../../../../src/config/actions/lobby";
-import { leaveLobby } from "storage/lobbies";
+import { leaveLobby, pushLobby, getLobbies } from "storage/lobbies";
+import { lobby1mock, lobby2mock } from "../../mocks";
+import { deepCopy } from "helpers/functional";
 
 beforeAll(() => {
   setRedis(redismock.createClient());
@@ -22,144 +18,65 @@ beforeEach(() => {
   deleteKeyFromRedis("lobbies");
 });
 
-test("leaveLobby() should return a Success response", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }],
-    },
-    2: {
-      id: "2",
-      name: "test2",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "5" }],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
+describe("leaveLobby function", () => {
+  test("Should return a Success response", async () => {
+    await pushLobby(lobby1mock, lobby1mock.owner.socketId);
+    await pushLobby(lobby2mock, lobby2mock.owner.socketId);
 
-  expect(await leaveLobby("1", "1")).toEqual(
-    Response.success(LOBBY.UNSUBSCRIBE, {}),
-  );
-});
+    expect(await leaveLobby(lobby1mock.players[1].id, lobby1mock.id)).toEqual(
+      Response.success(LOBBY.UNSUBSCRIBE, {}),
+    );
+  });
 
-test("leaveLobby() should return an Error response `Lobby doesn't exists`", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }],
-    },
-    2: {
-      id: "2",
-      name: "test2",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "5" }],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
+  test("No lobby : Should return an Error response `Lobby doesn't exists`", async () => {
+    await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
-  expect(await leaveLobby("1", "3")).toEqual(
-    Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!"),
-  );
-});
+    expect(await leaveLobby(lobby2mock.players[1].id, lobby2mock.id)).toEqual(
+      Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!"),
+    );
+  });
 
-test("leaveLobby() should return a Success response and remove lobby", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }],
-    },
-    2: {
-      id: "2",
-      name: "test2",
-      owner: { socketId: "dd", id: "5" },
-      maxPlayer: 4,
-      players: [{ socketId: "dd", id: "5" }],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
+  test("No lobbies : Should return an Error response `Lobby doesn't exists`", async () => {
+    expect(await leaveLobby(lobby1mock.players[1].id, lobby1mock.id)).toEqual(
+      Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!"),
+    );
+  });
 
-  expect(await leaveLobby("5", "2")).toEqual(
-    Response.success(LOBBY.UNSUBSCRIBE, {}),
-  );
-});
+  test("Should return a Success response", async () => {
+    await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
-test("leaveLobby() should return an Error response `last but not owner`", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }],
-    },
-    2: {
-      id: "2",
-      name: "test2",
-      owner: { socketId: "dd", id: "2" },
-      maxPlayer: 4,
-      players: [{ socketId: "dd", id: "5" }],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
+    expect(await leaveLobby(lobby1mock.owner.id, lobby1mock.id)).toEqual(
+      Response.success(LOBBY.UNSUBSCRIBE, {}),
+    );
 
-  expect(await leaveLobby("5", "2")).toEqual(
-    Response.error(
-      LOBBY.UNSUBSCRIBE,
-      "You are the last player but not the owner there is a problem!",
-    ),
-  );
-});
+    expect(await leaveLobby(lobby1mock.players[1].id, lobby1mock.id)).toEqual(
+      Response.success(LOBBY.UNSUBSCRIBE, {}),
+    );
+  });
 
-test("leaveLobby() should return a Success response and change owner", async () => {
-  const lobbies = {
-    1: {
-      id: "1",
-      name: "test",
-      owner: {},
-      maxPlayer: 4,
-      players: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }],
-    },
-    2: {
-      id: "2",
-      name: "test2",
-      owner: { socketId: "ddw", id: "6" },
-      maxPlayer: 4,
-      players: [
-        { socketId: "ddw", id: "6" },
-        { socketId: "ddq", id: "5" },
-        { socketId: "dda", id: "7" },
-      ],
-    },
-  };
-  await setComplexObjectToRedis("lobbies", lobbies);
+  test("Should return an Error response `last but not owner`", async () => {
+    const lobby = deepCopy(lobby1mock);
+    lobby.players = [lobby.players[1]];
+    await pushLobby(lobby, lobby1mock.owner.socketId);
 
-  expect(await leaveLobby("6", "2")).toEqual(
-    Response.success(LOBBY.UNSUBSCRIBE, {}),
-  );
+    expect(await leaveLobby(lobby.players[0].id, lobby1mock.id)).toEqual(
+      Response.error(
+        LOBBY.UNSUBSCRIBE,
+        "You are the last player but not the owner there is a problem!",
+      ),
+    );
+  });
 
-  const lobbiesFinal = await getComplexObjectFromRedis("lobbies", lobbies);
-  expect(lobbiesFinal[2].owner.id).toEqual("5");
-});
+  test("Should return a Success response and change owner", async () => {
+    const lobby = deepCopy(lobby1mock);
+    await pushLobby(lobby, lobby.owner.socketId);
 
-test("leaveLobby() should return Error response `lobby doesn't exists` no lobbies", async () => {
-  const player = {
-    id: "123",
-    name: "123",
-    socketId: "testSocketId2",
-  };
+    expect(await leaveLobby(lobby.owner.id, lobby.id)).toEqual(
+      Response.success(LOBBY.UNSUBSCRIBE, {}),
+    );
 
-  expect(await leaveLobby("6", "2")).toEqual(
-    Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!"),
-  );
+    const lobbies = await getLobbies();
+
+    expect(lobbies[lobby.id].owner.id).toEqual(lobby1mock.players[1].id);
+  });
 });
