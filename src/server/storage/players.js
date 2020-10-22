@@ -18,9 +18,6 @@ export const getPlayer = async (id) => {
 
 export const getPlayerId = async (socketId) => {
   const players = (await getComplexObjectFromRedis("players")) ?? {};
-  if (!players) {
-    return null;
-  }
   const playerId = Object.keys(players).find(
     (key) => players[key].socketId === socketId,
   );
