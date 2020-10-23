@@ -13,6 +13,7 @@ import {
   KEYBOARD_ACTIONS,
 } from "constants/tetris";
 import useTetrisState from "./useTetrisState";
+import usePrevious from "hooks/usePrevious";
 
 /*
  ** This custom hook is used to manage the game board.
@@ -27,6 +28,8 @@ function useTetrisGame(cols = 10, rows = 20) {
     setGameOver,
   } = useTetrisState();
   const autoMoveTimer = useAutoMove(gravity);
+
+  const previousY = usePrevious(state.currentPiece);
 
   const gravityInterval = React.useMemo(() => {
     const divideByThree = divideBy(3);
@@ -55,9 +58,24 @@ function useTetrisGame(cols = 10, rows = 20) {
   // Set a new Timer after each move
   React.useEffect(() => {
     if (!isEmpty(state.currentPiece.shape) && state.currentPiece.coord) {
-      autoMoveTimer.start(gravityInterval);
+      if (
+        // state.currentPiece.coord.y > previousY?.coord?.y ||
+        // state.currentPiece.coord.y <= 0
+        autoMoveTimer.state === 0
+      ) {
+        autoMoveTimer.start(gravityInterval);
 
-      return () => autoMoveTimer.stop();
+        return () => {
+          console.log(autoMoveTimer.state);
+          if (
+            // (state.currentPiece.coord.y > previousY?.coord?.y ||
+            //   state.currentPiece.coord.y <= 0) &&
+            autoMoveTimer.state === 1
+          ) {
+            autoMoveTimer.stop();
+          }
+        };
+      }
     }
   }, [state.currentPiece.coord, state.currentPiece.shape]);
 
@@ -80,37 +98,39 @@ function useTetrisGame(cols = 10, rows = 20) {
     return false;
   }
 
+  const [allowAction, setAllowAction] = React.useState(true);
+
   // Dispatcher to Tetris Actions
   function movePiece(action) {
     if (!state.alive) {
       return;
     }
 
-    if (KEYBOARD_ACTIONS.includes(action.code)) {
-      autoMoveTimer.stop();
-      if (action.code === "ArrowDown") {
-        doSoftDrop();
-      } else if (action.code === "ArrowLeft") {
-        movePieceLateral(MOVE_LEFT);
-      } else if (action.code === "ArrowRight") {
-        movePieceLateral(MOVE_RIGHT);
-      } else if (action.code === "ArrowUp") {
-        rotatePiece();
-      } else if (action.code === "Space") {
-        doHardDrop();
-      }
+    autoMoveTimer.pause();
+    if (action.code === "ArrowDown") {
+      doSoftDrop();
+    } else if (action.code === "ArrowLeft") {
+      movePieceLateral(MOVE_LEFT);
+    } else if (action.code === "ArrowRight") {
+      movePieceLateral(MOVE_RIGHT);
+    } else if (action.code === "ArrowUp" && allowAction) {
+      setAllowAction(false);
+      rotatePiece();
+    } else if (action.code === "Space") {
+      doHardDrop();
     }
+    autoMoveTimer.resume();
+  }
+
+  function reallowAction() {
+    setAllowAction(true);
   }
 
   // Tetris Actions
   function movePieceLateral(direction) {
     const newObj = Piece.lateralMove(state.grid, state.currentPiece, direction);
 
-    if (isEmpty(newObj)) {
-      autoMoveTimer.start(gravityInterval);
-    } else {
-      updateStateAfterMove(newObj);
-    }
+    updateStateAfterMove(newObj);
   }
 
   function doHardDrop() {
@@ -146,14 +166,10 @@ function useTetrisGame(cols = 10, rows = 20) {
   function rotatePiece() {
     const newObj = Piece.rotation(state.currentPiece, state.grid);
 
-    if (isEmpty(newObj)) {
-      autoMoveTimer.start(gravityInterval);
-    } else {
-      updateStateAfterMove(newObj);
-    }
+    updateStateAfterMove(newObj);
   }
 
-  return { movePiece };
+  return { movePiece, reallowAction };
 }
 
 export default useTetrisGame;
