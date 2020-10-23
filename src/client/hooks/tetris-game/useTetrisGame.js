@@ -21,32 +21,33 @@ function useTetrisGame(methods, nextPieces) {
       methods.moveDown(manuallyTriggered);
     }, gravityInterval);
 
-    return () => {
-      clearInterval(gravityTimer);
-    };
+    return () => clearInterval(gravityTimer);
   }, [gravityInterval, state.alive, nextPieces]);
 
-  function movePiece(action) {
-    if (!state.alive) {
-      return;
-    }
-    const manuallyTriggered = true;
-
-    switch (action.code) {
-      case "ArrowDown":
-        return methods.moveDown(manuallyTriggered);
-      case "ArrowLeft":
-        return methods.moveLateral(MOVE_LEFT);
-      case "ArrowRight":
-        return methods.moveLateral(MOVE_RIGHT);
-      case "ArrowUp":
-        return methods.rotation();
-      case "Space":
-        return methods.dropDown();
-      default:
+  const movePiece = React.useCallback(
+    (action) => {
+      if (!state.alive) {
         return;
-    }
-  }
+      }
+      const manuallyTriggered = true;
+
+      switch (action.code) {
+        case "ArrowDown":
+          return methods.moveDown(manuallyTriggered);
+        case "ArrowLeft":
+          return methods.moveLateral(MOVE_LEFT);
+        case "ArrowRight":
+          return methods.moveLateral(MOVE_RIGHT);
+        case "ArrowUp":
+          return methods.rotation();
+        case "Space":
+          return methods.dropDown();
+        default:
+          return;
+      }
+    },
+    [nextPieces],
+  );
 
   return { movePiece };
 }

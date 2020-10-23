@@ -52,7 +52,7 @@ function useGameBoard(
     }
   }, [gameBoard.piece.id]);
 
-  function insertNewPiece() {
+  const insertNewPiece = React.useCallback(() => {
     const newPiece = Insert.getNewPiece(gameBoard.piece, gameBoard.grid);
 
     if (canPut(gameBoard.grid, newPiece)) {
@@ -64,9 +64,9 @@ function useGameBoard(
       setGameBoard({ ...gameBoard, grid: newGrid, piece: newPiece });
       gameOver();
     }
-  }
+  }, [gameBoard.piece.id]);
 
-  function moveLateral(direction) {
+  const moveLateral = React.useCallback((direction) => {
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = LatMove.getNewPiece(oldState.piece, direction);
@@ -79,39 +79,42 @@ function useGameBoard(
 
       return oldState;
     });
-  }
+  }, []);
 
-  function moveDown(manuallyTriggered) {
-    setGameBoard((oldState) => {
-      const cleanGrid = Grid.clear(oldState.grid);
-      const newPiece = SoftDrop.getNewPiece(oldState.piece);
+  const moveDown = React.useCallback(
+    (manuallyTriggered) => {
+      setGameBoard((oldState) => {
+        const cleanGrid = Grid.clear(oldState.grid);
+        const newPiece = SoftDrop.getNewPiece(oldState.piece);
 
-      if (canPut(cleanGrid, newPiece)) {
-        const newGrid = SoftDrop.default(cleanGrid, newPiece);
-        const newGridWithShadow = Shadow.default(newGrid, newPiece);
-        if (manuallyTriggered) {
-          addScore(1);
+        if (canPut(cleanGrid, newPiece)) {
+          const newGrid = SoftDrop.default(cleanGrid, newPiece);
+          const newGridWithShadow = Shadow.default(newGrid, newPiece);
+          if (manuallyTriggered) {
+            addScore(1);
+          }
+
+          return { ...oldState, grid: newGridWithShadow, piece: newPiece };
         }
 
-        return { ...oldState, grid: newGridWithShadow, piece: newPiece };
-      }
+        const newGrid = Grid.bind(
+          cleanGrid,
+          oldState.piece,
+          addScore,
+          addRemovedLines,
+        );
+        const nextPiece = pullNextPiece();
+        return {
+          ...oldState,
+          grid: newGrid,
+          piece: { ...nextPiece, id: pieceId.current++ },
+        };
+      });
+    },
+    [gameBoard.piece.id],
+  );
 
-      const newGrid = Grid.bind(
-        cleanGrid,
-        oldState.piece,
-        addScore,
-        addRemovedLines,
-      );
-      const nextPiece = pullNextPiece();
-      return {
-        ...oldState,
-        grid: newGrid,
-        piece: { ...nextPiece, id: pieceId.current++ },
-      };
-    });
-  }
-
-  function dropDown() {
+  const dropDown = React.useCallback(() => {
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = HardDrop.getNewPiece(cleanGrid, oldState.piece);
@@ -134,9 +137,9 @@ function useGameBoard(
       }
       return oldState;
     });
-  }
+  }, [gameBoard.piece.id]);
 
-  function rotation() {
+  const rotation = React.useCallback(() => {
     setGameBoard((oldState) => {
       if (!("coord" in oldState.piece)) {
         return oldState;
@@ -153,7 +156,7 @@ function useGameBoard(
 
       return oldState;
     });
-  }
+  }, []);
 
   return {
     grid: gameBoard.grid,
