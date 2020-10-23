@@ -1,6 +1,5 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-import { ListLobby } from "pages/lobbies/save/ListLobby";
 import { LOBBY } from "../../../../config/actions/lobby";
 import { LOBBIES } from "../../../../config/actions/lobbies";
 import { setLobby } from "actions/store";
@@ -63,10 +62,10 @@ export default function ({ close }) {
           {Object.entries(state.lobby?.players || {}).map(
             ([key, el], index) => (
               <FlexBox className="w-full" key={`player-${key}`}>
-                <span className="mr-2">{`${index + 1} : ${el?.player.name} : ${
-                  el?.ready
-                } `}</span>
-                {el.ready ? (
+                <span className="mr-2">{`${index + 1} : ${
+                  el?.player.name
+                }`}</span>
+                {el?.ready ? (
                   <div className="h-4 w-4 rounded-md bg-green-500 mr-2" />
                 ) : (
                   <div className="h-4 w-4 rounded-md bg-red-500 mr-2" />
