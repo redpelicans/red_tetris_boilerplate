@@ -27,10 +27,7 @@ function useNextPieces() {
     const nextPiece = nextPieces[0];
     const fetchedPiece = fetchFromMock(1);
 
-    setNextPieces((oldPieces) => [
-      ...oldPieces.filter((_, idx) => idx !== 0),
-      ...fetchedPiece,
-    ]);
+    setNextPieces((oldPieces) => [...oldPieces.slice(1), ...fetchedPiece]);
 
     return nextPiece;
   }
