@@ -12,6 +12,7 @@ export default function ({ close }) {
   const [errorUnsub, setErrorUnsub] = React.useState("");
   const [errorDel, setErrorDel] = React.useState("");
 
+  const [success, error] = useSubscribe("lobby:response", LOBBY.UNSUBSCRIBE);
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.UNSUBSCRIBE) {
       if (state.lobbyResponse.type === "error") {

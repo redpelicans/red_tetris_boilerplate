@@ -15,7 +15,7 @@ export default function useSubscribe(socketDomain, actionToCheck) {
     return () => socket.off(action);
   }, []);
 
-  return { success: state.success.reason, error: state.error.reason };
+  return [state.success.reason, state.error.reason];
 }
 
 const initialState = {
