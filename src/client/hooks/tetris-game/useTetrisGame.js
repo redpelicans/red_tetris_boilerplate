@@ -16,7 +16,10 @@ function useTetrisGame(methods) {
       return;
     }
 
-    const gravityTimer = setInterval(methods.moveDown, gravityInterval);
+    const gravityTimer = setInterval(() => {
+      const manuallyTriggered = false;
+      methods.moveDown(manuallyTriggered);
+    }, gravityInterval);
 
     return () => {
       clearInterval(gravityTimer);
