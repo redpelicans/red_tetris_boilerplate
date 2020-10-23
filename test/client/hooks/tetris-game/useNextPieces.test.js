@@ -11,15 +11,10 @@ describe("useNextPieces", () => {
     expect(useStateStub).toHaveBeenCalledTimes(1);
     expect(result.current.nextPieces).toHaveLength(3);
 
-    const nextPieceAtFirst = result.current.nextPieces[0];
-
     act(() => {
       result.current.pullNextPiece();
     });
     expect(useStateStub).toHaveBeenCalledTimes(2);
     expect(result.current.nextPieces).toHaveLength(3);
-
-    const nextPieceAtSecond = result.current.nextPieces[0];
-    expect(nextPieceAtFirst !== nextPieceAtSecond).toBe(true);
   });
 });
