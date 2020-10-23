@@ -1,5 +1,4 @@
 import React from "react";
-import { deepCopy } from "helpers/functional";
 import * as Grid from "./grid";
 import * as Insert from "./pieces/insertion";
 import * as Shadow from "./pieces/shadow";
@@ -43,7 +42,7 @@ function useGameBoard(
 
     setGameBoard({
       ...gameBoard,
-      piece: { ...deepCopy(pieceFromStash), id: pieceId.current++ },
+      piece: { ...pieceFromStash, id: pieceId.current++ },
     });
   }, []);
 
@@ -107,7 +106,7 @@ function useGameBoard(
       return {
         ...oldState,
         grid: newGrid,
-        piece: { ...deepCopy(nextPiece), id: pieceId.current++ },
+        piece: { ...nextPiece, id: pieceId.current++ },
       };
     });
   }
@@ -130,7 +129,7 @@ function useGameBoard(
         return {
           ...oldState,
           grid: newGrid,
-          piece: { ...deepCopy(nextPiece), id: pieceId.current++ },
+          piece: { ...nextPiece, id: pieceId.current++ },
         };
       }
       return oldState;
