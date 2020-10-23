@@ -45,7 +45,7 @@ export default function ({ close }) {
     <span>You don't have any lobby yet :(</span>
   ) : (
     <FlexBox height="full" width="full" className="justify-center items-center">
-      <Player />
+      {/* <Player /> */}
       <FlexBox
         direction="col"
         className="h-2/5 p-10 bg-white bg-opacity-75 m-10 justify-between rounded-lg"

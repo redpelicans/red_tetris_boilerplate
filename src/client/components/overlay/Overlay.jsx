@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "components/modals/Modal";
 import PropTypes from "prop-types";
 
-export default function Overlay({ children, isOpen, close, className }) {
+export default function Overlay({ children, isOpen, close, ...rest }) {
   React.useEffect(() => {
     const onEscape = (evt) => {
       if (isOpen && evt.keyCode === 27) {
@@ -17,7 +17,7 @@ export default function Overlay({ children, isOpen, close, className }) {
     };
   }, []);
 
-  return isOpen ? <Modal className={className}>{children}</Modal> : null;
+  return isOpen ? <Modal {...rest}>{children}</Modal> : null;
 }
 
 Overlay.propTypes = {

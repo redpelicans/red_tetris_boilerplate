@@ -46,31 +46,51 @@ export default function Lobbies() {
           className="create-modal"
         />
       )}
-      <FlexBox direction="col" className="h-4/5">
-        <SearchLobby />
-        <div className="overflow-y-scroll max-h-4/5 lobby">
-          {Object.entries(state.lobbies || {}).map(([key, el], index) => {
-            return <LobbyItem lobby={el} key={index} />;
-          })}
-        </div>
-      </FlexBox>
-      <FlexBox width="3/4" direction="row" className="justify-between">
-        <button className="w-3/5 text-center bg-red-100 p-2 rounded-lg shadow-lg">
-          <FlexBox direction="col">
-            <span className="text-base">Play Game</span>
-            <span className="text-xs">
-              {Object.keys(state.players).length} players connected
-            </span>
-          </FlexBox>
-        </button>
-        <button
-          className="text-base w-1/3 text-center bg-red-400 p-2 rounded-lg shadow-lg"
-          onClick={() => setHasClickedCreate(true)}
-        >
-          Create Lobby
-        </button>
-      </FlexBox>
+      <LobbyList />
+
+      <ButtonsLobbies>
+        <PlayButton players={state.players} />
+        <CreateButton onClick={() => setHasClickedCreate(true)} />
+      </ButtonsLobbies>
+
       <LobbyContainer />
     </FlexBox>
   );
 }
+
+const LobbyList = () => (
+  <FlexBox direction="col" className="h-4/5">
+    <SearchLobby />
+    <div className="overflow-y-scroll max-h-4/5 lobby">
+      {Object.entries(state.lobbies || {}).map(([key, el], index) => {
+        return <LobbyItem lobby={el} key={index} />;
+      })}
+    </div>
+  </FlexBox>
+);
+
+const ButtonsLobbies = ({ children }) => (
+  <FlexBox width="3/4" direction="row" className="justify-between">
+    {children}
+  </FlexBox>
+);
+
+const PlayButton = ({ players }) => (
+  <button className="w-3/5 text-center bg-red-100 p-2 rounded-lg shadow-lg">
+    <FlexBox direction="col">
+      <span className="text-base">Play Game</span>
+      <span className="text-xs">
+        {Object.keys(players).length} players connected
+      </span>
+    </FlexBox>
+  </button>
+);
+
+const CreateButton = ({ ...rest }) => (
+  <button
+    className="text-base w-1/3 text-center bg-red-400 p-2 rounded-lg shadow-lg"
+    onClick={onClick}
+  >
+    Create Lobby
+  </button>
+);
