@@ -14,7 +14,6 @@ import {
 } from "actions/store";
 
 export const initialState = {
-  socket: null,
   socket: initSocket(),
   player: {},
   playerResponse: {},
