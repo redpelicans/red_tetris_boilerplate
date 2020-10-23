@@ -39,7 +39,7 @@ export default function Game() {
     addScore,
     addRemovedLines,
   );
-  const { movePiece } = useTetrisGame(methods);
+  const { movePiece } = useTetrisGame(methods, nextPieces);
 
   const options = {
     volume: 0.2,
