@@ -139,6 +139,10 @@ function useGameBoard(
 
   function rotation() {
     setGameBoard((oldState) => {
+      if (!("coord" in oldState.piece)) {
+        return oldState;
+      }
+
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = Rotation.getNewPiece(oldState.piece, cleanGrid);
 
