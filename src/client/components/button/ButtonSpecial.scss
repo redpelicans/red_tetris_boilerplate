@@ -92,7 +92,7 @@
     100% {
       transform: translateX(calc((var(--x3)) * 1px))
         translateY(calc((var(--y) + 400) * 1px)) rotate(900deg);
-      z-index: 1;
+      z-index: 100;
     }
   }
 

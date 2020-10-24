@@ -31,7 +31,7 @@ export default function ButtonSpecial({ onClick, name, ...rest }) {
     const x = Math.floor(Math.random() * (100 - -100) + -100);
     const y = Math.floor(Math.random() * (-20 - -125) + -125);
     const delay = Math.floor(Math.random() * (300 - 0) + 0);
-    const duration = Math.floor(Math.random() * (2000 - 1000) + 1000);
+    const duration = Math.floor(Math.random() * (1700 - 1000) + 1000);
 
     const res = {
       "--x": x,
