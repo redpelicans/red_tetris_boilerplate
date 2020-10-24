@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./ButtonSpecial.scss";
 import Tetromino from "components/tetrominoes/Tetrominoes";
-import { randomPick } from "helpers/common";
+import { randomPick, rancdomRangeNumber } from "helpers/common";
 import { pieces } from "constants/tetrominoes";
 
 export default function ButtonSpecial({ onClick, name, ...rest }) {
@@ -24,14 +24,14 @@ export default function ButtonSpecial({ onClick, name, ...rest }) {
   }, [playAnimation]);
 
   const getSize = () => {
-    return Math.floor(Math.random() * 3 + 1);
+    return randomRangeNumber(1, 3);
   };
 
   const getCssProperties = () => {
-    const x = Math.floor(Math.random() * (100 - -100) + -100);
-    const y = Math.floor(Math.random() * (-20 - -125) + -125);
-    const delay = Math.floor(Math.random() * (300 - 0) + 0);
-    const duration = Math.floor(Math.random() * (1700 - 1000) + 1000);
+    const x = randomRangeNumber(-100, 100);
+    const y = randomRangeNumber(-125, -20);
+    const delay = randomRangeNumber(0, 200);
+    const duration = randomRangeNumber(1000, 1700);
 
     const res = {
       "--x": x,
@@ -63,6 +63,7 @@ export default function ButtonSpecial({ onClick, name, ...rest }) {
         onClick={() => {
           setDisplayedAnimation(true);
           setPlayAnimation(true);
+          onClick();
         }}
       >
         {name}

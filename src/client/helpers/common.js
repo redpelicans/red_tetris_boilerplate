@@ -2,6 +2,10 @@ export function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export function randomRangeNumber(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
 export function randomNumber(max) {
   return Math.floor(Math.random() * max);
 }
