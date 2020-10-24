@@ -18,7 +18,7 @@ import "./Home.scss";
 export default function Home() {
   return (
     <FlexBox height="full" width="full" className="overflow-hidden">
-      <AnimatedBackground />
+      {/* <AnimatedBackground /> */}
       <Modal className="home-modal">
         <LanguageSelection />
         <ButtonSpecial name="Button" />
