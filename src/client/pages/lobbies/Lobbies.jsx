@@ -71,7 +71,7 @@ const ButtonsLobbies = ({ children }) => (
 );
 
 const PlayButton = ({ players }) => (
-  <button className="w-3/5 text-center bg-red-400 p-2 rounded-lg shadow-lg">
+  <button className="w-3/5 text-center bg-red-400 hover:bg-red-600 p-2 rounded-lg shadow-lg">
     <FlexBox direction="col">
       <span className="text-base text-white">Play Game</span>
       <span className="text-s text-white">
@@ -83,9 +83,9 @@ const PlayButton = ({ players }) => (
 
 const CreateButton = ({ onClick, ...rest }) => (
   <button
-    className="text-base w-1/3 text-center bg-red-400 p-2 rounded-lg shadow-lg"
+    className="text-base w-1/3 text-center bg-red-400 hover:bg-red-600 p-2 rounded-lg shadow-lg"
     onClick={onClick}
   >
-    Create Lobby
+    <span className="text-base text-white">Create Lobby</span>
   </button>
 );

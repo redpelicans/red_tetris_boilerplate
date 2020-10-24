@@ -59,7 +59,7 @@ export default function ({ close }) {
     <div>
       <h1>Create Lobby</h1>
       <FlexBox direction="row" className="">
-        <FlexBox direction="col" className="items-center border-teal-500 py-2">
+        <FlexBox direction="col" className="items-center border-red-400 py-2">
           <input
             className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg mb-2 mr-3 py-1 px-2 block w-full appearance-none leading-normal"
             type="text"
@@ -93,7 +93,7 @@ export default function ({ close }) {
               !myLobby?.name?.length ||
               !myLobby?.maxPlayer
             }
-            className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded mt-10"
+            className="flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded mt-10"
             type="button"
             onClick={() => createLobby(myLobby)}
           >

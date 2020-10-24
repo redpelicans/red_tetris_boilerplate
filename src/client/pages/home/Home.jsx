@@ -12,7 +12,7 @@ import Modal from "components/modals/Modal";
 import AnimatedBackground from "./AnimatedBackground";
 import { useTranslation } from "react-i18next";
 import InputUserName from "./InputUserName";
-
+import ButtonSpecial from "components/button/ButtonSpecial";
 import "./Home.scss";
 
 export default function Home() {
@@ -21,6 +21,7 @@ export default function Home() {
       <AnimatedBackground />
       <Modal className="home-modal">
         <LanguageSelection />
+        <ButtonSpecial name="Button" />
         <h1>Red Tetris</h1>
         <Link to="/game" className="mb-10">
           <SinglePlayer />

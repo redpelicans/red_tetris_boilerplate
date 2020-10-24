@@ -38,7 +38,7 @@ export default function () {
   return (
     <FlexBox direction="col" className="">
       <form
-        className="flex items-center border-teal-500 py-2"
+        className="flex items-center border-red-400 py-2"
         onSubmit={createPlayer}
       >
         <input
@@ -49,7 +49,7 @@ export default function () {
           onChange={handlePlayerName}
         />
         <button
-          className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+          className="flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded"
           type="submit"
         >
           Create player

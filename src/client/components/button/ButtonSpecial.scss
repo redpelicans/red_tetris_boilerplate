@@ -1,0 +1,101 @@
+.button {
+  position: relative;
+  padding: 10px 15px;
+  background-color: #ff4500;
+  color: white;
+  border-radius: 18px;
+  font-size: 15px;
+  border: solid 2px #ff4500;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.75);
+  transition: all 300ms ease-in-out;
+  user-select: none;
+  z-index: 2;
+  &:hover {
+    cursor: pointer;
+    transform: translateY(2px);
+    background-color: white;
+    color: #ff4500;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.75);
+  }
+  &:active {
+    box-shadow: inset 0px -5px 57px -20px rgba(0, 0, 0, 0.75);
+  }
+}
+
+.wrapperButton {
+  position: relative;
+}
+
+.tetromino {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(0) translateY(0) rotate(0);
+  z-index: 1;
+
+  //   @keyframes shape {
+  //     0% {
+  //       z-index: 1;
+  //       transform: translateX(0) translateY(0) rotate(0);
+  //     }
+  //     49% {
+  //       z-index: 1;
+  //     }
+  //     50% {
+  //       transform: translateX(50px) translateY(-15px) rotate(360deg);
+
+  //       z-index: 100;
+  //     }
+  //     100% {
+  //       transform: translateX(100px) translateY(-30px) rotate(720deg);
+  //       z-index: 1;
+  //     }
+  //   }
+
+  //   @keyframes shape {
+  //     0% {
+  //       z-index: 1;
+  //       transform: translateX(0) translateY(0) rotate(0);
+  //     }
+  //     40% {
+  //       z-index: 1;
+  //       transform: translateX(calc(var(--x) px)) translateY(calc(var(--y) px))
+  //         rotate(360deg);
+  //     }
+  //     55% {
+  //       transform: translateX(calc(var(--x) + 15px))
+  //         translateY(calc(var(--y) - 5px)) rotate(460deg);
+  //       z-index: 100;
+  //     }
+  //     100% {
+  //       transform: translateX(calc(var(--x) + 50px))
+  //         translateY(calc(var(--y) + 400px)) rotate(1000deg);
+  //       z-index: 1;
+  //     }
+  //   }
+
+  @keyframes shape {
+    0% {
+      z-index: 1;
+      transform: translateX(0) translateY(0) rotate(0);
+    }
+    40% {
+      z-index: 1;
+      transform: translateX(calc(var(--x) * 1px))
+        translateY(calc(var(--y) * 1px)) rotate(360deg);
+    }
+    55% {
+      transform: translateX(calc((var(--x2)) * 1px))
+        translateY(calc((var(--y) - 5) * 1px)) rotate(500deg);
+      z-index: 100;
+    }
+    100% {
+      transform: translateX(calc((var(--x3)) * 1px))
+        translateY(calc((var(--y) + 400) * 1px)) rotate(900deg);
+      z-index: 1;
+    }
+  }
+
+  animation: shape (calc((var(--duration)) * 1ms)) linear normal;
+  animation-delay: (calc((var(--delay)) * 1ms));
+}

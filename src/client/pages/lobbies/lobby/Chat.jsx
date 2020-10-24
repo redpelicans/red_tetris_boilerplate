@@ -2,7 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { MESSAGE } from "../../../../config/actions/message";
 import { StoreContext } from "store";
-
+import "pages/lobbies/lobbies.scss";
 export default function () {
   const [message, setMessage] = React.useState("");
   const { state, dispatch } = React.useContext(StoreContext);
@@ -14,7 +14,7 @@ export default function () {
   const scrollDown = () => {
     /** You can avoid using getElementById if you can get the div rendered by Item component using refs.
      * You can look at refs forwarding and other technics to see how you can solve this */
-    const divToScrollTo = document.getElementById(`lol`);
+    const divToScrollTo = document.getElementById(`chat`);
     if (divToScrollTo) {
       divToScrollTo.scrollTop = divToScrollTo.scrollHeight;
     }
@@ -44,36 +44,47 @@ export default function () {
       wrap="no-wrap"
       height="2/5"
       width="full"
-      className="justify-between pl-6"
+      className="justify-between"
     >
-      <FlexBox direction="col" wrap="no-wrap" width="full" height="full">
-        <ul id="lol" className="overflow-y-scroll h-3/4 w-4/5">
+      <FlexBox
+        direction="col"
+        wrap="no-wrap"
+        width="full"
+        height="full"
+        className="p-6 justify-around"
+      >
+        <ul
+          id="chat"
+          className="overflow-y-scroll h-3/4 w-full px-2 shadow-lg bg-grey-100 rounded"
+        >
           {state.messages.map((message, index) => {
             return (
               <li
                 key={message.id}
                 className={`flex flex-col mr-1 ml-1 ${
                   message.sender == state.player.name
-                    ? "items-end"
-                    : "items-start"
-                } break-words`}
+                    ? "items-end text-right"
+                    : "items-start text-left"
+                } word-breaker`}
               >
-                <span className="text-xs text-blue-600">{message.sender}</span>
-                <span className="text-sm">{message.message}</span>
+                <FlexBox direction="col" className="w-4/5 mb-1">
+                  <span className="text-sm text-red-400">{message.sender}</span>
+                  <span className="text-sm">{message.message}</span>
+                </FlexBox>
               </li>
             );
           })}
         </ul>
-        <form onSubmit={submit}>
+        <form onSubmit={submit} className="flex justify-between ">
           <input
             placeholder="Type your message"
             type="text"
             value={message}
             onChange={handleMessage}
-            className="w-4/5"
+            className="w-84% shadow-lg pl-2 bg-grey-100"
           />
           <button
-            className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 m-2 rounded"
+            className="w-15% flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded"
             type="submit"
           >
             Send

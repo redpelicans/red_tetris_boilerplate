@@ -9,6 +9,10 @@
   scrollbar-width: none; /* Firefox */
 }
 
+.word-breaker {
+  word-break: break-word;
+}
+
 .create-modal {
   @apply flex flex-col justify-center items-center bg-white rounded py-10 px-20;
 
