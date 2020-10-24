@@ -97,8 +97,8 @@ const LobbyComponent = ({ state, errorUnsub, errorDel }) => {
               <div className="h-4 w-4 rounded-full bg-red-500 mr-6" />
             )}
             <span>{`${el?.player.name} ${
-              el?.player.id === state?.lobby?.owner?.id ? `fdp` : ``
-            } ${el?.player.id === state?.player?.id ? `enormefdp` : ``}`}</span>
+              el?.player.id === state?.lobby?.owner?.id ? `owner` : ``
+            } ${el?.player.id === state?.player?.id ? `me` : ``}`}</span>
           </FlexBox>
         ))}
       </FlexBox>
