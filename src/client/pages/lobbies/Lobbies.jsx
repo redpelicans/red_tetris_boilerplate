@@ -1,19 +1,14 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
-// import MatchmakingPlacement from "./MatchmakingPlacement";
 import useNavigate from "hooks/useNavigate";
 import { LOBBIES } from "../../../config/actions/lobbies";
-// import CreateLobby from "./CreateLobby";
 import LobbyItem from "./lobbies/LobbyItem";
 import CreateLobby from "./lobby/CreateLobby";
 import Overlay from "components/overlay/Overlay";
 import SearchLobby from "./lobbies/SearchLobby";
 import "./lobbies.scss";
 import LobbyContainer from "./lobby/LobbyContainer";
-// import Players from "./Players";
-// import Player from "./Player";
-// import Chat from "./Chat";
 
 export default function Lobbies() {
   const { state, dispatch } = React.useContext(StoreContext);
@@ -46,7 +41,7 @@ export default function Lobbies() {
           className="create-modal"
         />
       )}
-      <LobbyList />
+      <LobbyList state={state} />
 
       <ButtonsLobbies>
         <PlayButton players={state.players} />
@@ -58,7 +53,7 @@ export default function Lobbies() {
   );
 }
 
-const LobbyList = () => (
+const LobbyList = ({ state }) => (
   <FlexBox direction="col" className="h-4/5">
     <SearchLobby />
     <div className="overflow-y-scroll max-h-4/5 lobby">
@@ -76,17 +71,17 @@ const ButtonsLobbies = ({ children }) => (
 );
 
 const PlayButton = ({ players }) => (
-  <button className="w-3/5 text-center bg-red-100 p-2 rounded-lg shadow-lg">
+  <button className="w-3/5 text-center bg-red-400 p-2 rounded-lg shadow-lg">
     <FlexBox direction="col">
-      <span className="text-base">Play Game</span>
-      <span className="text-xs">
+      <span className="text-base text-white">Play Game</span>
+      <span className="text-s text-white">
         {Object.keys(players).length} players connected
       </span>
     </FlexBox>
   </button>
 );
 
-const CreateButton = ({ ...rest }) => (
+const CreateButton = ({ onClick, ...rest }) => (
   <button
     className="text-base w-1/3 text-center bg-red-400 p-2 rounded-lg shadow-lg"
     onClick={onClick}

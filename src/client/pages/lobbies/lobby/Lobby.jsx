@@ -5,14 +5,13 @@ import { LOBBIES } from "../../../../config/actions/lobbies";
 import { setLobby } from "actions/store";
 import { StoreContext } from "store";
 import Chat from "./Chat";
-import Player from "./Player";
 
 export default function ({ close }) {
   const { state, dispatch } = React.useContext(StoreContext);
   const [errorUnsub, setErrorUnsub] = React.useState("");
   const [errorDel, setErrorDel] = React.useState("");
 
-  const [success, error] = useSubscribe("lobby:response", LOBBY.UNSUBSCRIBE);
+  // const [success, error] = useSubscribe("lobby:response", LOBBY.UNSUBSCRIBE);
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.UNSUBSCRIBE) {
       if (state.lobbyResponse.type === "error") {
@@ -43,56 +42,75 @@ export default function ({ close }) {
   const isEmpty = (obj) => Object.keys(obj).length === 0;
 
   return isEmpty(state.lobby) ? (
-    <span>You don't have any lobby yet :(</span>
-  ) : (
     <FlexBox height="full" width="full" className="justify-center items-center">
-      {/* <Player /> */}
-      <FlexBox
-        direction="col"
-        className="h-2/5 p-10 bg-white bg-opacity-75 m-10 justify-between rounded-lg"
-      >
-        <h1>Lobby</h1>
-        <span>Name : {state.lobby?.name}</span>
-        {/* <span>Id : {state.lobby?.id}</span> */}
-        {/* <span>Hash : {state.lobby?.hash}</span> */}
-        <span>
-          maxPlayers : {state.lobby?.players?.length}/{state.lobby?.maxPlayer}
-        </span>
-        {/* <span>Players in lobby :</span> */}
-        <FlexBox direction="row" className="max-h-1/4 overflow-y-scroll">
-          {Object.entries(state.lobby?.players || {}).map(
-            ([key, el], index) => (
-              <FlexBox className="w-full" key={`player-${key}`}>
-                <span className="mr-2">{`${index + 1} : ${
-                  el?.player.name
-                }`}</span>
-                {el?.ready ? (
-                  <div className="h-4 w-4 rounded-md bg-green-500 mr-2" />
-                ) : (
-                  <div className="h-4 w-4 rounded-md bg-red-500 mr-2" />
-                )}
-              </FlexBox>
-            ),
-          )}
-        </FlexBox>
-        <span>Owner : {state.lobby?.owner?.name}</span>
-
-        <span className="text-red-600">{errorUnsub}</span>
-        <span className="text-red-600">{errorDel}</span>
-        <Buttons
-          state={state}
-          owner={state.lobby.owner.id === state.player.id}
-        />
-      </FlexBox>
+      <span>You don't have any lobby yet!</span>
+    </FlexBox>
+  ) : (
+    <FlexBox height="full" width="full" className="">
+      <LobbyComponent
+        state={state}
+        errorUnsub={errorUnsub}
+        errorDel={errorDel}
+      />
       <Chat />
     </FlexBox>
   );
 }
 
+const LobbyComponent = ({ state, errorUnsub, errorDel }) => {
+  return (
+    <FlexBox
+      wrap="no-wrap"
+      direction="col"
+      height="3/5"
+      width="full"
+      className="justify-between"
+    >
+      <FlexBox
+        direction="row"
+        className="justify-between pt-6 pb-6 pl-6 pr-6 border-b border-black items-center"
+      >
+        <h1 className="text-2xl font-bold text-red-600 ">
+          {state.lobby?.name}
+        </h1>
+        <span className="text-2xl font-bold text-red-600">
+          {state.lobby?.players?.length}/{state.lobby?.maxPlayer}
+        </span>
+      </FlexBox>
+
+      <FlexBox
+        direction="row"
+        width="full"
+        // wrap=""
+        // height="1/4"
+        // className="max-h-1/4 overflow-y-scroll my-6 pl-10 pr-6"
+        className="overflow-y-scroll my-6 pl-10 pr-6"
+      >
+        {Object.entries(state.lobby?.players || {}).map(([key, el], index) => (
+          <FlexBox
+            width="full"
+            className="items-center pb-4"
+            key={`player-${key}`}
+          >
+            {el?.ready ? (
+              <div className="h-4 w-4 rounded-md bg-green-500 mr-6" />
+            ) : (
+              <div className="h-4 w-4 rounded-md bg-red-500 mr-6" />
+            )}
+            <span>{`${el?.player.name}`}</span>
+          </FlexBox>
+        ))}
+      </FlexBox>
+      {/* <span>Owner : {state.lobby?.owner?.name}</span> */}
+
+      <span className="text-red-600">{errorUnsub}</span>
+      <span className="text-red-600">{errorDel}</span>
+      <Buttons state={state} owner={state.lobby.owner.id === state.player.id} />
+    </FlexBox>
+  );
+};
+
 const Buttons = ({ state, owner }) => {
-  // const gameLaunch = ({lobbyId, playerId}) => {
-  //   owner ? launchGame() : ready();
-  // }
   const unsubscribeLobby = (lobbyId, playerId) => {
     state.socket.emit(LOBBY.UNSUBSCRIBE, { lobbyId, playerId });
   };
@@ -103,32 +121,32 @@ const Buttons = ({ state, owner }) => {
   };
 
   return (
-    <>
-      <FlexBox direction={owner ? "row" : "col"} className="justify-between">
+    <FlexBox direction="col">
+      <FlexBox direction="row" className="justify-around">
         <button
-          className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 m-2 rounded"
+          className="w-2/5 flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+          type="button"
+          // onClick={() => gameLaunch(state.lobby.id, state.player.id)}
+        >
+          {owner ? "Launch game" : "Ready"}
+        </button>
+        <button
+          className="w-2/5 flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
           type="button"
           onClick={() => unsubscribeLobby(state.lobby.id, state.player.id)}
         >
           Leave Lobby
         </button>
-        {owner && (
-          <button
-            className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 m-2 rounded"
-            type="button"
-            onClick={() => deleteLobby(state.lobby.id, state.player.id)}
-          >
-            Delete lobby
-          </button>
-        )}
       </FlexBox>
-      <button
-        className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 m-2 rounded"
-        type="button"
-        // onClick={() => gameLaunch(state.lobby.id, state.player.id)}
-      >
-        {owner ? "Launch game" : "Ready"}
-      </button>
-    </>
+      {owner && (
+        <button
+          className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 m-2 rounded"
+          type="button"
+          onClick={() => deleteLobby(state.lobby.id, state.player.id)}
+        >
+          Delete lobby
+        </button>
+      )}
+    </FlexBox>
   );
 };

@@ -41,11 +41,13 @@ export default function () {
   return (
     <FlexBox
       direction="col"
-      className="h-1/4 p-10 bg-white bg-opacity-75 m-10 justify-between rounded-lg"
+      wrap="no-wrap"
+      height="2/5"
+      width="full"
+      className="justify-between pl-6"
     >
-      <span>CHAT</span>
-      <FlexBox direction="col" width="full" height="full">
-        <ul id="lol" className="overflow-y-scroll max-h-3/4 max-w-80 min-h-1/4">
+      <FlexBox direction="col" wrap="no-wrap" width="full" height="full">
+        <ul id="lol" className="overflow-y-scroll h-3/4 w-4/5">
           {state.messages.map((message, index) => {
             return (
               <li
@@ -68,7 +70,8 @@ export default function () {
             type="text"
             value={message}
             onChange={handleMessage}
-          ></input>
+            className="w-4/5"
+          />
           <button
             className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 m-2 rounded"
             type="submit"
