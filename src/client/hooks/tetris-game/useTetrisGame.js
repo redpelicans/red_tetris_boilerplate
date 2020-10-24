@@ -1,157 +1,53 @@
 import React from "react";
-import * as Grid from "./grid";
-import * as Piece from "./pieces";
-import { isEmpty } from "helpers/common";
-import { divideBy } from "helpers/currying";
 import { GameContext } from "store";
-import { pullCurrentPiece, updateGrid, addScore } from "actions/game";
-import useAutoMove from "./useAutoMove";
-import {
-  INTERVAL_MS,
-  MOVE_LEFT,
-  MOVE_RIGHT,
-  KEYBOARD_ACTIONS,
-} from "constants/tetris";
-import useTetrisState from "./useTetrisState";
+import { MOVE_LEFT, MOVE_RIGHT } from "constants/tetris";
+import useGravity from "./useGravity";
 
 /*
- ** This custom hook is used to manage the game board.
- ** It exposed the following:
- **  - movePiece: A dispatcher to all possible actions;
+ ** This hook manage the env around the game
+ **   events, gravity...
  */
-function useTetrisGame(cols = 10, rows = 20) {
-  const { state, dispatch } = React.useContext(GameContext);
-  const {
-    updateStateAfterMove,
-    updateStateAfterBind,
-    setGameOver,
-  } = useTetrisState();
-  const autoMoveTimer = useAutoMove(gravity);
+function useTetrisGame(methods, nextPieces) {
+  const { state } = React.useContext(GameContext);
 
-  const gravityInterval = React.useMemo(() => {
-    const divideByThree = divideBy(3);
-    let interval = INTERVAL_MS;
-
-    for (let i = 0; i < state.level; i++) {
-      interval = interval - divideByThree(interval);
-    }
-
-    return interval;
-  }, [state.level]);
-
-  // On component did mount
+  const gravityInterval = useGravity();
   React.useEffect(() => {
-    const initGrid = Grid.create(cols, rows);
-    dispatch(updateGrid(initGrid));
-  }, []);
-
-  // On new piece
-  React.useEffect(() => {
-    if (!isEmpty(state.currentPiece.shape)) {
-      insertNewPiece(state.currentPiece);
-    }
-  }, [state.currentPiece.id]);
-
-  // Set a new Timer after each move
-  React.useEffect(() => {
-    if (!isEmpty(state.currentPiece.shape) && state.currentPiece.coord) {
-      autoMoveTimer.start(gravityInterval);
-
-      return () => autoMoveTimer.stop();
-    }
-  }, [state.currentPiece.coord, state.currentPiece.shape]);
-
-  // At start only
-  React.useEffect(() => {
-    if (state.nextPieces.length === 4) {
-      dispatch(pullCurrentPiece());
-    }
-  }, [state.nextPieces]);
-
-  // Methods
-  function insertNewPiece(piece, grid = state.grid) {
-    const newObj = Piece.insertion(piece, grid);
-    if (newObj) {
-      updateStateAfterMove(newObj);
-      return true;
-    }
-    const newGrid = Piece.forceInsertion(piece, grid);
-    setGameOver(newGrid);
-    return false;
-  }
-
-  // Dispatcher to Tetris Actions
-  function movePiece(action) {
     if (!state.alive) {
       return;
     }
 
-    if (KEYBOARD_ACTIONS.includes(action.code)) {
-      autoMoveTimer.stop();
-      if (action.code === "ArrowDown") {
-        doSoftDrop();
-      } else if (action.code === "ArrowLeft") {
-        movePieceLateral(MOVE_LEFT);
-      } else if (action.code === "ArrowRight") {
-        movePieceLateral(MOVE_RIGHT);
-      } else if (action.code === "ArrowUp") {
-        rotatePiece();
-      } else if (action.code === "Space") {
-        doHardDrop();
+    const gravityTimer = setInterval(() => {
+      const manuallyTriggered = false;
+      methods.moveDown(manuallyTriggered);
+    }, gravityInterval);
+
+    return () => clearInterval(gravityTimer);
+  }, [gravityInterval, state.alive, nextPieces]);
+
+  const movePiece = React.useCallback(
+    (action) => {
+      if (!state.alive) {
+        return;
       }
-    }
-  }
+      const manuallyTriggered = true;
 
-  // Tetris Actions
-  function movePieceLateral(direction) {
-    const newObj = Piece.lateralMove(state.grid, state.currentPiece, direction);
-
-    if (isEmpty(newObj)) {
-      autoMoveTimer.start(gravityInterval);
-    } else {
-      updateStateAfterMove(newObj);
-    }
-  }
-
-  function doHardDrop() {
-    const newObj = Piece.hardDrop(state.grid, state.currentPiece);
-
-    if (isEmpty(newObj)) {
-      setGameOver(null);
-    } else {
-      updateStateAfterBind(newObj);
-    }
-  }
-
-  function doSoftDrop() {
-    const hasMoved = gravity();
-
-    if (hasMoved) {
-      dispatch(addScore(1));
-    }
-  }
-
-  function gravity() {
-    let newObj = Piece.softDrop(state.grid, state.currentPiece);
-
-    if (isEmpty(newObj)) {
-      newObj = Grid.bind(state.grid, state.currentPiece);
-      updateStateAfterBind(newObj);
-      return false;
-    }
-    updateStateAfterMove(newObj);
-    return true;
-  }
-
-  function rotatePiece() {
-    const newObj = Piece.rotation(state.currentPiece, state.grid);
-
-    if (isEmpty(newObj)) {
-      autoMoveTimer.start(gravityInterval);
-    } else {
-      updateStateAfterMove(newObj);
-    }
-  }
+      switch (action.code) {
+        case "ArrowDown":
+          return methods.moveDown(manuallyTriggered);
+        case "ArrowLeft":
+          return methods.moveLateral(MOVE_LEFT);
+        case "ArrowRight":
+          return methods.moveLateral(MOVE_RIGHT);
+        case "ArrowUp":
+          return methods.rotation();
+        case "Space":
+          return methods.dropDown();
+        default:
+          return;
+      }
+    },
+    [nextPieces],
+  );
 
   return { movePiece };
 }

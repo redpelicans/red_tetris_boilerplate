@@ -1,4 +1,7 @@
-import insertion, { forceInsertion } from "hooks/tetris-game/pieces/insertion";
+import insertion, {
+  force,
+  getNewPiece,
+} from "hooks/tetris-game/pieces/insertion";
 import { CURRENT_PIECE, FREE } from "constants/tetris";
 
 describe("Insertion", () => {
@@ -45,9 +48,10 @@ describe("Insertion", () => {
     ];
     const expectedPiece = { ...mockPiece, coord: { x: 0, y: 0 } };
 
-    const [newGrid, newPiece] = insertion(mockPiece, mockGridOdd);
-    expect(newGrid).toEqual(expectedGrid);
+    const newPiece = getNewPiece(mockPiece, mockGridOdd);
     expect(newPiece).toEqual(expectedPiece);
+    const newGrid = insertion(newPiece, mockGridOdd);
+    expect(newGrid).toEqual(expectedGrid);
   });
 
   test("Valid insertion on Even sized grid", () => {
@@ -62,19 +66,10 @@ describe("Insertion", () => {
     ];
     const expectedPiece = { ...mockPiece, coord: { x: 1, y: 0 } };
 
-    const [newGrid, newPiece] = insertion(mockPiece, mockGridEven);
-    expect(newGrid).toEqual(expectedGrid);
+    const newPiece = getNewPiece(mockPiece, mockGridEven);
     expect(newPiece).toEqual(expectedPiece);
-  });
-
-  test("Invalid insertion on Even sized grid", () => {
-    expect(
-      insertion(mockPiece, [
-        ["red", "red", "red", "red"],
-        ["red", "red", "red", "red"],
-        ["red", "red", "red", "red"],
-      ]),
-    ).toBeNull();
+    const newGrid = insertion(newPiece, mockGridEven);
+    expect(newGrid).toEqual(expectedGrid);
   });
 
   test("Type Error", () => {
@@ -120,7 +115,8 @@ describe("Force Insertion", () => {
       ["red", "red", "red", "red", "red"],
     ];
 
-    expect(forceInsertion(mockPiece, mockGridOdd)).toEqual(expected);
+    const newPiece = getNewPiece(mockPiece, mockGridOdd);
+    expect(force(newPiece, mockGridOdd)).toEqual(expected);
   });
 
   test("Valid forced insertion on Even sized grid", () => {
@@ -130,21 +126,23 @@ describe("Force Insertion", () => {
       ["red", "red", "red", "red", "red", "red"],
     ];
 
-    expect(forceInsertion(mockPiece, mockGridEven)).toEqual(expected);
+    const newPiece = getNewPiece(mockPiece, mockGridEven);
+    expect(force(newPiece, mockGridEven)).toEqual(expected);
   });
 
-  test("Try forceInsertion when there is no empty space", () => {
+  test("Try force when there is no empty space", () => {
     const expected = [
       ["red", "red", "red", "red", FREE],
       ["red", "red", "red", "red", "red"],
       ["red", "red", "red", "red", "red"],
     ];
 
-    expect(forceInsertion(mockPiece, mockGridNoMoreSpace)).toEqual(expected);
+    const newPiece = getNewPiece(mockPiece, mockGridNoMoreSpace);
+    expect(force(newPiece, mockGridNoMoreSpace)).toEqual(expected);
   });
 
   test("Type Error", () => {
-    expect(() => forceInsertion(null, mockGridNoMoreSpace)).toThrow(TypeError);
-    expect(() => forceInsertion(mockPiece, null)).toThrow(TypeError);
+    expect(() => force(null, mockGridNoMoreSpace)).toThrow(TypeError);
+    expect(() => force(mockPiece, null)).toThrow(TypeError);
   });
 });

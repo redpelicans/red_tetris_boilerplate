@@ -1,12 +1,18 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import PropTypes from "prop-types";
-import { GameContext } from "store";
 import { CURRENT_PIECE, SHADOW_PIECE } from "constants/tetris";
 
-const TetrisGrid = ({ grid, rowHeight, colHeight, ...rest }) => (
+const TetrisGrid = ({
+  grid,
+  currentPieceColor,
+  rowHeight,
+  colHeight,
+  ...rest
+}) => (
   <TetrisRows
     rows={grid}
+    currentPieceColor={currentPieceColor}
     rowHeight={rowHeight}
     colHeight={colHeight}
     {...rest}
@@ -17,23 +23,32 @@ export default TetrisGrid;
 
 TetrisGrid.propTypes = {
   grid: PropTypes.array.isRequired,
+  currentPieceColor: PropTypes.string.isRequired,
   rowHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
   colHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
 };
 
-const TetrisRows = ({ rows, rowHeight, colHeight, ...rest }) =>
+const TetrisRows = ({
+  rows,
+  currentPieceColor,
+  rowHeight,
+  colHeight,
+  ...rest
+}) =>
   rows.map((row, idx) => (
     <FlexBox key={`row-${idx}`} direction="row" height={rowHeight} {...rest}>
-      <TetrisCols cols={row} rowIdx={idx} colHeight={colHeight} />
+      <TetrisCols
+        cols={row}
+        currentPieceColor={currentPieceColor}
+        rowIdx={idx}
+        colHeight={colHeight}
+      />
     </FlexBox>
   ));
 
-const TetrisCols = ({ cols, rowIdx, colHeight }) => {
-  const {
-    state: { currentPiece },
-  } = React.useContext(GameContext);
+const TetrisCols = ({ cols, currentPieceColor, rowIdx, colHeight }) => {
   const nbCol = cols.length;
 
   return cols.map((col, idx) => (
@@ -42,17 +57,17 @@ const TetrisCols = ({ cols, rowIdx, colHeight }) => {
       direction="col"
       height={colHeight}
       width={`1/${nbCol}`}
-      className={getTetroColor(col, currentPiece)}
+      className={getTetroColor(col, currentPieceColor)}
     />
   ));
 };
 
-const getTetroColor = (col, currentPiece) => {
+const getTetroColor = (col, currentPieceColor) => {
   switch (col) {
     case CURRENT_PIECE:
-      return `tetromino-${currentPiece.color}`;
+      return `tetromino-${currentPieceColor}`;
     case SHADOW_PIECE:
-      return `tetromino-${currentPiece.color} opacity-50`;
+      return `tetromino-${currentPieceColor} opacity-50`;
     default:
       return `tetromino-${col}`;
   }

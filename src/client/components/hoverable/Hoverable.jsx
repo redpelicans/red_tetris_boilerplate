@@ -23,16 +23,24 @@ function Hoverable({ children, ...rest }) {
   );
 }
 
-function In({ children, ...rest }) {
+function In({ children, className = "", ...rest }) {
   const { mouseIn } = React.useContext(HoverableContext);
 
-  return mouseIn && <div {...rest}>{children}</div>;
+  return (
+    <div className={mouseIn ? "flex " : "hidden " + className} {...rest}>
+      {children}
+    </div>
+  );
 }
 
-function Out({ children, ...rest }) {
+function Out({ children, className = "", ...rest }) {
   const { mouseIn } = React.useContext(HoverableContext);
 
-  return !mouseIn && <div {...rest}>{children}</div>;
+  return (
+    <div className={mouseIn ? "hidden " : "flex " + className} {...rest}>
+      {children}
+    </div>
+  );
 }
 
 Hoverable.In = In;

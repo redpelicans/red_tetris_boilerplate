@@ -1,7 +1,7 @@
 import * as Grid from "../grid";
 import { SHADOW_PIECE } from "constants/tetris";
 
-export function getDropPosition(grid, piece) {
+function getNewPiece(grid, piece) {
   const maxY = grid.length;
   const newPiece = { ...piece };
 
@@ -21,11 +21,11 @@ export function getDropPosition(grid, piece) {
 
 function shadow(grid, piece) {
   const cleanGrid = Grid.clear(grid);
-
-  const shadowPiece = getDropPosition(cleanGrid, piece);
-
+  const shadowPiece = getNewPiece(cleanGrid, piece);
   const newGrid = Grid.write(grid, shadowPiece, SHADOW_PIECE);
+
   return newGrid;
 }
 
+export { getNewPiece };
 export default shadow;

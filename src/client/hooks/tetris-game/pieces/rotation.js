@@ -86,22 +86,22 @@ function testMultiplePositions(testedPiece, grid) {
 }
 
 function rotation(piece, grid) {
+  const newGrid = Grid.write(grid, piece, CURRENT_PIECE);
+  return newGrid;
+}
+
+function getNewPiece(piece, grid) {
   const newShape = rotatePiece(piece.shape);
   const newPadding = getPadding(newShape);
   const newDim = { width: piece.dim.height, height: piece.dim.width };
 
-  const cleanGrid = Grid.clear(grid);
-
   const newPiece = testMultiplePositions(
     { ...piece, shape: newShape, padding: newPadding, dim: newDim },
-    cleanGrid,
+    grid,
   );
-  if (!newPiece) {
-    return null;
-  }
 
-  const newGrid = Grid.write(cleanGrid, newPiece, CURRENT_PIECE);
-  return [newGrid, newPiece];
+  return newPiece;
 }
 
+export { getNewPiece };
 export default rotation;

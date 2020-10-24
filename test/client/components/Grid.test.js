@@ -20,6 +20,7 @@ describe("Grid", () => {
     render(
       <GameContextProvider>
         <Grid
+          currentPieceColor="red"
           grid={mockGrid}
           rowHeight={10}
           colHeight={10}

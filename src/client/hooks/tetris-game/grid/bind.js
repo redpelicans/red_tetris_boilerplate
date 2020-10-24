@@ -11,7 +11,7 @@ function dropDownAllFollowingRows(grid, row) {
   grid[0] = Array(grid[0].length).fill(0);
 }
 
-function removeCompletedRows(grid) {
+function removeCompletedRows(grid, addScore, addRemovedLines) {
   let linesRemoved = 0;
   let row = grid.length - 1;
 
@@ -24,24 +24,18 @@ function removeCompletedRows(grid) {
     }
   }
 
-  const additionalScore = COMBO_SCORE[linesRemoved];
+  if (linesRemoved > 0) {
+    addRemovedLines(linesRemoved);
+    addScore(COMBO_SCORE[linesRemoved]);
+  }
 
-  return [grid, additionalScore, linesRemoved];
+  return grid;
 }
 
-function bind(grid, piece) {
+function bind(grid, piece, addScore, addRemovedLines) {
   const newGrid = write(grid, piece, piece.color);
-
-  const [
-    newGridAfterScore,
-    additionalScore,
-    nbRowsRemoved,
-  ] = removeCompletedRows(newGrid);
-  if (nbRowsRemoved > 0) {
-    const custom = new CustomEvent("custom", { detail: nbRowsRemoved });
-    window.dispatchEvent(custom);
-  }
-  return [newGridAfterScore, additionalScore, nbRowsRemoved];
+  removeCompletedRows(newGrid, addScore, addRemovedLines);
+  return newGrid;
 }
 
 export default bind;

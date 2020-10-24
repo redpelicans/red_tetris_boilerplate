@@ -42,11 +42,11 @@ const SinglePlayer = () => (
 
 const MultiPlayer = () => (
   <Hoverable className="home-game-pad">
-    <Hoverable.In className="flex flex-row">
+    <Hoverable.In className="flex-row">
       <GamePad className="mr-2" model={gamePadMatrixHover} size={2} />
       <GamePad model={gamePadMatrixHover} size={2} />
     </Hoverable.In>
-    <Hoverable.Out className="flex flex-row">
+    <Hoverable.Out className="flex-row">
       <GamePad className="mr-2" model={gamePadMatrix} size={2} />
       <GamePad model={gamePadMatrix} size={2} />
     </Hoverable.Out>

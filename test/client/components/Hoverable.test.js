@@ -13,17 +13,22 @@ describe("Hoverable", () => {
     </Hoverable>,
   );
 
+  const OutContainer = screen.queryByText(/Nothing/i);
+  const InContainer = screen.queryByText(/World/i);
+
   test("hover effect", () => {
     expect(screen.getByText(/Hello/i)).toBeInTheDocument();
 
     userEvent.hover(screen.getByText(/Hello/i));
 
     expect(screen.getByText(/World/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Nothing/i)).toBeNull();
+    expect(OutContainer.classList.contains("hidden")).toBe(true);
+    expect(InContainer.classList.contains("hidden")).toBe(false);
 
     userEvent.unhover(screen.getByText(/Hello/i));
 
     expect(screen.getByText(/Nothing/i)).toBeInTheDocument();
-    expect(screen.queryByText(/World/i)).toBeNull();
+    expect(InContainer.classList.contains("hidden")).toBe(true);
+    expect(OutContainer.classList.contains("hidden")).toBe(false);
   });
 });

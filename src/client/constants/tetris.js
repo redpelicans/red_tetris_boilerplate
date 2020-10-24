@@ -11,7 +11,6 @@ export const SHADOW_PIECE = 2;
  */
 
 export const COMBO_SCORE = {
-  0: 0,
   1: 100,
   2: 300,
   3: 500,
