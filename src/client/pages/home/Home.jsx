@@ -24,13 +24,13 @@ export default function Home() {
       <Modal className="home-modal">
         <LanguageSelection />
         <ButtonSpecial name="Button" className="button-1" />
-        <ButtonSpecial name="Button" className="button-2" />
-        <ButtonSpecial name="Button" className="button-3" />
         <h1>Red Tetris</h1>
         <Link to="/game" className="mb-10">
           <SinglePlayer />
         </Link>
+        <ButtonSpecial name="Button" className="button-2" />
         <MultiPlayer />
+        <ButtonSpecial name="Button" className="button-3" />
       </Modal>
     </FlexBox>
   );
