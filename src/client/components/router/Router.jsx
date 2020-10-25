@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "pages/home/Home";
-import Lobbies from "pages/lobbies/Lobbies";
+import Rooms from "pages/rooms/Rooms";
 import Game from "pages/game/Game";
 import { GameContextProvider } from "store";
 
@@ -16,7 +16,7 @@ export default function Router() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/lobbies" component={Lobbies} />
+        <Route exact path="/rooms" component={Rooms} />
         <Route path="/game">
           <GameContextProvider>
             <Game />

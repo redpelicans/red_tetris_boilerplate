@@ -3,16 +3,12 @@ import FlexBox from "components/flexbox/FlexBox";
 import { LOBBY } from "../../../../config/actions/lobby";
 import { LOBBIES } from "../../../../config/actions/lobbies";
 import { setLobby } from "actions/store";
-import { StoreContext } from "store";
-import Chat from "./Chat";
-import "pages/lobbies/lobbies.scss";
+import "pages/rooms/Rooms.scss";
 
-export default function ({ close }) {
-  const { state, dispatch } = React.useContext(StoreContext);
+export default function ({ close, state, dispatch }) {
   const [errorUnsub, setErrorUnsub] = React.useState("");
   const [errorDel, setErrorDel] = React.useState("");
 
-  // const [success, error] = useSubscribe("lobby:response", LOBBY.UNSUBSCRIBE);
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.UNSUBSCRIBE) {
       if (state.lobbyResponse.type === "error") {
@@ -40,25 +36,6 @@ export default function ({ close }) {
     }
   }, [state.lobbiesResponse]);
 
-  const isEmpty = (obj) => Object.keys(obj).length === 0;
-
-  return isEmpty(state.lobby) ? (
-    <FlexBox height="full" width="full" className="justify-center items-center">
-      <span>You don't have any lobby yet!</span>
-    </FlexBox>
-  ) : (
-    <FlexBox height="full" width="full" className="">
-      <LobbyComponent
-        state={state}
-        errorUnsub={errorUnsub}
-        errorDel={errorDel}
-      />
-      <Chat />
-    </FlexBox>
-  );
-}
-
-const LobbyComponent = ({ state, errorUnsub, errorDel }) => {
   return (
     <FlexBox
       wrap="no-wrap"
@@ -102,14 +79,13 @@ const LobbyComponent = ({ state, errorUnsub, errorDel }) => {
           </FlexBox>
         ))}
       </FlexBox>
-      {/* <span>Owner : {state.lobby?.owner?.name}</span> */}
 
       <span className="text-red-600">{errorUnsub}</span>
       <span className="text-red-600">{errorDel}</span>
       <Buttons state={state} owner={state.lobby.owner.id === state.player.id} />
     </FlexBox>
   );
-};
+}
 
 const Buttons = ({ state, owner }) => {
   const unsubscribeLobby = (lobbyId, playerId) => {

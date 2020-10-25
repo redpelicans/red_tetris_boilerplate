@@ -3,11 +3,8 @@ import FlexBox from "components/flexbox/FlexBox";
 import { setLobby, setLobbiesResponse } from "actions/store";
 import { LOBBY } from "../../../../config/actions/lobby";
 import { LOBBIES } from "../../../../config/actions/lobbies";
-import { StoreContext } from "store";
 
-export default function ({ close }) {
-  const { state, dispatch } = React.useContext(StoreContext);
-
+export default function ({ close, state, dispatch }) {
   const [myLobby, setMyLobby] = React.useState({
     hash: "test",
     maxPlayer: 4,

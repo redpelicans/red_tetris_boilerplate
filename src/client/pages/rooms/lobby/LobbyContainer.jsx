@@ -1,11 +1,10 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-import { StoreContext } from "store";
 import Lobby from "./Lobby";
 import { LOBBY } from "../../../../config/actions/lobby";
+import Chat from "./Chat";
 
-export default function ({ lobby, index }) {
-  const { state, dispatch } = React.useContext(StoreContext);
+export default function ({ state, dispatch }) {
   const [translate, setTranslate] = React.useState(false);
 
   React.useEffect(() => {
@@ -24,6 +23,8 @@ export default function ({ lobby, index }) {
     setTranslate(true);
   };
 
+  const isEmpty = (obj) => Object.keys(obj).length === 0;
+
   return (
     <FlexBox
       direction="row"
@@ -41,7 +42,20 @@ export default function ({ lobby, index }) {
         >
           {translate ? `>` : `<`}
         </FlexBox>
-        <Lobby close={close} />
+        {isEmpty(state.lobby) ? (
+          <FlexBox
+            height="full"
+            width="full"
+            className="justify-center items-center"
+          >
+            <span>You don't have any lobby yet!</span>
+          </FlexBox>
+        ) : (
+          <FlexBox height="full" width="full">
+            <Lobby state={state} close={close} dispatch={dispatch} />
+            <Chat state={state} dispatch={dispatch} />
+          </FlexBox>
+        )}
       </FlexBox>
     </FlexBox>
   );

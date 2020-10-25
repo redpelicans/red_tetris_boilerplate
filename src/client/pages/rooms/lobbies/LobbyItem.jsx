@@ -2,12 +2,10 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { setLobby } from "actions/store";
 import { LOBBY } from "../../../../config/actions/lobby";
-import { StoreContext } from "store";
 
 const isFull = (lobby) => players.length >= maxPlayer;
 
-export default function ({ lobby, index }) {
-  const { state, dispatch } = React.useContext(StoreContext);
+export default function ({ lobby, index, state, dispatch }) {
   const [error, setError] = React.useState("");
   const [hover, setHover] = React.useState(false);
 
@@ -34,8 +32,7 @@ export default function ({ lobby, index }) {
   return (
     <FlexBox
       direction="row"
-      width="3/4"
-      className="border border-grey-200 justify-between items-center rounded-lg shadow-lg p-3 mb-3"
+      className="border border-grey-200 justify-between items-center rounded-lg shadow-md p-3 mb-3"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >

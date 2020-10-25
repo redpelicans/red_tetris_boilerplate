@@ -1,11 +1,10 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { MESSAGE } from "../../../../config/actions/message";
-import { StoreContext } from "store";
-import "pages/lobbies/lobbies.scss";
-export default function () {
+import "pages/rooms/Rooms.scss";
+
+export default function ({ state, dispatch }) {
   const [message, setMessage] = React.useState("");
-  const { state, dispatch } = React.useContext(StoreContext);
 
   const handleMessage = (e) => {
     setMessage(e.target.value);

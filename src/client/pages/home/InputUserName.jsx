@@ -25,7 +25,7 @@ export default function () {
         console.log("New player created :", state.playerResponse.payload);
         dispatch(setPlayer(state.playerResponse.payload));
         dispatch(setPlayerResponse({}));
-        navigate("/lobbies");
+        navigate("/rooms");
       }
     }
   }, [state.playerResponse]);
