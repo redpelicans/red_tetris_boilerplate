@@ -13,21 +13,25 @@ import AnimatedBackground from "./AnimatedBackground";
 import { useTranslation } from "react-i18next";
 import InputUserName from "./InputUserName";
 import ButtonSpecial from "components/button/ButtonSpecial";
+import Button from "components/button/Button";
+
 import "./Home.scss";
 
 export default function Home() {
   return (
     <FlexBox height="full" width="full" className="overflow-hidden">
-      {/* <AnimatedBackground /> */}
+      <AnimatedBackground />
       <Modal className="home-modal">
         <LanguageSelection />
-        <ButtonSpecial name="Button" />
+        <ButtonSpecial name="Button" className="button-1" />
         <h1>Red Tetris</h1>
         <Link to="/game" className="mb-10">
           <SinglePlayer />
         </Link>
 
+        <ButtonSpecial name="Button" className="button-2" />
         <MultiPlayer />
+        <ButtonSpecial name="Button" className="button-3" />
       </Modal>
     </FlexBox>
   );

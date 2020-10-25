@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./ButtonSpecial.scss";
+import "./Button.scss";
 import Tetromino from "components/tetrominoes/Tetrominoes";
 import { randomPick, randomRangeNumber } from "helpers/common";
 import { pieces } from "constants/tetrominoes";
@@ -8,7 +9,7 @@ import { nanoid } from "nanoid";
 
 const count = {};
 
-export default function ButtonSpecial({ onClick, name, ...rest }) {
+export default function ButtonSpecial({ onClick, name, className, ...rest }) {
   const [obj, setObj] = React.useState({});
 
   const newAnim = (numberPieces) => {
@@ -29,8 +30,8 @@ export default function ButtonSpecial({ onClick, name, ...rest }) {
   };
 
   const getCssProperties = () => {
-    const x = randomRangeNumber(-100, 100);
-    const y = randomRangeNumber(-125, -20);
+    const x = randomRangeNumber(-150, 150);
+    const y = randomRangeNumber(-150, -60);
     const delay = randomRangeNumber(0, 150);
     const duration = randomRangeNumber(800, 1500);
 
@@ -81,7 +82,7 @@ export default function ButtonSpecial({ onClick, name, ...rest }) {
         });
       })}
       <div
-        className="button-special"
+        className={className}
         onClick={() => {
           newAnim(randomRangeNumber(5, 10));
           onClick;
