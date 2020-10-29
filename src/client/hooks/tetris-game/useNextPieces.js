@@ -24,10 +24,13 @@ function useNextPieces() {
   const [nextPieces, setNextPieces] = React.useState(() => fetchFromMock(3));
 
   function pullNextPiece() {
-    const nextPiece = nextPieces[0];
-    const fetchedPiece = fetchFromMock(1);
+    let nextPiece;
 
-    setNextPieces((oldPieces) => [...oldPieces.slice(1), ...fetchedPiece]);
+    setNextPieces((oldPieces) => {
+      nextPiece = oldPieces[0];
+      const fetchedPiece = fetchFromMock(1);
+      return [...oldPieces.slice(1), ...fetchedPiece];
+    });
 
     return nextPiece;
   }

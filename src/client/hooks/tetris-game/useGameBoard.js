@@ -83,6 +83,8 @@ function useGameBoard(
 
   const moveDown = React.useCallback(
     (manuallyTriggered) => {
+      let requestNewPiece = false;
+
       setGameBoard((oldState) => {
         const cleanGrid = Grid.clear(oldState.grid);
         const newPiece = SoftDrop.getNewPiece(oldState.piece);
@@ -97,24 +99,30 @@ function useGameBoard(
           return { ...oldState, grid: newGridWithShadow, piece: newPiece };
         }
 
+        requestNewPiece = true;
         const newGrid = Grid.bind(
           cleanGrid,
           oldState.piece,
           addScore,
           addRemovedLines,
         );
-        const nextPiece = pullNextPiece();
-        return {
-          ...oldState,
-          grid: newGrid,
-          piece: { ...nextPiece, id: pieceId.current++ },
-        };
+        return { ...oldState, grid: newGrid };
       });
+
+      if (requestNewPiece) {
+        const nextPiece = pullNextPiece();
+        setGameBoard((old) => ({
+          ...old,
+          piece: { ...nextPiece, id: pieceId.current++ },
+        }));
+      }
     },
     [gameBoard.piece.id],
   );
 
   const dropDown = React.useCallback(() => {
+    const nextPiece = pullNextPiece();
+
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = HardDrop.getNewPiece(cleanGrid, oldState.piece);
@@ -128,7 +136,6 @@ function useGameBoard(
           addScore,
           addRemovedLines,
         );
-        const nextPiece = pullNextPiece();
         return {
           ...oldState,
           grid: newGrid,
