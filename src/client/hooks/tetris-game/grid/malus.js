@@ -1,4 +1,3 @@
-// import write from "./write";
 import { BLOCKED_PIECE } from "constants/tetris";
 
 function malus(grid, nbLines) {
