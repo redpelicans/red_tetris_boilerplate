@@ -108,11 +108,4 @@ describe("PartialWrite", () => {
 
     expect(partialWrite(mockGrid, mockPiece, CURRENT_PIECE)).toEqual(expected);
   });
-
-  test("should throw an Error", () => {
-    mockPiece.coord = { x: 0, y: 0 };
-    mockPiece.dim.height = 0;
-
-    expect(() => partialWrite(mockGrid, mockPiece, CURRENT_PIECE)).toThrow();
-  });
 });
