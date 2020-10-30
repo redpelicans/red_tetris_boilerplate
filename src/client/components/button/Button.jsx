@@ -2,16 +2,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./Button.scss";
 
-export default function Button({ onClick, name, className, ...rest }) {
+export default function Button({ onClick, className, children, ...rest }) {
   return (
-    <div
+    <button
+      {...rest}
       className={className}
       onClick={() => {
-        onClick;
+        onClick();
       }}
     >
-      {name}
-    </div>
+      {children}
+    </button>
   );
 }
 
