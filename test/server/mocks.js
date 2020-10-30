@@ -57,7 +57,10 @@ export const lobby1mock = {
   name: "lobby1",
   maxPlayer: 3,
   owner: playerObject1mock,
-  players: [playerObject1mock, playerObject2mock],
+  players: [
+    { player: playerObject1mock, ready: false },
+    { player: playerObject2mock, ready: false },
+  ],
 };
 
 export const lobby2mock = {
@@ -65,5 +68,8 @@ export const lobby2mock = {
   name: "lobby2",
   maxPlayer: 3,
   owner: playerObject3mock,
-  players: [playerObject3mock, playerObject4mock],
+  players: [
+    { player: playerObject3mock, ready: false },
+    { player: playerObject4mock, ready: false },
+  ],
 };
