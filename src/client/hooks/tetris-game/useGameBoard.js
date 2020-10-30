@@ -6,6 +6,7 @@ import * as SoftDrop from "./pieces/softDrop";
 import * as HardDrop from "./pieces/hardDrop";
 import * as Rotation from "./pieces/rotation";
 import * as LatMove from "./pieces/lateralMove";
+import { CURRENT_PIECE } from "constants/tetris";
 
 const initialState = {
   grid: [],
@@ -165,6 +166,42 @@ function useGameBoard(
     });
   }, []);
 
+  // ADD this method in useTetrisGame, coupled with socket hook
+  const malus = (nbLines) => {
+    let enoughSpaceForMalus = true;
+
+    setGameBoard((oldState) => {
+      const cleanGrid = Grid.clear(oldState.grid);
+      const malusGrid = Grid.malus(cleanGrid, nbLines);
+
+      // We try to (re)place the piece (potentially in a upper position)
+      for (let line = 0; line <= nbLines; line++) {
+        const newPiece = {
+          ...oldState.piece,
+          coord: { ...oldState.piece.coord, y: oldState.piece.coord.y - line },
+        };
+
+        if (canPut(malusGrid, newPiece)) {
+          const newGrid = Grid.write(malusGrid, newPiece, CURRENT_PIECE);
+          const newGridWithShadow = Shadow.default(newGrid, newPiece);
+          return { ...oldState, grid: newGridWithShadow, piece: newPiece };
+        }
+      }
+
+      enoughSpaceForMalus = false;
+      const newPiece = {
+        ...oldState.piece,
+        coord: { ...oldState.piece.coord, y: 0 },
+      };
+      const newGrid = Grid.partialWrite(malusGrid, newPiece, newPiece.color);
+      return { ...oldState, grid: newGrid };
+    });
+
+    if (!enoughSpaceForMalus) {
+      gameOver();
+    }
+  };
+
   return {
     grid: gameBoard.grid,
     piece: gameBoard.piece,
@@ -173,6 +210,7 @@ function useGameBoard(
     moveDown,
     dropDown,
     rotation,
+    malus,
   };
 }
 
