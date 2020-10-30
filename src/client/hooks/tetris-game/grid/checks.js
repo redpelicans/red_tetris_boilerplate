@@ -1,4 +1,9 @@
-import { SHADOW_PIECE, CURRENT_PIECE, FREE } from "constants/tetris";
+import {
+  SHADOW_PIECE,
+  CURRENT_PIECE,
+  FREE,
+  BLOCKED_PIECE,
+} from "constants/tetris";
 
 export function isPartOfPiece(element) {
   return element === CURRENT_PIECE;
@@ -25,7 +30,10 @@ export function isNotAnEmptyRow(row) {
 }
 
 export function isACompleteRow(row) {
-  return row.every((value) => value !== FREE && value !== SHADOW_PIECE);
+  return row.every(
+    (value) =>
+      value !== FREE && value !== SHADOW_PIECE && value !== BLOCKED_PIECE,
+  );
 }
 
 function isPieceInArrayBoundaries(grid, piece) {

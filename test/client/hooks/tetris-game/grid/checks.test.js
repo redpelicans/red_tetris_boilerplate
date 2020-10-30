@@ -1,5 +1,10 @@
 import * as Check from "hooks/tetris-game/grid/checks";
-import { SHADOW_PIECE, CURRENT_PIECE, FREE } from "constants/tetris";
+import {
+  SHADOW_PIECE,
+  CURRENT_PIECE,
+  FREE,
+  BLOCKED_PIECE,
+} from "constants/tetris";
 
 describe("Check", () => {
   const mockGrid = [
@@ -8,6 +13,7 @@ describe("Check", () => {
     [FREE, SHADOW_PIECE, SHADOW_PIECE, SHADOW_PIECE, SHADOW_PIECE],
     ["red", "red", "red", "red", "red"],
     ["red", "red", "red", "red", "red"],
+    [BLOCKED_PIECE, BLOCKED_PIECE, BLOCKED_PIECE, BLOCKED_PIECE, BLOCKED_PIECE],
   ];
 
   describe("isPartOfPiece", () => {
@@ -95,6 +101,7 @@ describe("Check", () => {
       expect(Check.isACompleteRow(mockGrid[0])).toBe(false);
       expect(Check.isACompleteRow(mockGrid[1])).toBe(false);
       expect(Check.isACompleteRow(mockGrid[2])).toBe(false);
+      expect(Check.isACompleteRow(mockGrid[5])).toBe(false);
     });
   });
 
