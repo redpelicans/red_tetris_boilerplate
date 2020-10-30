@@ -1,6 +1,6 @@
 import { COMBO_SCORE } from "constants/tetris";
 import * as Check from "./checks";
-import write from "./write";
+import write, { partialWrite } from "./write";
 
 function dropDownAllFollowingRows(grid, row) {
   for (let i = row; i > 0; i--) {
@@ -33,7 +33,13 @@ function removeCompletedRows(grid, addScore, addRemovedLines) {
 }
 
 function bind(grid, piece, addScore, addRemovedLines) {
-  const newGrid = write(grid, piece, piece.color);
+  let newGrid;
+
+  if (Check.canPutLayer(grid, piece)) {
+    newGrid = write(grid, piece, piece.color);
+  } else {
+    newGrid = partialWrite(grid, piece, piece.color);
+  }
   removeCompletedRows(newGrid, addScore, addRemovedLines);
   return newGrid;
 }
