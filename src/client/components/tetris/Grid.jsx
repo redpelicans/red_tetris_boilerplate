@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import PropTypes from "prop-types";
-import { CURRENT_PIECE, SHADOW_PIECE } from "constants/tetris";
+import { CURRENT_PIECE, SHADOW_PIECE, BLOCKED_PIECE } from "constants/tetris";
 
 const TetrisGrid = ({
   grid,
@@ -68,6 +68,8 @@ const getTetroColor = (col, currentPieceColor) => {
       return `tetromino-${currentPieceColor}`;
     case SHADOW_PIECE:
       return `tetromino-${currentPieceColor} opacity-50`;
+    case BLOCKED_PIECE:
+      return "tetromino-blocked";
     default:
       return `tetromino-${col}`;
   }
