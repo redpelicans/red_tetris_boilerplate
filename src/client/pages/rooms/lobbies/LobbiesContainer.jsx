@@ -34,7 +34,7 @@ export default function LobbiesContainer({ state, dispatch }) {
 
 const LobbyList = ({ state, dispatch }) => (
   <FlexBox direction="col" className="max-h-3/5 my-6">
-    <div className="overflow-y-scroll lobby">
+    <div className="overflow-y-scroll hide-scroll">
       {Object.entries(state.lobbies || {}).map(([key, el], index) => {
         return (
           <LobbyItem lobby={el} key={index} state={state} dispatch={dispatch} />

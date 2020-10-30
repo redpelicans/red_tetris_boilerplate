@@ -59,7 +59,7 @@ export default function ({ close, state, dispatch }) {
       <FlexBox
         direction="row"
         width="full"
-        className="overflow-y-scroll my-6 pl-10 pr-6"
+        className="overflow-y-scroll hide-scroll pl-10 pr-6"
       >
         {Object.entries(state.lobby?.players || {}).map(([key, el], index) => (
           <FlexBox
@@ -109,7 +109,7 @@ const Buttons = ({ state, owner }) => {
   };
 
   return (
-    <FlexBox direction="col" className="p-6">
+    <FlexBox direction="col" className="px-6 py-2">
       <FlexBox direction="row" className="justify-between">
         <button
           className="w-48% flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded"

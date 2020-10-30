@@ -54,7 +54,7 @@ export default function ({ state, dispatch }) {
       >
         <ul
           id="chat"
-          className="overflow-y-scroll h-3/4 w-full px-2 shadow-lg bg-grey-100 rounded"
+          className="overflow-y-scroll hide-scroll h-3/4 w-full px-2 shadow-lg bg-grey-100 rounded"
         >
           {state.messages.map((message, index) => {
             return (
