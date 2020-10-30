@@ -121,6 +121,31 @@ export const leaveLobby = async (playerId, lobbyId) => {
   return Response.success(LOBBY.UNSUBSCRIBE, {});
 };
 
+export const readyLobby = async (playerId, lobbyId) => {
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+
+  const lobby = lobbies?.[lobbyId];
+  if (!lobby) {
+    return Response.error(LOBBY.READY, "Lobby doesn't exists!");
+  }
+
+  const onLobby = playerIsOnLobbyByPlayerId(lobbies, playerId);
+  if (!onLobby) {
+    return Response.error(LOBBY.READY, "You are not in this lobby!");
+  }
+
+  const owner = isOwner(lobby, playerId);
+  if (owner) {
+    return Response.error(LOBBY.READY, "You are the owner!");
+  }
+
+  lobby.players = setPlayerReady(lobby.players, playerId);
+  lobbies[lobbyId] = lobby;
+  await setComplexObjectToRedis("lobbies", lobbies);
+
+  return Response.success(LOBBY.READY, {});
+};
+
 export const clearPlayerFromLobbies = async (playerId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
@@ -179,4 +204,15 @@ export const getLobbyIdByPlayerId = (lobbies, playerId) => {
     lobbies[key].players.find((el) => el.player.id === playerId),
   );
   return lobbyId;
+};
+
+const setPlayerReady = (players, playerId) => {
+  return players.filter((el) => {
+    if (el.player.id === playerId) {
+      el.ready = true;
+      return el;
+    } else {
+      return el;
+    }
+  });
 };

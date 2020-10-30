@@ -126,6 +126,41 @@ describe("Socket tests", () => {
     });
   });
 
+  test("Should fail to be ready", async (done) => {
+    socketClient.on("lobby:response", async (response) => {
+      expect(response.type).toBe("error");
+      expect(response.reason).toBe("You are the owner!");
+      socketClient.off("lobby:response");
+      done();
+    });
+
+    const playerId = await getPlayerId(socketClient.id);
+    const lobbies = await getLobbies();
+    const lobbyId = Object.keys(lobbies)[0];
+
+    socketClient.emit("lobby:ready", {
+      playerId: playerId,
+      lobbyId: lobbyId,
+    });
+  });
+
+  test("Should send message", async (done) => {
+    socketClient.on("message:publish", (response) => {
+      expect(response.message).toEqual("message");
+      socketClient.off("message:publish");
+      done();
+    });
+
+    const lobbies = await getLobbies();
+    const lobbyId = Object.keys(lobbies)[0];
+
+    socketClient.emit("message:send", {
+      message: "message",
+      player: { name: "player1" },
+      lobbyId: lobbyId,
+    });
+  });
+
   test("Should leave lobby and lobby should be deleted", async (done) => {
     socketClient.on("lobby:response", (response) => {
       expect(response.type).toBe("success");
@@ -194,18 +229,6 @@ describe("Socket tests", () => {
         lobbyId: lobbyId,
       });
     };
-  });
-
-  test("Should send message", (done) => {
-    socketClient.on("message:publish", (response) => {
-      expect(response.message).toEqual("message");
-      socketClient.off("message:publish");
-      done();
-    });
-    socketClient.emit("message:send", {
-      message: "message",
-      player: { name: "player1" },
-    });
   });
 
   test("Should get new pieces", (done) => {

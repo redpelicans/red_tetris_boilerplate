@@ -71,8 +71,8 @@ eventEmitter.on(event.player.disconnect, async ({ socket }) => {
 });
 
 // Message new
-eventEmitter.on(event.message.new, async ({ socket, messageObject }) => {
-  io.in(GROUP.LOBBIES).emit(MESSAGE.PUBLISH, messageObject);
+eventEmitter.on(event.message.new, async ({ lobbyId, messageObject }) => {
+  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(MESSAGE.PUBLISH, messageObject);
 });
 
 // Clear Room
