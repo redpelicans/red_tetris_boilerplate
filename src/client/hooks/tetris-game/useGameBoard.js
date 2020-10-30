@@ -93,10 +93,6 @@ function useGameBoard(
         if (canPut(cleanGrid, newPiece)) {
           const newGrid = SoftDrop.default(cleanGrid, newPiece);
           const newGridWithShadow = Shadow.default(newGrid, newPiece);
-          if (manuallyTriggered) {
-            addScore(1);
-          }
-
           return { ...oldState, grid: newGridWithShadow, piece: newPiece };
         }
 
@@ -116,6 +112,8 @@ function useGameBoard(
           ...old,
           piece: { ...nextPiece, id: pieceId.current++ },
         }));
+      } else if (manuallyTriggered) {
+        addScore(1);
       }
     },
     [gameBoard.piece.id],
