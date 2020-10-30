@@ -61,6 +61,18 @@ describe("useGameBoard", () => {
     });
     expect(result.current.grid).toEqual(afterRotation);
     expect(useStateStub).toHaveBeenCalledTimes(9);
+
+    act(() => {
+      result.current.malus(2);
+    });
+    expect(result.current.grid).toEqual(afterMalus);
+    expect(useStateStub).toHaveBeenCalledTimes(10);
+
+    act(() => {
+      result.current.malus(5);
+    });
+    expect(result.current.grid).toEqual(afterMoreMalus);
+    expect(useStateStub).toHaveBeenCalledTimes(11);
   });
 });
 
@@ -140,4 +152,30 @@ const afterRotation = [
   [0, 0, 0, 0, 2, 2, 0, 0, 0, 0],
   [0, 0, 0, 0, 2, "green", 0, 0, 0, 0],
   [0, 0, 0, 0, "green", "green", "green", 0, 0, 0],
+];
+
+const afterMalus = [
+  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 2, 2, 0, 0, 0, 0],
+  [0, 0, 0, 0, 2, "green", 0, 0, 0, 0],
+  [0, 0, 0, 0, "green", "green", "green", 0, 0, 0],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+];
+
+const afterMoreMalus = [
+  [0, 0, 0, 0, "green", "green", 0, 0, 0, 0],
+  [0, 0, 0, 0, "green", "green", 0, 0, 0, 0],
+  [0, 0, 0, 0, "green", "green", "green", 0, 0, 0],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
 ];
