@@ -68,14 +68,25 @@ export default function ({ close, state, dispatch }) {
             className="items-center pb-4 word-breaker"
             key={`player-${key}`}
           >
-            {el?.ready ? (
-              <div className="h-4 w-4 rounded-full bg-green-500 mr-6" />
+            {el?.player.id !== state?.lobby?.owner?.id &&
+              (el?.ready ? (
+                <div className="h-4 w-4 rounded-full bg-green-500 mr-4" />
+              ) : (
+                <div className="h-4 w-4 rounded-full bg-red-500 mr-4" />
+              ))}
+
+            {el?.player.id === state?.lobby?.owner?.id ? (
+              <div className="h-4 w-4 mr-4">
+                <img src="/src/client/assets/img/crown.png" />
+              </div>
             ) : (
-              <div className="h-4 w-4 rounded-full bg-red-500 mr-6" />
+              <div></div>
             )}
-            <span>{`${el?.player.name} ${
-              el?.player.id === state?.lobby?.owner?.id ? `owner` : ``
-            } ${el?.player.id === state?.player?.id ? `me` : ``}`}</span>
+            {el?.player.id === state?.player?.id ? (
+              <span className="text-green-500">{`${el?.player.name}`}</span>
+            ) : (
+              <span>{`${el?.player.name}`}</span>
+            )}
           </FlexBox>
         ))}
       </FlexBox>
