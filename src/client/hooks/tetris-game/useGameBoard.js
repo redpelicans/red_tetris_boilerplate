@@ -121,20 +121,21 @@ function useGameBoard(
 
   const dropDown = React.useCallback(() => {
     const nextPiece = pullNextPiece();
+    let distance = 0;
 
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = HardDrop.getNewPiece(cleanGrid, oldState.piece);
 
       if (canPut(cleanGrid, newPiece)) {
-        addScore((newPiece.coord.y - oldState.piece.coord.y) * 2);
-
+        distance = newPiece.coord.y - oldState.piece.coord.y;
         const newGrid = Grid.bind(
           cleanGrid,
           newPiece,
           addScore,
           addRemovedLines,
         );
+
         return {
           ...oldState,
           grid: newGrid,
@@ -143,6 +144,8 @@ function useGameBoard(
       }
       return oldState;
     });
+
+    addScore(distance * 2);
   }, [gameBoard.piece.id]);
 
   const rotation = React.useCallback(() => {
