@@ -1,6 +1,6 @@
 {
-	"home": {
-		"multijoueur": "Multijoueur",
-		"solo": "Solo"
-	}
+  "home": {
+    "multijoueur": "Multijoueur",
+    "solo": "Solo"
+  }
 }
