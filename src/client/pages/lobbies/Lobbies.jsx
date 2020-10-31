@@ -13,36 +13,30 @@ export default function Lobbies() {
 
   return (
     <FlexBox
-      width="full"
-      height="full"
-      className="justify-center overflow-hidden relative"
+      direction="col"
+      width="2/4"
+      height="auto"
+      className="justify-between py-8"
     >
-      <FlexBox
-        direction="col"
-        width="2/4"
-        height="auto"
-        className="justify-between py-8"
-      >
-        {hasClickedCreate && (
-          <Overlay
-            isOpen={hasClickedCreate}
-            close={() => setHasClickedCreate(false)}
-            className="create-modal"
-          >
-            <CreateLobby close={close} state={state} dispatch={dispatch} />
-          </Overlay>
-        )}
+      {hasClickedCreate && (
+        <Overlay
+          isOpen={hasClickedCreate}
+          close={() => setHasClickedCreate(false)}
+          className="create-modal"
+        >
+          <CreateLobby close={close} state={state} dispatch={dispatch} />
+        </Overlay>
+      )}
 
-        <FlexBox direction="col">
-          <SearchLobby />
-          <LobbyList state={state} dispatch={dispatch} />
-        </FlexBox>
-
-        <ButtonsLobbies>
-          <JoinButton players={state.players} />
-          <CreateButton onClick={() => setHasClickedCreate(true)} />
-        </ButtonsLobbies>
+      <FlexBox direction="col">
+        <SearchLobby />
+        <LobbyList state={state} dispatch={dispatch} />
       </FlexBox>
+
+      <ButtonsLobbies>
+        <JoinButton players={state.players} />
+        <CreateButton onClick={() => setHasClickedCreate(true)} />
+      </ButtonsLobbies>
     </FlexBox>
   );
 }
