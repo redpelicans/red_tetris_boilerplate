@@ -10,7 +10,7 @@ export const getGame = async (id) => {
 
 export const updateScore = async (gameId, playerId, score) => {
   const game = await getGame(gameId);
-  if (game === {}) return null;
+  if (Object.keys(game).length === 0) return null;
   const newPlayers = [];
   game.players.forEach((element) => {
     if (element.player.id === playerId) element.score = score;
@@ -22,7 +22,7 @@ export const updateScore = async (gameId, playerId, score) => {
 
 export const setLoser = async (gameId, playerId) => {
   const game = await getGame(gameId);
-  if (game === {}) return null;
+  if (Object.keys(game).length === 0) return null;
   const newPlayers = [];
   game.players.forEach((element) => {
     if (element.player.id === playerId) element.loser = true;

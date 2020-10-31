@@ -1,15 +1,11 @@
 import redismock from "redis-mock";
 import socketIOClient from "socket.io-client";
-import { setRedis, quitRedis, deleteKeyFromRedis } from "storage";
+import { setRedis, quitRedis } from "storage";
 import { getPlayerId, getPlayer } from "../../../src/server/storage/players";
-import {
-  getLobbyIdByPlayerId,
-  getLobbies,
-} from "../../../src/server/storage/lobbies";
+import { getLobbies } from "../../../src/server/storage/lobbies";
 import runHttpServer, { quitHttpServer } from "httpserver";
 import runSocketIo, { quitSocketIo } from "socket";
 import { promiseTimeout } from "utils/promise";
-import { lobby1mock, lobby2mock } from "../mocks";
 
 let socketClient;
 
@@ -139,6 +135,23 @@ describe("Socket tests", () => {
 
     socketClient.emit("lobby:ready", {
       playerId: playerId,
+      lobbyId: lobbyId,
+    });
+  });
+
+  test("Should fail to start game", async (done) => {
+    socketClient.on("game:response", (response) => {
+      expect(response.type).toBe("error");
+      socketClient.off("game:response");
+      done();
+    });
+
+    const playerId = await getPlayerId(socketClient.id);
+    const lobbies = await getLobbies();
+    const lobbyId = Object.keys(lobbies)[0];
+
+    socketClient.emit("game:start", {
+      ownerId: playerId,
       lobbyId: lobbyId,
     });
   });
