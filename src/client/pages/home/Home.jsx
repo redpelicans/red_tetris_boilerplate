@@ -42,21 +42,25 @@ const SinglePlayer = () => {
       <Hoverable.Out>
         <GamePad model={gamePadMatrix} size={2} />
       </Hoverable.Out>
-      <h2>{t("pages.home.jeu_solo")}</h2>
+      <h2>{t("pages.home.solo")}</h2>
     </Hoverable>
   );
 };
 
-const MultiPlayer = () => (
-  <Hoverable className="home-game-pad">
-    <Hoverable.In className="flex-row">
-      <GamePad className="mr-2" model={gamePadMatrixHover} size={2} />
-      <GamePad model={gamePadMatrixHover} size={2} />
-    </Hoverable.In>
-    <Hoverable.Out className="flex-row">
-      <GamePad className="mr-2" model={gamePadMatrix} size={2} />
-      <GamePad model={gamePadMatrix} size={2} />
-    </Hoverable.Out>
-    <h2>Multijoueur</h2>
-  </Hoverable>
-);
+const MultiPlayer = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Hoverable className="home-game-pad">
+      <Hoverable.In className="flex-row">
+        <GamePad className="mr-2" model={gamePadMatrixHover} size={2} />
+        <GamePad model={gamePadMatrixHover} size={2} />
+      </Hoverable.In>
+      <Hoverable.Out className="flex-row">
+        <GamePad className="mr-2" model={gamePadMatrix} size={2} />
+        <GamePad model={gamePadMatrix} size={2} />
+      </Hoverable.Out>
+      <h2>{t("pages.home.multijoueur")}</h2>
+    </Hoverable>
+  );
+};
