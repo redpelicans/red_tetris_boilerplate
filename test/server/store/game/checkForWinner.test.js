@@ -13,7 +13,7 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  deleteKeyFromRedis("lobbies");
+  deleteKeyFromRedis(`game-${game1mock.id}`);
 });
 
 describe("checkForWinner function", () => {

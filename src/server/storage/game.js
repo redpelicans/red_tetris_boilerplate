@@ -1,11 +1,11 @@
 import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
 
-export const getGame = async (id) => {
-  return (await getComplexObjectFromRedis(`game-${id}`)) ?? {};
-};
-
 export const setGame = async (game) => {
   return await setComplexObjectToRedis(`game-${game.id}`, game);
+};
+
+export const getGame = async (id) => {
+  return (await getComplexObjectFromRedis(`game-${id}`)) ?? {};
 };
 
 export const updateScore = async (gameId, playerId, score) => {
