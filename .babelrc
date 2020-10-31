@@ -9,6 +9,7 @@
     "@babel/preset-react"
   ],
   "plugins": [
+    "syntax-dynamic-import",
     "@babel/plugin-transform-react-jsx-source",
     "@babel/plugin-transform-runtime",
     "module:fast-async"

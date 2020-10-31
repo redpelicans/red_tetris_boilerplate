@@ -102,6 +102,7 @@ module.exports = () => {
         constants: path.resolve(CLIENT_DIR, "constants"),
         helpers: path.resolve(CLIENT_DIR, "helpers"),
         hooks: path.resolve(CLIENT_DIR, "hooks"),
+        locales: path.resolve(CLIENT_DIR, "locales"),
         mocks: path.resolve(CLIENT_DIR, "mocks"),
         pages: path.resolve(CLIENT_DIR, "pages"),
         reducers: path.resolve(CLIENT_DIR, "reducers"),
