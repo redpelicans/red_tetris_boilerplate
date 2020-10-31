@@ -5,11 +5,21 @@ import CreateLobby from "./CreateLobby";
 import Overlay from "components/overlay/Overlay";
 import SearchLobby from "./SearchLobby";
 import { StoreContext } from "store";
+import useNavigate from "hooks/useNavigate";
+import { LOBBIES } from "../../../config/actions/lobbies";
 import "./Lobbies.scss";
 
 export default function Lobbies() {
   const { state, dispatch } = React.useContext(StoreContext);
   const [hasClickedCreate, setHasClickedCreate] = React.useState(false);
+  const { navigate } = useNavigate();
+
+  React.useEffect(() => {
+    if (!Object.keys(state.player).length) {
+      navigate("/");
+    }
+    state.socket.emit(LOBBIES.SUBSCRIBE);
+  }, []);
 
   return (
     <FlexBox
@@ -24,7 +34,11 @@ export default function Lobbies() {
           close={() => setHasClickedCreate(false)}
           className="create-modal"
         >
-          <CreateLobby close={close} state={state} dispatch={dispatch} />
+          <CreateLobby
+            close={() => setHasClickedCreate(false)}
+            state={state}
+            dispatch={dispatch}
+          />
         </Overlay>
       )}
 

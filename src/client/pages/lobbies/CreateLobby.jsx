@@ -3,6 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import { setLobby, setLobbiesResponse } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
+import useNavigate from "hooks/useNavigate";
 
 export default function CreateLobby({ close, state, dispatch }) {
   const [myLobby, setMyLobby] = React.useState({
@@ -11,6 +12,7 @@ export default function CreateLobby({ close, state, dispatch }) {
     owner: state.player,
   });
   const [error, setError] = React.useState("");
+  const { navigate } = useNavigate();
 
   const handleLobby = (e) => {
     const value = e.target.value;
@@ -39,6 +41,7 @@ export default function CreateLobby({ close, state, dispatch }) {
           lobbyId: state.lobbiesResponse.payload.id,
         });
         close();
+        navigate("/rooms/id");
       }
     }
   }, [state.lobbiesResponse]);

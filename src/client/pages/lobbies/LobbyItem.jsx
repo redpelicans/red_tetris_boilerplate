@@ -3,7 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import { setLobby } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
 
-export default function ({ lobby, index, state, dispatch }) {
+export default function LobbyItem({ lobby, state, dispatch }) {
   const [error, setError] = React.useState("");
   const [hover, setHover] = React.useState(false);
 
