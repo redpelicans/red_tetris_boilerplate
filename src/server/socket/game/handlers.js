@@ -4,7 +4,12 @@ import { GAME } from "../../../config/actions/game";
 import Game from "models/game";
 import eventEmitter from "listeners";
 import event from "listeners/events";
-import { setGame } from "../../storage/game";
+import {
+  setGame,
+  updateScore,
+  checkForWinner,
+  setLoser,
+} from "../../storage/game";
 
 export const handlerStartGame = async (socket, { lobbyId, ownerId }) => {
   const response = await startGame(ownerId, lobbyId);
@@ -45,6 +50,7 @@ export const handlerSendScore = async (socket, { gameId, playerId, score }) => {
     lobbyId,
     score,
   });
+  checkForWinner(gameId);
 };
 
 export const handlerSendBoard = (socket, { lobbyId, playerId, boardGame }) => {
@@ -68,10 +74,12 @@ export const handlerSendPenalty = (
   });
 };
 
-export const handlerSendLose = (socket, { lobbyId, playerId }) => {
+export const handlerSendLose = async (socket, { lobbyId, playerId }) => {
+  await setLoser(gameId, playerId);
   eventEmitter.emit(event.game.lose, {
     socket,
     playerId,
     lobbyId,
   });
+  checkForWinner(gameId);
 };

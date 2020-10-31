@@ -7,7 +7,7 @@ const createPlayers = (players) => {
       player: element.player,
       score: 0,
       loser: false,
-      board: [],
+      // board: [],
     });
   });
   return newPlayers;

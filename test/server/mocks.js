@@ -73,3 +73,25 @@ export const lobby2mock = {
     { player: playerObject4mock, ready: false },
   ],
 };
+
+export const game1mock = {
+  id: "1",
+  name: "lobby1",
+  over: false,
+  owner: playerObject1mock,
+  players: [
+    { player: playerObject1mock, score: 0, loser: false },
+    { player: playerObject2mock, score: 0, loser: false },
+  ],
+};
+
+export const game2mock = {
+  id: "2",
+  name: "lobby2",
+  over: false,
+  owner: playerObject3mock,
+  players: [
+    { player: playerObject3mock, score: 0, loser: false },
+    { player: playerObject4mock, score: 0, loser: false },
+  ],
+};
