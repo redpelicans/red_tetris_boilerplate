@@ -38,6 +38,13 @@ function useGameBoard(
   }));
   const pieceId = React.useRef(0);
 
+  const isGameOver = React.useRef(false);
+  React.useEffect(() => {
+    if (isGameOver.current) {
+      gameOver();
+    }
+  }, [isGameOver.current]);
+
   React.useEffect(() => {
     const pieceFromStash = pullNextPiece();
 
@@ -63,7 +70,7 @@ function useGameBoard(
     } else {
       const newGrid = Insert.force(newPiece, gameBoard.grid);
       setGameBoard({ ...gameBoard, grid: newGrid, piece: newPiece });
-      gameOver();
+      isGameOver.current = true;
     }
   }, [gameBoard.piece.id]);
 
@@ -169,11 +176,14 @@ function useGameBoard(
 
   // ADD this method in useTetrisGame, coupled with socket hook
   const malus = (nbLines) => {
-    let enoughSpaceForMalus = true;
-
     setGameBoard((oldState) => {
       const cleanGrid = Grid.clear(oldState.grid);
       const malusGrid = Grid.malus(cleanGrid, nbLines);
+
+      if (Grid.Check.distanceFromTop(cleanGrid) < nbLines) {
+        isGameOver.current = true;
+        return { ...oldState, grid: malusGrid };
+      }
 
       // We try to (re)place the piece (potentially in a upper position)
       for (let line = 0; line <= nbLines; line++) {
@@ -189,7 +199,7 @@ function useGameBoard(
         }
       }
 
-      enoughSpaceForMalus = false;
+      isGameOver.current = true;
       const newPiece = {
         ...oldState.piece,
         coord: { ...oldState.piece.coord, y: 0 },
@@ -197,10 +207,6 @@ function useGameBoard(
       const newGrid = Grid.partialWrite(malusGrid, newPiece, newPiece.color);
       return { ...oldState, grid: newGrid };
     });
-
-    if (!enoughSpaceForMalus) {
-      gameOver();
-    }
   };
 
   return {
