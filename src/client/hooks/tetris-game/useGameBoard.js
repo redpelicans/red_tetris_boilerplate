@@ -76,6 +76,10 @@ function useGameBoard(
 
   const moveLateral = React.useCallback((direction) => {
     setGameBoard((oldState) => {
+      if (!("coord" in oldState.piece)) {
+        return;
+      }
+
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = LatMove.getNewPiece(oldState.piece, direction);
 
@@ -94,6 +98,10 @@ function useGameBoard(
       let requestNewPiece = false;
 
       setGameBoard((oldState) => {
+        if (!("coord" in oldState.piece)) {
+          return;
+        }
+
         const cleanGrid = Grid.clear(oldState.grid);
         const newPiece = SoftDrop.getNewPiece(oldState.piece);
 
@@ -131,6 +139,10 @@ function useGameBoard(
     let distance = 0;
 
     setGameBoard((oldState) => {
+      if (!("coord" in oldState.piece)) {
+        return;
+      }
+
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = HardDrop.getNewPiece(cleanGrid, oldState.piece);
 
