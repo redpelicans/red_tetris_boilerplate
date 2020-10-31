@@ -1,10 +1,13 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import Lobby from "./Lobby";
-import { LOBBY } from "../../../../config/actions/lobby";
+import { LOBBY } from "../../../config/actions/lobby";
 import Chat from "./Chat";
+import { StoreContext } from "store";
+import "./Lobby.scss";
 
-export default function ({ state, dispatch }) {
+export default function LobbyContainer() {
+  const { state, dispatch } = React.useContext(StoreContext);
   const [translate, setTranslate] = React.useState(false);
 
   React.useEffect(() => {
@@ -29,18 +32,16 @@ export default function ({ state, dispatch }) {
     <FlexBox
       direction="row"
       width="3.3/10"
-      className={`absolute top-0 bottom-0 right-0 bg-white shadow-lg transition-all duration-500 ease-in-out transform ${
-        translate ? `translate-x-0` : `translate-x-9/10`
-      }`}
+      className={`modal-lobby translate-x-${translate ? "0" : "9/10"}`}
     >
       <FlexBox direction="col" width="full" height="full" className="relative">
         <FlexBox
           width="10"
           height="10"
-          className="absolute justify-center items-center rounded rounded-full bg-red-400 left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+          className="toggle"
           onClick={() => setTranslate((e) => !e)}
         >
-          {translate ? `>` : `<`}
+          {translate ? ">" : "<"}
         </FlexBox>
         {isEmpty(state.lobby) ? (
           <FlexBox

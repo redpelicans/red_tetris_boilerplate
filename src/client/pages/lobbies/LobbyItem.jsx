@@ -1,9 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { setLobby } from "actions/store";
-import { LOBBY } from "../../../../config/actions/lobby";
-
-const isFull = (lobby) => players.length >= maxPlayer;
+import { LOBBY } from "../../../config/actions/lobby";
 
 export default function ({ lobby, index, state, dispatch }) {
   const [error, setError] = React.useState("");
@@ -29,10 +27,12 @@ export default function ({ lobby, index, state, dispatch }) {
     });
   };
 
+  const isFull = lobby.players.length >= lobby.maxPlayer;
+
   return (
     <FlexBox
       direction="row"
-      className="border border-grey-200 justify-between items-center rounded-lg shadow-md p-3 mb-3"
+      className="lobby-item"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -49,9 +49,9 @@ export default function ({ lobby, index, state, dispatch }) {
             {lobby.players.length}/{lobby.maxPlayer}
           </span>
           {isFull ? (
-            <div className="h-5 w-5 rounded-md bg-green-500 mr-2" />
+            <div className="status-dot bg-green-500" />
           ) : (
-            <div className="h-5 w-5 rounded-md bg-red-500 mr-2" />
+            <div className="status-dot bg-red-500" />
           )}
         </FlexBox>
       )}

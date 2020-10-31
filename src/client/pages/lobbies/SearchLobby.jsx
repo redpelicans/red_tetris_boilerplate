@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 
-export default function () {
+export default function SearchLobby() {
   return (
     <FlexBox
       direction="row"

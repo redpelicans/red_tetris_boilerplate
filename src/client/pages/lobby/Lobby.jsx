@@ -1,11 +1,11 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-import { LOBBY } from "../../../../config/actions/lobby";
-import { LOBBIES } from "../../../../config/actions/lobbies";
+import { LOBBY } from "../../../config/actions/lobby";
+import { LOBBIES } from "../../../config/actions/lobbies";
 import { setLobby } from "actions/store";
-import "pages/rooms/Rooms.scss";
+import "./Lobby.scss";
 
-export default function ({ close, state, dispatch }) {
+export default function Lobby({ close, state, dispatch }) {
   const [errorUnsub, setErrorUnsub] = React.useState("");
   const [errorDel, setErrorDel] = React.useState("");
 
@@ -46,7 +46,7 @@ export default function ({ close, state, dispatch }) {
     >
       <FlexBox
         direction="row"
-        className="justify-between pt-6 pb-6 pl-6 pr-6 border-b border-black items-center"
+        className="justify-between p-6 border-b border-black items-center"
       >
         <h1 className="text-2xl font-bold text-red-600 ">
           {state.lobby?.name}
@@ -61,7 +61,7 @@ export default function ({ close, state, dispatch }) {
         width="full"
         className="overflow-y-scroll hide-scroll pl-10 pr-6"
       >
-        {Object.entries(state.lobby?.players || {}).map(([key, el], index) => (
+        {Object.entries(state.lobby?.players || {}).map(([key, el]) => (
           <FlexBox
             width="full"
             wrap="no-wrap"
@@ -111,15 +111,11 @@ const Buttons = ({ state, owner }) => {
   return (
     <FlexBox direction="col" className="px-6 py-2">
       <FlexBox direction="row" className="justify-between">
-        <button
-          className="w-48% flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded"
-          type="button"
-          // onClick={() => gameLaunch(state.lobby.id, state.player.id)}
-        >
+        <button className="red-button" type="button">
           {owner ? "Launch game" : "Ready"}
         </button>
         <button
-          className="w-48% flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded"
+          className="red-button"
           type="button"
           onClick={() => unsubscribeLobby(state.lobby.id, state.player.id)}
         >

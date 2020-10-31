@@ -1,0 +1,19 @@
+.word-breaker {
+  word-break: break-word;
+}
+
+.modal-lobby {
+  @apply absolute top-0 bottom-0 right-0 bg-white shadow-lg transition-all duration-500 ease-in-out transform;
+
+  .toggle {
+    @apply absolute justify-center items-center rounded-full bg-red-400 left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer;
+  }
+}
+
+.red-button {
+  @apply w-48% flex-shrink-0 bg-red-400 text-sm text-white py-1 px-2 rounded;
+
+  &:hover {
+    @apply bg-red-600;
+  }
+}
