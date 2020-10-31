@@ -34,7 +34,7 @@ export const setLoser = async (gameId, playerId) => {
 
 export const checkForWinner = async (gameId) => {
   const game = await getGame(gameId);
-  if (game === {}) return null;
+  if (Object.keys(game).length === 0) return null;
 
   const players = game.players;
 
