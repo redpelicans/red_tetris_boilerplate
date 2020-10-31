@@ -9,20 +9,20 @@
 
     -->
     <preset_collections/>
-    <framework>react-intl</framework>
+    <framework>i18next</framework>
     <filename>translations.babel</filename>
     <source_root_dir></source_root_dir>
     <folder_node>
         <name></name>
         <children>
-            <folder_node>
+            <file_node>
                 <name>pages</name>
                 <children>
                     <folder_node>
                         <name>home</name>
                         <children>
                             <concept_node>
-                                <name>jeu_multi</name>
+                                <name>multijoueur</name>
                                 <definition_loaded>false</definition_loaded>
                                 <description></description>
                                 <comment></comment>
@@ -39,7 +39,7 @@
                                 </translations>
                             </concept_node>
                             <concept_node>
-                                <name>jeu_solo</name>
+                                <name>solo</name>
                                 <definition_loaded>false</definition_loaded>
                                 <description></description>
                                 <comment></comment>
@@ -58,7 +58,8 @@
                         </children>
                     </folder_node>
                 </children>
-            </folder_node>
+                <filename></filename>
+            </file_node>
         </children>
     </folder_node>
     <isTemplateProject>false</isTemplateProject>
@@ -66,35 +67,33 @@
         <language>
             <code>en-US</code>
             <source_id></source_id>
-            <source_file>en-US.json</source_file>
+            <source_file>en</source_file>
         </language>
         <language>
             <code>fr-FR</code>
             <source_id></source_id>
-            <source_file>fr-FR.json</source_file>
+            <source_file>fr</source_file>
         </language>
     </languages>
     <translation_files>
         <translation_file>
-            <file>en-US.json</file>
+            <file>fr</file>
         </translation_file>
         <translation_file>
-            <file>fr-FR.json</file>
+            <file>en</file>
         </translation_file>
     </translation_files>
     <editor_configuration>
         <save_empty_translations>true</save_empty_translations>
         <copy_templates>
-            <copy_template></copy_template>
-            <copy_template></copy_template>
-            <copy_template></copy_template>
+            <copy_template>'%1'</copy_template>
+            <copy_template>{ this.props.t('%1') }</copy_template>
+            <copy_template>{ t('%1') }</copy_template>
         </copy_templates>
     </editor_configuration>
     <primary_language>fr-FR</primary_language>
     <configuration>
-        <definitions></definitions>
         <indent>tab</indent>
-        <format>json</format>
-        <support_arrays>true</support_arrays>
+        <format>namespaced-json</format>
     </configuration>
 </babeledit_project>

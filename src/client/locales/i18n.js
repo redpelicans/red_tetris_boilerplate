@@ -1,28 +1,22 @@
 import i18n from "i18next";
-import detector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
-import frlangJSON from "./fr-FR.json";
-import enlangJSON from "./en-US.json";
-
-console.log(enlangJSON);
+import pagesFR from "./translations/fr/pages.json";
+import pagesEN from "./translations/en/pages.json";
 
 const LANGUAGES = {
-  en: { translation: enlangJSON },
-  fr: { translation: frlangJSON },
+  fr: { translation: { pages: pagesFR } },
+  en: { translation: { pages: pagesEN } },
 };
 
-i18n
-  .use(detector)
-  .use(initReactI18next)
-  .init({
-    resources: LANGUAGES,
-    lng: "fr",
-    fallbackLng: "fr",
+i18n.use(initReactI18next).init({
+  resources: LANGUAGES,
+  lng: "fr",
+  fallbackLng: "fr",
 
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default i18n;
