@@ -2,3 +2,4 @@ build
 coverage
 .storybook
 README.md
+src/client/locales/translations
