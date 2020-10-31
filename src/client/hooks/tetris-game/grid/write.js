@@ -49,7 +49,8 @@ function getHeightLeft(piece, grid) {
   } = piece;
   const colLimit = x + width;
 
-  for (let row = 0; row < height; row++) {
+  let row = 0;
+  for (row; row < height; row++) {
     for (let col = x; col < colLimit; col++) {
       const element = grid[row][col];
 
@@ -59,7 +60,7 @@ function getHeightLeft(piece, grid) {
     }
   }
 
-  throw new Error("Tetromino has no valid informations");
+  return row;
 }
 
 function partialWrite(grid, piece, type) {

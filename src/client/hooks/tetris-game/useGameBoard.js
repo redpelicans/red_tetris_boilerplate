@@ -6,6 +6,7 @@ import * as SoftDrop from "./pieces/softDrop";
 import * as HardDrop from "./pieces/hardDrop";
 import * as Rotation from "./pieces/rotation";
 import * as LatMove from "./pieces/lateralMove";
+import { CURRENT_PIECE } from "constants/tetris";
 
 const initialState = {
   grid: [],
@@ -37,6 +38,13 @@ function useGameBoard(
   }));
   const pieceId = React.useRef(0);
 
+  const isGameOver = React.useRef(false);
+  React.useEffect(() => {
+    if (isGameOver.current) {
+      gameOver();
+    }
+  }, [isGameOver.current]);
+
   React.useEffect(() => {
     const pieceFromStash = pullNextPiece();
 
@@ -62,12 +70,16 @@ function useGameBoard(
     } else {
       const newGrid = Insert.force(newPiece, gameBoard.grid);
       setGameBoard({ ...gameBoard, grid: newGrid, piece: newPiece });
-      gameOver();
+      isGameOver.current = true;
     }
   }, [gameBoard.piece.id]);
 
   const moveLateral = React.useCallback((direction) => {
     setGameBoard((oldState) => {
+      if (!("coord" in oldState.piece)) {
+        return;
+      }
+
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = LatMove.getNewPiece(oldState.piece, direction);
 
@@ -86,16 +98,16 @@ function useGameBoard(
       let requestNewPiece = false;
 
       setGameBoard((oldState) => {
+        if (!("coord" in oldState.piece)) {
+          return;
+        }
+
         const cleanGrid = Grid.clear(oldState.grid);
         const newPiece = SoftDrop.getNewPiece(oldState.piece);
 
         if (canPut(cleanGrid, newPiece)) {
           const newGrid = SoftDrop.default(cleanGrid, newPiece);
           const newGridWithShadow = Shadow.default(newGrid, newPiece);
-          if (manuallyTriggered) {
-            addScore(1);
-          }
-
           return { ...oldState, grid: newGridWithShadow, piece: newPiece };
         }
 
@@ -115,6 +127,8 @@ function useGameBoard(
           ...old,
           piece: { ...nextPiece, id: pieceId.current++ },
         }));
+      } else if (manuallyTriggered) {
+        addScore(1);
       }
     },
     [gameBoard.piece.id],
@@ -122,20 +136,25 @@ function useGameBoard(
 
   const dropDown = React.useCallback(() => {
     const nextPiece = pullNextPiece();
+    let distance = 0;
 
     setGameBoard((oldState) => {
+      if (!("coord" in oldState.piece)) {
+        return;
+      }
+
       const cleanGrid = Grid.clear(oldState.grid);
       const newPiece = HardDrop.getNewPiece(cleanGrid, oldState.piece);
 
       if (canPut(cleanGrid, newPiece)) {
-        addScore((newPiece.coord.y - oldState.piece.coord.y) * 2);
-
+        distance = newPiece.coord.y - oldState.piece.coord.y;
         const newGrid = Grid.bind(
           cleanGrid,
           newPiece,
           addScore,
           addRemovedLines,
         );
+
         return {
           ...oldState,
           grid: newGrid,
@@ -144,6 +163,8 @@ function useGameBoard(
       }
       return oldState;
     });
+
+    addScore(distance * 2);
   }, [gameBoard.piece.id]);
 
   const rotation = React.useCallback(() => {
@@ -165,6 +186,41 @@ function useGameBoard(
     });
   }, []);
 
+  // ADD this method in useTetrisGame, coupled with socket hook
+  const malus = (nbLines) => {
+    setGameBoard((oldState) => {
+      const cleanGrid = Grid.clear(oldState.grid);
+      const malusGrid = Grid.malus(cleanGrid, nbLines);
+
+      if (Grid.Check.distanceFromTop(cleanGrid) < nbLines) {
+        isGameOver.current = true;
+        return { ...oldState, grid: malusGrid };
+      }
+
+      // We try to (re)place the piece (potentially in a upper position)
+      for (let line = 0; line <= nbLines; line++) {
+        const newPiece = {
+          ...oldState.piece,
+          coord: { ...oldState.piece.coord, y: oldState.piece.coord.y - line },
+        };
+
+        if (canPut(malusGrid, newPiece)) {
+          const newGrid = Grid.write(malusGrid, newPiece, CURRENT_PIECE);
+          const newGridWithShadow = Shadow.default(newGrid, newPiece);
+          return { ...oldState, grid: newGridWithShadow, piece: newPiece };
+        }
+      }
+
+      isGameOver.current = true;
+      const newPiece = {
+        ...oldState.piece,
+        coord: { ...oldState.piece.coord, y: 0 },
+      };
+      const newGrid = Grid.partialWrite(malusGrid, newPiece, newPiece.color);
+      return { ...oldState, grid: newGrid };
+    });
+  };
+
   return {
     grid: gameBoard.grid,
     piece: gameBoard.piece,
@@ -173,6 +229,7 @@ function useGameBoard(
     moveDown,
     dropDown,
     rotation,
+    malus,
   };
 }
 

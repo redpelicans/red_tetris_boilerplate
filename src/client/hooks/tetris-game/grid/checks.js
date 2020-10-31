@@ -1,4 +1,9 @@
-import { SHADOW_PIECE, CURRENT_PIECE, FREE } from "constants/tetris";
+import {
+  SHADOW_PIECE,
+  CURRENT_PIECE,
+  FREE,
+  BLOCKED_PIECE,
+} from "constants/tetris";
 
 export function isPartOfPiece(element) {
   return element === CURRENT_PIECE;
@@ -12,6 +17,10 @@ export function isFree(element) {
   return element === FREE;
 }
 
+export function isBlocked(element) {
+  return element === BLOCKED_PIECE;
+}
+
 export function isBottomLine(grid, row) {
   return row === grid.length - 1;
 }
@@ -20,12 +29,19 @@ export function isBottomBorder(grid, row) {
   return row === grid.length;
 }
 
+export function isAnEmptyRow(row) {
+  return row.every((value) => isFree(value) || isPartOfShadowPiece(value));
+}
+
 export function isNotAnEmptyRow(row) {
-  return row.some((value) => value !== FREE && value !== SHADOW_PIECE);
+  return row.some((value) => !isFree(value) && !isPartOfShadowPiece(value));
 }
 
 export function isACompleteRow(row) {
-  return row.every((value) => value !== FREE && value !== SHADOW_PIECE);
+  return row.every(
+    (value) =>
+      !isFree(value) && !isPartOfShadowPiece(value) && !isBlocked(value),
+  );
 }
 
 function isPieceInArrayBoundaries(grid, piece) {
@@ -73,4 +89,13 @@ export function canPutLayer(grid, piece) {
     }
   }
   return true;
+}
+
+export function distanceFromTop(grid) {
+  let distance = 0;
+
+  for (let row = 0; row < grid.length && isAnEmptyRow(grid[row]); row++) {
+    distance++;
+  }
+  return distance;
 }

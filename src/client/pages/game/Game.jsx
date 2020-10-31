@@ -77,6 +77,12 @@ export default function Game() {
       >
         Retour accueil
       </Link>
+      <button
+        onClick={() => methods.malus(2)}
+        className="text-red-600 bg-grey-200 border-2 border-red-600 p-2 rounded"
+      >
+        TEST MALUS
+      </button>
       <h1 className="font-bold">{state.alive ? "Still alive" : "GAME OVER"}</h1>
       <FlexBox direction="row" className="mt-4">
         <FlexBox

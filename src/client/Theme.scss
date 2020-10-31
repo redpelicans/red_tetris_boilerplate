@@ -72,6 +72,11 @@ $tetrominoes: (
     theme("colors.purple.500"),
     theme("colors.purple.700"),
   ),
+  blocked: (
+    theme("colors.grey.300"),
+    theme("colors.grey.500"),
+    theme("colors.grey.700"),
+  ),
 );
 
 @each $name, $colors in $tetrominoes {

@@ -5,6 +5,7 @@
 export const FREE = 0;
 export const CURRENT_PIECE = 1;
 export const SHADOW_PIECE = 2;
+export const BLOCKED_PIECE = 3;
 
 /*
  ** SCORING

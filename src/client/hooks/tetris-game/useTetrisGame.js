@@ -46,7 +46,7 @@ function useTetrisGame(methods, nextPieces) {
           return;
       }
     },
-    [nextPieces],
+    [nextPieces, state.alive],
   );
 
   return { movePiece };

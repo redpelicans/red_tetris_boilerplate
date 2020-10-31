@@ -1,5 +1,11 @@
 import * as Check from "hooks/tetris-game/grid/checks";
-import { SHADOW_PIECE, CURRENT_PIECE, FREE } from "constants/tetris";
+import {
+  SHADOW_PIECE,
+  CURRENT_PIECE,
+  FREE,
+  BLOCKED_PIECE,
+} from "constants/tetris";
+import { distanceFromTop } from "../../../../../src/client/hooks/tetris-game/grid/checks";
 
 describe("Check", () => {
   const mockGrid = [
@@ -8,6 +14,7 @@ describe("Check", () => {
     [FREE, SHADOW_PIECE, SHADOW_PIECE, SHADOW_PIECE, SHADOW_PIECE],
     ["red", "red", "red", "red", "red"],
     ["red", "red", "red", "red", "red"],
+    [BLOCKED_PIECE, BLOCKED_PIECE, BLOCKED_PIECE, BLOCKED_PIECE, BLOCKED_PIECE],
   ];
 
   describe("isPartOfPiece", () => {
@@ -46,6 +53,19 @@ describe("Check", () => {
     });
   });
 
+  describe("isBlocked", () => {
+    test("is a blocked space in the grid", () => {
+      expect(Check.isBlocked(mockGrid[5][0])).toBe(true);
+    });
+
+    test("is not a blocked space in the grid", () => {
+      expect(Check.isBlocked(mockGrid[0][0])).toBe(false);
+      expect(Check.isBlocked(mockGrid[0][1])).toBe(false);
+      expect(Check.isBlocked(mockGrid[2][1])).toBe(false);
+      expect(Check.isBlocked(mockGrid[3][1])).toBe(false);
+    });
+  });
+
   describe("isBottomLine", () => {
     const lastRow = mockGrid.length - 1;
 
@@ -74,6 +94,20 @@ describe("Check", () => {
     });
   });
 
+  describe("isAnEmptyRow", () => {
+    test("is an empty row", () => {
+      expect(Check.isAnEmptyRow(mockGrid[1])).toBe(true);
+      expect(Check.isAnEmptyRow(mockGrid[2])).toBe(true);
+    });
+
+    test("is not an empty row", () => {
+      expect(Check.isAnEmptyRow(mockGrid[0])).toBe(false);
+      expect(Check.isAnEmptyRow(mockGrid[3])).toBe(false);
+      expect(Check.isAnEmptyRow(mockGrid[4])).toBe(false);
+      expect(Check.isAnEmptyRow(mockGrid[5])).toBe(false);
+    });
+  });
+
   describe("isNotAnEmptyRow", () => {
     test("is an empty row", () => {
       expect(Check.isNotAnEmptyRow(mockGrid[1])).toBe(false);
@@ -95,6 +129,7 @@ describe("Check", () => {
       expect(Check.isACompleteRow(mockGrid[0])).toBe(false);
       expect(Check.isACompleteRow(mockGrid[1])).toBe(false);
       expect(Check.isACompleteRow(mockGrid[2])).toBe(false);
+      expect(Check.isACompleteRow(mockGrid[5])).toBe(false);
     });
   });
 
@@ -147,6 +182,31 @@ describe("Check", () => {
         mockPiece.coord = coord;
         expect(Check.canPutLayer(mockPlacementGrid, mockPiece)).toBe(false);
       }
+    });
+  });
+
+  describe("distanceFromTop", () => {
+    const mockDistanceGrid = [
+      [FREE, FREE, FREE, FREE, FREE],
+      [FREE, FREE, FREE, FREE, FREE],
+      ["red", "red", "red", "red", "red"],
+      ["red", "red", "red", "red", "red"],
+      [
+        BLOCKED_PIECE,
+        BLOCKED_PIECE,
+        BLOCKED_PIECE,
+        BLOCKED_PIECE,
+        BLOCKED_PIECE,
+      ],
+    ];
+
+    test("compute distance", () => {
+      expect(distanceFromTop(mockGrid)).toEqual(0);
+      expect(distanceFromTop(mockDistanceGrid)).toEqual(2);
+    });
+
+    test("ErrorType", () => {
+      expect(() => distanceFromTop(null)).toThrow(TypeError);
     });
   });
 });
