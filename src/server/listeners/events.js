@@ -21,9 +21,9 @@ export default {
   },
   game: {
     started: "onGameStarted",
+    score: "onScoreChange",
     board: "onBoardChange",
     penalty: "onPenalty",
-    score: "onScoreChange",
     lose: "onLose",
     winner: "onWinner",
   },

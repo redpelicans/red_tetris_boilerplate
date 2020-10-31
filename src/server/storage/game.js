@@ -17,3 +17,27 @@ export const getGame = async (id) => {
 export const setGame = async (game) => {
   return await setComplexObjectToRedis(`game-${game.id}`, game);
 };
+
+export const updateScore = async (gameId, playerId, score) => {
+  const game = await getGame(gameId);
+  if (game === {}) return null;
+  const newPlayers = [];
+  game.players.forEach((element) => {
+    if (element.player.id === playerId) element.score = score;
+    newPlayers.push(element);
+  });
+  game.players = newPlayers;
+  return await setComplexObjectToRedis(`game-${game.id}`, game);
+};
+
+export const setLoser = async (gameId, playerId) => {
+  const game = await getGame(gameId);
+  if (game === {}) return null;
+  const newPlayers = [];
+  game.players.forEach((element) => {
+    if (element.player.id === playerId) element.loser = true;
+    newPlayers.push(element);
+  });
+  game.players = newPlayers;
+  return await setComplexObjectToRedis(`game-${game.id}`, game);
+};

@@ -28,7 +28,7 @@ export const handlerStartGame = async (socket, { lobbyId, ownerId }) => {
       owner: lobby.owner,
       players: lobby.players,
     });
-    setGame(game);
+    await setGame(game);
 
     eventEmitter.emit(event.game.started, {
       lobbyId,
@@ -37,35 +37,41 @@ export const handlerStartGame = async (socket, { lobbyId, ownerId }) => {
   }
 };
 
-export const handlerSendBoard = (socket, { lobbyId, boardGame }) => {
-  eventEmitter.emit(event.game.board, {
-    socket,
-    lobbyId,
-    boardGame,
-  });
-};
-
-export const handlerSendPenalty = (socket, { lobbyId, nbLinePenalty }) => {
-  eventEmitter.emit(event.game.penalty, {
-    socket,
-    lobbyId,
-    nbLinePenalty,
-  });
-};
-
-// TODO
-export const handlerSendScore = (socket, { lobbyId, score }) => {
+export const handlerSendScore = async (socket, { gameId, playerId, score }) => {
+  await updateScore(gameId, playerId, score);
   eventEmitter.emit(event.game.score, {
     socket,
+    playerId,
     lobbyId,
     score,
   });
 };
 
-// TODO
-export const handlerSendLose = (socket, { lobbyId }) => {
+export const handlerSendBoard = (socket, { lobbyId, playerId, boardGame }) => {
+  eventEmitter.emit(event.game.board, {
+    socket,
+    playerId,
+    lobbyId,
+    boardGame,
+  });
+};
+
+export const handlerSendPenalty = (
+  socket,
+  { lobbyId, playerId, nbLinePenalty },
+) => {
+  eventEmitter.emit(event.game.penalty, {
+    socket,
+    playerId,
+    lobbyId,
+    nbLinePenalty,
+  });
+};
+
+export const handlerSendLose = (socket, { lobbyId, playerId }) => {
   eventEmitter.emit(event.game.lose, {
     socket,
+    playerId,
     lobbyId,
   });
 };
