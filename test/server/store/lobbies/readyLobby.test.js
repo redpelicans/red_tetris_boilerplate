@@ -3,13 +3,7 @@ import { setRedis, quitRedis, deleteKeyFromRedis } from "storage";
 import Response from "models/response";
 import { LOBBY } from "../../../../src/config/actions/lobby";
 import { readyLobby, pushLobby } from "storage/lobbies";
-import {
-  lobby1mock,
-  lobby2mock,
-  playerObject3mock,
-  playerObject4mock,
-} from "../../mocks";
-import { deepCopy } from "helpers/functional";
+import { lobby1mock, lobby2mock, playerObject3mock } from "../../mocks";
 
 beforeAll(() => {
   setRedis(redismock.createClient());

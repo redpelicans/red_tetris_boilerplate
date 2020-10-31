@@ -1,10 +1,20 @@
 import { logerror, loginfo } from "utils/log";
-import { getPlayer } from "storage/players";
-import { joinLobby, leaveLobby } from "storage/lobbies";
-import { LOBBY } from "../../../config/actions/lobby";
-import GROUP_DOMAIN from "../../../config/actions/group";
+import { startGame } from "storage/lobbies";
+import { GAME } from "../../../config/actions/game";
 import eventEmitter from "listeners";
 import event from "listeners/events";
+
+export const handlerStartGame = async (socket, { lobbyId, playerId }) => {
+  const response = await startGame(playerId, lobbyId);
+  socket.emit(GAME.RESPONSE, response);
+
+  // if (response.type === "success") {
+  //   eventEmitter.emit(event.lobby.change, {
+  //     socket,
+  //     lobbyId,
+  //   });
+  // }
+};
 
 export const handlerSendBoard = (socket, { lobbyId, boardGame }) => {
   eventEmitter.emit(event.game.board, {
