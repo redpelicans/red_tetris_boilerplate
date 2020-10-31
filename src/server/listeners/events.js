@@ -20,6 +20,7 @@ export default {
     clear: "onClearRoom",
   },
   game: {
+    started: "onGameStarted",
     board: "onBoardChange",
     penalty: "onPenalty",
     score: "onScoreChange",

@@ -86,6 +86,11 @@ eventEmitter.on(event.room.clear, async ({ room }) => {
   });
 });
 
+// Game Started
+eventEmitter.on(event.game.started, ({ lobbyId, game }) => {
+  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(GAME.STARTED, game);
+});
+
 // Game Board Change
 eventEmitter.on(event.game.board, ({ socket, lobbyId, boardGame }) => {
   const socketId = socket.id;

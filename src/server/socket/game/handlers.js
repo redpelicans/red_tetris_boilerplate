@@ -1,19 +1,40 @@
 import { logerror, loginfo } from "utils/log";
-import { startGame } from "storage/lobbies";
+import { startGame, getLobby } from "storage/lobbies";
 import { GAME } from "../../../config/actions/game";
+import Game from "models/game";
 import eventEmitter from "listeners";
 import event from "listeners/events";
+import { setGame } from "../../storage/game";
 
-export const handlerStartGame = async (socket, { lobbyId, playerId }) => {
-  const response = await startGame(playerId, lobbyId);
+export const handlerStartGame = async (socket, { lobbyId, ownerId }) => {
+  const response = await startGame(ownerId, lobbyId);
   socket.emit(GAME.RESPONSE, response);
 
-  // if (response.type === "success") {
-  //   eventEmitter.emit(event.lobby.change, {
-  //     socket,
-  //     lobbyId,
-  //   });
-  // }
+  if (response.type === "success") {
+    eventEmitter.emit(event.lobby.change, {
+      socket,
+      lobbyId,
+    });
+
+    // unsub from group:lobbies?
+
+    eventEmitter.emit(event.lobbies.change, {
+      socket,
+    });
+
+    const lobby = await getLobby(lobbyId);
+    const game = new Game({
+      name: lobby.name,
+      owner: lobby.owner,
+      players: lobby.players,
+    });
+    setGame(game);
+
+    eventEmitter.emit(event.game.started, {
+      lobbyId,
+      game,
+    });
+  }
 };
 
 export const handlerSendBoard = (socket, { lobbyId, boardGame }) => {

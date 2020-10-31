@@ -73,7 +73,6 @@ describe("Socket tests", () => {
     });
     socketClient.on("players:publish", (response) => {
       socketClient.off("players:publish");
-
       done();
     });
     socketClient.emit("lobbies:subscribe");
@@ -184,7 +183,6 @@ describe("Socket tests", () => {
         expect(response.type).toBe("success");
         expect(response.payload).toEqual({});
         expect(await getLobbies()).toEqual({});
-
         socketClient.off("lobbies:response");
         done();
       }
