@@ -2,7 +2,6 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
-import { GAME } from "../../../config/actions/game";
 import { setLobby } from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
@@ -10,6 +9,7 @@ import "./Lobby.scss";
 export default function Lobby({ close, state, dispatch }) {
   const [errorUnsub, setErrorUnsub] = React.useState("");
   const [errorDel, setErrorDel] = React.useState("");
+  const { navigate } = useNavigate();
 
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.UNSUBSCRIBE) {
@@ -29,6 +29,13 @@ export default function Lobby({ close, state, dispatch }) {
         console.log("Ready set!");
       }
     }
+    if (state.lobbyResponse.action === LOBBY.START) {
+      if (state.lobbyResponse.type === "error") {
+        console.log("Can't launch game:", state.lobbyResponse.reason);
+      } else if (state.lobbyResponse.type === "success") {
+        console.log("Game successfully launched!");
+      }
+    }
   }, [state.lobbyResponse]);
 
   React.useEffect(() => {
@@ -44,6 +51,13 @@ export default function Lobby({ close, state, dispatch }) {
       }
     }
   }, [state.lobbiesResponse]);
+
+  React.useEffect(() => {
+    if (Object.keys(state.game).length !== 0) {
+      console.log("GAME JUST STARTED!!!!");
+      navigate("/game-multi");
+    }
+  }, [state.game]);
 
   return (
     <FlexBox
@@ -108,8 +122,6 @@ export default function Lobby({ close, state, dispatch }) {
 }
 
 const Buttons = ({ state, owner }) => {
-  const { navigate } = useNavigate();
-
   const unsubscribeLobby = (lobbyId, playerId) => {
     state.socket.emit(LOBBY.UNSUBSCRIBE, { lobbyId, playerId });
   };
@@ -124,8 +136,8 @@ const Buttons = ({ state, owner }) => {
   };
 
   const launchGame = (lobbyId, ownerId) => {
+    console.log("launching game...");
     state.socket.emit(LOBBY.START, { lobbyId, ownerId });
-    // navigate("/game-multi");
   };
 
   return (

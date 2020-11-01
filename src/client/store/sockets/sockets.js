@@ -15,6 +15,7 @@ import {
   setLobbyResponse,
   addMessage,
   setNextPieces,
+  setGameStarted,
 } from "actions/store";
 
 const endpoint = "http://0.0.0.0:3004";
@@ -36,12 +37,15 @@ export function setupSocket(socket, dispatch) {
     dispatch(setLobby(data));
   });
 
+  socket.on(LOBBY.STARTED, (data) => {
+    dispatch(setGameStarted(data));
+  });
+
   socket.on(PLAYERS.PUBLISH, (data) => {
     dispatch(setPlayers(data));
   });
 
   socket.on(MESSAGE.PUBLISH, (data) => {
-    console.log("HEY");
     dispatch(addMessage(data));
   });
 
