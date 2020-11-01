@@ -15,7 +15,7 @@ export const handlerAddLobby = async (
   socket.emit(LOBBIES.RESPONSE, response);
 
   if (response.type === "success") {
-    socket.join(`${GROUP_DOMAIN}:${lobby.id}`);
+    socket.join(`${GROUP_DOMAIN}:lobby-${lobby.id}`);
 
     eventEmitter.emit(event.lobbies.change, {
       socket,

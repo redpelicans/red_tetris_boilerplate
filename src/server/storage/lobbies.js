@@ -174,7 +174,7 @@ export const startGame = async (playerId, lobbyId) => {
     return Response.error(GAME.START, "All the players need to be ready!");
   }
 
-  lobbies[lobbyId].isReady = true;
+  lobbies[lobbyId].isPlaying = true;
   await setComplexObjectToRedis("lobbies", lobbies);
 
   return Response.success(GAME.START, {});
