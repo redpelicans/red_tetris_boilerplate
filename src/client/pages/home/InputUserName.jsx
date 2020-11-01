@@ -2,14 +2,16 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
 import useNavigate from "hooks/useNavigate";
-import { setPlayer, setPlayerResponse } from "actions/store";
+import { setPlayer } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
+import { useSocket } from "hooks";
 
 export default function InputUserName() {
-  const { state, dispatch } = React.useContext(StoreContext);
+  const { dispatch } = React.useContext(StoreContext);
   const [playerName, setPlayerName] = React.useState("");
   const [error, setError] = React.useState("");
+  const [playerState, playerEmitter] = useSocket(PLAYER.RESPONSE);
 
   const { navigate } = useNavigate();
   const handlePlayerName = (e) => {
@@ -17,23 +19,17 @@ export default function InputUserName() {
   };
 
   React.useEffect(() => {
-    if (state.playerResponse.action === PLAYER.CREATE) {
-      console.log("I got an error");
-      if (state.playerResponse.type === "error") {
-        console.log("There was an error with player:response");
-        setError(state?.playerResponse?.reason);
-      } else if (state.playerResponse.type === "success") {
-        console.log("New player created :", state.playerResponse.payload);
-        dispatch(setPlayer(state.playerResponse.payload));
-        dispatch(setPlayerResponse({}));
-        navigate("/rooms");
-      }
+    if (playerState.payload) {
+      dispatch(setPlayer(playerState.payload));
+      navigate("/rooms");
+    } else {
+      setError(playerState.error);
     }
-  }, [state.playerResponse]);
+  }, [playerState]);
 
   const createPlayer = (event) => {
     event.preventDefault();
-    state.socket.emit(PLAYER.CREATE, { name: playerName });
+    playerEmitter(PLAYER.CREATE, { name: playerName });
   };
 
   return (

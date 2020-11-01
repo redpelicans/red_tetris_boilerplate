@@ -20,10 +20,6 @@ import {
 const endpoint = "http://0.0.0.0:3004";
 
 export function setupSocket(socket, dispatch) {
-  socket.on(PLAYER.RESPONSE, (data) => {
-    dispatch(setPlayerResponse(data));
-  });
-
   socket.on(LOBBIES.PUBLISH, (data) => {
     dispatch(setLobbies(data));
   });
