@@ -58,7 +58,7 @@ export default function Lobbies() {
 const LobbyList = ({ state, dispatch }) => (
   <FlexBox direction="col" className="max-h-3/5 my-6">
     <div className="overflow-y-scroll hide-scroll">
-      {Object.values(state.lobbies).map((lobby, index) => (
+      {Object.values(state.lobbies || {}).map((lobby, index) => (
         <LobbyItem
           lobby={lobby}
           key={index}

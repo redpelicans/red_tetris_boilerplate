@@ -8,7 +8,7 @@ export default function Button({ onClick, className, children, ...rest }) {
       {...rest}
       className={className}
       onClick={() => {
-        onClick();
+        if (onClick) onClick();
       }}
     >
       {children}

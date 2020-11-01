@@ -4,6 +4,7 @@ import { StoreContext } from "store";
 import useNavigate from "hooks/useNavigate";
 import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
+import ButtonSpecial from "components/button/ButtonSpecial";
 
 export default function () {
   const { state, dispatch } = React.useContext(StoreContext);
@@ -48,12 +49,9 @@ export default function () {
           value={playerName}
           onChange={handlePlayerName}
         />
-        <button
-          className="flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded"
-          type="submit"
-        >
+        <ButtonSpecial className="button-3" type="submit">
           Create player
-        </button>
+        </ButtonSpecial>
       </form>
       <span className="text-red-600">{error}</span>
     </FlexBox>
