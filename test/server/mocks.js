@@ -56,6 +56,7 @@ export const lobby1mock = {
   id: "1",
   name: "lobby1",
   maxPlayer: 3,
+  isPlaying: false,
   owner: playerObject1mock,
   players: [
     { player: playerObject1mock, ready: false },
@@ -67,6 +68,7 @@ export const lobby2mock = {
   id: "2",
   name: "lobby2",
   maxPlayer: 3,
+  isPlaying: false,
   owner: playerObject3mock,
   players: [
     { player: playerObject3mock, ready: false },

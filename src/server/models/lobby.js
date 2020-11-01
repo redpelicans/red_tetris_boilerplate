@@ -6,6 +6,7 @@ export default class Lobby {
     this.hash = hash;
     this.name = name;
     this.maxPlayer = maxPlayer;
+    this.isPlaying = false;
     this.players = [];
     this.owner = owner;
   }

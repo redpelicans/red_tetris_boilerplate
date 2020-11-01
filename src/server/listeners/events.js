@@ -18,6 +18,7 @@ export default {
   },
   room: {
     clear: "onClearRoom",
+    join: "onJoinRoom",
   },
   game: {
     started: "onGameStarted",

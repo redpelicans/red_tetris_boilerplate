@@ -23,11 +23,11 @@ eventEmitter.on(event.lobbies.change, async ({ socket }) => {
 // Lobby change
 eventEmitter.on(event.lobby.change, async ({ socket, lobbyId }) => {
   const lobby = (await getLobby(lobbyId)) ?? {};
-  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(LOBBY.PUBLISH, lobby);
+  io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(LOBBY.PUBLISH, lobby);
 
-  if (lobby === {}) {
+  if (Object.keys(lobby).length === 0) {
     eventEmitter.emit(event.room.clear, {
-      room: `${GROUP_DOMAIN}:${lobbyId}`,
+      room: `${GROUP_DOMAIN}:lobby-${lobbyId}`,
     });
   }
 });
@@ -54,7 +54,7 @@ eventEmitter.on(event.player.disconnect, async ({ socket }) => {
   const playerId = await getPlayerId(socket.id);
   const lobbyId = await clearPlayerFromLobbies(playerId);
   if (lobbyId) {
-    socket.leave(`${GROUP_DOMAIN}:${lobbyId}`);
+    socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
     eventEmitter.emit(event.lobby.change, {
       socket,
       lobbyId,
@@ -72,7 +72,10 @@ eventEmitter.on(event.player.disconnect, async ({ socket }) => {
 
 // Message new
 eventEmitter.on(event.message.new, async ({ lobbyId, messageObject }) => {
-  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(MESSAGE.PUBLISH, messageObject);
+  io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(
+    MESSAGE.PUBLISH,
+    messageObject,
+  );
 });
 
 // Clear Room
@@ -86,55 +89,70 @@ eventEmitter.on(event.room.clear, async ({ room }) => {
   });
 });
 
+// Join based on room
+eventEmitter.on(event.room.join, async ({ roomIn, roomTo }) => {
+  io.in(roomIn).clients(function (error, clients) {
+    if (clients.length > 0) {
+      clients.forEach(function (socket_id) {
+        io.sockets.sockets[socket_id].join(roomTo);
+      });
+    }
+  });
+});
+
 // Game Started
 eventEmitter.on(event.game.started, ({ lobbyId, game }) => {
-  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(GAME.STARTED, game);
+  io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(GAME.STARTED, game);
+  eventEmitter.emit(event.room.join, {
+    roomIn: `${GROUP_DOMAIN}:lobby-${lobbyId}`,
+    roomTo: `${GROUP_DOMAIN}:game-${game.id}`,
+  });
 });
 
 // Game Score Change
-eventEmitter.on(event.game.board, ({ socket, playerId, lobbyId, score }) => {
+eventEmitter.on(event.game.board, ({ socket, playerId, gameId, score }) => {
   socket.broadcast
-    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .to(`${GROUP_DOMAIN}:game-${gameId}`)
     .emit(GAME.GET_SCORE, { playerId, score });
 });
 
 // Game Board Change
-eventEmitter.on(
-  event.game.board,
-  ({ socket, playerId, lobbyId, boardGame }) => {
-    socket.broadcast
-      .to(`${GROUP_DOMAIN}:${lobbyId}`)
-      .emit(GAME.GET_BOARD, { playerId, boardGame });
-  },
-);
+eventEmitter.on(event.game.board, ({ socket, playerId, gameId, boardGame }) => {
+  socket.broadcast
+    .to(`${GROUP_DOMAIN}:game-${gameId}`)
+    .emit(GAME.GET_BOARD, { playerId, boardGame });
+});
 
 // Game Penalty
 eventEmitter.on(
   event.game.penalty,
-  ({ socket, playerId, lobbyId, nbLinePenalty }) => {
+  ({ socket, playerId, gameId, nbLinePenalty }) => {
     socket.broadcast
-      .to(`${GROUP_DOMAIN}:${lobbyId}`)
+      .to(`${GROUP_DOMAIN}:game-${gameId}`)
       .emit(GAME.GET_PENALTY, { playerId, nbLinePenalty });
   },
 );
 
 // Game Lose
-eventEmitter.on(event.game.lose, ({ socket, playerId, lobbyId }) => {
+eventEmitter.on(event.game.lose, ({ socket, playerId, gameId }) => {
   socket.broadcast
-    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .to(`${GROUP_DOMAIN}:game-${gameId}`)
     .emit(GAME.GET_LOSE, { playerId });
 });
 
 // Game Winner
-eventEmitter.on(event.game.winner, ({ playerId, score }) => {
-  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(GAME.WINNER, { playerId, score });
+eventEmitter.on(event.game.winner, ({ winner, gameId }) => {
+  io.in(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.WINNER, { winner });
+  eventEmitter.emit(event.room.clear, {
+    room: `${GROUP_DOMAIN}:game-${gameId}`,
+  });
 });
 
 // // Lobby Leaver
 // // TODO
 // eventEmitter.on(event.game.leaver, ({ socketId }) => {
 //   socket.broadcast
-//     .to(`${GROUP_DOMAIN}:${lobbyId}`)
+//     .to(`${GROUP_DOMAIN}:lobby-${lobbyId}`)
 //     .emit(LOBBY.LEAVER, { socketId });
 // });
 
