@@ -6,7 +6,7 @@ import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
 
-export default function () {
+export default function InputUserName() {
   const { state, dispatch } = React.useContext(StoreContext);
   const [playerName, setPlayerName] = React.useState("");
   const [error, setError] = React.useState("");
