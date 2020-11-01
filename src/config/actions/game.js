@@ -14,4 +14,5 @@ export const GAME = {
   GET_LOSE: `${domain}:get_lose`,
   WINNER: `${domain}:winner`,
   RESPONSE: `${domain}:response`,
+  LEAVER: `${domain}:leaver`,
 };
