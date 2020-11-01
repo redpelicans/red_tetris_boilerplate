@@ -5,6 +5,7 @@ export default {
   },
   lobby: {
     change: "onLobbyChange",
+    leaver: "onLobbyLeaver",
   },
   players: {
     change: "onPlayersChange",
@@ -17,5 +18,13 @@ export default {
   },
   room: {
     clear: "onClearRoom",
+  },
+  game: {
+    started: "onGameStarted",
+    score: "onScoreChange",
+    board: "onBoardChange",
+    penalty: "onPenalty",
+    lose: "onLose",
+    winner: "onWinner",
   },
 };

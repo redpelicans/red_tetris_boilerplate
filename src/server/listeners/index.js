@@ -5,6 +5,7 @@ import { LOBBIES } from "../../config/actions/lobbies";
 import { LOBBY } from "../../config/actions/lobby";
 import { PLAYERS } from "../../config/actions/players";
 import { MESSAGE } from "../../config/actions/message";
+import { GAME } from "../../config/actions/game";
 import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
 import { getLobby, clearPlayerFromLobbies } from "storage/lobbies";
 import { popPlayer, getPlayerId } from "storage/players";
@@ -70,8 +71,8 @@ eventEmitter.on(event.player.disconnect, async ({ socket }) => {
 });
 
 // Message new
-eventEmitter.on(event.message.new, async ({ socket, messageObject }) => {
-  io.in(GROUP.LOBBIES).emit(MESSAGE.PUBLISH, messageObject);
+eventEmitter.on(event.message.new, async ({ lobbyId, messageObject }) => {
+  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(MESSAGE.PUBLISH, messageObject);
 });
 
 // Clear Room
@@ -84,5 +85,57 @@ eventEmitter.on(event.room.clear, async ({ room }) => {
     }
   });
 });
+
+// Game Started
+eventEmitter.on(event.game.started, ({ lobbyId, game }) => {
+  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(GAME.STARTED, game);
+});
+
+// Game Score Change
+eventEmitter.on(event.game.board, ({ socket, playerId, lobbyId, score }) => {
+  socket.broadcast
+    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .emit(GAME.GET_SCORE, { playerId, score });
+});
+
+// Game Board Change
+eventEmitter.on(
+  event.game.board,
+  ({ socket, playerId, lobbyId, boardGame }) => {
+    socket.broadcast
+      .to(`${GROUP_DOMAIN}:${lobbyId}`)
+      .emit(GAME.GET_BOARD, { playerId, boardGame });
+  },
+);
+
+// Game Penalty
+eventEmitter.on(
+  event.game.penalty,
+  ({ socket, playerId, lobbyId, nbLinePenalty }) => {
+    socket.broadcast
+      .to(`${GROUP_DOMAIN}:${lobbyId}`)
+      .emit(GAME.GET_PENALTY, { playerId, nbLinePenalty });
+  },
+);
+
+// Game Lose
+eventEmitter.on(event.game.lose, ({ socket, playerId, lobbyId }) => {
+  socket.broadcast
+    .to(`${GROUP_DOMAIN}:${lobbyId}`)
+    .emit(GAME.GET_LOSE, { playerId });
+});
+
+// Game Winner
+eventEmitter.on(event.game.winner, ({ playerId, score }) => {
+  io.in(`${GROUP_DOMAIN}:${lobbyId}`).emit(GAME.WINNER, { playerId, score });
+});
+
+// // Lobby Leaver
+// // TODO
+// eventEmitter.on(event.game.leaver, ({ socketId }) => {
+//   socket.broadcast
+//     .to(`${GROUP_DOMAIN}:${lobbyId}`)
+//     .emit(LOBBY.LEAVER, { socketId });
+// });
 
 export default eventEmitter;

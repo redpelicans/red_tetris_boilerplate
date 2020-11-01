@@ -8,6 +8,7 @@ import * as lobbies from "socket/lobbies";
 import * as lobby from "socket/lobby";
 import * as message from "socket/message";
 import * as disconnect from "socket/disconnect";
+import * as game from "socket/game";
 
 const handlers = Object.values({
   ...piece,
@@ -16,6 +17,7 @@ const handlers = Object.values({
   ...lobby,
   ...message,
   ...disconnect,
+  ...game,
 });
 
 export let io;

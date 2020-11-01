@@ -1,6 +1,6 @@
 import { LOBBIES } from "../../config/actions/lobbies";
 import { LOBBY } from "../../config/actions/lobby";
-
+import { GAME } from "../../config/actions/game";
 import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
 import Response from "models/response";
 
@@ -71,6 +71,11 @@ export const joinLobby = async (player, lobbyId) => {
     return Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!");
   }
 
+  const lobbyOpen = isLobbyOpen(lobby);
+  if (!lobbyOpen) {
+    return Response.error(LOBBY.SUBSCRIBE, "The lobby is closed!");
+  }
+
   const lobbyFull = isLobbyFull(lobby);
   if (lobbyFull) {
     return Response.error(LOBBY.SUBSCRIBE, "The lobby is full!");
@@ -119,6 +124,60 @@ export const leaveLobby = async (playerId, lobbyId) => {
   await setComplexObjectToRedis("lobbies", lobbies);
 
   return Response.success(LOBBY.UNSUBSCRIBE, {});
+};
+
+export const readyLobby = async (playerId, lobbyId) => {
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+
+  const lobby = lobbies?.[lobbyId];
+  if (!lobby) {
+    return Response.error(LOBBY.READY, "Lobby doesn't exists!");
+  }
+
+  const onLobby = playerIsOnLobbyByPlayerId(lobbies, playerId);
+  if (!onLobby) {
+    return Response.error(LOBBY.READY, "You are not in this lobby!");
+  }
+
+  const owner = isOwner(lobby, playerId);
+  if (owner) {
+    return Response.error(LOBBY.READY, "You are the owner!");
+  }
+
+  lobby.players = setPlayerReady(lobby.players, playerId);
+  lobbies[lobbyId] = lobby;
+  await setComplexObjectToRedis("lobbies", lobbies);
+
+  return Response.success(LOBBY.READY, {});
+};
+
+export const startGame = async (playerId, lobbyId) => {
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+
+  const lobby = lobbies?.[lobbyId];
+  if (!lobby) {
+    return Response.error(GAME.START, "Lobby doesn't exists!");
+  }
+
+  const owner = isOwner(lobby, playerId);
+  if (!owner) {
+    return Response.error(GAME.START, "You are not the owner!");
+  }
+
+  const nbPlayers = countPlayers(lobby);
+  if (nbPlayers < 2) {
+    return Response.error(GAME.START, "You need to be at least 2 players!");
+  }
+
+  const ready = isLobbyReady(lobby, playerId);
+  if (!ready) {
+    return Response.error(GAME.START, "All the players need to be ready!");
+  }
+
+  lobbies[lobbyId].isReady = true;
+  await setComplexObjectToRedis("lobbies", lobbies);
+
+  return Response.success(GAME.START, {});
 };
 
 export const clearPlayerFromLobbies = async (playerId) => {
@@ -179,4 +238,29 @@ export const getLobbyIdByPlayerId = (lobbies, playerId) => {
     lobbies[key].players.find((el) => el.player.id === playerId),
   );
   return lobbyId;
+};
+
+const setPlayerReady = (players, playerId) => {
+  return players.filter((el) => {
+    if (el.player.id === playerId) {
+      el.ready = true;
+      return el;
+    } else {
+      return el;
+    }
+  });
+};
+
+const isLobbyReady = (lobby, playerId) => {
+  return !lobby.players.some(
+    (el) => el.ready !== true && playerId !== el.player.id,
+  );
+};
+
+const countPlayers = (lobby) => {
+  return lobby.players.length;
+};
+
+const isLobbyOpen = (lobby) => {
+  return !lobby.isPlaying;
 };
