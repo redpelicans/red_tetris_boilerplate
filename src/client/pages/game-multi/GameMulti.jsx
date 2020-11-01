@@ -14,22 +14,29 @@ import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
 
-export default function Game() {
+export default function GameMulti() {
   const { state, dispatch } = React.useContext(GameContext);
   const gameOver = () => {
+    // emit(newLoser)
     dispatch(setPlayerIsAlive(false));
   };
 
   const [linesRemoved, setLinesRemoved] = React.useState(0);
-  const addRemovedLines = React.useCallback((value) =>
-    setLinesRemoved((oldValue) => oldValue + value),
-  );
+  const addRemovedLines = (value) => {
+    // if (value > 1) {
+    // emit(newPenalty(value - 1))
+    // }
+    setLinesRemoved((oldValue) => oldValue + value);
+  };
 
   const [score, setScore] = React.useState(0);
-  const addScore = React.useCallback(
-    (value) => setScore((oldScore) => oldScore + value),
-    [],
-  );
+  const addScore = React.useCallback((value) => {
+    setScore((oldScore) => {
+      const newScore = oldScore + value;
+      // emit(newScore)
+      return newScore;
+    });
+  }, []);
   const { nextPieces, pullNextPiece } = useNextPieces();
   const { grid, piece, ...methods } = useGameBoard(
     10,
@@ -39,6 +46,11 @@ export default function Game() {
     addScore,
     addRemovedLines,
   );
+
+  React.useEffect(() => {
+    // emit(newGrid)
+  }, [grid]);
+
   const { movePiece } = useTetrisGame(methods, nextPieces);
 
   const options = {

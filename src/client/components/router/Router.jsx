@@ -3,7 +3,9 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "pages/home/Home";
 import Lobbies from "pages/lobbies/Lobbies";
 import Lobby from "pages/lobby/LobbyContainer";
-import Game from "pages/game/Game";
+import GameMulti from "pages/game-multi/GameMulti";
+import GameSolo from "pages/game-solo/GameSolo";
+
 import FlexBox from "components/flexbox/FlexBox";
 import { GameContextProvider } from "store";
 import { StoreContext } from "store";
@@ -21,6 +23,11 @@ export default function Router() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route path="/game-solo">
+          <GameContextProvider>
+            <GameSolo />
+          </GameContextProvider>
+        </Route>
         <ProtectedRoutes />
       </Switch>
     </BrowserRouter>
@@ -51,9 +58,9 @@ const ProtectedRoutes = () => {
         </FlexBox>
       </Route>
 
-      <Route path="/game">
+      <Route path="/game-multi">
         <GameContextProvider>
-          <Game />
+          <GameMulti />
         </GameContextProvider>
       </Route>
     </>

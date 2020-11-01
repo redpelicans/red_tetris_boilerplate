@@ -3,6 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
 import { setLobby } from "actions/store";
+import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
 
 export default function Lobby({ close, state, dispatch }) {
@@ -106,6 +107,8 @@ export default function Lobby({ close, state, dispatch }) {
 }
 
 const Buttons = ({ state, owner }) => {
+  const { navigate } = useNavigate();
+
   const unsubscribeLobby = (lobbyId, playerId) => {
     state.socket.emit(LOBBY.UNSUBSCRIBE, { lobbyId, playerId });
   };
@@ -119,11 +122,21 @@ const Buttons = ({ state, owner }) => {
     state.socket.emit(LOBBY.READY, { lobbyId, playerId });
   };
 
+  const launchGame = (lobbyId, ownerId) => {
+    // state.socket.emit(GAME.START, { lobbyId, ownerId });
+    // timer
+    navigate("/game-multi");
+  };
+
   return (
     <FlexBox direction="col" className="px-6 py-2">
       <FlexBox direction="row" className="justify-between">
         {owner ? (
-          <button className="red-button" type="button">
+          <button
+            className="red-button"
+            type="button"
+            onClick={() => launchGame(state.lobby.id, state.player.id)}
+          >
             Launch game
           </button>
         ) : (
