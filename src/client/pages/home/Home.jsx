@@ -11,6 +11,8 @@ import Hoverable from "components/hoverable/Hoverable";
 import Modal from "components/modals/Modal";
 import AnimatedBackground from "./AnimatedBackground";
 import { useTranslation } from "react-i18next";
+import InputUserName from "./InputUserName";
+
 import "./Home.scss";
 
 export default function Home() {
@@ -23,9 +25,7 @@ export default function Home() {
         <Link to="/game" className="mb-10">
           <SinglePlayer />
         </Link>
-        <Link to="/game">
-          <MultiPlayer />
-        </Link>
+        <MultiPlayer />
       </Modal>
     </FlexBox>
   );
@@ -48,11 +48,20 @@ const SinglePlayer = () => {
 };
 
 const MultiPlayer = () => {
-  const { t } = useTranslation();
+  const [hasClicked, setHasClicked] = React.useState(false);
 
+  return hasClicked ? (
+    <InputUserName />
+  ) : (
+    <MultiPlayerGamePad setHasClicked={setHasClicked} />
+  );
+};
+
+const MultiPlayerGamePad = ({ setHasClicked }) => {
+  const { t } = useTranslation();
   return (
-    <Hoverable className="home-game-pad">
-      <Hoverable.In className="flex-row">
+    <Hoverable className="home-game-pad" onClick={() => setHasClicked(true)}>
+      <Hoverable.In className="flex flex-row">
         <GamePad className="mr-2" model={gamePadMatrixHover} size={2} />
         <GamePad model={gamePadMatrixHover} size={2} />
       </Hoverable.In>

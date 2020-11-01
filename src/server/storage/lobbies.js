@@ -76,7 +76,7 @@ export const joinLobby = async (player, lobbyId) => {
     return Response.error(LOBBY.SUBSCRIBE, "The lobby is full!");
   }
 
-  lobby.players.push(player);
+  lobby.players.push({ ready: false, player: player });
   lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
 
@@ -107,7 +107,8 @@ export const leaveLobby = async (playerId, lobbyId) => {
 
   const owner = isOwner(lobby, playerId);
   if (owner) {
-    lobby.owner = getNextOwner(lobby.players, playerId);
+    const nextOwner = getNextOwner(lobby.players, playerId);
+    lobby.owner = nextOwner.player;
     /* Handle info on front? */
   }
 
@@ -147,13 +148,13 @@ const isLobbyFull = (lobby) => {
 
 const playerIsOnLobbyBySocketId = (lobbies, socketId) => {
   return Object.keys(lobbies).some((key) =>
-    lobbies[key].players.some((player) => player.socketId === socketId),
+    lobbies[key].players.some((el) => el.player.socketId === socketId),
   );
 };
 
 const playerIsOnLobbyByPlayerId = (lobbies, playerId) => {
   return Object.keys(lobbies).some((key) =>
-    lobbies[key].players.some((player) => player.id === playerId),
+    lobbies[key].players.some((el) => el.player.id === playerId),
   );
 };
 
@@ -166,16 +167,16 @@ const isLastPlayerInLobby = (lobby) => {
 };
 
 const deletePlayerFromPlayers = (players, playerId) => {
-  return players.filter((player) => player.id !== playerId);
+  return players.filter((el) => el.player.id !== playerId);
 };
 
 const getNextOwner = (players, playerId) => {
-  return players.find((player) => player.id !== playerId);
+  return players.find((el) => el.player.id !== playerId);
 };
 
 export const getLobbyIdByPlayerId = (lobbies, playerId) => {
   const lobbyId = Object.keys(lobbies).find((key) =>
-    lobbies[key].players.find((player) => player.id === playerId),
+    lobbies[key].players.find((el) => el.player.id === playerId),
   );
   return lobbyId;
 };

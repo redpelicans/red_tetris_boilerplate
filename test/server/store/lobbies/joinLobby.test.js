@@ -28,7 +28,7 @@ describe("joinLobby function", () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
     const lobby = deepCopy(lobby1mock);
-    lobby.players.push(playerObject3mock);
+    lobby.players.push({ player: playerObject3mock, ready: false });
 
     expect(await joinLobby(playerObject3mock, lobby1mock.id)).toEqual(
       Response.success(LOBBY.SUBSCRIBE, lobby),
@@ -61,7 +61,7 @@ describe("joinLobby function", () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
     const lobby = deepCopy(lobby1mock);
-    lobby.players.push(playerObject3mock);
+    lobby.players.push({ player: playerObject3mock, ready: false });
 
     expect(await joinLobby(playerObject3mock, lobby1mock.id)).toEqual(
       Response.success(LOBBY.SUBSCRIBE, lobby),

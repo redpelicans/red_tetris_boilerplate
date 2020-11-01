@@ -40,9 +40,9 @@ describe("clearPlayerFromLobbies function", () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
     await pushLobby(lobby2mock, lobby2mock.owner.socketId);
 
-    expect(await clearPlayerFromLobbies(lobby1mock.players[1].id)).toEqual(
-      lobby1mock.id,
-    );
+    expect(
+      await clearPlayerFromLobbies(lobby1mock.players[1].player.id),
+    ).toEqual(lobby1mock.id);
   });
 
   test("Should return null and get error from leaveLobby", async () => {

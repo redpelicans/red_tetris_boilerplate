@@ -1,0 +1,46 @@
+.button-special-wrapper {
+  position: relative;
+}
+
+.button-special-tetro {
+  position: absolute;
+  display: none !important;
+  top: 50%;
+  left: 50%;
+  transform: translateX(0) translateY(0) rotate(0);
+  z-index: 1;
+}
+
+.button-special-tetro[explosion="1"] {
+  position: absolute;
+  display: block !important;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%) rotate(0);
+  z-index: 1;
+
+  animation: explosion (calc((var(--duration)) * 1ms)) linear normal;
+  animation-delay: (calc((var(--delay)) * 1ms));
+}
+
+@keyframes explosion {
+  0% {
+    z-index: 1;
+    transform: translateX(0) translateY(0) rotate(0);
+  }
+  40% {
+    z-index: 1;
+    transform: translateX(calc(var(--x) * 1px)) translateY(calc(var(--y) * 1px))
+      rotate(360deg);
+  }
+  55% {
+    transform: translateX(calc((var(--x2)) * 1px))
+      translateY(calc((var(--y) - 6) * 1px)) rotate(500deg);
+    z-index: 100;
+  }
+  100% {
+    transform: translateX(calc((var(--x3)) * 1px))
+      translateY(calc((var(--y) + 400) * 1px)) rotate(900deg);
+    z-index: 100;
+  }
+}

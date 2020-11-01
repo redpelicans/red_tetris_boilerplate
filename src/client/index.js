@@ -6,10 +6,10 @@ import "./styles.scss";
 import "locales/i18n";
 
 ReactDom.render(
-  <React.StrictMode>
-    <StoreContextProvider>
-      <Router />
-    </StoreContextProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <StoreContextProvider>
+    <Router />
+  </StoreContextProvider>,
+  // </React.StrictMode>,
   document.getElementById("tetris"),
 );

@@ -15,7 +15,7 @@ services:
     ports:
       - "3004:3004"
     environment:
-      REDIS_HOST: redtetris-redis
+      REDIS_HOST: redtetris-redis-dev
     restart: always
     links:
       - redis
