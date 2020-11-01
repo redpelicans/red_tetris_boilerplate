@@ -52,9 +52,9 @@ export default function LobbyItem({ lobby, state, dispatch }) {
             {lobby.players.length}/{lobby.maxPlayer}
           </span>
           {isFull ? (
-            <div className="status-dot bg-green-500" />
-          ) : (
             <div className="status-dot bg-red-500" />
+          ) : (
+            <div className="status-dot bg-green-500" />
           )}
         </FlexBox>
       )}
