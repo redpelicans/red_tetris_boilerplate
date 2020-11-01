@@ -2,10 +2,12 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { setLobby } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
+import useNavigate from "hooks/useNavigate";
 
 export default function LobbyItem({ lobby, state, dispatch }) {
   const [error, setError] = React.useState("");
   const [hover, setHover] = React.useState(false);
+  const { navigate } = useNavigate();
 
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.SUBSCRIBE) {
@@ -15,6 +17,7 @@ export default function LobbyItem({ lobby, state, dispatch }) {
       } else if (state.lobbyResponse.type === "success") {
         console.log("Lobby joined :", state.lobbyResponse.payload);
         dispatch(setLobby(state.lobbyResponse.payload));
+        navigate("/rooms/id");
       }
     }
   }, [state.lobbyResponse]);

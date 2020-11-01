@@ -41,6 +41,7 @@ export function setupSocket(socket, dispatch) {
   });
 
   socket.on(MESSAGE.PUBLISH, (data) => {
+    console.log("HEY");
     dispatch(addMessage(data));
   });
 
