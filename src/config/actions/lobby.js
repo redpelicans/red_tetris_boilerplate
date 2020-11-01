@@ -9,4 +9,6 @@ export const LOBBY = {
   RESPONSE: `${domain}:response`,
   READY: `${domain}:ready`,
   LEAVER: `${domain}:leaver`,
+  START: `${domain}:start`,
+  STARTED: `${domain}:started`,
 };

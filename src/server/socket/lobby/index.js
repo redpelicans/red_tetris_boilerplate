@@ -3,11 +3,13 @@ import {
   validationSubscribeLobby,
   validationUnsubscribeLobby,
   validationReadyLobby,
+  validationStartGame,
 } from "socket/lobby/schemas";
 import {
   handlerSubscribeLobby,
   handlerUnsubscribeLobby,
   handlerReadyLobby,
+  handlerStartGame,
 } from "socket/lobby/handlers";
 import { LOBBY } from "./../../../config/actions/lobby";
 
@@ -27,4 +29,10 @@ export const readyLobby = createEvent(
   LOBBY.READY,
   validationReadyLobby,
   handlerReadyLobby,
+);
+
+export const startGame = createEvent(
+  LOBBY.START,
+  validationStartGame,
+  handlerStartGame,
 );

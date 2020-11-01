@@ -1,14 +1,9 @@
 import redismock from "redis-mock";
 import { setRedis, quitRedis, deleteKeyFromRedis } from "storage";
 import Response from "models/response";
-import { GAME } from "../../../../src/config/actions/game";
+import { LOBBY } from "../../../../src/config/actions/lobby";
 import { startGame, pushLobby } from "storage/lobbies";
-import {
-  lobby1mock,
-  lobby2mock,
-  playerObject3mock,
-  playerObject4mock,
-} from "../../mocks";
+import { lobby1mock, lobby2mock } from "../../mocks";
 import { deepCopy } from "helpers/functional";
 
 beforeAll(() => {
@@ -30,7 +25,7 @@ describe("startGame function", () => {
     await pushLobby(lobby, lobby.owner.socketId);
 
     expect(await startGame(lobby.players[0].player.id, lobby.id)).toEqual(
-      Response.success(GAME.START, {}),
+      Response.success(LOBBY.START, {}),
     );
   });
 
@@ -40,7 +35,7 @@ describe("startGame function", () => {
     await pushLobby(lobby, lobby.owner.socketId);
 
     expect(await startGame(lobby.players[0].player.id, lobby.id)).toEqual(
-      Response.error(GAME.START, "You need to be at least 2 players!"),
+      Response.error(LOBBY.START, "You need to be at least 2 players!"),
     );
   });
 
@@ -49,13 +44,13 @@ describe("startGame function", () => {
 
     expect(
       await startGame(lobby1mock.players[0].player.id, lobby1mock.id),
-    ).toEqual(Response.error(GAME.START, "All the players need to be ready!"));
+    ).toEqual(Response.error(LOBBY.START, "All the players need to be ready!"));
   });
 
   test("No lobbies : should return an Error response `Lobby doesn't exists!`", async () => {
     expect(
       await startGame(lobby1mock.players[0].player.id, lobby1mock.id),
-    ).toEqual(Response.error(GAME.START, "Lobby doesn't exists!"));
+    ).toEqual(Response.error(LOBBY.START, "Lobby doesn't exists!"));
   });
 
   test("No lobby : should return an Error response `Lobby doesn't exists!`", async () => {
@@ -63,7 +58,7 @@ describe("startGame function", () => {
 
     expect(
       await startGame(lobby1mock.players[0].player.id, lobby2mock.id),
-    ).toEqual(Response.error(GAME.START, "Lobby doesn't exists!"));
+    ).toEqual(Response.error(LOBBY.START, "Lobby doesn't exists!"));
   });
 
   test("Should return an Error response `You are not the owner!`", async () => {
@@ -71,6 +66,6 @@ describe("startGame function", () => {
 
     expect(
       await startGame(lobby1mock.players[1].player.id, lobby1mock.id),
-    ).toEqual(Response.error(GAME.START, "You are not the owner!"));
+    ).toEqual(Response.error(LOBBY.START, "You are not the owner!"));
   });
 });

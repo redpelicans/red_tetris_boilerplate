@@ -156,28 +156,28 @@ export const startGame = async (playerId, lobbyId) => {
 
   const lobby = lobbies?.[lobbyId];
   if (!lobby) {
-    return Response.error(GAME.START, "Lobby doesn't exists!");
+    return Response.error(LOBBY.START, "Lobby doesn't exists!");
   }
 
   const owner = isOwner(lobby, playerId);
   if (!owner) {
-    return Response.error(GAME.START, "You are not the owner!");
+    return Response.error(LOBBY.START, "You are not the owner!");
   }
 
   const nbPlayers = countPlayers(lobby);
   if (nbPlayers < 2) {
-    return Response.error(GAME.START, "You need to be at least 2 players!");
+    return Response.error(LOBBY.START, "You need to be at least 2 players!");
   }
 
   const ready = isLobbyReady(lobby, playerId);
   if (!ready) {
-    return Response.error(GAME.START, "All the players need to be ready!");
+    return Response.error(LOBBY.START, "All the players need to be ready!");
   }
 
   lobbies[lobbyId].isPlaying = true;
   await setComplexObjectToRedis("lobbies", lobbies);
 
-  return Response.success(GAME.START, {});
+  return Response.success(LOBBY.START, {});
 };
 
 export const clearPlayerFromLobbies = async (playerId) => {

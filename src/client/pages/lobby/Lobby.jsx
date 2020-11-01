@@ -2,6 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
+import { GAME } from "../../../config/actions/game";
 import { setLobby } from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
@@ -123,9 +124,8 @@ const Buttons = ({ state, owner }) => {
   };
 
   const launchGame = (lobbyId, ownerId) => {
-    // state.socket.emit(GAME.START, { lobbyId, ownerId });
-    // timer
-    navigate("/game-multi");
+    state.socket.emit(LOBBY.START, { lobbyId, ownerId });
+    // navigate("/game-multi");
   };
 
   return (

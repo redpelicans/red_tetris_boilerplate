@@ -140,17 +140,19 @@ describe("Socket tests", () => {
   });
 
   test("Should fail to start game", async (done) => {
-    socketClient.on("game:response", (response) => {
-      expect(response.type).toBe("error");
-      socketClient.off("game:response");
-      done();
+    socketClient.on("lobby:response", (response) => {
+      if (response.action == "lobby:start") {
+        expect(response.type).toBe("error");
+        socketClient.off("game:response");
+        done();
+      }
     });
 
     const playerId = await getPlayerId(socketClient.id);
     const lobbies = await getLobbies();
     const lobbyId = Object.keys(lobbies)[0];
 
-    socketClient.emit("game:start", {
+    socketClient.emit("lobby:start", {
       ownerId: playerId,
       lobbyId: lobbyId,
     });

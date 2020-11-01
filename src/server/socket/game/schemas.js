@@ -1,10 +1,5 @@
 import Joi from "joi";
 
-export const validationStartGame = {
-  lobbyId: Joi.string().required().description("The id of the lobby"),
-  playerId: Joi.string().required().description("The id of the player"),
-};
-
 export const validationSendBoard = {
   lobbyId: Joi.string().required().description("The id of the lobby"),
   boardGame: Joi.array().required().description("The boardGame of the player"),

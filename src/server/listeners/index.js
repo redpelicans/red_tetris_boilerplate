@@ -102,7 +102,7 @@ eventEmitter.on(event.room.join, async ({ roomIn, roomTo }) => {
 
 // Game Started
 eventEmitter.on(event.game.started, ({ lobbyId, game }) => {
-  io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(GAME.STARTED, game);
+  io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(LOBBY.STARTED, game);
   eventEmitter.emit(event.room.join, {
     roomIn: `${GROUP_DOMAIN}:lobby-${lobbyId}`,
     roomTo: `${GROUP_DOMAIN}:game-${game.id}`,
