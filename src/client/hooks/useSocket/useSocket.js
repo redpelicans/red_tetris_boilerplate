@@ -14,7 +14,7 @@ function useSocket(action) {
     return () => socket.off(action);
   }, []);
 
-  return [state, socket.emit];
+  return [state, (...rest) => socket.emit(...rest)];
 }
 
 export default useSocket;
