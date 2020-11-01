@@ -243,7 +243,7 @@ export const getLobbyIdByPlayerId = (lobbies, playerId) => {
 const setPlayerReady = (players, playerId) => {
   return players.filter((el) => {
     if (el.player.id === playerId) {
-      el.ready = true;
+      el.ready = !el.ready;
       return el;
     } else {
       return el;

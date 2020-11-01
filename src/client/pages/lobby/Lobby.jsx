@@ -20,6 +20,13 @@ export default function Lobby({ close, state, dispatch }) {
         close();
       }
     }
+    if (state.lobbyResponse.action === LOBBY.READY) {
+      if (state.lobbyResponse.type === "error") {
+        console.log("Can't set ready");
+      } else if (state.lobbyResponse.type === "success") {
+        console.log("Ready set!");
+      }
+    }
   }, [state.lobbyResponse]);
 
   React.useEffect(() => {
@@ -108,12 +115,26 @@ const Buttons = ({ state, owner }) => {
     state.socket.emit(LOBBIES.DELETE, { lobbyId, ownerId: playerId });
   };
 
+  const setReady = (lobbyId, playerId) => {
+    state.socket.emit(LOBBY.READY, { lobbyId, playerId });
+  };
+
   return (
     <FlexBox direction="col" className="px-6 py-2">
       <FlexBox direction="row" className="justify-between">
-        <button className="red-button" type="button">
-          {owner ? "Launch game" : "Ready"}
-        </button>
+        {owner ? (
+          <button className="red-button" type="button">
+            Launch game
+          </button>
+        ) : (
+          <button
+            className="red-button"
+            type="button"
+            onClick={() => setReady(state.lobby.id, state.player.id)}
+          >
+            Ready
+          </button>
+        )}
         <button
           className="red-button"
           type="button"
