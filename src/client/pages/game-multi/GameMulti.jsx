@@ -20,9 +20,9 @@ export default function GameMulti() {
   const { state: state2 } = React.useContext(StoreContext);
   const { state, dispatch } = React.useContext(GameContext);
 
-  React.useEffect(() => {
-    console.log("game.players", state2.game?.players);
-  }, [state2.game.players]);
+  // React.useEffect(() => {
+  //   console.log("game.players", state2.game?.players);
+  // }, [state2.game.players]);
 
   const gameOver = () => {
     // emit(newLoser)
@@ -128,6 +128,28 @@ export default function GameMulti() {
           <Level level={state.level} />
           <LinesRemoved lines={linesRemoved} />
           <NextPieces nextPieces={nextPieces} />
+        </FlexBox>
+        <FlexBox direction="col" className="items-center mx-4">
+          <span>{`OPPONENTS`}</span>
+          {Object.entries(state2.game.players || {}).map(([key, el]) => (
+            <FlexBox
+              direction="col"
+              className="items-center"
+              key={`player-${key}`}
+            >
+              {el?.player.id !== state2?.player?.id && (
+                <div>
+                  <span>{`name : ${el?.player.name}`}</span>
+                  <br />
+                  <span>{`score : ${el?.score}`}</span>
+                  <br />
+                  <span>{`status : ${el?.loser}`}</span>
+                  <br />
+                  <span>{`---------`}</span>
+                </div>
+              )}
+            </FlexBox>
+          ))}
         </FlexBox>
       </FlexBox>
     </FlexBox>
