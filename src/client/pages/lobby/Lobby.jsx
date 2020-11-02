@@ -67,6 +67,7 @@ export default function Lobby({ open, close, state, dispatch }) {
   React.useEffect(() => {
     if (Object.keys(state.game).length !== 0) {
       console.log("Game will start");
+      console.log(state.game);
       open();
       // Here put timer for launching game
       navigate("/game-multi");

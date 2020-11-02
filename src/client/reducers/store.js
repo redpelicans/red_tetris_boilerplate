@@ -11,6 +11,7 @@ import {
   RESET_MESSAGES,
   SET_NEXT_PIECES,
   SET_GAME_STARTED,
+  SET_SCORE,
 } from "actions/store";
 
 export const initialState = {
@@ -56,6 +57,16 @@ export default function reducer(state = initialState, action) {
       return { ...state, nextPieces: [...state.nextPieces, ...action.pieces] };
     case SET_GAME_STARTED:
       return { ...state, game: action.game };
+    case SET_SCORE:
+      console.log(action);
+      const newGame = state.game;
+      const newPlayers = newGame.players.map((el) => {
+        if (el.player.id === action.playerId) el.score = action.score;
+        return el;
+      });
+      console.log(newPlayers);
+      newGame.players = newPlayers;
+      return { ...state, game: newGame };
     default:
       return state;
   }

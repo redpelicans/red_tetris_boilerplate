@@ -5,6 +5,7 @@ import { LOBBIES } from "../../../config/actions/lobbies";
 import { PIECE } from "../../../config/actions/piece";
 import { MESSAGE } from "../../../config/actions/message";
 import { PLAYERS } from "../../../config/actions/players";
+import { GAME } from "../../../config/actions/game";
 
 import {
   setPlayerResponse,
@@ -16,6 +17,7 @@ import {
   addMessage,
   setNextPieces,
   setGameStarted,
+  setScore,
 } from "actions/store";
 
 const endpoint = "http://0.0.0.0:3004";
@@ -51,6 +53,10 @@ export function setupSocket(socket, dispatch) {
 
   socket.on(PIECE.SEND, (data) => {
     dispatch(setNextPieces(data));
+  });
+
+  socket.on(GAME.GET_SCORE, (data) => {
+    dispatch(setScore(data));
   });
 }
 

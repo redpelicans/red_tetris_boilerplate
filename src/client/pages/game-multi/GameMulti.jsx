@@ -13,9 +13,17 @@ import TetrisTheme from "assets/music/Tetris_theme.ogg";
 import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
+import { StoreContext } from "store";
+import { GAME } from "../../../config/actions/game";
 
 export default function GameMulti() {
+  const { state: state2 } = React.useContext(StoreContext);
   const { state, dispatch } = React.useContext(GameContext);
+
+  React.useEffect(() => {
+    console.log("game.players", state2.game?.players);
+  }, [state2.game.players]);
+
   const gameOver = () => {
     // emit(newLoser)
     dispatch(setPlayerIsAlive(false));
@@ -34,6 +42,11 @@ export default function GameMulti() {
     setScore((oldScore) => {
       const newScore = oldScore + value;
       // emit(newScore)
+      state2.socket.emit(GAME.SEND_SCORE, {
+        gameId: state2.game.id,
+        playerId: state2.player.id,
+        score: newScore,
+      });
       return newScore;
     });
   }, []);

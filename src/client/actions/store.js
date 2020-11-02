@@ -9,6 +9,7 @@ export const ADD_MESSAGE = "ADD_MESSAGE";
 export const RESET_MESSAGES = "RESET_MESSAGES";
 export const SET_NEXT_PIECES = "SET_NEXT_PIECES";
 export const SET_GAME_STARTED = "SET_GAME_STARTED";
+export const SET_SCORE = "SET_SCORE";
 
 export const setPlayer = (player) => ({
   type: SET_PLAYER,
@@ -57,4 +58,10 @@ export const setNextPieces = (pieces) => ({
 export const setGameStarted = (game) => ({
   type: SET_GAME_STARTED,
   game: game,
+});
+
+export const setScore = (score) => ({
+  type: SET_SCORE,
+  score: score.score,
+  playerId: score.playerId,
 });
