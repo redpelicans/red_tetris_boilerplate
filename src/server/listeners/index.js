@@ -110,7 +110,7 @@ eventEmitter.on(event.game.started, ({ lobbyId, game }) => {
 });
 
 // Game Score Change
-eventEmitter.on(event.game.board, ({ socket, playerId, gameId, score }) => {
+eventEmitter.on(event.game.score, ({ socket, playerId, gameId, score }) => {
   socket.broadcast
     .to(`${GROUP_DOMAIN}:game-${gameId}`)
     .emit(GAME.GET_SCORE, { playerId, score });
