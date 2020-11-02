@@ -12,7 +12,10 @@ export default function LobbyItem({ lobby, state, dispatch }) {
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.SUBSCRIBE) {
       if (state.lobbyResponse.type === "error") {
-        console.log("There was an error with lobby:response");
+        console.log(
+          "There was an error with lobby:subscribe :",
+          state.lobbyResponse.reason,
+        );
         setError(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
         console.log("Lobby joined :", state.lobbyResponse.payload);
