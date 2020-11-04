@@ -18,6 +18,9 @@ import {
   setNextPieces,
   setGameStarted,
   setScore,
+  setBoard,
+  setLoser,
+  setWinner,
 } from "actions/store";
 
 const endpoint = "http://0.0.0.0:3004";
@@ -57,6 +60,18 @@ export function setupSocket(socket, dispatch) {
 
   socket.on(GAME.GET_SCORE, (data) => {
     dispatch(setScore(data));
+  });
+
+  socket.on(GAME.GET_BOARD, (data) => {
+    dispatch(setBoard(data));
+  });
+
+  socket.on(GAME.GET_LOSE, (data) => {
+    dispatch(setLoser(data));
+  });
+
+  socket.on(GAME.WINNER, (data) => {
+    dispatch(setWinner(data));
   });
 }
 

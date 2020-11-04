@@ -5,7 +5,6 @@ import event from "listeners/events";
 import { updateScore, checkForWinner, setLoser } from "../../storage/game";
 
 export const handlerSendScore = async (socket, { gameId, playerId, score }) => {
-  logerror("received new demand handlerScore");
   await updateScore(gameId, playerId, score);
   eventEmitter.emit(event.game.score, {
     socket,

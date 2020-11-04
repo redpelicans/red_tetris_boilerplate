@@ -10,6 +10,9 @@ export const RESET_MESSAGES = "RESET_MESSAGES";
 export const SET_NEXT_PIECES = "SET_NEXT_PIECES";
 export const SET_GAME_STARTED = "SET_GAME_STARTED";
 export const SET_SCORE = "SET_SCORE";
+export const SET_BOARD = "SET_BOARD";
+export const SET_LOSER = "SET_LOSER";
+export const SET_WINNER = "SET_WINNER";
 
 export const setPlayer = (player) => ({
   type: SET_PLAYER,
@@ -60,8 +63,24 @@ export const setGameStarted = (game) => ({
   game: game,
 });
 
-export const setScore = (score) => ({
+export const setScore = (payload) => ({
   type: SET_SCORE,
-  score: score.score,
-  playerId: score.playerId,
+  score: payload.score,
+  playerId: payload.playerId,
+});
+
+export const setBoard = (payload) => ({
+  type: SET_BOARD,
+  board: payload.boardGame,
+  playerId: payload.playerId,
+});
+
+export const setLoser = (payload) => ({
+  type: SET_LOSER,
+  playerId: payload.playerId,
+});
+
+export const setWinner = (payload) => ({
+  type: SET_WINNER,
+  winner: payload.winner,
 });
