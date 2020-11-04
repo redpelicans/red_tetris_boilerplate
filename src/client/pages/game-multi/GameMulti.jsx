@@ -13,12 +13,15 @@ import TetrisTheme from "assets/music/Tetris_theme.ogg";
 import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
+import { setPenalty } from "actions/store";
 import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Overlay from "components/overlay/Overlay";
 
 export default function GameMulti() {
-  const { state: stateStore } = React.useContext(StoreContext);
+  const { state: stateStore, dispatch: dispatchStore } = React.useContext(
+    StoreContext,
+  );
   const { state, dispatch } = React.useContext(GameContext);
 
   const gameOver = () => {
@@ -77,6 +80,7 @@ export default function GameMulti() {
   React.useEffect(() => {
     if (stateStore.penalty > 0) {
       methods.malus(stateStore.penalty);
+      dispatchStore(setPenalty({ nbLinePenalty: 0, playerId: "" }));
     }
   }, [stateStore.penalty]);
 
@@ -96,6 +100,13 @@ export default function GameMulti() {
       toggleGameOverAudio();
     }
   }, [state.alive]);
+
+  React.useEffect(() => {
+    if (Object.keys(stateStore.winner).length) {
+      dispatch(setPlayerIsAlive(false));
+      // clean and put lobby is playing to false
+    }
+  }, [stateStore.winner]);
 
   React.useEffect(() => {
     setOptions({ ...options, playbackRate: state.speedRate });
@@ -119,6 +130,13 @@ export default function GameMulti() {
           <span>{`name : ${stateStore.winner.player.name}`}</span>
           <br />
           <span>{`score : ${stateStore.winner.score}`}</span>
+          <br />
+          <Link
+            to="/rooms/id"
+            className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
+          >
+            Back to rooms
+          </Link>
         </Overlay>
       ) : null}
       <Link
@@ -168,9 +186,16 @@ export default function GameMulti() {
                   <br />
                   <span>{`score : ${el?.score}`}</span>
                   <br />
-                  <span>{`status : ${el?.loser}`}</span>
+                  <span>{`status : ${
+                    el?.loser ? "lost" : "still playing"
+                  }`}</span>
                   <br />
-                  <span>{`---------`}</span>
+                  <TetrisGrid
+                    grid={el?.board}
+                    currentPieceColor={"blocked"}
+                    rowHeight={6}
+                    colHeight={6}
+                  />
                 </div>
               )}
             </FlexBox>
