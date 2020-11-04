@@ -35,8 +35,9 @@ eventEmitter.on(event.lobby.change, async ({ socket, lobbyId }) => {
 // Players change
 eventEmitter.on(event.players.change, async ({ socket }) => {
   const players = await getComplexObjectFromRedis("players");
-  socket.emit(PLAYERS.PUBLISH, players);
-  // io.in(GROUP.LOBBIES).emit(PLAYERS.PUBLISH, players);
+  // to check
+  // socket.emit(PLAYERS.PUBLISH, players);
+  io.in(GROUP.LOBBIES).emit(PLAYERS.PUBLISH, players);
 });
 
 // Lobbies Subscribe

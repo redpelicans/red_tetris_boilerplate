@@ -14,7 +14,7 @@ import event from "listeners/events";
 import Game from "models/game";
 import { setGame } from "../../storage/game";
 
-export const handlerSubscribeLobby = async (socket, { playerId, lobbyId }) => {
+export const handlerSubscribeLobby = async (socket, { lobbyId, playerId }) => {
   const player = await getPlayer(playerId);
   const response = await joinLobby(player, lobbyId);
   socket.emit(LOBBY.RESPONSE, response);
@@ -54,7 +54,7 @@ export const handlerUnsubscribeLobby = async (
   }
 };
 
-export const handlerReadyLobby = async (socket, { playerId, lobbyId }) => {
+export const handlerReadyLobby = async (socket, { lobbyId, playerId }) => {
   const response = await readyLobby(playerId, lobbyId);
   socket.emit(LOBBY.RESPONSE, response);
 

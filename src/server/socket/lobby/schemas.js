@@ -17,5 +17,5 @@ export const validationReadyLobby = {
 
 export const validationStartGame = {
   lobbyId: Joi.string().required().description("The id of the lobby"),
-  playerId: Joi.string().required().description("The id of the player"),
+  ownerId: Joi.string().required().description("The id of the owner"),
 };
