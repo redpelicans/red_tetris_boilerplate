@@ -21,6 +21,7 @@ import {
   setBoard,
   setLoser,
   setWinner,
+  setPenalty,
 } from "actions/store";
 
 const endpoint = "http://0.0.0.0:3004";
@@ -72,6 +73,10 @@ export function setupSocket(socket, dispatch) {
 
   socket.on(GAME.WINNER, (data) => {
     dispatch(setWinner(data));
+  });
+
+  socket.on(GAME.GET_PENALTY, (data) => {
+    dispatch(setPenalty(data));
   });
 }
 

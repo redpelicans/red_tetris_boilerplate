@@ -32,6 +32,7 @@ export const initialState = {
   nextPieces: [],
   game: {},
   winner: {},
+  penalty: 0,
 };
 
 export default function reducer(state = initialState, action) {
@@ -89,6 +90,8 @@ export default function reducer(state = initialState, action) {
       return { ...state, game: newGame3 };
     case SET_WINNER:
       return { ...state, winner: action.winner };
+    case SET_PENALTY:
+      return { ...state, penalty: action.nbLinePenalty };
     default:
       return state;
   }

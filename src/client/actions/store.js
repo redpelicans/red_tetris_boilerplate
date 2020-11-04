@@ -13,6 +13,7 @@ export const SET_SCORE = "SET_SCORE";
 export const SET_BOARD = "SET_BOARD";
 export const SET_LOSER = "SET_LOSER";
 export const SET_WINNER = "SET_WINNER";
+export const SET_PENALTY = "SET_PENALTY";
 
 export const setPlayer = (player) => ({
   type: SET_PLAYER,
@@ -83,4 +84,10 @@ export const setLoser = (payload) => ({
 export const setWinner = (payload) => ({
   type: SET_WINNER,
   winner: payload.winner,
+});
+
+export const setPenalty = (payload) => ({
+  type: SET_PENALTY,
+  nbLinePenalty: payload.nbLinePenalty,
+  playerId: payload.playerId,
 });

@@ -74,6 +74,12 @@ export default function GameMulti() {
     });
   }, [grid]);
 
+  React.useEffect(() => {
+    if (stateStore.penalty > 0) {
+      methods.malus(stateStore.penalty);
+    }
+  }, [stateStore.penalty]);
+
   const { movePiece } = useTetrisGame(methods, nextPieces);
 
   const options = {
