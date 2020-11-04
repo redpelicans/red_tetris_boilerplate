@@ -47,6 +47,10 @@ export function setupSocket(socket, dispatch) {
     dispatch(setGameStarted(data));
   });
 
+  socket.on(PLAYER.RESPONSE, (data) => {
+    dispatch(setPlayerResponse(data));
+  });
+
   socket.on(PLAYERS.PUBLISH, (data) => {
     dispatch(setPlayers(data));
   });

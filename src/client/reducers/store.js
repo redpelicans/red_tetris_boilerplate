@@ -3,6 +3,7 @@ import { deepCopy } from "helpers/functional";
 
 import {
   SET_PLAYER,
+  SET_PLAYER_RESPONSE,
   SET_PLAYERS,
   SET_LOBBIES,
   SET_LOBBY,
@@ -37,6 +38,8 @@ export const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case SET_PLAYER_RESPONSE:
+      return { ...state, playerResponse: action.playerResponse };
     case SET_PLAYER:
       return { ...state, player: action.player };
     case SET_PLAYERS:

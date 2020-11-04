@@ -37,7 +37,7 @@ export const handlerUnsubscribeLobby = async (
   socket,
   { playerId, lobbyId },
 ) => {
-  const response = await leaveLobby(lobbyId, playerId);
+  const response = await leaveLobby(playerId, lobbyId);
   socket.emit(LOBBY.RESPONSE, response);
 
   if (response.type === "success") {

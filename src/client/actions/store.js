@@ -15,6 +15,11 @@ export const SET_LOSER = "SET_LOSER";
 export const SET_WINNER = "SET_WINNER";
 export const SET_PENALTY = "SET_PENALTY";
 
+export const setPlayerResponse = (playerResponse) => ({
+  type: SET_PLAYER_RESPONSE,
+  playerResponse: playerResponse,
+});
+
 export const setPlayer = (player) => ({
   type: SET_PLAYER,
   player: player,
