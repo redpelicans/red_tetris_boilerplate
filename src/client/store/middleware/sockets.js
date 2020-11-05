@@ -7,8 +7,8 @@ import { MESSAGE } from "../../../config/actions/message";
 import { PLAYERS } from "../../../config/actions/players";
 import { GAME } from "../../../config/actions/game";
 
-const host = process.env.REACT_APP_SOCKET_HOST || "0.0.0.0";
-const port = process.env.REACT_APP_SOCKET_PORT || "3004";
+const host = process.env.REACT_APP_BACK_HOST || "0.0.0.0";
+const port = process.env.REACT_APP_BACK_PORT || "3004";
 const endpoint = `${host}:${port}`;
 
 export const socket = socketIOClient(endpoint);
