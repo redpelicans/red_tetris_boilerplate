@@ -1,4 +1,6 @@
 const path = require("path");
+const dotenv = require("dotenv");
+const webpack = require("webpack");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ErrorOverlayPlugin = require("error-overlay-webpack-plugin");
@@ -8,6 +10,11 @@ const CLIENT_DIR = path.join(__dirname, "src/client");
 
 module.exports = () => {
   const isEnvProduction = process.env.NODE_ENV === "production";
+  const env = dotenv.config().parsed || {};
+  const envKeys = Object.keys(env).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(env[next]);
+    return prev;
+  }, {});
 
   return {
     mode: isEnvProduction ? "production" : "development",
@@ -146,6 +153,7 @@ module.exports = () => {
             : undefined,
         ),
       ),
+      new webpack.DefinePlugin(envKeys),
     ],
   };
 };

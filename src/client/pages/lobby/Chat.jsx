@@ -2,6 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { MESSAGE } from "../../../config/actions/message";
 import "./Lobby.scss";
+import { socket } from "store/middleware/sockets";
 
 export default function Chat({ state }) {
   const [message, setMessage] = React.useState("");
@@ -27,10 +28,10 @@ export default function Chat({ state }) {
     if (message && message !== "") {
       const sender = state.player.name;
       const lobbyId = state?.lobby?.id;
-      state.socket.emit(MESSAGE.SEND, { message, sender, lobbyId });
+      socket.emit(MESSAGE.SEND, { message, sender, lobbyId });
       setMessage("");
     }
-    state.socket.emit("piece:get", { nb: 2 });
+    socket.emit("piece:get", { nb: 2 });
   };
 
   const submit = (event) => {

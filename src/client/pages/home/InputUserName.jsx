@@ -2,35 +2,60 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { StoreContext } from "store";
 import useNavigate from "hooks/useNavigate";
-import { setPlayer } from "actions/store";
+import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
-import { useSocket } from "hooks";
+// import { useSocket } from "hooks";
+import { socket, setupSocketPlayer } from "store/middleware/sockets";
 
 export default function InputUserName() {
-  const { dispatch } = React.useContext(StoreContext);
+  const { state, dispatch } = React.useContext(StoreContext);
   const [playerName, setPlayerName] = React.useState("");
   const [error, setError] = React.useState("");
-  const [playerState, playerEmitter] = useSocket(PLAYER.RESPONSE);
-
+  // const [playerState, playerEmitter] = useSocket(PLAYER.RESPONSE);
   const { navigate } = useNavigate();
+
+  React.useEffect(() => {
+    setupSocketPlayer(dispatch);
+  }, []);
+
   const handlePlayerName = (e) => {
     setPlayerName(e.target.value);
   };
 
+  // React.useEffect(() => {
+  //   if (playerState.payload) {
+  //     dispatch(setPlayer(playerState.payload));
+  //     navigate("/rooms");
+  //   } else {
+  //     setError(playerState.error);
+  //   }
+  // }, [playerState]);
+
   React.useEffect(() => {
-    if (playerState.payload) {
-      dispatch(setPlayer(playerState.payload));
-      navigate("/rooms");
-    } else {
-      setError(playerState.error);
+    if (state.playerResponse.action === PLAYER.CREATE) {
+      console.log("I got an error");
+      if (state.playerResponse.type === "error") {
+        console.log("There was an error with player:response");
+        setError(state?.playerResponse?.reason);
+      } else if (state.playerResponse.type === "success") {
+        console.log("New player created :", state.playerResponse.payload);
+        dispatch(setPlayer(state.playerResponse.payload));
+        dispatch(setPlayerResponse({}));
+        navigate("/rooms");
+      }
     }
-  }, [playerState]);
+  }, [state.playerResponse]);
 
   const createPlayer = (event) => {
     event.preventDefault();
-    playerEmitter(PLAYER.CREATE, { name: playerName });
+    socket.emit(PLAYER.CREATE, { name: playerName });
   };
+
+  // const createPlayer = (event) => {
+  //   event.preventDefault();
+  //   playerEmitter(PLAYER.CREATE, { name: playerName });
+  // };
 
   return (
     <FlexBox direction="col" className="">

@@ -6,10 +6,15 @@ import Overlay from "components/overlay/Overlay";
 import SearchLobby from "./SearchLobby";
 import { StoreContext } from "store";
 import "./Lobbies.scss";
+import { setupSocketRooms } from "store/middleware/sockets";
 
 export default function Lobbies() {
   const { state, dispatch } = React.useContext(StoreContext);
   const [hasClickedCreate, setHasClickedCreate] = React.useState(false);
+
+  React.useEffect(() => {
+    setupSocketRooms(dispatch);
+  }, []);
 
   return (
     <FlexBox

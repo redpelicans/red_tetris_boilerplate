@@ -1,7 +1,8 @@
-import { initSocket } from "store/sockets/sockets";
+// import { initSocket } from "store/middleware/sockets";
 
 import {
   SET_PLAYER,
+  SET_PLAYER_RESPONSE,
   SET_PLAYERS,
   SET_LOBBIES,
   SET_LOBBY,
@@ -14,7 +15,7 @@ import {
 } from "actions/store";
 
 export const initialState = {
-  socket: initSocket(),
+  // socket: initSocket(),
   player: {},
   playerResponse: {},
   players: {},
@@ -29,6 +30,8 @@ export const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case SET_PLAYER_RESPONSE:
+      return { ...state, playerResponse: action.playerResponse };
     case SET_PLAYER:
       return { ...state, player: action.player };
     case SET_PLAYERS:

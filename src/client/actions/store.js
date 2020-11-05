@@ -10,6 +10,11 @@ export const RESET_MESSAGES = "RESET_MESSAGES";
 export const SET_NEXT_PIECES = "SET_NEXT_PIECES";
 export const SET_GAME_STARTED = "SET_GAME_STARTED";
 
+export const setPlayerResponse = (playerResponse) => ({
+  type: SET_PLAYER_RESPONSE,
+  playerResponse: playerResponse,
+});
+
 export const setPlayer = (player) => ({
   type: SET_PLAYER,
   player: player,

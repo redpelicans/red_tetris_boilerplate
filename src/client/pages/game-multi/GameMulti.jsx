@@ -13,30 +13,68 @@ import TetrisTheme from "assets/music/Tetris_theme.ogg";
 import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
+import { setPenalty, setGame } from "actions/game";
+import { setGameStarted } from "actions/store";
+import { StoreContext } from "store";
+import { GAME } from "../../../config/actions/game";
+import Overlay from "components/overlay/Overlay";
+import { socket, setupSocketGame } from "store/middleware/sockets";
+// Nico -> handle even score and 0 / 0
+// Nico -> handle lobby to isPlaying or not at end
+// Nico -> reset at end
+// Nico -> ready to false when game is launched
 
 export default function GameMulti() {
+  const { state: stateStore, dispatch: dispatchStore } = React.useContext(
+    StoreContext,
+  );
   const { state, dispatch } = React.useContext(GameContext);
+
+  React.useEffect(() => {
+    setupSocketGame(dispatch);
+    dispatch(setGame(stateStore.game));
+  }, []);
+
   const gameOver = () => {
-    // emit(newLoser)
+    socket.emit(GAME.SEND_LOSE, {
+      gameId: state.game.id,
+      playerId: stateStore.player.id,
+    });
     dispatch(setPlayerIsAlive(false));
   };
 
   const [linesRemoved, setLinesRemoved] = React.useState(0);
   const addRemovedLines = (value) => {
-    // if (value > 1) {
-    // emit(newPenalty(value - 1))
-    // }
+    if (value > 1) {
+      if (state.game.id) {
+        socket.emit(GAME.SEND_PENALTY, {
+          gameId: state.game.id,
+          playerId: stateStore.player.id,
+          nbLinePenalty: value - 1,
+        });
+      }
+    }
     setLinesRemoved((oldValue) => oldValue + value);
   };
 
   const [score, setScore] = React.useState(0);
-  const addScore = React.useCallback((value) => {
-    setScore((oldScore) => {
-      const newScore = oldScore + value;
-      // emit(newScore)
-      return newScore;
-    });
-  }, []);
+  const addScore = React.useCallback(
+    (value) => {
+      setScore((oldScore) => {
+        const newScore = oldScore + value;
+        if (state.game.id) {
+          socket.emit(GAME.SEND_SCORE, {
+            gameId: state.game.id,
+            playerId: stateStore.player.id,
+            score: newScore,
+          });
+        }
+        return newScore;
+      });
+    },
+    [state.game.id],
+  );
+
   const { nextPieces, pullNextPiece } = useNextPieces();
   const { grid, piece, ...methods } = useGameBoard(
     10,
@@ -48,8 +86,21 @@ export default function GameMulti() {
   );
 
   React.useEffect(() => {
-    // emit(newGrid)
-  }, [grid]);
+    if (state.game.id) {
+      socket.emit(GAME.SEND_BOARD, {
+        gameId: state.game.id,
+        playerId: stateStore.player.id,
+        boardGame: grid,
+      });
+    }
+  }, [grid, state.game.id]);
+
+  React.useEffect(() => {
+    if (state.penalty > 0) {
+      methods.malus(state.penalty);
+      dispatch(setPenalty({ nbLinePenalty: 0, playerId: "" }));
+    }
+  }, [state.penalty]);
 
   const { movePiece } = useTetrisGame(methods, nextPieces);
 
@@ -69,6 +120,15 @@ export default function GameMulti() {
   }, [state.alive]);
 
   React.useEffect(() => {
+    if (Object.keys(state.winner).length) {
+      dispatch(setPlayerIsAlive(false));
+      dispatchStore(setGameStarted({}));
+      dispatch(setGame({}));
+      // dispatch(setWinner({}));
+    }
+  }, [state.winner]);
+
+  React.useEffect(() => {
     setOptions({ ...options, playbackRate: state.speedRate });
   }, [state.speedRate]);
 
@@ -83,6 +143,22 @@ export default function GameMulti() {
       height={"full"}
       className="justify-center items-center"
     >
+      {Object.keys(state.winner).length ? (
+        <Overlay isOpen={true} className="create-modal">
+          <span>{`WINNER`}</span>
+          <br />
+          <span>{`name : ${state.winner.player.name}`}</span>
+          <br />
+          <span>{`score : ${state.winner.score}`}</span>
+          <br />
+          <Link
+            to="/rooms/id"
+            className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
+          >
+            Back to rooms
+          </Link>
+        </Overlay>
+      ) : null}
       <Link
         to="/"
         className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
@@ -115,6 +191,35 @@ export default function GameMulti() {
           <Level level={state.level} />
           <LinesRemoved lines={linesRemoved} />
           <NextPieces nextPieces={nextPieces} />
+        </FlexBox>
+        <FlexBox direction="col" className="items-center mx-4">
+          <span>{`OPPONENTS`}</span>
+          {Object.entries(state.game.players || {}).map(([key, el]) => (
+            <FlexBox
+              direction="col"
+              className="items-center"
+              key={`player-${key}`}
+            >
+              {el?.player.id !== stateStore?.player?.id && (
+                <div>
+                  <span>{`name : ${el?.player.name}`}</span>
+                  <br />
+                  <span>{`score : ${el?.score}`}</span>
+                  <br />
+                  <span>{`status : ${
+                    el?.loser ? "lost" : "still playing"
+                  }`}</span>
+                  <br />
+                  <TetrisGrid
+                    grid={el?.board}
+                    currentPieceColor={"blocked"}
+                    rowHeight={6}
+                    colHeight={6}
+                  />
+                </div>
+              )}
+            </FlexBox>
+          ))}
         </FlexBox>
       </FlexBox>
     </FlexBox>

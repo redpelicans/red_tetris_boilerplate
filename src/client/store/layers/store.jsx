@@ -1,7 +1,7 @@
 import React from "react";
 import { storeReducer, initialStore } from "reducers";
 import PropTypes from "prop-types";
-import { setupSocket } from "store/sockets/sockets";
+// import { setupSocket } from "store/middleware/sockets";
 
 export const StoreContext = React.createContext();
 
@@ -14,9 +14,9 @@ export function StoreContextProvider({ children }) {
   // const [dispatch] = React.useState(() => asyncMiddleware(storeDispatch));
 
   /* Check if we need to do it when storeState and Dispatch are 'up' */
-  React.useEffect(() => {
-    setupSocket(storeState.socket, storeDispatch);
-  }, []);
+  // React.useEffect(() => {
+  //   setupSocket(storeState.socket, storeDispatch);
+  // }, []);
 
   return (
     <StoreContext.Provider

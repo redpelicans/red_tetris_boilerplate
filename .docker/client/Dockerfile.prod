@@ -4,7 +4,7 @@ WORKDIR /redtetris/client/
 COPY package*.json ./
 RUN npm install
 COPY . ./
-RUN npm run client-dist
+RUN REACT_APP_BACK_HOST=http://redtetris.co REACT_APP_BACK_PORT=3004 npm run client-dist
 
 FROM nginx:stable-alpine
 COPY --from=build /redtetris/client/build /usr/share/nginx/html
