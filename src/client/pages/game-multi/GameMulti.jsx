@@ -18,6 +18,7 @@ import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Overlay from "components/overlay/Overlay";
 import { socket, setupSocketGame } from "store/middleware/sockets";
+// Nico -> handle even score and 0 / 0
 
 export default function GameMulti() {
   const { state: stateStore } = React.useContext(StoreContext);
@@ -25,11 +26,11 @@ export default function GameMulti() {
 
   React.useEffect(() => {
     setupSocketGame(dispatch);
+    console.log(stateStore.game);
     dispatch(setGame(stateStore.game));
   }, []);
 
   const gameOver = () => {
-    // emit(newLoser)
     socket.emit(GAME.SEND_LOSE, {
       gameId: state.game.id,
       playerId: stateStore.player.id,
@@ -40,28 +41,35 @@ export default function GameMulti() {
   const [linesRemoved, setLinesRemoved] = React.useState(0);
   const addRemovedLines = (value) => {
     if (value > 1) {
-      socket.emit(GAME.SEND_PENALTY, {
-        gameId: state.game.id,
-        playerId: stateStore.player.id,
-        nbLinePenalty: value - 1,
-      });
+      if (state.game.id) {
+        socket.emit(GAME.SEND_PENALTY, {
+          gameId: state.game.id,
+          playerId: stateStore.player.id,
+          nbLinePenalty: value - 1,
+        });
+      }
     }
     setLinesRemoved((oldValue) => oldValue + value);
   };
 
   const [score, setScore] = React.useState(0);
-  const addScore = React.useCallback((value) => {
-    setScore((oldScore) => {
-      const newScore = oldScore + value;
-      // emit(newScore)
-      socket.emit(GAME.SEND_SCORE, {
-        gameId: state.game.id,
-        playerId: stateStore.player.id,
-        score: newScore,
+  const addScore = React.useCallback(
+    (value) => {
+      setScore((oldScore) => {
+        const newScore = oldScore + value;
+        if (state.game.id) {
+          socket.emit(GAME.SEND_SCORE, {
+            gameId: state.game.id,
+            playerId: stateStore.player.id,
+            score: newScore,
+          });
+        }
+        return newScore;
       });
-      return newScore;
-    });
-  }, []);
+    },
+    [state.game.id],
+  );
+
   const { nextPieces, pullNextPiece } = useNextPieces();
   const { grid, piece, ...methods } = useGameBoard(
     10,
@@ -73,13 +81,14 @@ export default function GameMulti() {
   );
 
   React.useEffect(() => {
-    // emit(newGrid)
-    socket.emit(GAME.SEND_BOARD, {
-      gameId: state.game.id,
-      playerId: stateStore.player.id,
-      boardGame: grid,
-    });
-  }, [grid]);
+    if (state.game.id) {
+      socket.emit(GAME.SEND_BOARD, {
+        gameId: state.game.id,
+        playerId: stateStore.player.id,
+        boardGame: grid,
+      });
+    }
+  }, [grid, state.game.id]);
 
   React.useEffect(() => {
     if (state.penalty > 0) {
