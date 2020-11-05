@@ -4,7 +4,7 @@ import { setLobby, setLobbiesResponse } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
 import useNavigate from "hooks/useNavigate";
-import { socket } from "store/sockets/sockets";
+import { socket } from "store/middleware/sockets";
 
 export default function CreateLobby({ close, state, dispatch }) {
   const [myLobby, setMyLobby] = React.useState({

@@ -1,4 +1,4 @@
-// import { initSocket } from "store/sockets/sockets";
+// import { initSocket } from "store/middleware/sockets";
 
 import {
   SET_PLAYER,

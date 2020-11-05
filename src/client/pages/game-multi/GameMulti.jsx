@@ -17,7 +17,7 @@ import { setPenalty, setGame } from "actions/game";
 import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Overlay from "components/overlay/Overlay";
-import { socket, setupSocketGame } from "store/sockets/sockets";
+import { socket, setupSocketGame } from "store/middleware/sockets";
 
 export default function GameMulti() {
   const { state: stateStore } = React.useContext(StoreContext);

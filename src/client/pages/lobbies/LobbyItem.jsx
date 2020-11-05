@@ -3,7 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import { setLobby } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
 import useNavigate from "hooks/useNavigate";
-import { socket } from "store/sockets/sockets";
+import { socket } from "store/middleware/sockets";
 
 export default function LobbyItem({ lobby, state, dispatch }) {
   const [error, setError] = React.useState("");
@@ -52,10 +52,11 @@ export default function LobbyItem({ lobby, state, dispatch }) {
         <button onClick={() => subscribeLobby(lobby)}>Join lobby</button>
       ) : (
         <FlexBox>
+          {lobby.isPlaying && <span className="mr-6">PLAYING</span>}
           <span className="mr-2">
             {lobby.players.length}/{lobby.maxPlayer}
           </span>
-          {isFull ? (
+          {isFull || lobby.isPlaying ? (
             <div className="status-dot bg-red-500" />
           ) : (
             <div className="status-dot bg-green-500" />

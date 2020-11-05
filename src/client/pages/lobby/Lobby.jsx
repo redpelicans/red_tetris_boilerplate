@@ -5,7 +5,7 @@ import { LOBBIES } from "../../../config/actions/lobbies";
 import { setLobby } from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
-import { socket } from "store/sockets/sockets";
+import { socket } from "store/middleware/sockets";
 
 export default function Lobby({ open, close, state, dispatch }) {
   const [errorUnsub, setErrorUnsub] = React.useState("");

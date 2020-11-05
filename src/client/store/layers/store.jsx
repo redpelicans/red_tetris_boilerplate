@@ -1,7 +1,7 @@
 import React from "react";
 import { storeReducer, initialStore } from "reducers";
 import PropTypes from "prop-types";
-// import { setupSocket } from "store/sockets/sockets";
+// import { setupSocket } from "store/middleware/sockets";
 
 export const StoreContext = React.createContext();
 

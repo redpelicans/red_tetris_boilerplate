@@ -6,7 +6,7 @@ import Overlay from "components/overlay/Overlay";
 import SearchLobby from "./SearchLobby";
 import { StoreContext } from "store";
 import "./Lobbies.scss";
-import { setupSocketRooms } from "store/sockets/sockets";
+import { setupSocketRooms } from "store/middleware/sockets";
 
 export default function Lobbies() {
   const { state, dispatch } = React.useContext(StoreContext);

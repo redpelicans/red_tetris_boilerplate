@@ -6,7 +6,7 @@ import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
 // import { useSocket } from "hooks";
-import { socket, setupSocketPlayer } from "store/sockets/sockets";
+import { socket, setupSocketPlayer } from "store/middleware/sockets";
 
 export default function InputUserName() {
   const { state, dispatch } = React.useContext(StoreContext);
