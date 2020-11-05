@@ -7,7 +7,10 @@ import { MESSAGE } from "../../../config/actions/message";
 import { PLAYERS } from "../../../config/actions/players";
 import { GAME } from "../../../config/actions/game";
 
-const endpoint = "http://0.0.0.0:3004";
+const host = process.env.REACT_APP_SOCKET_HOST || "0.0.0.0";
+const port = process.env.REACT_APP_SOCKET_PORT || "3004";
+const endpoint = `${host}:${port}`;
+
 export const socket = socketIOClient(endpoint);
 
 import {
@@ -92,6 +95,6 @@ export function setupSocketGame(dispatch) {
   });
 }
 
-export function initSocket() {
-  return socketIOClient(endpoint);
-}
+// export function initSocket() {
+//   return socketIOClient(endpoint);
+// }
