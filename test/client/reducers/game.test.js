@@ -12,9 +12,9 @@ describe("Game reducer", () => {
     expect(alive).toEqual(false);
   });
 
-  test("SET_SCORE", () => {
+  test("SET_OWNER_SCORE", () => {
     const action = {
-      type: actions.SET_SCORE,
+      type: actions.SET_OWNER_SCORE,
       score: 42,
     };
     const { score } = reducer(initialState, action);
