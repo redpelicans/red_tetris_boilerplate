@@ -13,21 +13,25 @@ import TetrisTheme from "assets/music/Tetris_theme.ogg";
 import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
-import { setPenalty } from "actions/store";
+import { setPenalty, setGame } from "actions/game";
 import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Overlay from "components/overlay/Overlay";
+import { socket, setupSocketGame } from "store/sockets/sockets";
 
 export default function GameMulti() {
-  const { state: stateStore, dispatch: dispatchStore } = React.useContext(
-    StoreContext,
-  );
+  const { state: stateStore } = React.useContext(StoreContext);
   const { state, dispatch } = React.useContext(GameContext);
+
+  React.useEffect(() => {
+    setupSocketGame(dispatch);
+    dispatch(setGame(stateStore.game));
+  }, []);
 
   const gameOver = () => {
     // emit(newLoser)
-    stateStore.socket.emit(GAME.SEND_LOSE, {
-      gameId: stateStore.game.id,
+    socket.emit(GAME.SEND_LOSE, {
+      gameId: state.game.id,
       playerId: stateStore.player.id,
     });
     dispatch(setPlayerIsAlive(false));
@@ -36,8 +40,8 @@ export default function GameMulti() {
   const [linesRemoved, setLinesRemoved] = React.useState(0);
   const addRemovedLines = (value) => {
     if (value > 1) {
-      stateStore.socket.emit(GAME.SEND_PENALTY, {
-        gameId: stateStore.game.id,
+      socket.emit(GAME.SEND_PENALTY, {
+        gameId: state.game.id,
         playerId: stateStore.player.id,
         nbLinePenalty: value - 1,
       });
@@ -50,8 +54,8 @@ export default function GameMulti() {
     setScore((oldScore) => {
       const newScore = oldScore + value;
       // emit(newScore)
-      stateStore.socket.emit(GAME.SEND_SCORE, {
-        gameId: stateStore.game.id,
+      socket.emit(GAME.SEND_SCORE, {
+        gameId: state.game.id,
         playerId: stateStore.player.id,
         score: newScore,
       });
@@ -70,19 +74,19 @@ export default function GameMulti() {
 
   React.useEffect(() => {
     // emit(newGrid)
-    stateStore.socket.emit(GAME.SEND_BOARD, {
-      gameId: stateStore.game.id,
+    socket.emit(GAME.SEND_BOARD, {
+      gameId: state.game.id,
       playerId: stateStore.player.id,
       boardGame: grid,
     });
   }, [grid]);
 
   React.useEffect(() => {
-    if (stateStore.penalty > 0) {
-      methods.malus(stateStore.penalty);
-      dispatchStore(setPenalty({ nbLinePenalty: 0, playerId: "" }));
+    if (state.penalty > 0) {
+      methods.malus(state.penalty);
+      dispatch(setPenalty({ nbLinePenalty: 0, playerId: "" }));
     }
-  }, [stateStore.penalty]);
+  }, [state.penalty]);
 
   const { movePiece } = useTetrisGame(methods, nextPieces);
 
@@ -102,11 +106,11 @@ export default function GameMulti() {
   }, [state.alive]);
 
   React.useEffect(() => {
-    if (Object.keys(stateStore.winner).length) {
+    if (Object.keys(state.winner).length) {
       dispatch(setPlayerIsAlive(false));
       // clean and put lobby is playing to false
     }
-  }, [stateStore.winner]);
+  }, [state.winner]);
 
   React.useEffect(() => {
     setOptions({ ...options, playbackRate: state.speedRate });
@@ -123,13 +127,13 @@ export default function GameMulti() {
       height={"full"}
       className="justify-center items-center"
     >
-      {Object.keys(stateStore.winner).length ? (
+      {Object.keys(state.winner).length ? (
         <Overlay isOpen={true} className="create-modal">
           <span>{`WINNER`}</span>
           <br />
-          <span>{`name : ${stateStore.winner.player.name}`}</span>
+          <span>{`name : ${state.winner.player.name}`}</span>
           <br />
-          <span>{`score : ${stateStore.winner.score}`}</span>
+          <span>{`score : ${state.winner.score}`}</span>
           <br />
           <Link
             to="/rooms/id"
@@ -174,7 +178,7 @@ export default function GameMulti() {
         </FlexBox>
         <FlexBox direction="col" className="items-center mx-4">
           <span>{`OPPONENTS`}</span>
-          {Object.entries(stateStore.game.players || {}).map(([key, el]) => (
+          {Object.entries(state.game.players || {}).map(([key, el]) => (
             <FlexBox
               direction="col"
               className="items-center"

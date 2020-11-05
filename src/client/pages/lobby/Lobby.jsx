@@ -5,6 +5,7 @@ import { LOBBIES } from "../../../config/actions/lobbies";
 import { setLobby } from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
+import { socket } from "store/sockets/sockets";
 
 export default function Lobby({ open, close, state, dispatch }) {
   const [errorUnsub, setErrorUnsub] = React.useState("");
@@ -138,21 +139,21 @@ export default function Lobby({ open, close, state, dispatch }) {
 
 const Buttons = ({ state, owner }) => {
   const unsubscribeLobby = (lobbyId, playerId) => {
-    state.socket.emit(LOBBY.UNSUBSCRIBE, { lobbyId, playerId });
+    socket.emit(LOBBY.UNSUBSCRIBE, { lobbyId, playerId });
   };
 
   const deleteLobby = (lobbyId, playerId) => {
     // check for ownerId?
-    state.socket.emit(LOBBIES.DELETE, { lobbyId, ownerId: playerId });
+    socket.emit(LOBBIES.DELETE, { lobbyId, ownerId: playerId });
   };
 
   const setReady = (lobbyId, playerId) => {
-    state.socket.emit(LOBBY.READY, { lobbyId, playerId });
+    socket.emit(LOBBY.READY, { lobbyId, playerId });
   };
 
   const launchGame = (lobbyId, ownerId) => {
     console.log("launching game...");
-    state.socket.emit(LOBBY.START, { lobbyId, ownerId });
+    socket.emit(LOBBY.START, { lobbyId, ownerId });
   };
 
   return (

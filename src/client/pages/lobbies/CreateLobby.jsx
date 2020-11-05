@@ -4,6 +4,7 @@ import { setLobby, setLobbiesResponse } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
 import useNavigate from "hooks/useNavigate";
+import { socket } from "store/sockets/sockets";
 
 export default function CreateLobby({ close, state, dispatch }) {
   const [myLobby, setMyLobby] = React.useState({
@@ -36,7 +37,7 @@ export default function CreateLobby({ close, state, dispatch }) {
         dispatch(setLobby(state.lobbiesResponse.payload));
         dispatch(setLobbiesResponse({}));
         // to put outside to get the new Lobby Object
-        state.socket.emit(LOBBY.SUBSCRIBE, {
+        socket.emit(LOBBY.SUBSCRIBE, {
           playerId: state.player.id,
           lobbyId: state.lobbiesResponse.payload.id,
         });
@@ -48,7 +49,7 @@ export default function CreateLobby({ close, state, dispatch }) {
 
   const createLobby = (myLobby) => {
     setError("");
-    state.socket.emit(LOBBIES.ADD, myLobby);
+    socket.emit(LOBBIES.ADD, myLobby);
     setMyLobby({
       maxPlayer: 4,
       owner: state.player,

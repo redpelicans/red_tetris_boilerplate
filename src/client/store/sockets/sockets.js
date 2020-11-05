@@ -7,6 +7,9 @@ import { MESSAGE } from "../../../config/actions/message";
 import { PLAYERS } from "../../../config/actions/players";
 import { GAME } from "../../../config/actions/game";
 
+const endpoint = "http://0.0.0.0:3004";
+export const socket = socketIOClient(endpoint);
+
 import {
   setPlayerResponse,
   setPlayers,
@@ -17,16 +20,23 @@ import {
   addMessage,
   setNextPieces,
   setGameStarted,
+} from "actions/store";
+
+import {
   setScore,
   setBoard,
   setLoser,
   setWinner,
   setPenalty,
-} from "actions/store";
+} from "actions/game";
 
-const endpoint = "http://0.0.0.0:3004";
+export function setupSocketPlayer(dispatch) {
+  socket.on(PLAYER.RESPONSE, (data) => {
+    dispatch(setPlayerResponse(data));
+  });
+}
 
-export function setupSocket(socket, dispatch) {
+export function setupSocketRooms(dispatch) {
   socket.on(LOBBIES.PUBLISH, (data) => {
     dispatch(setLobbies(data));
   });
@@ -47,10 +57,6 @@ export function setupSocket(socket, dispatch) {
     dispatch(setGameStarted(data));
   });
 
-  socket.on(PLAYER.RESPONSE, (data) => {
-    dispatch(setPlayerResponse(data));
-  });
-
   socket.on(PLAYERS.PUBLISH, (data) => {
     dispatch(setPlayers(data));
   });
@@ -58,10 +64,12 @@ export function setupSocket(socket, dispatch) {
   socket.on(MESSAGE.PUBLISH, (data) => {
     dispatch(addMessage(data));
   });
+}
 
-  socket.on(PIECE.SEND, (data) => {
-    dispatch(setNextPieces(data));
-  });
+export function setupSocketGame(dispatch) {
+  // socket.on(PIECE.SEND, (data) => {
+  //   dispatch(setNextPieces(data));
+  // });
 
   socket.on(GAME.GET_SCORE, (data) => {
     dispatch(setScore(data));

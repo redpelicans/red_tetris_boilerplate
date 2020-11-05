@@ -5,15 +5,20 @@ import useNavigate from "hooks/useNavigate";
 import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
-import { useSocket } from "hooks";
+// import { useSocket } from "hooks";
+import { socket, setupSocketPlayer } from "store/sockets/sockets";
 
 export default function InputUserName() {
   const { state, dispatch } = React.useContext(StoreContext);
   const [playerName, setPlayerName] = React.useState("");
   const [error, setError] = React.useState("");
   // const [playerState, playerEmitter] = useSocket(PLAYER.RESPONSE);
-
   const { navigate } = useNavigate();
+
+  React.useEffect(() => {
+    setupSocketPlayer(dispatch);
+  }, []);
+
   const handlePlayerName = (e) => {
     setPlayerName(e.target.value);
   };
@@ -44,7 +49,7 @@ export default function InputUserName() {
 
   const createPlayer = (event) => {
     event.preventDefault();
-    state.socket.emit(PLAYER.CREATE, { name: playerName });
+    socket.emit(PLAYER.CREATE, { name: playerName });
   };
 
   // const createPlayer = (event) => {

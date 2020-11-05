@@ -11,7 +11,7 @@ import { GameContextProvider } from "store";
 import { StoreContext } from "store";
 import useNavigate from "hooks/useNavigate";
 import { LOBBIES } from "../../../config/actions/lobbies";
-
+import { socket } from "store/sockets/sockets";
 /*
  **   You can had any Route you need inside the <Switch />
  **   The component that should be display for this Route
@@ -42,7 +42,7 @@ const ProtectedRoutes = () => {
     if (!Object.keys(state.player).length) {
       navigate("/");
     }
-    state.socket.emit(LOBBIES.SUBSCRIBE);
+    socket.emit(LOBBIES.SUBSCRIBE);
   }, []);
 
   return (

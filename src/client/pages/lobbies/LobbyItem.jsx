@@ -3,6 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import { setLobby } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
 import useNavigate from "hooks/useNavigate";
+import { socket } from "store/sockets/sockets";
 
 export default function LobbyItem({ lobby, state, dispatch }) {
   const [error, setError] = React.useState("");
@@ -27,7 +28,7 @@ export default function LobbyItem({ lobby, state, dispatch }) {
 
   const subscribeLobby = (lobby) => {
     setError("");
-    state.socket.emit(LOBBY.SUBSCRIBE, {
+    socket.emit(LOBBY.SUBSCRIBE, {
       lobbyId: lobby.id,
       playerId: state.player.id,
     });
