@@ -14,19 +14,24 @@ import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
 import { setPenalty, setGame } from "actions/game";
+import { setGameStarted } from "actions/store";
 import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Overlay from "components/overlay/Overlay";
 import { socket, setupSocketGame } from "store/middleware/sockets";
 // Nico -> handle even score and 0 / 0
+// Nico -> handle lobby to isPlaying or not at end
+// Nico -> reset at end
+// Nico -> ready to false when game is launched
 
 export default function GameMulti() {
-  const { state: stateStore } = React.useContext(StoreContext);
+  const { state: stateStore, dispatch: dispatchStore } = React.useContext(
+    StoreContext,
+  );
   const { state, dispatch } = React.useContext(GameContext);
 
   React.useEffect(() => {
     setupSocketGame(dispatch);
-    console.log(stateStore.game);
     dispatch(setGame(stateStore.game));
   }, []);
 
@@ -117,7 +122,9 @@ export default function GameMulti() {
   React.useEffect(() => {
     if (Object.keys(state.winner).length) {
       dispatch(setPlayerIsAlive(false));
-      // clean and put lobby is playing to false
+      dispatchStore(setGameStarted({}));
+      dispatch(setGame({}));
+      // dispatch(setWinner({}));
     }
   }, [state.winner]);
 
