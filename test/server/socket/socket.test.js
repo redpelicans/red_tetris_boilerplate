@@ -289,11 +289,14 @@ describe("Socket tests", () => {
     };
 
     const disconnectClient = async () => {
+      const lobbies = await getLobbies();
+      const lobbyId = Object.keys(lobbies)[0];
       socketClient.disconnect();
       setTimeout(async () => {
-        expect(await getLobbies()).toEqual({});
+        const lobbies = await getLobbies();
+        expect(lobbies[lobbyId]).toEqual(undefined);
         done();
-      }, 500);
+      }, 2500);
     };
   });
 });
