@@ -40,13 +40,10 @@ export const setLobby = (lobby) => ({
   lobby: lobby,
 });
 
-export const setLobbyResponse = (lobbyResponse) => {
-  console.log("SET LOBBY RESPONSE");
-  return {
-    type: SET_LOBBY_RESPONSE,
-    lobbyResponse: lobbyResponse,
-  };
-};
+export const setLobbyResponse = (lobbyResponse) => ({
+  type: SET_LOBBY_RESPONSE,
+  lobbyResponse: lobbyResponse,
+});
 
 export const addMessage = (message) => ({
   type: ADD_MESSAGE,

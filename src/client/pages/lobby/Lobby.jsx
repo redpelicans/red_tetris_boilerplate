@@ -128,7 +128,7 @@ const Buttons = ({ state, owner }) => {
   };
 
   const launchGame = (lobbyId, ownerId) => {
-    console.log("launching game...");
+    console.log("Launching game...");
     socket.emit(LOBBY.START, { lobbyId, ownerId });
   };
 

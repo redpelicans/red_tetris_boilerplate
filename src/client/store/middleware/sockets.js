@@ -49,7 +49,6 @@ export function setupSocketRooms(dispatch) {
   });
 
   socket.on(LOBBY.RESPONSE, (data) => {
-    console.log("SOCKET GOT LOBBY RESPONSE");
     dispatch(setLobbyResponse(data));
   });
 
