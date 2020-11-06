@@ -4,7 +4,7 @@ import { setLobby } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
 import useNavigate from "hooks/useNavigate";
 import { socket } from "store/middleware/sockets";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function LobbyItem({ lobby, state, dispatch }) {
@@ -15,6 +15,7 @@ export default function LobbyItem({ lobby, state, dispatch }) {
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.SUBSCRIBE) {
       if (state.lobbyResponse.type === "error") {
+        console.log("WTFFFFFFF");
         notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
         dispatch(setLobby(state.lobbyResponse.payload));
@@ -24,6 +25,7 @@ export default function LobbyItem({ lobby, state, dispatch }) {
   }, [state.lobbyResponse]);
 
   const subscribeLobby = (lobby) => {
+    console.log("SUBBBBBB");
     socket.emit(LOBBY.SUBSCRIBE, {
       lobbyId: lobby.id,
       playerId: state.player.id,
@@ -34,7 +36,6 @@ export default function LobbyItem({ lobby, state, dispatch }) {
 
   return (
     <>
-      <ToastContainer />
       <FlexBox
         direction="row"
         className="lobby-item"

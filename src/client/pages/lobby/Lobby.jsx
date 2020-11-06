@@ -6,7 +6,7 @@ import { setLobby } from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
 import { socket } from "store/middleware/sockets";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Lobby({ open, close, state, dispatch }) {
@@ -21,15 +21,13 @@ export default function Lobby({ open, close, state, dispatch }) {
         dispatch(setLobby({}));
         close();
       }
-    }
-    if (state.lobbyResponse.action === LOBBY.READY) {
+    } else if (state.lobbyResponse.action === LOBBY.READY) {
       if (state.lobbyResponse.type === "error") {
         notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
         console.log("Ready was set to true or false!");
       }
-    }
-    if (state.lobbyResponse.action === LOBBY.START) {
+    } else if (state.lobbyResponse.action === LOBBY.START) {
       if (state.lobbyResponse.type === "error") {
         notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
@@ -64,7 +62,6 @@ export default function Lobby({ open, close, state, dispatch }) {
       width="full"
       className="justify-between"
     >
-      <ToastContainer />
       <FlexBox
         direction="row"
         className="justify-between p-6 border-b border-black items-center"

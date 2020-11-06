@@ -6,7 +6,7 @@ import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
 import { socket, setupSocketPlayer } from "store/middleware/sockets";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function InputUserName() {
@@ -42,7 +42,6 @@ export default function InputUserName() {
 
   return (
     <FlexBox direction="col" className="">
-      <ToastContainer />
       <form
         className="flex items-center border-red-400 py-2"
         onSubmit={createPlayer}

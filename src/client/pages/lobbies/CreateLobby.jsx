@@ -5,7 +5,7 @@ import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
 import useNavigate from "hooks/useNavigate";
 import { socket } from "store/middleware/sockets";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateLobby({ close, state, dispatch }) {
@@ -56,7 +56,6 @@ export default function CreateLobby({ close, state, dispatch }) {
 
   return (
     <div>
-      <ToastContainer />
       <h1>Create Lobby</h1>
       <FlexBox direction="row" className="">
         <FlexBox direction="col" className="items-center border-red-400 py-2">

@@ -41,6 +41,7 @@ export default function reducer(state = initialState, action) {
     case SET_LOBBY:
       return { ...state, lobby: action.lobby };
     case SET_LOBBY_RESPONSE:
+      console.log("REDUCER SET LOBBY RESPONSE");
       return { ...state, lobbyResponse: action.lobbyResponse };
     case SET_LOBBIES_RESPONSE:
       return { ...state, lobbiesResponse: action.lobbiesResponse };
