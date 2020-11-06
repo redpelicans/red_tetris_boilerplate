@@ -31,5 +31,9 @@ export function StoreContextProvider({ children }) {
 }
 
 StoreContextProvider.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.array,
+    PropTypes.node,
+  ]).isRequired,
 };
