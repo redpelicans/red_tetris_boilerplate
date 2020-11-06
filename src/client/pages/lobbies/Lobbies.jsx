@@ -20,7 +20,8 @@ export default function Lobbies() {
     <FlexBox
       direction="col"
       width="2/4"
-      height="auto"
+      height="full"
+      wrap="no-wrap"
       className="justify-between py-8"
     >
       {hasClickedCreate && (
@@ -37,11 +38,8 @@ export default function Lobbies() {
         </Overlay>
       )}
 
-      <FlexBox direction="col">
-        <SearchLobby />
-        <LobbyList state={state} dispatch={dispatch} />
-      </FlexBox>
-
+      <SearchLobby />
+      <LobbyList state={state} dispatch={dispatch} />
       <ButtonsLobbies>
         <JoinButton players={state.players} />
         <CreateButton onClick={() => setHasClickedCreate(true)} />
@@ -51,17 +49,15 @@ export default function Lobbies() {
 }
 
 const LobbyList = ({ state, dispatch }) => (
-  <FlexBox direction="col" className="max-h-3/5 my-6">
-    <div className="overflow-y-scroll hide-scroll">
-      {Object.values(state.lobbies || {}).map((lobby, index) => (
-        <LobbyItem
-          lobby={lobby}
-          key={index}
-          state={state}
-          dispatch={dispatch}
-        />
-      ))}
-    </div>
+  // at less than 600 delete min height
+  <FlexBox
+    direction="col"
+    wrap="no-wrap"
+    className="min-h-3/4 my-6 overflow-y-scroll hide-scroll"
+  >
+    {Object.values(state.lobbies || {}).map((lobby, index) => (
+      <LobbyItem lobby={lobby} key={index} state={state} dispatch={dispatch} />
+    ))}
   </FlexBox>
 );
 
