@@ -6,42 +6,29 @@ import { setLobby } from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
 import { socket } from "store/middleware/sockets";
+import { toast } from "react-toastify";
 
 export default function Lobby({ open, close, state, dispatch }) {
-  const [errorUnsub, setErrorUnsub] = React.useState("");
-  const [errorDel, setErrorDel] = React.useState("");
+  const notify = (error) => toast.error(error);
   const { navigate } = useNavigate();
 
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.UNSUBSCRIBE) {
       if (state.lobbyResponse.type === "error") {
-        console.log(
-          "There was an error with lobby:unsubscribe :",
-          state.lobbyResponse.reason,
-        );
-        setErrorUnsub(state?.lobbyResponse?.reason);
+        notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
-        console.log("Unsubscribed from lobby");
         dispatch(setLobby({}));
         close();
       }
-    }
-    if (state.lobbyResponse.action === LOBBY.READY) {
+    } else if (state.lobbyResponse.action === LOBBY.READY) {
       if (state.lobbyResponse.type === "error") {
-        console.log(
-          "There was an error with lobby:ready :",
-          state.lobbyResponse.reason,
-        );
+        notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
-        console.log("Ready set or unset!");
+        console.log("Ready was set to true or false!");
       }
-    }
-    if (state.lobbyResponse.action === LOBBY.START) {
+    } else if (state.lobbyResponse.action === LOBBY.START) {
       if (state.lobbyResponse.type === "error") {
-        console.log(
-          "There was an error with lobby:start :",
-          state.lobbyResponse.reason,
-        );
+        notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
         console.log("Game successfully launched!");
       }
@@ -51,14 +38,8 @@ export default function Lobby({ open, close, state, dispatch }) {
   React.useEffect(() => {
     if (state.lobbiesResponse.action === LOBBIES.DELETE) {
       if (state.lobbiesResponse.type === "error") {
-        console.log(
-          "There was an error with lobbies:delete :",
-          lobbiesResponse.reason,
-        );
-        setErrorDel(state?.lobbiesResponse?.reason);
+        notify(state?.lobbiesResponse?.reason);
       } else if (state.lobbiesResponse.type === "success") {
-        // check if needed or already done by publish
-        console.log("Lobby deleted!");
         dispatch(setLobby({}));
         close();
       }
@@ -67,10 +48,7 @@ export default function Lobby({ open, close, state, dispatch }) {
 
   React.useEffect(() => {
     if (Object.keys(state.game).length !== 0) {
-      console.log("Game will start");
-      console.log(state.game);
       open();
-      // Here put timer for launching game
       navigate("/game-multi");
     }
   }, [state.game]);
@@ -129,9 +107,6 @@ export default function Lobby({ open, close, state, dispatch }) {
           </FlexBox>
         ))}
       </FlexBox>
-
-      <span className="text-red-600">{errorUnsub}</span>
-      <span className="text-red-600">{errorDel}</span>
       <Buttons state={state} owner={state.lobby.owner.id === state.player.id} />
     </FlexBox>
   );
@@ -152,7 +127,7 @@ const Buttons = ({ state, owner }) => {
   };
 
   const launchGame = (lobbyId, ownerId) => {
-    console.log("launching game...");
+    console.log("Launching game...");
     socket.emit(LOBBY.START, { lobbyId, ownerId });
   };
 

@@ -5,6 +5,7 @@ import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
 import useNavigate from "hooks/useNavigate";
 import { socket } from "store/middleware/sockets";
+import { toast } from "react-toastify";
 
 export default function CreateLobby({ close, state, dispatch }) {
   const [myLobby, setMyLobby] = React.useState({
@@ -12,7 +13,7 @@ export default function CreateLobby({ close, state, dispatch }) {
     maxPlayer: 4,
     owner: state.player,
   });
-  const [error, setError] = React.useState("");
+  const notify = (error) => toast.error(error);
   const { navigate } = useNavigate();
 
   const handleLobby = (e) => {
@@ -30,13 +31,10 @@ export default function CreateLobby({ close, state, dispatch }) {
   React.useEffect(() => {
     if (state.lobbiesResponse.action === LOBBIES.ADD) {
       if (state.lobbiesResponse.type === "error") {
-        console.log("There was an error with lobbies:response");
-        setError(state?.lobbiesResponse?.reason);
+        notify(state?.lobbiesResponse?.reason);
       } else if (state.lobbiesResponse.type === "success") {
-        console.log("New lobby created :", state.lobbiesResponse.payload);
         dispatch(setLobby(state.lobbiesResponse.payload));
         dispatch(setLobbiesResponse({}));
-        // to put outside to get the new Lobby Object
         socket.emit(LOBBY.SUBSCRIBE, {
           playerId: state.player.id,
           lobbyId: state.lobbiesResponse.payload.id,
@@ -48,7 +46,6 @@ export default function CreateLobby({ close, state, dispatch }) {
   }, [state.lobbiesResponse]);
 
   const createLobby = (myLobby) => {
-    setError("");
     socket.emit(LOBBIES.ADD, myLobby);
     setMyLobby({
       maxPlayer: 4,
@@ -100,7 +97,6 @@ export default function CreateLobby({ close, state, dispatch }) {
           >
             Create lobby
           </button>
-          <span className="text-red-600">{error}</span>
         </FlexBox>
       </FlexBox>
     </div>

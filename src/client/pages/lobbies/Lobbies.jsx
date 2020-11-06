@@ -6,15 +6,32 @@ import Overlay from "components/overlay/Overlay";
 import SearchLobby from "./SearchLobby";
 import { StoreContext } from "store";
 import "./Lobbies.scss";
-import { setupSocketRooms } from "store/middleware/sockets";
+import { setupSocketRooms, rooms } from "store/middleware/sockets";
+import useNavigate from "hooks/useNavigate";
+import { setLobby } from "actions/store";
+import { toast } from "react-toastify";
+import { LOBBY } from "../../../config/actions/lobby";
 
 export default function Lobbies() {
   const { state, dispatch } = React.useContext(StoreContext);
   const [hasClickedCreate, setHasClickedCreate] = React.useState(false);
+  const { navigate } = useNavigate();
+  const notify = (error) => toast.error(error);
 
   React.useEffect(() => {
-    setupSocketRooms(dispatch);
+    if (!rooms) setupSocketRooms(dispatch);
   }, []);
+
+  React.useEffect(() => {
+    if (state.lobbyResponse.action === LOBBY.SUBSCRIBE) {
+      if (state.lobbyResponse.type === "error") {
+        notify(state?.lobbyResponse?.reason);
+      } else if (state.lobbyResponse.type === "success") {
+        dispatch(setLobby(state.lobbyResponse.payload));
+        navigate("/rooms/id");
+      }
+    }
+  }, [state.lobbyResponse]);
 
   return (
     <FlexBox

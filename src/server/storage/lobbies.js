@@ -73,7 +73,7 @@ export const joinLobby = async (player, lobbyId) => {
 
   const lobbyOpen = isLobbyOpen(lobby);
   if (!lobbyOpen) {
-    return Response.error(LOBBY.SUBSCRIBE, "The lobby is closed!");
+    return Response.error(LOBBY.SUBSCRIBE, "The lobby is in game!");
   }
 
   const lobbyFull = isLobbyFull(lobby);

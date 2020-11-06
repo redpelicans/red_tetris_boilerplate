@@ -71,4 +71,14 @@ describe("joinLobby function", () => {
       Response.error(LOBBY.SUBSCRIBE, "The lobby is full!"),
     );
   });
+
+  test("Should return an Error response `The lobby is playing!`", async () => {
+    const lobby = deepCopy(lobby1mock);
+    lobby.isPlaying = true;
+    await pushLobby(lobby, lobby.owner.socketId);
+
+    expect(await joinLobby(playerObject3mock, lobby.id)).toEqual(
+      Response.error(LOBBY.SUBSCRIBE, "The lobby is in game!"),
+    );
+  });
 });
