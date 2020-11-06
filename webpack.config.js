@@ -83,6 +83,10 @@ module.exports = () => {
           ],
         },
         {
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
+        },
+        {
           test: /\.(png|svg|jpe?g|gif)$/,
           include: path.resolve(CLIENT_DIR, "assets/img"),
           use: require.resolve("file-loader"),
@@ -116,7 +120,7 @@ module.exports = () => {
         store: path.resolve(CLIENT_DIR, "store"),
         worker: path.resolve(CLIENT_DIR, "worker"),
       },
-      extensions: ["*", ".js", ".jsx", ".scss"],
+      extensions: ["*", ".js", ".jsx", ".scss", ".css"],
     },
 
     plugins: [

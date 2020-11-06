@@ -5,15 +5,15 @@ import useNavigate from "hooks/useNavigate";
 import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
-// import { useSocket } from "hooks";
 import { socket, setupSocketPlayer } from "store/middleware/sockets";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function InputUserName() {
   const { state, dispatch } = React.useContext(StoreContext);
   const [playerName, setPlayerName] = React.useState("");
-  const [error, setError] = React.useState("");
-  // const [playerState, playerEmitter] = useSocket(PLAYER.RESPONSE);
   const { navigate } = useNavigate();
+  const notify = (error) => toast.error(error);
 
   React.useEffect(() => {
     setupSocketPlayer(dispatch);
@@ -23,23 +23,11 @@ export default function InputUserName() {
     setPlayerName(e.target.value);
   };
 
-  // React.useEffect(() => {
-  //   if (playerState.payload) {
-  //     dispatch(setPlayer(playerState.payload));
-  //     navigate("/rooms");
-  //   } else {
-  //     setError(playerState.error);
-  //   }
-  // }, [playerState]);
-
   React.useEffect(() => {
     if (state.playerResponse.action === PLAYER.CREATE) {
-      console.log("I got an error");
       if (state.playerResponse.type === "error") {
-        console.log("There was an error with player:response");
-        setError(state?.playerResponse?.reason);
+        notify(state?.playerResponse?.reason);
       } else if (state.playerResponse.type === "success") {
-        console.log("New player created :", state.playerResponse.payload);
         dispatch(setPlayer(state.playerResponse.payload));
         dispatch(setPlayerResponse({}));
         navigate("/rooms");
@@ -52,13 +40,9 @@ export default function InputUserName() {
     socket.emit(PLAYER.CREATE, { name: playerName });
   };
 
-  // const createPlayer = (event) => {
-  //   event.preventDefault();
-  //   playerEmitter(PLAYER.CREATE, { name: playerName });
-  // };
-
   return (
     <FlexBox direction="col" className="">
+      <ToastContainer />
       <form
         className="flex items-center border-red-400 py-2"
         onSubmit={createPlayer}
@@ -74,7 +58,6 @@ export default function InputUserName() {
           Create player
         </ButtonSpecial>
       </form>
-      <span className="text-red-600">{error}</span>
     </FlexBox>
   );
 }

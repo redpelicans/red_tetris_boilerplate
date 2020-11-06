@@ -31,7 +31,6 @@ export default function Chat({ state }) {
       socket.emit(MESSAGE.SEND, { message, sender, lobbyId });
       setMessage("");
     }
-    socket.emit("piece:get", { nb: 2 });
   };
 
   const submit = (event) => {

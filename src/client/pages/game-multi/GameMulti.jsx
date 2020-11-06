@@ -19,10 +19,6 @@ import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Overlay from "components/overlay/Overlay";
 import { socket, setupSocketGame } from "store/middleware/sockets";
-// Nico -> handle even score and 0 / 0
-// Nico -> handle lobby to isPlaying or not at end
-// Nico -> reset at end
-// Nico -> ready to false when game is launched
 
 export default function GameMulti() {
   const { state: stateStore, dispatch: dispatchStore } = React.useContext(
