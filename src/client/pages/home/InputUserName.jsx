@@ -5,9 +5,8 @@ import useNavigate from "hooks/useNavigate";
 import { setPlayer, setPlayerResponse } from "actions/store";
 import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
-import { socket, setupSocketPlayer } from "store/middleware/sockets";
+import { socket, setupSocketPlayer, player } from "store/middleware/sockets";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function InputUserName() {
   const { state, dispatch } = React.useContext(StoreContext);
@@ -16,7 +15,7 @@ export default function InputUserName() {
   const notify = (error) => toast.error(error);
 
   React.useEffect(() => {
-    setupSocketPlayer(dispatch);
+    if (!player) setupSocketPlayer(dispatch);
   }, []);
 
   const handlePlayerName = (e) => {

@@ -7,7 +7,6 @@ import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
 import { socket } from "store/middleware/sockets";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function Lobby({ open, close, state, dispatch }) {
   const notify = (error) => toast.error(error);

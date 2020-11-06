@@ -6,7 +6,6 @@ import { LOBBIES } from "../../../config/actions/lobbies";
 import useNavigate from "hooks/useNavigate";
 import { socket } from "store/middleware/sockets";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateLobby({ close, state, dispatch }) {
   const [myLobby, setMyLobby] = React.useState({

@@ -12,6 +12,9 @@ const port = process.env.REACT_APP_BACK_PORT || "3004";
 const endpoint = `${host}:${port}`;
 
 export const socket = socketIOClient(endpoint);
+export let game = false;
+export let player = false;
+export let rooms = false;
 
 import {
   setPlayerResponse,
@@ -37,6 +40,7 @@ export function setupSocketPlayer(dispatch) {
   socket.on(PLAYER.RESPONSE, (data) => {
     dispatch(setPlayerResponse(data));
   });
+  player = true;
 }
 
 export function setupSocketRooms(dispatch) {
@@ -67,6 +71,7 @@ export function setupSocketRooms(dispatch) {
   socket.on(MESSAGE.PUBLISH, (data) => {
     dispatch(addMessage(data));
   });
+  rooms = true;
 }
 
 export function setupSocketGame(dispatch) {
@@ -93,6 +98,7 @@ export function setupSocketGame(dispatch) {
   socket.on(GAME.GET_PENALTY, (data) => {
     dispatch(setPenalty(data));
   });
+  game = true;
 }
 
 // export function initSocket() {

@@ -1,31 +1,14 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-import { setLobby } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
-import useNavigate from "hooks/useNavigate";
 import { socket } from "store/middleware/sockets";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function LobbyItem({ lobby, state, dispatch }) {
-  const notify = (error) => toast.error(error);
   const [hover, setHover] = React.useState(false);
-  const { navigate } = useNavigate();
 
-  React.useEffect(() => {
-    if (state.lobbyResponse.action === LOBBY.SUBSCRIBE) {
-      if (state.lobbyResponse.type === "error") {
-        notify(state?.lobbyResponse?.reason);
-      } else if (state.lobbyResponse.type === "success") {
-        dispatch(setLobby(state.lobbyResponse.payload));
-        navigate("/rooms/id");
-      }
-    }
-  }, [state.lobbyResponse]);
-
-  const subscribeLobby = (lobby) => {
+  const subscribeLobby = (lobbyId) => {
     socket.emit(LOBBY.SUBSCRIBE, {
-      lobbyId: lobby.id,
+      lobbyId: lobbyId,
       playerId: state.player.id,
     });
   };
@@ -46,7 +29,7 @@ export default function LobbyItem({ lobby, state, dispatch }) {
         </FlexBox>
 
         {hover ? (
-          <button onClick={() => subscribeLobby(lobby)}>Join lobby</button>
+          <button onClick={() => subscribeLobby(lobby.id)}>Join lobby</button>
         ) : (
           <FlexBox>
             {lobby.isPlaying && <span className="mr-6">PLAYING</span>}

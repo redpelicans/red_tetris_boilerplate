@@ -18,7 +18,7 @@ import { setGameStarted } from "actions/store";
 import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Overlay from "components/overlay/Overlay";
-import { socket, setupSocketGame } from "store/middleware/sockets";
+import { socket, setupSocketGame, game } from "store/middleware/sockets";
 
 export default function GameMulti() {
   const { state: stateStore, dispatch: dispatchStore } = React.useContext(
@@ -27,7 +27,7 @@ export default function GameMulti() {
   const { state, dispatch } = React.useContext(GameContext);
 
   React.useEffect(() => {
-    setupSocketGame(dispatch);
+    if (!game) setupSocketGame(dispatch);
     dispatch(setGame(stateStore.game));
   }, []);
 
