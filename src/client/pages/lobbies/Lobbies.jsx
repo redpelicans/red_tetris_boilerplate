@@ -6,7 +6,7 @@ import Overlay from "components/overlay/Overlay";
 import SearchLobby from "./SearchLobby";
 import { StoreContext } from "store";
 import "./Lobbies.scss";
-import { setupSocketRooms, rooms } from "store/middleware/sockets";
+import { setupSocketRooms } from "store/middleware/sockets";
 import useNavigate from "hooks/useNavigate";
 import { setLobby } from "actions/store";
 import { toast } from "react-toastify";
@@ -19,7 +19,7 @@ export default function Lobbies() {
   const notify = (error) => toast.error(error);
 
   React.useEffect(() => {
-    if (!rooms) setupSocketRooms(dispatch);
+    setupSocketRooms(dispatch);
   }, []);
 
   React.useEffect(() => {
