@@ -65,6 +65,7 @@ export default function CreateLobby({ close, state, dispatch }) {
             placeholder="Lobby name"
             value={myLobby?.name || ""}
             onChange={handleLobby}
+            autoFocus
           />
           <span className="mt-1">Max players :</span>
           <select
