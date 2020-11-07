@@ -28,7 +28,9 @@ export default function Lobbies() {
         notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
         dispatch(setLobby(state.lobbyResponse.payload));
-        navigate("/rooms/id");
+        navigate(
+          `/rooms/${state.lobbyResponse.payload.name}[${state.player.name}]`,
+        );
       }
     }
   }, [state.lobbyResponse]);

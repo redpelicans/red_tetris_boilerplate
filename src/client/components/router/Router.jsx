@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 import Home from "pages/home/Home";
 import Lobbies from "pages/lobbies/Lobbies";
 import Lobby from "pages/lobby/LobbyContainer";
@@ -12,6 +12,7 @@ import { StoreContext } from "store";
 import useNavigate from "hooks/useNavigate";
 import { LOBBIES } from "../../../config/actions/lobbies";
 import { socket } from "store/middleware/sockets";
+
 /*
  **   You can had any Route you need inside the <Switch />
  **   The component that should be display for this Route
@@ -20,17 +21,17 @@ import { socket } from "store/middleware/sockets";
  */
 export default function Router() {
   return (
-    <BrowserRouter>
+    <HashRouter hashType="noslash">
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/game-solo">
+        <Route path="/single-player[solo]/game">
           <GameContextProvider>
             <GameSolo />
           </GameContextProvider>
         </Route>
         <ProtectedRoutes />
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
@@ -54,11 +55,11 @@ const ProtectedRoutes = () => {
           className="justify-center overflow-hidden relative"
         >
           <Lobbies />
-          <Route exact path="/rooms/id" component={Lobby} />
+          <Route exact path="/rooms/:roomName" component={Lobby} />
         </FlexBox>
       </Route>
 
-      <Route path="/game-multi">
+      <Route exact path="/game-multi">
         <GameContextProvider>
           <GameMulti />
         </GameContextProvider>
