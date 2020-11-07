@@ -51,6 +51,7 @@ export default function InputUserName() {
           placeholder="Player name"
           value={playerName}
           onChange={handlePlayerName}
+          autoFocus
         />
         <ButtonSpecial className="button-3" type="submit">
           Create player
