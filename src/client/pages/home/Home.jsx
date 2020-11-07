@@ -22,7 +22,7 @@ export default function Home() {
       <Modal className="home-modal">
         <LanguageSelection />
         <h1>Red Tetris</h1>
-        <Link to="/game-solo" className="mb-10">
+        <Link to="/single-player[solo]" className="mb-10">
           <SinglePlayer />
         </Link>
         <MultiPlayer />

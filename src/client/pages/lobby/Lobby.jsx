@@ -19,6 +19,7 @@ export default function Lobby({ open, close, state, dispatch }) {
       } else if (state.lobbyResponse.type === "success") {
         dispatch(setLobby({}));
         close();
+        navigate("/rooms");
       }
     } else if (state.lobbyResponse.action === LOBBY.READY) {
       if (state.lobbyResponse.type === "error") {
@@ -42,6 +43,7 @@ export default function Lobby({ open, close, state, dispatch }) {
       } else if (state.lobbiesResponse.type === "success") {
         dispatch(setLobby({}));
         close();
+        navigate("/rooms");
       }
     }
   }, [state.lobbiesResponse]);
