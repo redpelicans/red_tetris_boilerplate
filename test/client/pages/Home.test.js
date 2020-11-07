@@ -23,7 +23,7 @@ describe("Home", () => {
     );
 
     userEvent.click(screen.getByText(/Solo/i));
-    expect(history.location.pathname).toBe("/game-solo");
+    expect(history.location.pathname).toBe("/single-player[solo]");
   });
 
   test.skip("navigation link on Multi Mode", () => {
