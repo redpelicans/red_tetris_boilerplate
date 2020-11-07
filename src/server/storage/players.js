@@ -58,5 +58,5 @@ const isAvailable = (players, username) => {
 };
 
 const isValid = (username) => {
-  return RegExp("^[a-z0-9_-]{3,16}$").test(username);
+  return RegExp("^[a-zA-Z0-9_-]{3,16}$").test(username);
 };

@@ -4,6 +4,7 @@ import Response from "models/response";
 import { LOBBIES } from "../../../../src/config/actions/lobbies";
 import { pushLobby } from "storage/lobbies";
 import { lobby1mock, lobby2mock } from "../../mocks";
+import { deepCopy } from "helpers/functional";
 
 beforeAll(() => {
   setRedis(redismock.createClient());
@@ -34,13 +35,32 @@ describe("pushLobby function", () => {
     );
   });
 
+  test("Should return an Error `Invalid lobby name` response", async () => {
+    const lobby = deepCopy(lobby1mock);
+    lobby.name = "lo bby1";
+
+    expect(await pushLobby(lobby, lobby.owner.socketId)).toEqual(
+      Response.error(LOBBIES.ADD, "Invalid lobby name !"),
+    );
+
+    lobby.name = "lo";
+    expect(await pushLobby(lobby, lobby.owner.socketId)).toEqual(
+      Response.error(LOBBIES.ADD, "Invalid lobby name !"),
+    );
+
+    lobby.name = "lobby1lobby1lobby1a";
+    expect(await pushLobby(lobby, lobby.owner.socketId)).toEqual(
+      Response.error(LOBBIES.ADD, "Invalid lobby name !"),
+    );
+  });
+
   test("Should return an Error `lobbyName not available` response", async () => {
     expect(await pushLobby(lobby1mock, lobby1mock.owner.socketId)).toEqual(
       Response.success(LOBBIES.ADD, lobby1mock),
     );
 
     expect(await pushLobby(lobby1mock, lobby2mock.owner.socketId)).toEqual(
-      Response.error(LOBBIES.ADD, "lobbyName is not available!"),
+      Response.error(LOBBIES.ADD, "lobbyName is not available !"),
     );
   });
 });
