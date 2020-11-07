@@ -4,11 +4,13 @@ import Lobby from "./Lobby";
 import { LOBBY } from "../../../config/actions/lobby";
 import Chat from "./Chat";
 import { StoreContext } from "store";
+import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
 
 export default function LobbyContainer() {
   const { state, dispatch } = React.useContext(StoreContext);
   const [translate, setTranslate] = React.useState(false);
+  const { navigate } = useNavigate();
 
   React.useEffect(() => {
     if (state.lobbyResponse.action === LOBBY.SUBSCRIBE) {
@@ -17,6 +19,12 @@ export default function LobbyContainer() {
       }
     }
   }, [state.lobbyResponse]);
+
+  React.useEffect(() => {
+    if (Object.keys(state.lobby).length === 0) {
+      navigate("/rooms");
+    }
+  }, [state.lobby]);
 
   const close = () => {
     setTranslate(false);
@@ -43,15 +51,7 @@ export default function LobbyContainer() {
         >
           {translate ? ">" : "<"}
         </FlexBox>
-        {isEmpty(state.lobby) ? (
-          <FlexBox
-            height="full"
-            width="full"
-            className="justify-center items-center"
-          >
-            <span>You don't have any lobby yet!</span>
-          </FlexBox>
-        ) : (
+        {!isEmpty(state.lobby) && (
           <FlexBox height="full" width="full">
             <Lobby
               state={state}
