@@ -37,13 +37,14 @@ export const bindEvent = (socket, { name, validation, fn }) => {
       /* Careful Joi.validate is deprecated (<14) */
       Joi.validate(payload, validation, (error) => {
         if (error) {
-          logerror("bindEvent error!", error);
+          logerror("bindEvent error!", error.details);
           return socket.emit(name, { error });
+        } else {
+          return fn(socket, payload);
         }
-        /* Why?
-          fn(socket, payload); */
       });
+    } else {
+      return fn(socket, payload);
     }
-    return fn(socket, payload);
   });
 };

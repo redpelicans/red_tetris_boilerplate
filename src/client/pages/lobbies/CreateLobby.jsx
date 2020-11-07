@@ -48,6 +48,7 @@ export default function CreateLobby({ close, state, dispatch }) {
   const createLobby = (myLobby) => {
     socket.emit(LOBBIES.ADD, myLobby);
     setMyLobby({
+      hash: "test",
       maxPlayer: 4,
       owner: state.player,
     });
