@@ -26,9 +26,13 @@ export const pushLobby = async (lobby, socketId) => {
     return Response.error(LOBBIES.ADD, "You already have an active lobby !");
   }
 
+  if (!lobby?.name || !isValid(lobby?.name)) {
+    return Response.error(LOBBIES.ADD, "Invalid lobby name !");
+  }
+
   const nameTaken = isLobbyNameTaken(lobbies, lobby.name);
   if (nameTaken) {
-    return Response.error(LOBBIES.ADD, "lobbyName is not available!");
+    return Response.error(LOBBIES.ADD, "lobbyName is not available !");
   }
 
   lobbies[lobby.id] = lobby;
@@ -263,4 +267,8 @@ const countPlayers = (lobby) => {
 
 const isLobbyOpen = (lobby) => {
   return !lobby.isPlaying;
+};
+
+const isValid = (username) => {
+  return RegExp("^[a-zA-Z0-9_-]{3,16}$").test(username);
 };
