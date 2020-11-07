@@ -14,9 +14,27 @@ import { LOBBY } from "../../../config/actions/lobby";
 
 export default function Lobbies() {
   const { state, dispatch } = React.useContext(StoreContext);
-  const [hasClickedCreate, setHasClickedCreate] = React.useState(false);
   const { navigate } = useNavigate();
+  const [hasClickedCreate, setHasClickedCreate] = React.useState(false);
   const notify = (error) => toast.error(error);
+
+  const lobbies = Object.values(state.lobbies || {});
+  const [searchedValue, setSearchedValue] = React.useState("");
+  const [filteredLobbies, setFilteredLobbies] = React.useState(lobbies);
+  const filterLobbyList = (newValue) => {
+    if (newValue === "") {
+      setFilteredLobbies(lobbies);
+    } else {
+      const filterLobbies = lobbies.filter(
+        (lobby) =>
+          lobby.name.toLowerCase().indexOf(newValue.toLowerCase()) > -1,
+      );
+      setFilteredLobbies(filterLobbies);
+    }
+  };
+  React.useEffect(() => {
+    filterLobbyList(searchedValue);
+  }, [searchedValue, state.lobbies]);
 
   React.useEffect(() => {
     setupSocketRooms(dispatch);
@@ -57,8 +75,16 @@ export default function Lobbies() {
         </Overlay>
       )}
 
-      <SearchLobby />
-      <LobbyList state={state} dispatch={dispatch} />
+      <SearchLobby
+        searchedValue={searchedValue}
+        setSearchedValue={(newValue) => setSearchedValue(newValue)}
+      />
+
+      <LobbyList
+        filteredLobbies={filteredLobbies}
+        state={state}
+        dispatch={dispatch}
+      />
       <ButtonsLobbies>
         <JoinButton players={state.players} />
         <CreateButton onClick={() => setHasClickedCreate(true)} />
@@ -67,14 +93,14 @@ export default function Lobbies() {
   );
 }
 
-const LobbyList = ({ state, dispatch }) => (
+const LobbyList = ({ filteredLobbies, state, dispatch }) => (
   // at less than 600 delete min height
   <FlexBox
     direction="col"
     wrap="no-wrap"
     className="min-h-3/4 my-6 overflow-y-scroll hide-scroll"
   >
-    {Object.values(state.lobbies || {}).map((lobby, index) => (
+    {filteredLobbies.map((lobby, index) => (
       <LobbyItem lobby={lobby} key={index} state={state} dispatch={dispatch} />
     ))}
   </FlexBox>
