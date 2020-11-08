@@ -1,12 +1,9 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-// import { timeout } from "helpers/common";
-// import { pushNewPiece } from "actions/game";
-import MOCK_TETROMINOES from "mocks/Tetrominoes";
 
 const NextPieces = React.memo(({ nextPieces }) => (
-  <FlexBox direction="col">
-    <h1 className="font-bold">Next Pieces</h1>
+  <FlexBox direction="col" className="space-y-4">
+    <h1 className="font-bold text-2xl">Next Pieces</h1>
     {nextPieces[0] && <Previsualisation nextPiece={nextPieces[0]} size={4} />}
     {nextPieces[1] && <Previsualisation nextPiece={nextPieces[1]} size={2} />}
   </FlexBox>
@@ -40,20 +37,3 @@ const Previsualisation = React.memo(({ nextPiece, size }) => {
     </FlexBox>
   );
 });
-
-// Function for test env
-const lengthMockTetrominoes = MOCK_TETROMINOES.length;
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-
-async function fetchFromMock(n) {
-  const ret = [];
-  for (let i = 0; i < n; i++) {
-    ret.push(MOCK_TETROMINOES[getRandomInt(lengthMockTetrominoes)]);
-    // ret.push(MOCK_TETROMINOES[0]);
-  }
-
-  // await timeout(500);
-  return ret;
-}
