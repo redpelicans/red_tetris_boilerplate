@@ -16,7 +16,13 @@ export default function ScatteringGrid() {
       className="items-center space-y-2"
       key={`opponent-${opponent.player.id}`}
     >
-      <p className="font-semibold text-lg">{opponent.player.name}</p>
+      <p
+        className={
+          "font-semibold text-lg" + (opponent.looser ? " line-through" : "")
+        }
+      >
+        {opponent.player.name}
+      </p>
 
       <FlexBox
         direction="col"
