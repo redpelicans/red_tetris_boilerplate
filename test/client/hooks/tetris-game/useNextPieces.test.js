@@ -15,6 +15,6 @@ describe("useNextPieces", () => {
       result.current.pullNextPiece();
     });
     expect(useStateStub).toHaveBeenCalledTimes(2);
-    expect(result.current.nextPieces).toHaveLength(3);
+    expect(result.current.nextPieces).toHaveLength(2);
   });
 });
