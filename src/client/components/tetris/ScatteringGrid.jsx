@@ -12,9 +12,11 @@ export default function ScatteringGrid() {
   return opponents.map((opponent) => (
     <FlexBox
       direction="col"
-      className="items-center"
+      className="items-center space-y-2"
       key={`opponent-${opponent.player.id}`}
     >
+      <p className="font-semibold text-lg">{opponent.player.name}</p>
+
       <FlexBox
         direction="col"
         width={24}
@@ -27,6 +29,8 @@ export default function ScatteringGrid() {
           colHeight={2}
         />
       </FlexBox>
+
+      <p>{opponent.score}</p>
     </FlexBox>
   ));
 }
