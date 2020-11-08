@@ -1,12 +1,13 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { StoreContext } from "store";
+import { StoreContext, GameContext } from "store";
 
 export default function ScatteringGrid() {
-  const { state } = React.useContext(StoreContext);
+  const { state } = React.useContext(GameContext);
+  const { state: stateStore } = React.useContext(StoreContext);
   const opponents = Object.values(state.game.players || {}).filter(
-    (player) => player.player.id !== state.player.id,
+    (player) => player.player.id !== stateStore.player.id,
   );
 
   return opponents.map((opponent) => (
