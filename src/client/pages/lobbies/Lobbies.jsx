@@ -49,12 +49,15 @@ export default function Lobbies() {
       } else if (state.lobbyResponse.type === "success") {
         dispatch(setLobby(state.lobbyResponse.payload));
         dispatch(setLobbyResponse({}));
-        navigate(
-          `/rooms/${state.lobbyResponse.payload.name}[${state.player.name}]`,
-        );
       }
     }
   }, [state.lobbyResponse]);
+
+  React.useEffect(() => {
+    if (!isEmpty(Object.keys(state.lobby))) {
+      navigate(`/rooms/${state.lobby.name}[${state.player.name}]`);
+    }
+  }, [state.lobby]);
 
   return (
     <FlexBox
