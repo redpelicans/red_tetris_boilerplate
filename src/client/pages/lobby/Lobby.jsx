@@ -36,6 +36,15 @@ export default function Lobby({ open, state, dispatch }) {
       if (state.lobbyResponse.type === "error") {
         notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
+        dispatch(
+          setLobby({
+            ...state.lobby,
+            players: state.lobby.players.map((player) => ({
+              ...player,
+              ready: false,
+            })),
+          }),
+        );
         console.log("Game successfully launched!");
       }
     }
