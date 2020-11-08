@@ -30,7 +30,7 @@
 }
 
 .action-btn {
-  @apply text-center bg-red-400 rounded-lg shadow-lg;
+  @apply text-center bg-red-400 rounded-lg shadow-lg py-1;
 
   &:hover {
     @apply bg-red-600;
