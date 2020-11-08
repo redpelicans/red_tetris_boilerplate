@@ -11,6 +11,8 @@ import useNavigate from "hooks/useNavigate";
 import { setLobby } from "actions/store";
 import { toast } from "react-toastify";
 import { LOBBY } from "../../../config/actions/lobby";
+import { socket } from "store/middleware/sockets";
+import { isEmpty } from "helpers/common";
 
 export default function Lobbies() {
   const { state, dispatch } = React.useContext(StoreContext);
@@ -86,7 +88,7 @@ export default function Lobbies() {
         dispatch={dispatch}
       />
       <ButtonsLobbies>
-        <JoinButton players={state.players} />
+        <JoinButton players={state.players} lobbies={filteredLobbies} />
         <CreateButton onClick={() => setHasClickedCreate(true)} />
       </ButtonsLobbies>
     </FlexBox>
@@ -94,7 +96,6 @@ export default function Lobbies() {
 }
 
 const LobbyList = ({ filteredLobbies, state, dispatch }) => (
-  // at less than 600 delete min height
   <FlexBox
     direction="col"
     wrap="no-wrap"
@@ -121,23 +122,55 @@ const ButtonsLobbies = ({ children }) => (
   </FlexBox>
 );
 
-const JoinButton = ({ players }) => (
-  <button className="w-3/5 text-center bg-red-400 hover:bg-red-600 rounded-lg shadow-lg font-semibold py-1">
-    <FlexBox direction="col">
-      <span className=" text-white">Join Game</span>
-      <span className="text-sm text-white">
-        {Object.keys(players).length} players connected
-      </span>
-    </FlexBox>
-  </button>
-);
+const JoinButton = ({ players, lobbies }) => {
+  const { state } = React.useContext(StoreContext);
+
+  const isDisabled =
+    !isEmpty(Object.keys(state.lobby)) ||
+    lobbies.length === 0 ||
+    lobbies.every(
+      (lobby) =>
+        lobby.isPlaying || parseInt(lobby.maxPlayer) === lobby.players.length,
+    );
+
+  const handleClick = () => {
+    if (isDisabled) {
+      return;
+    }
+
+    const joinableLobbies = lobbies.filter(
+      (lobby) =>
+        !lobby.isPlaying && parseInt(lobby.maxPlayer) > lobby.players.length,
+    );
+    const lobbyToJoin = joinableLobbies.reduce(
+      (toJoin, lobby) =>
+        lobby.players.length < toJoin.players.length ? lobby : toJoin,
+      lobbies[0],
+    );
+    socket.emit(LOBBY.SUBSCRIBE, {
+      lobbyId: lobbyToJoin.id,
+      playerId: state.player.id,
+    });
+  };
+
+  return (
+    <button
+      className={`w-3/5 ${isDisabled ? "disabled-btn" : "action-btn "}`}
+      disabled={isDisabled}
+      onClick={handleClick}
+    >
+      <FlexBox direction="col">
+        <span className="font-semibold text-white">Join Game</span>
+        <span className="text-sm text-white">
+          {Object.keys(players).length} players connected
+        </span>
+      </FlexBox>
+    </button>
+  );
+};
 
 const CreateButton = ({ onClick, ...rest }) => (
-  <button
-    className="w-1/3 text-center bg-red-400 hover:bg-red-600 rounded-lg shadow-lg font-semibold  py-1"
-    onClick={onClick}
-    {...rest}
-  >
-    <span className=" text-white">Create Lobby</span>
+  <button className="w-1/3 action-btn" onClick={onClick} {...rest}>
+    <span className="font-semibold text-white">Create Lobby</span>
   </button>
 );

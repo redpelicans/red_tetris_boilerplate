@@ -28,3 +28,15 @@
     @apply h-3 w-3 rounded-full mr-2;
   }
 }
+
+.action-btn {
+  @apply text-center bg-red-400 rounded-lg shadow-lg;
+
+  &:hover {
+    @apply bg-red-600;
+  }
+}
+
+.disabled-btn {
+  @apply text-center cursor-default rounded-lg shadow-lg bg-gray-400;
+}
