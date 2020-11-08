@@ -54,6 +54,25 @@ describe("pushLobby function", () => {
     );
   });
 
+  test("Should return an Error `Invalid max players` response", async () => {
+    const lobby = deepCopy(lobby1mock);
+    lobby.maxPlayer = 0;
+
+    expect(await pushLobby(lobby, lobby.owner.socketId)).toEqual(
+      Response.error(LOBBIES.ADD, "Invalid max players !"),
+    );
+
+    lobby.maxPlayer = 1;
+    expect(await pushLobby(lobby, lobby.owner.socketId)).toEqual(
+      Response.error(LOBBIES.ADD, "Invalid max players !"),
+    );
+
+    lobby.maxPlayer = 18;
+    expect(await pushLobby(lobby, lobby.owner.socketId)).toEqual(
+      Response.error(LOBBIES.ADD, "Invalid max players !"),
+    );
+  });
+
   test("Should return an Error `lobbyName not available` response", async () => {
     expect(await pushLobby(lobby1mock, lobby1mock.owner.socketId)).toEqual(
       Response.success(LOBBIES.ADD, lobby1mock),
