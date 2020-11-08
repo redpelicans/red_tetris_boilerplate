@@ -24,7 +24,7 @@ export default function LobbyItem({ lobby, state }) {
         <span className="text-xs">{lobby.owner.name}</span>
       </FlexBox>
 
-      <FlexBox>
+      <FlexBox className="items-center">
         {lobby.isPlaying && <span className="mr-6">PLAYING</span>}
         <span className="mr-2">
           {lobby.players.length}/{lobby.maxPlayer}
