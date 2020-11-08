@@ -8,7 +8,7 @@ import { StoreContext } from "store";
 import "./Lobbies.scss";
 import { setupSocketRooms } from "store/middleware/sockets";
 import useNavigate from "hooks/useNavigate";
-import { setLobby } from "actions/store";
+import { setLobby, setLobbyResponse } from "actions/store";
 import { toast } from "react-toastify";
 import { LOBBY } from "../../../config/actions/lobby";
 import { socket } from "store/middleware/sockets";
@@ -48,6 +48,7 @@ export default function Lobbies() {
         notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
         dispatch(setLobby(state.lobbyResponse.payload));
+        dispatch(setLobbyResponse({}));
         navigate(
           `/rooms/${state.lobbyResponse.payload.name}[${state.player.name}]`,
         );
