@@ -17,7 +17,7 @@ import { setPenalty, setGame } from "actions/game";
 import { setGameStarted } from "actions/store";
 import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
-import Overlay from "components/overlay/Overlay";
+import Modal from "components/modals/Modal";
 import { socket, setupSocketGame } from "store/middleware/sockets";
 import ScatteringGrid from "components/tetris/ScatteringGrid";
 
@@ -139,31 +139,20 @@ export default function GameMulti() {
       height="full"
       className="justify-center items-center"
     >
-      {Object.keys(state.winner).length ? (
-        <Overlay isOpen className="create-modal">
-          <span>{"WINNER"}</span>
-          <br />
-          <span>{`name : ${state.winner.player.name}`}</span>
-          <br />
-          <span>{`score : ${state.winner.score}`}</span>
-          <br />
-          <Link
-            to="/rooms/id"
-            className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
-          >
-            Back to rooms
-          </Link>
-        </Overlay>
-      ) : null}
+      {Object.keys(state.winner).length && (
+        <Modal className="create-modal">
+          <Winner winner={state.winner} />
+        </Modal>
+      )}
 
-      <h1 className="font-bold">{state.alive ? "Still alive" : "GAME OVER"}</h1>
-      <FlexBox direction="row" className="mt-4">
-        <FlexBox direction="col" className="items-center mx-4">
+      <h2 className="text-3xl font-bold">Red Tetris</h2>
+      <FlexBox direction="row" className="space-x-8">
+        <FlexBox direction="col" className="items-center space-y-4">
+          <NextPieces nextPieces={nextPieces} />
           <Timer />
           <Score score={score} />
           <Level level={state.level} />
           <LinesRemoved lines={linesRemoved} />
-          <NextPieces nextPieces={nextPieces} />
         </FlexBox>
 
         <FlexBox
@@ -232,3 +221,23 @@ const Timer = React.memo(() => {
 
   return <p>{elapsedTime}</p>;
 });
+
+const Winner = ({ winner }) => (
+  <FlexBox direction="col">
+    <h2 className="text-2xl font-bold space-y-4">And the winner is:</h2>
+
+    <h3 className="text-center text-xl font-semibold">{winner.player.name}</h3>
+
+    <div>
+      <h3 className="text-lg font-semibold">SCORE</h3>
+      <span className="flex justify-center">{winner.score}</span>
+    </div>
+
+    <Link
+      to="/rooms"
+      className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold"
+    >
+      Back to rooms
+    </Link>
+  </FlexBox>
+);
