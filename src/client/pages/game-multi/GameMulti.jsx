@@ -139,7 +139,7 @@ export default function GameMulti() {
       height="full"
       className="justify-center items-center"
     >
-      {Object.keys(state.winner).length && (
+      {Object.keys(state.winner).length != 0 && (
         <Modal className="create-modal">
           <Winner winner={state.winner} />
         </Modal>
@@ -167,7 +167,6 @@ export default function GameMulti() {
             colHeight={6}
           />
         </FlexBox>
-
         <ScatteringGrid />
       </FlexBox>
     </FlexBox>
