@@ -4,7 +4,7 @@ import TetrisGrid from "components/tetris/Grid";
 import { useTetrisGame, useGameBoard, useNextPieces } from "hooks";
 import { Link } from "react-router-dom";
 import { GameContext } from "store";
-import NextPieces from "./NextPieces";
+import NextPieces from "components/tetris/NextPieces";
 import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
@@ -19,6 +19,7 @@ import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Overlay from "components/overlay/Overlay";
 import { socket, setupSocketGame } from "store/middleware/sockets";
+import ScatteringGrid from "components/tetris/ScatteringGrid";
 
 export default function GameMulti() {
   const { state: stateStore, dispatch: dispatchStore } = React.useContext(
@@ -120,7 +121,6 @@ export default function GameMulti() {
       dispatch(setPlayerIsAlive(false));
       dispatchStore(setGameStarted({}));
       dispatch(setGame({}));
-      // dispatch(setWinner({}));
     }
   }, [state.winner]);
 
@@ -140,8 +140,8 @@ export default function GameMulti() {
       className="justify-center items-center"
     >
       {Object.keys(state.winner).length ? (
-        <Overlay isOpen={true} className="create-modal">
-          <span>{`WINNER`}</span>
+        <Overlay isOpen className="create-modal">
+          <span>{"WINNER"}</span>
           <br />
           <span>{`name : ${state.winner.player.name}`}</span>
           <br />
@@ -155,20 +155,17 @@ export default function GameMulti() {
           </Link>
         </Overlay>
       ) : null}
-      <Link
-        to="/"
-        className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
-      >
-        Retour accueil
-      </Link>
-      <button
-        onClick={() => methods.malus(2)}
-        className="text-red-600 bg-grey-200 border-2 border-red-600 p-2 rounded"
-      >
-        TEST MALUS
-      </button>
+
       <h1 className="font-bold">{state.alive ? "Still alive" : "GAME OVER"}</h1>
       <FlexBox direction="row" className="mt-4">
+        <FlexBox direction="col" className="items-center mx-4">
+          <Timer />
+          <Score score={score} />
+          <Level level={state.level} />
+          <LinesRemoved lines={linesRemoved} />
+          <NextPieces nextPieces={nextPieces} />
+        </FlexBox>
+
         <FlexBox
           direction="col"
           width={64}
@@ -181,42 +178,8 @@ export default function GameMulti() {
             colHeight={6}
           />
         </FlexBox>
-        <FlexBox direction="col" className="items-center mx-4">
-          <Timer />
-          <Score score={score} />
-          <Level level={state.level} />
-          <LinesRemoved lines={linesRemoved} />
-          <NextPieces nextPieces={nextPieces} />
-        </FlexBox>
-        <FlexBox direction="col" className="items-center mx-4">
-          <span>{`OPPONENTS`}</span>
-          {Object.entries(state.game.players || {}).map(([key, el]) => (
-            <FlexBox
-              direction="col"
-              className="items-center"
-              key={`player-${key}`}
-            >
-              {el?.player.id !== stateStore?.player?.id && (
-                <div>
-                  <span>{`name : ${el?.player.name}`}</span>
-                  <br />
-                  <span>{`score : ${el?.score}`}</span>
-                  <br />
-                  <span>{`status : ${
-                    el?.loser ? "lost" : "still playing"
-                  }`}</span>
-                  <br />
-                  <TetrisGrid
-                    grid={el?.board}
-                    currentPieceColor={"blocked"}
-                    rowHeight={6}
-                    colHeight={6}
-                  />
-                </div>
-              )}
-            </FlexBox>
-          ))}
-        </FlexBox>
+
+        <ScatteringGrid />
       </FlexBox>
     </FlexBox>
   );
