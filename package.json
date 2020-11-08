@@ -13,7 +13,8 @@
     "coverage": "jest --coverage",
     "format": "prettier --write .",
     "test-ci": "jest --runInBand",
-    "format-ci": "prettier --check ."
+    "format-ci": "prettier --check .",
+    "clean-srv": "sudo docker stop redis && sudo docker rm redis && sudo docker run -p 6379:6379 --name redis -d redis && npm run srv-dev"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.11.5",
