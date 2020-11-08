@@ -26,6 +26,10 @@ export default function LobbyContainer() {
     }
   }, [state.lobby]);
 
+  React.useEffect(() => {
+    open();
+  }, []);
+
   const close = () => {
     setTranslate(false);
   };
