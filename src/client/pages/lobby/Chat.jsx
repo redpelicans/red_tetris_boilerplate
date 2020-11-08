@@ -26,6 +26,7 @@ export default function Chat({ state }) {
 
   const sendMessage = () => {
     if (message && message !== "") {
+      console.log("salutnico");
       const sender = state.player.name;
       const lobbyId = state?.lobby?.id;
       socket.emit(MESSAGE.SEND, { message, sender, lobbyId });

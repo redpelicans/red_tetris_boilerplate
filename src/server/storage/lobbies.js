@@ -182,6 +182,8 @@ export const startGame = async (playerId, lobbyId) => {
     return Response.error(LOBBY.START, "All the players need to be ready!");
   }
 
+  const newPlayers = setAllPlayersReady(lobbies[lobbyId].players);
+  lobbies[lobbyId].players = newPlayers;
   lobbies[lobbyId].isPlaying = true;
   await setComplexObjectToRedis("lobbies", lobbies);
 
@@ -279,4 +281,11 @@ const isLobbyNameValid = (lobbyName) => {
 
 const isMaxPlayerValid = (maxPlayer) => {
   return maxPlayer >= 2 && maxPlayer <= 12;
+};
+
+const setAllPlayersReady = (players) => {
+  return players.map((player) => ({
+    ...player,
+    ready: false,
+  }));
 };

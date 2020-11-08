@@ -65,6 +65,7 @@ export function setupSocketRooms(dispatch) {
   });
 
   socket.on(MESSAGE.PUBLISH, (data) => {
+    console.log("coucou");
     dispatch(addMessage(data));
   });
 }

@@ -82,8 +82,6 @@ export const handlerStartGame = async (socket, { lobbyId, ownerId }) => {
       lobbyId,
     });
 
-    // unsub from group:lobbies?
-
     eventEmitter.emit(event.lobbies.change, {
       socket,
     });
