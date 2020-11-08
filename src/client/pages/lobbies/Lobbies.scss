@@ -24,6 +24,10 @@
 .lobby-item {
   @apply border border-grey-200 justify-between items-center rounded-lg shadow-md p-3 mb-3;
 
+  &:hover {
+    @apply border-red-200;
+  }
+
   .status-dot {
     @apply h-5 w-5 rounded-md mr-2;
   }
