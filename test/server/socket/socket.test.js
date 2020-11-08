@@ -244,7 +244,7 @@ describe("Socket tests", () => {
     };
   });
 
-  test("Should get new pieces", (done) => {
+  test.skip("Should get new pieces", (done) => {
     socketClient.on("piece:send", (response) => {
       expect(response.length).toEqual(3);
       socketClient.off("piece:send");
