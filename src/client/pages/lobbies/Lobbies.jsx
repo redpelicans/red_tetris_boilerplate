@@ -94,7 +94,6 @@ export default function Lobbies() {
 }
 
 const LobbyList = ({ filteredLobbies, state, dispatch }) => (
-  // at less than 600 delete min height
   <FlexBox
     direction="col"
     wrap="no-wrap"
