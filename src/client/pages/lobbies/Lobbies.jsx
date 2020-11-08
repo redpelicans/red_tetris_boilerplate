@@ -100,9 +100,18 @@ const LobbyList = ({ filteredLobbies, state, dispatch }) => (
     wrap="no-wrap"
     className="min-h-3/4 my-6 overflow-y-scroll hide-scroll"
   >
-    {filteredLobbies.map((lobby, index) => (
-      <LobbyItem lobby={lobby} key={index} state={state} dispatch={dispatch} />
-    ))}
+    {filteredLobbies.length > 0 ? (
+      filteredLobbies.map((lobby, index) => (
+        <LobbyItem
+          lobby={lobby}
+          key={index}
+          state={state}
+          dispatch={dispatch}
+        />
+      ))
+    ) : (
+      <p className="text-center italic">There is no lobby.</p>
+    )}
   </FlexBox>
 );
 
