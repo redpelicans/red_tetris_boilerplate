@@ -135,8 +135,8 @@ export default function GameMulti() {
   return (
     <FlexBox
       direction="col"
-      width={"full"}
-      height={"full"}
+      width="full"
+      height="full"
       className="justify-center items-center"
     >
       {Object.keys(state.winner).length ? (

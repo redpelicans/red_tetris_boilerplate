@@ -68,8 +68,8 @@ export default function GameSolo() {
   return (
     <FlexBox
       direction="col"
-      width={"full"}
-      height={"full"}
+      width="full"
+      height="full"
       className="justify-center items-center space-y-4"
     >
       {!state.alive && (
