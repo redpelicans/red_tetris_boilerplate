@@ -170,7 +170,7 @@ describe("Socket tests", () => {
 
     socketClient.emit("message:send", {
       message: "message",
-      player: { name: "player1" },
+      sender: { name: "player1" },
       lobbyId: lobbyId,
     });
   });
