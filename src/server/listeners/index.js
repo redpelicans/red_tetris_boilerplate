@@ -6,6 +6,7 @@ import { LOBBY } from "../../config/actions/lobby";
 import { PLAYERS } from "../../config/actions/players";
 import { MESSAGE } from "../../config/actions/message";
 import { GAME } from "../../config/actions/game";
+import { PIECE } from "../../config/actions/piece";
 import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
 import { getLobby, clearPlayerFromLobbies } from "storage/lobbies";
 import { popPlayer, getPlayerId } from "storage/players";
@@ -147,6 +148,11 @@ eventEmitter.on(event.game.winner, ({ winner, gameId }) => {
   eventEmitter.emit(event.room.clear, {
     room: `${GROUP_DOMAIN}:game-${gameId}`,
   });
+});
+
+// Piece Send
+eventEmitter.on(event.piece.send, ({ pieces, gameId }) => {
+  io.in(`${GROUP_DOMAIN}:game-${gameId}`).emit(PIECE.SEND, pieces);
 });
 
 // // Lobby Leaver

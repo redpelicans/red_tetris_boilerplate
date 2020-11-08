@@ -1,4 +1,6 @@
 import React from "react";
+import { PIECE } from "../../../config/actions/piece";
+import { socket } from "store/middleware/sockets";
 
 // MOCK
 
@@ -20,7 +22,7 @@ function fetchFromMock(n) {
 
 // END OF MOCK
 
-function useNextPieces() {
+function useNextPieces(gameId) {
   const [nextPieces, setNextPieces] = React.useState(() => fetchFromMock(3));
 
   function pullNextPiece() {
@@ -28,14 +30,20 @@ function useNextPieces() {
 
     setNextPieces((oldPieces) => {
       nextPiece = oldPieces[0];
-      const fetchedPiece = fetchFromMock(1);
-      return [...oldPieces.slice(1), ...fetchedPiece];
+
+      if (oldPieces.length < 3) {
+        socket.emit(PIECE.GET, {
+          gameId,
+          nbPieces: 3,
+        });
+      }
+      return oldPieces.slice(1);
     });
 
     return nextPiece;
   }
 
-  return { nextPieces, pullNextPiece };
+  return { nextPieces, pullNextPiece, setNextPieces };
 }
 
 export default useNextPieces;

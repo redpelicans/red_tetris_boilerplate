@@ -21,7 +21,6 @@ import {
   setLobby,
   setLobbyResponse,
   addMessage,
-  setNextPieces,
   setGameStarted,
 } from "actions/store";
 
@@ -31,6 +30,7 @@ import {
   setLoser,
   setWinner,
   setPenalty,
+  setNextPieces,
 } from "actions/game";
 
 export function setupSocketPlayer(dispatch) {
@@ -65,15 +65,14 @@ export function setupSocketRooms(dispatch) {
   });
 
   socket.on(MESSAGE.PUBLISH, (data) => {
-    console.log("coucou");
     dispatch(addMessage(data));
   });
 }
 
 export function setupSocketGame(dispatch) {
-  // socket.on(PIECE.SEND, (data) => {
-  //   dispatch(setNextPieces(data));
-  // });
+  socket.on(PIECE.SEND, (data) => {
+    dispatch(setNextPieces(data));
+  });
 
   socket.on(GAME.GET_SCORE, (data) => {
     dispatch(setScore(data));

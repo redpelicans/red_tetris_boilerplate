@@ -8,6 +8,7 @@ import {
   SET_LOSER,
   SET_WINNER,
   SET_PENALTY,
+  SET_NEXT_PIECES,
 } from "actions/game";
 import { pipe } from "helpers/functional";
 import { lowerOrEqualThan, divideBy } from "helpers/currying";
@@ -21,6 +22,7 @@ export const initialState = {
   game: {},
   winner: {},
   penalty: 0,
+  nextPieces: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -73,6 +75,8 @@ export default function reducer(state = initialState, action) {
       return { ...state, winner: action.winner };
     case SET_PENALTY:
       return { ...state, penalty: action.nbLinePenalty };
+    case SET_NEXT_PIECES:
+      return { ...state, nextPieces: action.pieces };
     default:
       return state;
   }

@@ -73,7 +73,16 @@ export default function GameMulti() {
     [state.game.id],
   );
 
-  const { nextPieces, pullNextPiece } = useNextPieces();
+  const { nextPieces, pullNextPiece, setNextPieces } = useNextPieces(
+    state.game.id,
+  );
+
+  React.useEffect(() => {
+    if (state.nextPieces && state.nextPieces.length > 0) {
+      setNextPieces((old) => [...old, ...state.nextPieces]);
+    }
+  }, [state.nextPieces]);
+
   const { grid, piece, ...methods } = useGameBoard(
     10,
     20,
