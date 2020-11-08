@@ -46,7 +46,7 @@ export default function LobbyContainer() {
         <FlexBox
           width="10"
           height="10"
-          className="toggle"
+          className="toggle font-bold text-white font-serif"
           onClick={() => setTranslate((e) => !e)}
         >
           {translate ? ">" : "<"}

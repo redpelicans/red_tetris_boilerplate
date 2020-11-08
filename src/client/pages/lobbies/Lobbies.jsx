@@ -101,9 +101,18 @@ const LobbyList = ({ filteredLobbies, state, dispatch }) => (
     wrap="no-wrap"
     className="min-h-3/4 my-6 overflow-y-scroll hide-scroll"
   >
-    {filteredLobbies.map((lobby, index) => (
-      <LobbyItem lobby={lobby} key={index} state={state} dispatch={dispatch} />
-    ))}
+    {filteredLobbies.length > 0 ? (
+      filteredLobbies.map((lobby, index) => (
+        <LobbyItem
+          lobby={lobby}
+          key={index}
+          state={state}
+          dispatch={dispatch}
+        />
+      ))
+    ) : (
+      <p className="text-center italic">There is no lobby.</p>
+    )}
   </FlexBox>
 );
 
@@ -151,8 +160,8 @@ const JoinButton = ({ players, lobbies }) => {
       onClick={handleClick}
     >
       <FlexBox direction="col">
-        <span className="text-base text-white">Join Game</span>
-        <span className="text-s text-white">
+        <span className="font-semibold text-white">Join Game</span>
+        <span className="text-sm text-white">
           {Object.keys(players).length} players connected
         </span>
       </FlexBox>
@@ -162,6 +171,6 @@ const JoinButton = ({ players, lobbies }) => {
 
 const CreateButton = ({ onClick, ...rest }) => (
   <button className="w-1/3 action-btn" onClick={onClick} {...rest}>
-    <span className="text-base text-white">Create Lobby</span>
+    <span className="font-semibold text-white">Create Lobby</span>
   </button>
 );

@@ -25,12 +25,12 @@
   @apply border border-grey-200 justify-between items-center rounded-lg shadow-md p-3 mb-3;
 
   .status-dot {
-    @apply h-5 w-5 rounded-md mr-2;
+    @apply h-3 w-3 rounded-full mr-2;
   }
 }
 
 .action-btn {
-  @apply text-center bg-red-400 rounded-lg shadow-lg;
+  @apply text-center bg-red-400 rounded-lg shadow-lg py-1;
 
   &:hover {
     @apply bg-red-600;

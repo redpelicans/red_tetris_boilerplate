@@ -11,7 +11,7 @@
 }
 
 .red-button {
-  @apply w-48% flex-shrink-0 bg-red-400 text-sm text-white py-1 px-2 rounded;
+  @apply w-48% flex-shrink-0 bg-red-400 text-sm text-white py-1 px-2 rounded font-semibold;
 
   &:hover {
     @apply bg-red-600;
