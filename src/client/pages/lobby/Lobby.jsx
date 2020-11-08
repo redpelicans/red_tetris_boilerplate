@@ -2,7 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
-import { setLobby } from "actions/store";
+import { setLobby, setLobbiesResponse, setLobbyResponse } from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
 import { socket } from "store/middleware/sockets";
@@ -18,6 +18,7 @@ export default function Lobby({ open, close, state, dispatch }) {
         notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
         dispatch(setLobby({}));
+        dispatch(setLobbyResponse({}));
         close();
         navigate("/rooms");
       }
@@ -42,6 +43,7 @@ export default function Lobby({ open, close, state, dispatch }) {
         notify(state?.lobbiesResponse?.reason);
       } else if (state.lobbiesResponse.type === "success") {
         dispatch(setLobby({}));
+        dispatch(setLobbiesResponse({}));
         close();
         navigate("/rooms");
       }
