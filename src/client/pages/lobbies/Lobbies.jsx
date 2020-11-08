@@ -113,10 +113,10 @@ const ButtonsLobbies = ({ children }) => (
 );
 
 const JoinButton = ({ players }) => (
-  <button className="w-3/5 text-center bg-red-400 hover:bg-red-600 rounded-lg shadow-lg">
+  <button className="w-3/5 text-center bg-red-400 hover:bg-red-600 rounded-lg shadow-lg font-semibold py-1">
     <FlexBox direction="col">
-      <span className="text-base text-white">Join Game</span>
-      <span className="text-s text-white">
+      <span className=" text-white">Join Game</span>
+      <span className="text-sm text-white">
         {Object.keys(players).length} players connected
       </span>
     </FlexBox>
@@ -125,10 +125,10 @@ const JoinButton = ({ players }) => (
 
 const CreateButton = ({ onClick, ...rest }) => (
   <button
-    className="text-base w-1/3 text-center bg-red-400 hover:bg-red-600 rounded-lg shadow-lg"
+    className="w-1/3 text-center bg-red-400 hover:bg-red-600 rounded-lg shadow-lg font-semibold  py-1"
     onClick={onClick}
     {...rest}
   >
-    <span className="text-base text-white">Create Lobby</span>
+    <span className=" text-white">Create Lobby</span>
   </button>
 );
