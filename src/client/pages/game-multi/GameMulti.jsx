@@ -5,7 +5,6 @@ import { useTetrisGame, useGameBoard, useNextPiecesMulti } from "hooks";
 import { Link } from "react-router-dom";
 import { GameContext } from "store";
 import NextPieces from "components/tetris/NextPieces";
-import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
 import { DEFAULT_REPEAT_TIMEOUT } from "constants/tetris";
@@ -21,6 +20,8 @@ import Modal from "components/modals/Modal";
 import { socket, socketGameOn, socketGameOff } from "store/middleware";
 import ScatteringGrid from "components/tetris/ScatteringGrid";
 import { deepCopy } from "helpers/functional";
+import { useTranslation } from "react-i18next";
+import { Score, LinesRemoved, Level, Timer } from "components/tetris/Stats";
 
 export default function GameMulti() {
   const { state: stateStore, dispatch: dispatchStore } = React.useContext(
@@ -143,7 +144,6 @@ export default function GameMulti() {
     if (Object.keys(state.winner).length) {
       dispatch(setPlayerIsAlive(false));
       dispatchStore(setGameStarted({}));
-      // dispatch(setGame({}));
     }
   }, [state.winner]);
 
@@ -162,7 +162,7 @@ export default function GameMulti() {
       height="full"
       className="justify-center items-center"
     >
-      {Object.keys(state.winner).length != 0 && (
+      {Object.keys(state.winner).length !== 0 && (
         <Modal className="create-modal">
           <Winner winner={state.winner} game={state.game} />
         </Modal>
@@ -196,70 +196,30 @@ export default function GameMulti() {
   );
 }
 
-const Score = React.memo(({ score }) => (
-  <FlexBox direction="col" className="relative items-center">
-    <h1 className="font-bold w-32 text-center">SCORE</h1>
-    <span>{score}</span>
-  </FlexBox>
-));
+const Winner = ({ winner }) => {
+  const { t } = useTranslation();
 
-const LinesRemoved = React.memo(({ lines }) => <p>{lines} Lines removed</p>);
+  return (
+    <FlexBox direction="col">
+      <h2 className="text-2xl font-bold space-y-4">
+        {t("pages:game.winner")}:
+      </h2>
 
-const Level = React.memo(({ level }) => (
-  <h1 className="font-bold">Level {level}</h1>
-));
+      <h3 className="text-center text-xl font-semibold">
+        {winner.player.name}
+      </h3>
 
-const Timer = React.memo(() => {
-  const { state } = React.useContext(GameContext);
-  const startTime = new Date();
+      <div>
+        <h3 className="text-lg font-semibold">{t("pages.game.score")}</h3>
+        <span className="flex justify-center">{winner.score}</span>
+      </div>
 
-  const [elapsedTime, setElapsedTime] = React.useState("00:00");
-  React.useEffect(() => {
-    const formatTimeUnit = (timeUnit) =>
-      timeUnit < 10 ? `0${timeUnit}` : timeUnit;
-
-    const formatElapsedTime = (diffTime) => {
-      const minutes = diffTime.getMinutes();
-      const seconds = diffTime.getSeconds();
-
-      return `${formatTimeUnit(minutes)}:${formatTimeUnit(seconds)}`;
-    };
-
-    const getNewElapsedTime = () => {
-      const newElapsedTime = new Date(getElapsedTime(startTime));
-      const newElapsedTimeFormatted = formatElapsedTime(newElapsedTime);
-      return newElapsedTimeFormatted;
-    };
-
-    if (state.alive) {
-      const timerInterval = setInterval(
-        () => setElapsedTime(getNewElapsedTime()),
-        1000,
-      );
-
-      return () => clearInterval(timerInterval);
-    }
-  }, [state.alive]);
-
-  return <p>{elapsedTime}</p>;
-});
-
-const Winner = ({ winner, game }) => (
-  <FlexBox direction="col">
-    <h2 className="text-2xl font-bold space-y-4">And the winner is:</h2>
-
-    <h3 className="text-center text-xl font-semibold">{winner.player.name}</h3>
-
-    <div>
-      <h3 className="text-lg font-semibold">SCORE</h3>
-      <span className="flex justify-center">{winner.score}</span>
-    </div>
-
-    <Link
-      to="/rooms"
-      className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold"
-    >
-      Back to rooms
-    </Link>
-  </FlexBox>
-);
+      <Link
+        to="/rooms"
+        className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold"
+      >
+        {t("pages:game.back_to_lobbies")}
+      </Link>
+    </FlexBox>
+  );
+};

@@ -4,7 +4,6 @@ import TetrisGrid from "components/tetris/Grid";
 import { useTetrisGame, useGameBoard, useNextPiecesSolo } from "hooks";
 import { GameContext } from "store";
 import NextPieces from "components/tetris/NextPieces";
-import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
 import { DEFAULT_REPEAT_TIMEOUT } from "constants/tetris";
@@ -14,8 +13,11 @@ import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
 import GameOverStats from "./GameOverStats";
 import Modal from "components/modals/Modal";
+import { useTranslation } from "react-i18next";
+import { Score, LinesRemoved, Level, Timer } from "components/tetris/Stats";
 
 export default function GameSolo() {
+  const { t } = useTranslation();
   const { state, dispatch } = React.useContext(GameContext);
   const gameOver = () => {
     dispatch(setPlayerIsAlive(false));
@@ -85,7 +87,7 @@ export default function GameSolo() {
       <h2 className="text-3xl font-bold">Red Tetris</h2>
       <FlexBox direction="row" className="space-x-8">
         <FlexBox direction="col" className="items-center space-y-4">
-          <h3 className="font-bold text-2xl">Stats</h3>
+          <h3 className="font-bold text-2xl">{t("pages.game.stats")}</h3>
           <Timer />
           <Score score={score} />
           <Level level={state.level} />
@@ -110,51 +112,3 @@ export default function GameSolo() {
     </FlexBox>
   );
 }
-
-const Score = React.memo(({ score }) => (
-  <FlexBox direction="col" className="relative items-center">
-    <h1 className="font-bold w-32 text-center text-lg">SCORE</h1>
-    <span>{score}</span>
-  </FlexBox>
-));
-
-const LinesRemoved = React.memo(({ lines }) => <p>{lines} Lines removed</p>);
-
-const Level = React.memo(({ level }) => (
-  <h1 className="font-bold text-lg">Level {level}</h1>
-));
-
-const Timer = React.memo(() => {
-  const { state } = React.useContext(GameContext);
-  const startTime = new Date();
-
-  const [elapsedTime, setElapsedTime] = React.useState("00:00");
-  React.useEffect(() => {
-    const formatTimeUnit = (timeUnit) =>
-      timeUnit < 10 ? `0${timeUnit}` : timeUnit;
-
-    const formatElapsedTime = (diffTime) => {
-      const minutes = diffTime.getMinutes();
-      const seconds = diffTime.getSeconds();
-
-      return `${formatTimeUnit(minutes)}:${formatTimeUnit(seconds)}`;
-    };
-
-    const getNewElapsedTime = () => {
-      const newElapsedTime = new Date(getElapsedTime(startTime));
-      const newElapsedTimeFormatted = formatElapsedTime(newElapsedTime);
-      return newElapsedTimeFormatted;
-    };
-
-    if (state.alive) {
-      const timerInterval = setInterval(
-        () => setElapsedTime(getNewElapsedTime()),
-        1000,
-      );
-
-      return () => clearInterval(timerInterval);
-    }
-  }, [state.alive]);
-
-  return <p>{elapsedTime}</p>;
-});
