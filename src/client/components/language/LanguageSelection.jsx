@@ -1,9 +1,10 @@
 import React from "react";
 import i18n from "locales/i18n";
+import "./LanguageSelection.scss";
 
 const LANGUAGES = ["fr", "en"];
 
-const renderLangOptions = () =>
+const LangOptions = () =>
   LANGUAGES.map((lang, idx) => (
     <option value={lang} key={idx}>
       {lang}
@@ -17,11 +18,8 @@ export default function LanguageSelection() {
   };
 
   return (
-    <select
-      className="font-thin bg-white absolute top-0 right-0 z-50"
-      onChange={changeLanguage}
-    >
-      {renderLangOptions()}
+    <select className="lang-select" onChange={changeLanguage}>
+      <LangOptions />
     </select>
   );
 }
