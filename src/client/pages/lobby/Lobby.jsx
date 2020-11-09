@@ -2,13 +2,18 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
-import { setLobby, setLobbiesResponse, setLobbyResponse } from "actions/store";
+import {
+  setLobby,
+  setLobbiesResponse,
+  setLobbyResponse,
+  resetMessages,
+} from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
 import { socket } from "store/middleware/sockets";
 import { toast } from "react-toastify";
 
-export default function Lobby({ open, close, state, dispatch }) {
+export default function Lobby({ open, state, dispatch }) {
   const notify = (error) => toast.error(error);
   const { navigate } = useNavigate();
 
@@ -19,6 +24,7 @@ export default function Lobby({ open, close, state, dispatch }) {
       } else if (state.lobbyResponse.type === "success") {
         dispatch(setLobby({}));
         dispatch(setLobbyResponse({}));
+        dispatch(resetMessages());
       }
     } else if (state.lobbyResponse.action === LOBBY.READY) {
       if (state.lobbyResponse.type === "error") {
@@ -42,8 +48,7 @@ export default function Lobby({ open, close, state, dispatch }) {
       } else if (state.lobbiesResponse.type === "success") {
         dispatch(setLobby({}));
         dispatch(setLobbiesResponse({}));
-        close();
-        navigate("/rooms");
+        dispatch(resetMessages());
       }
     }
   }, [state.lobbiesResponse]);
