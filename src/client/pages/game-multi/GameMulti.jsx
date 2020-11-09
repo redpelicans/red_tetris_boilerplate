@@ -139,7 +139,7 @@ export default function GameMulti() {
     if (Object.keys(state.winner).length) {
       dispatch(setPlayerIsAlive(false));
       dispatchStore(setGameStarted({}));
-      dispatch(setGame({}));
+      // dispatch(setGame({}));
     }
   }, [state.winner]);
 
@@ -160,7 +160,7 @@ export default function GameMulti() {
     >
       {Object.keys(state.winner).length != 0 && (
         <Modal className="create-modal">
-          <Winner winner={state.winner} />
+          <Winner winner={state.winner} game={state.game} />
         </Modal>
       )}
 
@@ -240,7 +240,7 @@ const Timer = React.memo(() => {
   return <p>{elapsedTime}</p>;
 });
 
-const Winner = ({ winner }) => (
+const Winner = ({ winner, game }) => (
   <FlexBox direction="col">
     <h2 className="text-2xl font-bold space-y-4">And the winner is:</h2>
 

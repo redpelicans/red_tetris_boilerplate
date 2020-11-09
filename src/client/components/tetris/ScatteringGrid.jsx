@@ -18,7 +18,7 @@ export default function ScatteringGrid() {
     >
       <p
         className={
-          "font-semibold text-lg" + (opponent.looser ? " line-through" : "")
+          "font-semibold text-lg" + (opponent.loser ? " line-through" : "")
         }
       >
         {opponent.player.name}
