@@ -204,6 +204,20 @@ export const clearPlayerFromLobbies = async (playerId) => {
   return null;
 };
 
+export const setLobbyNotPlaying = async (lobbyId) => {
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+
+  const lobby = lobbies?.[lobbyId];
+  if (!lobby) {
+    return null;
+  }
+
+  lobbies[lobbyId].isPlaying = false;
+  await setComplexObjectToRedis("lobbies", lobbies);
+
+  return lobbies[lobbyId];
+};
+
 const isLobbyNameTaken = (lobbies, name) => {
   const res = Object.keys(lobbies).some((key) => lobbies[key].name === name);
   return res;

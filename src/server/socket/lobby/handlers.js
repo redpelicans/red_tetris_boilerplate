@@ -23,13 +23,10 @@ export const handlerSubscribeLobby = async (socket, { lobbyId, playerId }) => {
     socket.join(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
 
     eventEmitter.emit(event.lobby.change, {
-      socket,
       lobbyId,
     });
 
-    eventEmitter.emit(event.lobbies.change, {
-      socket,
-    });
+    eventEmitter.emit(event.lobbies.change);
   }
 };
 
@@ -44,13 +41,10 @@ export const handlerUnsubscribeLobby = async (
     socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
 
     eventEmitter.emit(event.lobby.change, {
-      socket,
       lobbyId,
     });
 
-    eventEmitter.emit(event.lobbies.change, {
-      socket,
-    });
+    eventEmitter.emit(event.lobbies.change);
   }
 };
 
@@ -59,16 +53,9 @@ export const handlerReadyLobby = async (socket, { lobbyId, playerId }) => {
   socket.emit(LOBBY.RESPONSE, response);
 
   if (response.type === "success") {
-    // socket.leave(`${GROUP_DOMAIN}:${lobbyId}`);
-
     eventEmitter.emit(event.lobby.change, {
-      socket,
       lobbyId,
     });
-
-    // eventEmitter.emit(event.lobbies.change, {
-    //   socket,
-    // });
   }
 };
 
@@ -78,18 +65,15 @@ export const handlerStartGame = async (socket, { lobbyId, ownerId }) => {
 
   if (response.type === "success") {
     eventEmitter.emit(event.lobby.change, {
-      socket,
       lobbyId,
     });
 
-    eventEmitter.emit(event.lobbies.change, {
-      socket,
-    });
+    eventEmitter.emit(event.lobbies.change);
 
     const lobby = await getLobby(lobbyId);
     const game = new Game({
       name: lobby.name,
-      owner: lobby.owner,
+      lobbyId: lobby.id,
       players: lobby.players,
     });
     await setGame(game);

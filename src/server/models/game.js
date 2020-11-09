@@ -14,11 +14,12 @@ const createPlayers = (players) => {
 };
 
 export default class Game {
-  constructor({ name, owner, players }) {
+  constructor({ name, lobbyId, players }) {
     this.id = nanoid();
+    this.lobbyId = lobbyId;
     this.name = name;
     this.over = false;
     this.players = createPlayers(players);
-    this.owner = owner;
+    // this.owner = owner;
   }
 }

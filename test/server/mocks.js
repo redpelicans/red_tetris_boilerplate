@@ -80,7 +80,7 @@ export const game1mock = {
   id: "1",
   name: "lobby1",
   over: false,
-  owner: playerObject1mock,
+  lobbyId: "1",
   players: [
     { player: playerObject1mock, score: 0, loser: false },
     { player: playerObject2mock, score: 0, loser: false },
@@ -91,7 +91,7 @@ export const game2mock = {
   id: "2",
   name: "lobby2",
   over: false,
-  owner: playerObject3mock,
+  lobbyId: "2",
   players: [
     { player: playerObject3mock, score: 0, loser: false },
     { player: playerObject4mock, score: 0, loser: false },

@@ -15,14 +15,14 @@ import { io } from "socket";
 const eventEmitter = new EventEmitter();
 
 // Lobbies change
-eventEmitter.on(event.lobbies.change, async ({ socket }) => {
+eventEmitter.on(event.lobbies.change, async () => {
   const lobbies = await getComplexObjectFromRedis("lobbies");
 
   io.in(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, lobbies);
 });
 
 // Lobby change
-eventEmitter.on(event.lobby.change, async ({ socket, lobbyId }) => {
+eventEmitter.on(event.lobby.change, async ({ lobbyId }) => {
   const lobby = (await getLobby(lobbyId)) ?? {};
   io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(LOBBY.PUBLISH, lobby);
 
@@ -58,12 +58,9 @@ eventEmitter.on(event.player.disconnect, async ({ socket }) => {
   if (lobbyId) {
     socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
     eventEmitter.emit(event.lobby.change, {
-      socket,
       lobbyId,
     });
-    eventEmitter.emit(event.lobbies.change, {
-      socket,
-    });
+    eventEmitter.emit(event.lobbies.change);
   }
 
   await popPlayer(playerId);
