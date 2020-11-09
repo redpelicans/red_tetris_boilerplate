@@ -55,7 +55,7 @@ export default function CreateLobby({ close, state, dispatch }) {
 
   return (
     <div>
-      <h1>{t("pages.lobbies.create_lobby")}</h1>
+      <h1 className="text-center">{t("pages.lobbies.create_lobby")}</h1>
       <FlexBox direction="row" className="">
         <FlexBox direction="col" className="items-center border-red-400 py-2">
           <input
