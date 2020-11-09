@@ -204,7 +204,7 @@ export const clearPlayerFromLobbies = async (playerId) => {
   return null;
 };
 
-export const setLobbyNotPlaying = async (lobbyId) => {
+export const setLobbyWon = async (lobbyId, winner) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
   const lobby = lobbies?.[lobbyId];
@@ -212,10 +212,19 @@ export const setLobbyNotPlaying = async (lobbyId) => {
     return null;
   }
 
-  lobbies[lobbyId].isPlaying = false;
+  lobby.isPlaying = false;
+  const owner = isOwner(lobby, winner.id);
+
+  if (!owner) {
+    if (isOnLobby(lobby, winner.id)) {
+      lobby.owner = winner;
+    }
+  }
+
+  lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
 
-  return lobbies[lobbyId];
+  return lobby;
 };
 
 const isLobbyNameTaken = (lobbies, name) => {
@@ -239,6 +248,10 @@ const playerIsOnLobbyByPlayerId = (lobbies, playerId) => {
   return Object.keys(lobbies).some((key) =>
     lobbies[key].players.some((el) => el.player.id === playerId),
   );
+};
+
+const isOnLobby = (lobby, playerId) => {
+  return lobby.players.some((el) => el.player.id === playerId);
 };
 
 const isOwner = (lobby, playerId) => {

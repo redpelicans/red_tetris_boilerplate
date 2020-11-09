@@ -166,7 +166,7 @@ const JoinButton = ({ players, lobbies }) => {
       <FlexBox direction="col">
         <span className="font-semibold text-white">Join Game</span>
         <span className="text-sm text-white">
-          {Object.keys(players).length} players connected
+          {Object.keys(players || {}).length} players connected
         </span>
       </FlexBox>
     </button>

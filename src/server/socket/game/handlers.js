@@ -8,7 +8,7 @@ import {
   setLoser,
   getGame,
 } from "../../storage/game";
-import { setLobbyNotPlaying } from "../../storage/lobbies";
+import { setLobbyWon } from "../../storage/lobbies";
 
 export const handlerSendScore = async (socket, { gameId, playerId, score }) => {
   await updateScore(gameId, playerId, score);
@@ -63,7 +63,7 @@ const checkWinner = async (gameId) => {
 
     const game = await getGame(gameId);
     if (Object.keys(game).length !== 0) {
-      if ((await setLobbyNotPlaying(game.lobbyId)) != null) {
+      if ((await setLobbyWon(game.lobbyId, winner.player)) != null) {
         eventEmitter.emit(event.lobby.change, {
           lobbyId: game.lobbyId,
         });
