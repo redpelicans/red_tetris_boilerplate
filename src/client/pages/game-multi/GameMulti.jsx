@@ -69,7 +69,7 @@ export default function GameMulti() {
               playerId: stateStore.player.id,
               score: newScore,
             });
-          }, 300);
+          }, 1000);
         }
         return newScore;
       });
@@ -107,7 +107,7 @@ export default function GameMulti() {
           playerId: stateStore.player.id,
           boardGame: grid,
         });
-      }, 300);
+      }, 1000);
     }
   }, [grid, state.game.id]);
 
