@@ -1,0 +1,39 @@
+{
+	"game": {
+		"back_to_lobbies": "Volver a lobbies",
+		"game_over": "Juego terminado",
+		"level": "Nivel",
+		"lines_removed": "{{count}} Línea eliminada",
+		"lines_removed_plural": "{{count}} Líneas eliminadas",
+		"main_menu": "Menú principal",
+		"next_pieces": "Próximas piezas",
+		"score": "Puntuación",
+		"stats": "Estadísticas",
+		"winner": "Ganador"
+	},
+	"home": {
+		"multiplayer": "Multijugador",
+		"new_player": "Nuevo jugador",
+		"player_name": "Seudónimo",
+		"solo": "Solo"
+	},
+	"lobbies": {
+		"create_lobby": "Crea lobby",
+		"empty_lobby_list": "No se encontró salón",
+		"join_game": "Unirse a un juego",
+		"lobby_name": "Nombre del salón",
+		"max_players": "Jugadores máximos",
+		"players_connected": "{{count}} Jugador conectado",
+		"players_connected_plural": "{{count}} Jugadores conectados",
+		"playing": "Juego actual",
+		"search_lobby": "Encuentra una sala de juegos"
+	},
+	"lobby": {
+		"delete_lobby": "Eliminar el lobby",
+		"launch_game": "Comenzar el juego",
+		"leave_lobby": "Deja el lobby",
+		"ready": "Listo",
+		"send": "Enviar",
+		"type_message": "Escribe un mensaje"
+	}
+}

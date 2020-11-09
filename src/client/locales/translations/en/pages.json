@@ -24,7 +24,7 @@
 		"lobby_name": "Lobby name",
 		"max_players": "Max players",
 		"players_connected": "{{count}} Player connected",
-		"players_connected_plural": "{{count}} Players2 connected",
+		"players_connected_plural": "{{count}} Players connected",
 		"playing": "Playing",
 		"search_lobby": "Search a lobby"
 	},

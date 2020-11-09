@@ -2,7 +2,7 @@ import React from "react";
 import i18n from "locales/i18n";
 import "./LanguageSelection.scss";
 
-const LANGUAGES = ["fr", "en"];
+const LANGUAGES = ["fr", "en", "es"];
 
 const LangOptions = () =>
   LANGUAGES.map((lang, idx) => (
