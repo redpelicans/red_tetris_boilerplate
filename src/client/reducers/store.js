@@ -20,7 +20,6 @@ export const initialState = {
   lobby: {},
   lobbyResponse: {},
   messages: [],
-
   game: {},
 };
 
