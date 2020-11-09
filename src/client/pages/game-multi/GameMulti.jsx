@@ -55,17 +55,21 @@ export default function GameMulti() {
     setLinesRemoved((oldValue) => oldValue + value);
   };
 
+  const scoreRef = React.useRef(null);
   const [score, setScore] = React.useState(0);
   const addScore = React.useCallback(
     (value) => {
       setScore((oldScore) => {
         const newScore = oldScore + value;
         if (state.game.id) {
-          socket.emit(GAME.SEND_SCORE, {
-            gameId: state.game.id,
-            playerId: stateStore.player.id,
-            score: newScore,
-          });
+          clearTimeout(scoreRef.current);
+          scoreRef.current = setTimeout(() => {
+            socket.emit(GAME.SEND_SCORE, {
+              gameId: state.game.id,
+              playerId: stateStore.player.id,
+              score: newScore,
+            });
+          }, 300);
         }
         return newScore;
       });
@@ -92,13 +96,18 @@ export default function GameMulti() {
     addRemovedLines,
   );
 
+  const boardRef = React.useRef(null);
+
   React.useEffect(() => {
     if (state.game.id) {
-      socket.emit(GAME.SEND_BOARD, {
-        gameId: state.game.id,
-        playerId: stateStore.player.id,
-        boardGame: grid,
-      });
+      clearTimeout(boardRef.current);
+      boardRef.current = setTimeout(() => {
+        socket.emit(GAME.SEND_BOARD, {
+          gameId: state.game.id,
+          playerId: stateStore.player.id,
+          boardGame: grid,
+        });
+      }, 300);
     }
   }, [grid, state.game.id]);
 
