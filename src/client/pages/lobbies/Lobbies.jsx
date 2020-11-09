@@ -12,6 +12,7 @@ import { setLobby, setLobbyResponse } from "actions/store";
 import { toast } from "react-toastify";
 import { LOBBY } from "../../../config/actions/lobby";
 import { isEmpty } from "helpers/common";
+import { useTranslation } from "react-i18next";
 
 export default function Lobbies() {
   const { state, dispatch } = React.useContext(StoreContext);
@@ -98,26 +99,32 @@ export default function Lobbies() {
   );
 }
 
-const LobbyList = ({ filteredLobbies, state, dispatch }) => (
-  <FlexBox
-    direction="col"
-    wrap="no-wrap"
-    className="min-h-3/4 my-6 overflow-y-scroll hide-scroll"
-  >
-    {filteredLobbies.length > 0 ? (
-      filteredLobbies.map((lobby, index) => (
-        <LobbyItem
-          lobby={lobby}
-          key={index}
-          state={state}
-          dispatch={dispatch}
-        />
-      ))
-    ) : (
-      <p className="text-center italic">There is no lobby.</p>
-    )}
-  </FlexBox>
-);
+const LobbyList = ({ filteredLobbies, state, dispatch }) => {
+  const { t } = useTranslation();
+
+  return (
+    <FlexBox
+      direction="col"
+      wrap="no-wrap"
+      className="min-h-3/4 my-6 overflow-y-scroll hide-scroll"
+    >
+      {filteredLobbies.length > 0 ? (
+        filteredLobbies.map((lobby, index) => (
+          <LobbyItem
+            lobby={lobby}
+            key={index}
+            state={state}
+            dispatch={dispatch}
+          />
+        ))
+      ) : (
+        <p className="text-center italic">
+          {t("pages.lobbies.empty_lobby_list")}.
+        </p>
+      )}
+    </FlexBox>
+  );
+};
 
 const ButtonsLobbies = ({ children }) => (
   <FlexBox direction="row" className="justify-between">
@@ -126,6 +133,7 @@ const ButtonsLobbies = ({ children }) => (
 );
 
 const JoinButton = ({ players, lobbies }) => {
+  const { t } = useTranslation();
   const { state } = React.useContext(StoreContext);
 
   const isDisabled =
@@ -163,17 +171,27 @@ const JoinButton = ({ players, lobbies }) => {
       onClick={handleClick}
     >
       <FlexBox direction="col">
-        <span className="font-semibold text-white">Join Game</span>
+        <span className="font-semibold text-white">
+          {t("pages.lobbies.join_game")}
+        </span>
         <span className="text-sm text-white">
-          {Object.keys(players || {}).length} players connected
+          {t("pages.lobbies.players_connected", {
+            count: Object.keys(players || {}).length,
+          })}
         </span>
       </FlexBox>
     </button>
   );
 };
 
-const CreateButton = ({ onClick, ...rest }) => (
-  <button className="w-1/3 action-btn" onClick={onClick} {...rest}>
-    <span className="font-semibold text-white">Create Lobby</span>
-  </button>
-);
+const CreateButton = ({ onClick, ...rest }) => {
+  const { t } = useTranslation();
+
+  return (
+    <button className="w-1/3 action-btn" onClick={onClick} {...rest}>
+      <span className="font-semibold text-white">
+        {t("pages.lobbies.create_lobby")}
+      </span>
+    </button>
+  );
+};

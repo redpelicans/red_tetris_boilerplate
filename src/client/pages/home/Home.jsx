@@ -66,7 +66,7 @@ const MultiPlayerGamePad = ({ setHasClicked }) => {
         <GamePad className="mr-2" model={gamePadMatrix} size={2} />
         <GamePad model={gamePadMatrix} size={2} />
       </Hoverable.Out>
-      <h2>{t("pages.home.multijoueur")}</h2>
+      <h2>{t("pages.home.multiplayer")}</h2>
     </Hoverable>
   );
 };

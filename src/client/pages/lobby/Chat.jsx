@@ -2,9 +2,11 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { MESSAGE } from "../../../config/actions/message";
 import "./Lobby.scss";
-import { socket } from "store/middleware";
+import { socket } from "store/middleware/sockets";
+import { useTranslation } from "react-i18next";
 
 export default function Chat({ state }) {
+  const { t } = useTranslation();
   const [message, setMessage] = React.useState("");
 
   const handleMessage = (e) => {
@@ -75,8 +77,7 @@ export default function Chat({ state }) {
         </ul>
         <form onSubmit={submit} className="flex justify-between ">
           <input
-            placeholder="Type your message"
-            type="text"
+            placeholder={t("pages.lobby.type_message")}
             value={message}
             onChange={handleMessage}
             className="w-84% shadow-lg pl-2 bg-grey-100"
@@ -85,7 +86,7 @@ export default function Chat({ state }) {
             className="w-15% flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded"
             type="submit"
           >
-            Send
+            {t("pages.lobby.send")}
           </button>
         </form>
       </FlexBox>
