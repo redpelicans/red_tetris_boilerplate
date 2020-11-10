@@ -41,7 +41,6 @@ export function setupSocketRooms(socket, dispatch) {
 
   socket.on(LOBBY.KICKED, () => {
     dispatch(setLobby({}));
-    dispatch(setLobbyResponse({}));
     dispatch(resetMessages());
   });
 
