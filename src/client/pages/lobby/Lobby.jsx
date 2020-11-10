@@ -48,6 +48,12 @@ export default function Lobby({ open, state, dispatch }) {
         );
         console.log("Game successfully launched!");
       }
+    } else if (state.lobbyResponse.action === LOBBY.KICK) {
+      if (state.lobbyResponse.type === "error") {
+        notify(state?.lobbyResponse?.reason);
+      } else if (state.lobbyResponse.type === "success") {
+        console.log("Player kicked from lobby!");
+      }
     }
   }, [state.lobbyResponse]);
 
