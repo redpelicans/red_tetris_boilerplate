@@ -6,6 +6,7 @@ import {
   readyLobby,
   startGame,
   getLobby,
+  kickedFromLobby,
 } from "storage/lobbies";
 import { LOBBY } from "../../../config/actions/lobby";
 import GROUP_DOMAIN from "../../../config/actions/group";
@@ -39,6 +40,27 @@ export const handlerUnsubscribeLobby = async (
 
   if (response.type === "success") {
     socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
+
+    eventEmitter.emit(event.lobby.change, {
+      lobbyId,
+    });
+
+    eventEmitter.emit(event.lobbies.change);
+  }
+};
+
+export const handlerKickLobby = async (
+  socket,
+  { ownerId, playerId, lobbyId },
+) => {
+  const response = await kickedFromLobby(ownerId, playerId, lobbyId);
+  socket.emit(LOBBY.RESPONSE, response);
+
+  if (response.type === "success") {
+    eventEmitter.emit(event.lobby.kicked, {
+      socketId: response.payload.socketId,
+      lobbyId,
+    });
 
     eventEmitter.emit(event.lobby.change, {
       lobbyId,

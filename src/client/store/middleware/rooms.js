@@ -10,6 +10,7 @@ import {
   setLobby,
   setLobbyResponse,
   addMessage,
+  resetMessages,
   setGameStarted,
 } from "actions/store";
 
@@ -36,6 +37,11 @@ export function setupSocketRooms(socket, dispatch) {
 
   socket.on(PLAYERS.PUBLISH, (data) => {
     dispatch(setPlayers(data));
+  });
+
+  socket.on(LOBBY.KICKED, () => {
+    dispatch(setLobby({}));
+    dispatch(resetMessages());
   });
 
   socket.on(MESSAGE.PUBLISH, (data) => {

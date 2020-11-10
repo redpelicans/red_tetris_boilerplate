@@ -10,6 +10,12 @@ export const validationSubscribeLobby = {
   playerId: Joi.string().required().description("The id of the player"),
 };
 
+export const validationKickLobby = {
+  ownerId: Joi.string().required().description("The id of the owner"),
+  playerId: Joi.string().required().description("The id of the player"),
+  lobbyId: Joi.string().required().description("The id of the lobby"),
+};
+
 export const validationReadyLobby = {
   lobbyId: Joi.string().required().description("The id of the lobby"),
   playerId: Joi.string().required().description("The id of the player"),

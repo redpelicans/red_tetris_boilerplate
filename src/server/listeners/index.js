@@ -49,11 +49,19 @@ eventEmitter.on(event.players.change, async ({ socket }) => {
 
 // Lobbies Subscribe
 eventEmitter.on(event.lobbies.subscribe, async ({ socket }) => {
+  // socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
+  // socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
+
   const players = await getComplexObjectFromRedis("players");
   socket.emit(PLAYERS.PUBLISH, players);
 
   const lobbies = await getComplexObjectFromRedis("lobbies");
   socket.emit(LOBBIES.PUBLISH, lobbies);
+});
+
+eventEmitter.on(event.lobby.kicked, async ({ socketId, lobbyId }) => {
+  io.sockets.connected[socketId].leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
+  io.sockets.connected[socketId].emit(LOBBY.KICKED);
 });
 
 // Player disconnect

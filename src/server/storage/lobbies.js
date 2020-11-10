@@ -99,6 +99,39 @@ export const joinLobby = async (player, lobbyId) => {
   return Response.success(LOBBY.SUBSCRIBE, lobby);
 };
 
+export const kickedFromLobby = async (ownerId, playerId, lobbyId) => {
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+
+  const lobby = lobbies?.[lobbyId];
+  if (!lobby) {
+    return Response.error(LOBBY.KICK, "Lobby doesn't exists!");
+  }
+
+  if (ownerId === playerId) {
+    return Response.error(LOBBY.KICK, "You cannot kick yourself!");
+  }
+
+  const owner = isOwner(lobby, ownerId);
+  if (!owner) {
+    return Response.error(LOBBY.KICK, "You need to be the owner of the Lobby!");
+  }
+
+  const playerIsInLobby = isOnLobby(lobby, playerId);
+  if (!playerIsInLobby) {
+    return Response.error(LOBBY.KICK, "The player is not in your Lobby!");
+  }
+
+  const playerEl = getPlayer(lobby.players, playerId);
+  const socketId = playerEl.player.socketId;
+  const newPlayers = deletePlayerFromPlayers(lobby.players, playerId);
+
+  lobby.players = newPlayers;
+  lobbies[lobbyId] = lobby;
+  await setComplexObjectToRedis("lobbies", lobbies);
+
+  return Response.success(LOBBY.KICK, { socketId });
+};
+
 export const leaveLobby = async (playerId, lobbyId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
@@ -125,7 +158,6 @@ export const leaveLobby = async (playerId, lobbyId) => {
   if (owner) {
     const nextOwner = getNextOwner(lobby.players, playerId);
     lobby.owner = nextOwner.player;
-    /* Handle info on front? */
   }
 
   const newPlayers = deletePlayerFromPlayers(lobby.players, playerId);
@@ -285,6 +317,10 @@ const deletePlayerFromPlayers = (players, playerId) => {
 
 const getNextOwner = (players, playerId) => {
   return players.find((el) => el.player.id !== playerId);
+};
+
+const getPlayer = (players, playerId) => {
+  return players.find((el) => el.player.id === playerId);
 };
 
 export const getLobbyIdByPlayerId = (lobbies, playerId) => {

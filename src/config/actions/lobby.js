@@ -8,7 +8,9 @@ export const LOBBY = {
   PUBLISH: `${domain}:publish`,
   RESPONSE: `${domain}:response`,
   READY: `${domain}:ready`,
-  LEAVER: `${domain}:leaver`,
+  // LEAVER: `${domain}:leaver`,
+  KICK: `${domain}:kick`,
+  KICKED: `${domain}:kicked`,
   START: `${domain}:start`,
   STARTED: `${domain}:started`,
 };
