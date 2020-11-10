@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { useTetrisGame, useGameBoard, useNextPieces } from "hooks";
+import { useTetrisGame, useGameBoard, useNextPiecesSolo } from "hooks";
 import { GameContext } from "store";
 import NextPieces from "components/tetris/NextPieces";
 import { getElapsedTime } from "helpers/common";
@@ -31,7 +31,7 @@ export default function GameSolo() {
     (value) => setScore((oldScore) => oldScore + value),
     [],
   );
-  const { nextPieces, pullNextPiece } = useNextPieces();
+  const { nextPieces, pullNextPiece } = useNextPiecesSolo();
   const { grid, piece, ...methods } = useGameBoard(
     10,
     20,

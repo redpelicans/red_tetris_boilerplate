@@ -6,8 +6,6 @@ import {
   socket
 } from "store/middleware/sockets";
 
-// MOCK
-
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 
 const lengthMockTetrominoes = MOCK_TETROMINOES.length;
@@ -24,8 +22,6 @@ function fetchFromMock(n) {
 
   return ret;
 }
-
-// END OF MOCK
 
 function useNextPieces(gameId, pieces) {
   const [nextPieces, setNextPieces] = React.useState(pieces);
@@ -52,6 +48,27 @@ function useNextPieces(gameId, pieces) {
     nextPieces,
     pullNextPiece,
     setNextPieces
+  };
+}
+
+export function useNextPiecesSolo() {
+  const [nextPieces, setNextPieces] = React.useState(() => fetchFromMock(3));
+
+  function pullNextPiece() {
+    let nextPiece;
+
+    setNextPieces((oldPieces) => {
+      nextPiece = oldPieces[0];
+      const fetchedPiece = fetchFromMock(1);
+      return [...oldPieces.slice(1), ...fetchedPiece];
+    });
+
+    return nextPiece;
+  }
+
+  return {
+    nextPieces,
+    pullNextPiece
   };
 }
 
