@@ -1,12 +1,17 @@
 import React from "react";
-import { PIECE } from "../../../config/actions/piece";
-import { socket } from "store/middleware/sockets";
+import {
+  PIECE
+} from "../../../config/actions/piece";
+import {
+  socket
+} from "store/middleware/sockets";
 
 // MOCK
 
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 
 const lengthMockTetrominoes = MOCK_TETROMINOES.length;
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
@@ -22,8 +27,8 @@ function fetchFromMock(n) {
 
 // END OF MOCK
 
-function useNextPieces(gameId) {
-  const [nextPieces, setNextPieces] = React.useState(() => fetchFromMock(3));
+function useNextPieces(gameId, pieces) {
+  const [nextPieces, setNextPieces] = React.useState(pieces);
 
   function pullNextPiece() {
     let nextPiece;
@@ -43,7 +48,11 @@ function useNextPieces(gameId) {
     return nextPiece;
   }
 
-  return { nextPieces, pullNextPiece, setNextPieces };
+  return {
+    nextPieces,
+    pullNextPiece,
+    setNextPieces
+  };
 }
 
 export default useNextPieces;

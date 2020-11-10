@@ -79,6 +79,7 @@ export default function GameMulti() {
 
   const { nextPieces, pullNextPiece, setNextPieces } = useNextPieces(
     state.game.id,
+    stateStore.game.pieces,
   );
 
   React.useEffect(() => {
