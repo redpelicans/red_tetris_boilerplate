@@ -38,6 +38,12 @@ export function setupSocketRooms(socket, dispatch) {
     dispatch(setPlayers(data));
   });
 
+  socket.on(LOBBY.KICKED, () => {
+    dispatch(setLobby({}));
+    dispatch(setLobbyResponse({}));
+    dispatch(resetMessages());
+  });
+
   socket.on(MESSAGE.PUBLISH, (data) => {
     dispatch(addMessage(data));
   });
