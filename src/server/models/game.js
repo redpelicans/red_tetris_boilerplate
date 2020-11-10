@@ -1,6 +1,3 @@
-import {
-  nanoid
-} from "nanoid";
 import Piece from "models/piece";
 
 const createPieces = () => {
@@ -30,8 +27,7 @@ export default class Game {
     lobbyId,
     players
   }) {
-    this.id = nanoid();
-    this.lobbyId = lobbyId;
+    this.id = lobbyId;
     this.name = name;
     this.over = false;
     this.players = createPlayers(players);

@@ -1,5 +1,10 @@
-import { logerror, loginfo } from "utils/log";
-import { deleteKeyFromRedis } from "storage";
+import {
+  logerror,
+  loginfo
+} from "utils/log";
+import {
+  deleteKeyFromRedis
+} from "storage";
 import eventEmitter from "listeners";
 import event from "listeners/events";
 import {
@@ -8,9 +13,15 @@ import {
   setLoser,
   getGame,
 } from "../../storage/game";
-import { setLobbyWon } from "../../storage/lobbies";
+import {
+  setLobbyWon
+} from "../../storage/lobbies";
 
-export const handlerSendScore = async (socket, { gameId, playerId, score }) => {
+export const handlerSendScore = async (socket, {
+  gameId,
+  playerId,
+  score
+}) => {
   await updateScore(gameId, playerId, score);
   eventEmitter.emit(event.game.score, {
     socket,
@@ -21,7 +32,11 @@ export const handlerSendScore = async (socket, { gameId, playerId, score }) => {
   checkWinner(gameId);
 };
 
-export const handlerSendBoard = (socket, { gameId, playerId, boardGame }) => {
+export const handlerSendBoard = (socket, {
+  gameId,
+  playerId,
+  boardGame
+}) => {
   eventEmitter.emit(event.game.board, {
     socket,
     playerId,
@@ -31,8 +46,11 @@ export const handlerSendBoard = (socket, { gameId, playerId, boardGame }) => {
 };
 
 export const handlerSendPenalty = (
-  socket,
-  { gameId, playerId, nbLinePenalty },
+  socket, {
+    gameId,
+    playerId,
+    nbLinePenalty
+  },
 ) => {
   eventEmitter.emit(event.game.penalty, {
     socket,
@@ -42,7 +60,10 @@ export const handlerSendPenalty = (
   });
 };
 
-export const handlerSendLose = async (socket, { gameId, playerId }) => {
+export const handlerSendLose = async (socket, {
+  gameId,
+  playerId
+}) => {
   await setLoser(gameId, playerId);
   eventEmitter.emit(event.game.lose, {
     socket,
@@ -52,7 +73,7 @@ export const handlerSendLose = async (socket, { gameId, playerId }) => {
   checkWinner(gameId);
 };
 
-const checkWinner = async (gameId) => {
+export const checkWinner = async (gameId) => {
   const winner = await checkForWinner(gameId);
 
   if (winner) {
@@ -63,9 +84,9 @@ const checkWinner = async (gameId) => {
 
     const game = await getGame(gameId);
     if (Object.keys(game).length !== 0) {
-      if ((await setLobbyWon(game.lobbyId, winner.player)) != null) {
+      if ((await setLobbyWon(game.id, winner.player)) != null) {
         eventEmitter.emit(event.lobby.change, {
-          lobbyId: game.lobbyId,
+          lobbyId: game.id,
         });
 
         eventEmitter.emit(event.lobbies.change);

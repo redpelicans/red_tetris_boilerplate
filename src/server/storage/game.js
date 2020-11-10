@@ -1,4 +1,7 @@
-import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
+import {
+  getComplexObjectFromRedis,
+  setComplexObjectToRedis
+} from "storage";
 
 export const setGame = async (game) => {
   return await setComplexObjectToRedis(`game-${game.id}`, game);
@@ -32,6 +35,15 @@ export const setLoser = async (gameId, playerId) => {
   return await setGame(game);
 };
 
+export const hasLost = async (gameId, playerId) => {
+  const game = await getGame(gameId);
+  if (Object.keys(game).length === 0) return null;
+  const element = game.players.find((element) =>
+    (element.player.id === playerId)
+  );
+  return element?.loser;
+};
+
 export const checkForWinner = async (gameId) => {
   const game = await getGame(gameId);
   if (Object.keys(game).length === 0) return null;
@@ -40,11 +52,11 @@ export const checkForWinner = async (gameId) => {
 
   const playersRemaining = nbPlayersRemaining(players);
   const winner =
-    playersRemaining === 1
-      ? isWinnerLastPlayer(players)
-      : playersRemaining === 0
-      ? getHighestScorePlayer(players)
-      : null;
+    playersRemaining === 1 ?
+    isWinnerLastPlayer(players) :
+    playersRemaining === 0 ?
+    getHighestScorePlayer(players) :
+    null;
 
   return winner;
 };
