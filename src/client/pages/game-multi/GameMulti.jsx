@@ -202,7 +202,7 @@ const Winner = ({ winner }) => {
   return (
     <FlexBox direction="col">
       <h2 className="text-2xl font-bold space-y-4">
-        {t("pages:game.winner")}:
+        {t("pages.game.winner")}:
       </h2>
 
       <h3 className="text-center text-xl font-semibold">
@@ -218,7 +218,7 @@ const Winner = ({ winner }) => {
         to="/rooms"
         className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold"
       >
-        {t("pages:game.back_to_lobbies")}
+        {t("pages.game.back_to_lobbies")}
       </Link>
     </FlexBox>
   );

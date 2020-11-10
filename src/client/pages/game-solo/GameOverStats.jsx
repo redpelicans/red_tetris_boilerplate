@@ -52,7 +52,7 @@ const LinesRemoved = ({ lines }) => {
   return (
     <div>
       <h3 className="text-lg font-semibold">
-        {t("pages:game.lines_removed_plural")}:
+        {t("pages.game.lines_removed_plural")}:
       </h3>
       <span className="flex justify-center">{lines}</span>
     </div>
