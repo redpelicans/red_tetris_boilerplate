@@ -13,7 +13,6 @@ import "./Lobby.scss";
 import { socket } from "store/middleware";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { removeSocketRooms } from "../../store/middleware/rooms";
 
 export default function Lobby({ open, state, dispatch }) {
   const notify = (error) => toast.error(error);
