@@ -10,7 +10,7 @@ import {
 } from "actions/store";
 import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
-import { socket } from "store/middleware/sockets";
+import { socket } from "store/middleware";
 import { toast } from "react-toastify";
 
 export default function Lobby({ open, state, dispatch }) {

@@ -6,12 +6,11 @@ import Overlay from "components/overlay/Overlay";
 import SearchLobby from "./SearchLobby";
 import { StoreContext } from "store";
 import "./Lobbies.scss";
-import { setupSocketRooms } from "store/middleware/sockets";
+import { socket, socketRoomsOn } from "store/middleware";
 import useNavigate from "hooks/useNavigate";
 import { setLobby, setLobbyResponse } from "actions/store";
 import { toast } from "react-toastify";
 import { LOBBY } from "../../../config/actions/lobby";
-import { socket } from "store/middleware/sockets";
 import { isEmpty } from "helpers/common";
 
 export default function Lobbies() {
@@ -39,7 +38,7 @@ export default function Lobbies() {
   }, [searchedValue, state.lobbies]);
 
   React.useEffect(() => {
-    setupSocketRooms(dispatch);
+    socketRoomsOn(dispatch);
   }, []);
 
   React.useEffect(() => {

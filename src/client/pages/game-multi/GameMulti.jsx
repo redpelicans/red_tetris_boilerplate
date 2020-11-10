@@ -18,7 +18,7 @@ import { setGameStarted } from "actions/store";
 import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
 import Modal from "components/modals/Modal";
-import { socket, setupSocketGame } from "store/middleware/sockets";
+import { socket, socketGameOn, socketGameOff } from "store/middleware";
 import ScatteringGrid from "components/tetris/ScatteringGrid";
 import { deepCopy } from "helpers/functional";
 
@@ -29,8 +29,11 @@ export default function GameMulti() {
   const { state, dispatch } = React.useContext(GameContext);
 
   React.useEffect(() => {
-    setupSocketGame(dispatch);
+    socketGameOn(dispatch);
     dispatch(setGame(deepCopy(stateStore.game)));
+    return function unsub() {
+      socketGameOff();
+    };
   }, []);
 
   const gameOver = () => {

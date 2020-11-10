@@ -1,10 +1,4 @@
 import React from "react";
-import {
-  PIECE
-} from "../../../config/actions/piece";
-import {
-  socket
-} from "store/middleware/sockets";
 
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 

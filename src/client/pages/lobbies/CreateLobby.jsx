@@ -3,7 +3,7 @@ import FlexBox from "components/flexbox/FlexBox";
 import { setLobby, setLobbiesResponse } from "actions/store";
 import { LOBBY } from "../../../config/actions/lobby";
 import { LOBBIES } from "../../../config/actions/lobbies";
-import { socket } from "store/middleware/sockets";
+import { socket } from "store/middleware";
 import { toast } from "react-toastify";
 
 export default function CreateLobby({ close, state, dispatch }) {
