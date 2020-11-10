@@ -25,7 +25,7 @@ export default function CreateLobby({ close, state, dispatch }) {
     }));
   };
   const minPlayers = 2;
-  const playersInputRange = 11;
+  const playersInputRange = 5;
   const playersSelection = new Array(playersInputRange).fill(0);
 
   React.useEffect(() => {

@@ -360,7 +360,7 @@ const isLobbyNameValid = (lobbyName) => {
 };
 
 const isMaxPlayerValid = (maxPlayer) => {
-  return maxPlayer >= 2 && maxPlayer <= 12;
+  return maxPlayer >= 2 && maxPlayer <= 6;
 };
 
 const setAllPlayersReady = (players) => {
