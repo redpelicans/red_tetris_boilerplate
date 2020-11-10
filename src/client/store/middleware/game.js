@@ -1,9 +1,5 @@
-import {
-  GAME
-} from "../../../config/actions/game";
-import {
-  PIECE
-} from "../../../config/actions/piece";
+import { GAME } from "../../../config/actions/game";
+import { PIECE } from "../../../config/actions/piece";
 
 import {
   setScore,

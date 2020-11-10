@@ -1,50 +1,22 @@
-import {
-  EventEmitter
-} from "events";
+import { EventEmitter } from "events";
 import event from "listeners/events";
-import {
-  getComplexObjectFromRedis
-} from "storage";
-import {
-  LOBBIES
-} from "../../config/actions/lobbies";
-import {
-  LOBBY
-} from "../../config/actions/lobby";
-import {
-  PLAYERS
-} from "../../config/actions/players";
-import {
-  MESSAGE
-} from "../../config/actions/message";
-import {
-  GAME
-} from "../../config/actions/game";
-import {
-  PIECE
-} from "../../config/actions/piece";
-import GROUP_DOMAIN, {
-  GROUP
-} from "../../config/actions/group";
+import { getComplexObjectFromRedis } from "storage";
+import { LOBBIES } from "../../config/actions/lobbies";
+import { LOBBY } from "../../config/actions/lobby";
+import { PLAYERS } from "../../config/actions/players";
+import { MESSAGE } from "../../config/actions/message";
+import { GAME } from "../../config/actions/game";
+import { PIECE } from "../../config/actions/piece";
+import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
 import {
   getLobby,
   clearPlayerFromLobbies,
-  isLobbyPlaying
+  isLobbyPlaying,
 } from "storage/lobbies";
-import {
-  popPlayer,
-  getPlayerId
-} from "storage/players";
-import {
-  checkWinner,
-} from "socket/game/handlers";
-import {
-  setLoser,
-  hasLost
-} from "storage/game";
-import {
-  io
-} from "socket";
+import { popPlayer, getPlayerId } from "storage/players";
+import { checkWinner } from "socket/game/handlers";
+import { setLoser, hasLost } from "storage/game";
+import { io } from "socket";
 
 const eventEmitter = new EventEmitter();
 
@@ -56,9 +28,7 @@ eventEmitter.on(event.lobbies.change, async () => {
 });
 
 // Lobby change
-eventEmitter.on(event.lobby.change, async ({
-  lobbyId
-}) => {
+eventEmitter.on(event.lobby.change, async ({ lobbyId }) => {
   const lobby = (await getLobby(lobbyId)) ?? {};
   io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(LOBBY.PUBLISH, lobby);
 
@@ -70,9 +40,7 @@ eventEmitter.on(event.lobby.change, async ({
 });
 
 // Players change
-eventEmitter.on(event.players.change, async ({
-  socket
-}) => {
+eventEmitter.on(event.players.change, async ({ socket }) => {
   const players = await getComplexObjectFromRedis("players");
   // to check
   // socket.emit(PLAYERS.PUBLISH, players);
@@ -80,9 +48,7 @@ eventEmitter.on(event.players.change, async ({
 });
 
 // Lobbies Subscribe
-eventEmitter.on(event.lobbies.subscribe, async ({
-  socket
-}) => {
+eventEmitter.on(event.lobbies.subscribe, async ({ socket }) => {
   const players = await getComplexObjectFromRedis("players");
   socket.emit(PLAYERS.PUBLISH, players);
 
@@ -91,9 +57,7 @@ eventEmitter.on(event.lobbies.subscribe, async ({
 });
 
 // Player disconnect
-eventEmitter.on(event.player.disconnect, async ({
-  socket
-}) => {
+eventEmitter.on(event.player.disconnect, async ({ socket }) => {
   socket.leave(GROUP.LOBBIES);
   const playerId = await getPlayerId(socket.id);
   const lobbyId = await clearPlayerFromLobbies(playerId);
@@ -125,10 +89,7 @@ eventEmitter.on(event.player.disconnect, async ({
 });
 
 // Message new
-eventEmitter.on(event.message.new, async ({
-  lobbyId,
-  messageObject
-}) => {
+eventEmitter.on(event.message.new, async ({ lobbyId, messageObject }) => {
   io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(
     MESSAGE.PUBLISH,
     messageObject,
@@ -136,9 +97,7 @@ eventEmitter.on(event.message.new, async ({
 });
 
 // Clear Room
-eventEmitter.on(event.room.clear, async ({
-  room
-}) => {
+eventEmitter.on(event.room.clear, async ({ room }) => {
   io.in(room).clients(function (error, clients) {
     if (clients.length > 0) {
       clients.forEach(function (socket_id) {
@@ -149,10 +108,7 @@ eventEmitter.on(event.room.clear, async ({
 });
 
 // Join based on room
-eventEmitter.on(event.room.join, async ({
-  roomIn,
-  roomTo
-}) => {
+eventEmitter.on(event.room.join, async ({ roomIn, roomTo }) => {
   io.in(roomIn).clients(function (error, clients) {
     if (clients.length > 0) {
       clients.forEach(function (socket_id) {
@@ -163,10 +119,7 @@ eventEmitter.on(event.room.join, async ({
 });
 
 // Game Started
-eventEmitter.on(event.game.started, ({
-  lobbyId,
-  game
-}) => {
+eventEmitter.on(event.game.started, ({ lobbyId, game }) => {
   io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(LOBBY.STARTED, game);
   eventEmitter.emit(event.room.join, {
     roomIn: `${GROUP_DOMAIN}:lobby-${lobbyId}`,
@@ -175,73 +128,45 @@ eventEmitter.on(event.game.started, ({
 });
 
 // Game Score Change
-eventEmitter.on(event.game.score, ({
-  socket,
-  playerId,
-  gameId,
-  score
-}) => {
-  socket.broadcast
-    .to(`${GROUP_DOMAIN}:game-${gameId}`)
-    .emit(GAME.GET_SCORE, {
-      playerId,
-      score
-    });
+eventEmitter.on(event.game.score, ({ socket, playerId, gameId, score }) => {
+  socket.broadcast.to(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.GET_SCORE, {
+    playerId,
+    score,
+  });
 });
 
 // Game Board Change
-eventEmitter.on(event.game.board, ({
-  socket,
-  playerId,
-  gameId,
-  boardGame
-}) => {
-  socket.broadcast
-    .to(`${GROUP_DOMAIN}:game-${gameId}`)
-    .emit(GAME.GET_BOARD, {
-      playerId,
-      boardGame
-    });
+eventEmitter.on(event.game.board, ({ socket, playerId, gameId, boardGame }) => {
+  socket.broadcast.to(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.GET_BOARD, {
+    playerId,
+    boardGame,
+  });
 });
 
 // Game Penalty
 eventEmitter.on(
   event.game.penalty,
-  ({
-    socket,
-    playerId,
-    gameId,
-    nbLinePenalty
-  }) => {
+  ({ socket, playerId, gameId, nbLinePenalty }) => {
     socket.broadcast
       .to(`${GROUP_DOMAIN}:game-${gameId}`)
       .emit(GAME.GET_PENALTY, {
         playerId,
-        nbLinePenalty
+        nbLinePenalty,
       });
   },
 );
 
 // Game Lose
-eventEmitter.on(event.game.lose, ({
-  socket,
-  playerId,
-  gameId
-}) => {
-  socket.broadcast
-    .to(`${GROUP_DOMAIN}:game-${gameId}`)
-    .emit(GAME.GET_LOSE, {
-      playerId
-    });
+eventEmitter.on(event.game.lose, ({ socket, playerId, gameId }) => {
+  socket.broadcast.to(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.GET_LOSE, {
+    playerId,
+  });
 });
 
 // Game Winner
-eventEmitter.on(event.game.winner, ({
-  winner,
-  gameId
-}) => {
+eventEmitter.on(event.game.winner, ({ winner, gameId }) => {
   io.in(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.WINNER, {
-    winner
+    winner,
   });
   eventEmitter.emit(event.room.clear, {
     room: `${GROUP_DOMAIN}:game-${gameId}`,
@@ -249,10 +174,7 @@ eventEmitter.on(event.game.winner, ({
 });
 
 // Piece Send
-eventEmitter.on(event.piece.send, ({
-  pieces,
-  gameId
-}) => {
+eventEmitter.on(event.piece.send, ({ pieces, gameId }) => {
   io.in(`${GROUP_DOMAIN}:game-${gameId}`).emit(PIECE.SEND, pieces);
 });
 

@@ -1,11 +1,6 @@
-import {
-  PLAYER
-} from "../../../config/actions/player";
+import { PLAYER } from "../../../config/actions/player";
 
-
-import {
-  setPlayerResponse,
-} from "actions/store";
+import { setPlayerResponse } from "actions/store";
 
 export function setupSocketPlayer(socket, dispatch) {
   socket.on(PLAYER.RESPONSE, (data) => {

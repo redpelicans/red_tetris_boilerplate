@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  PIECE
-} from "../../../config/actions/piece";
-import {
-  socket
-} from "store/middleware";
+import { PIECE } from "../../../config/actions/piece";
+import { socket } from "store/middleware";
 
 function useNextPiecesMulti(gameId, pieces) {
   const [nextPieces, setNextPieces] = React.useState(pieces);
@@ -30,7 +26,7 @@ function useNextPiecesMulti(gameId, pieces) {
   return {
     nextPieces,
     pullNextPiece,
-    setNextPieces
+    setNextPieces,
   };
 }
 

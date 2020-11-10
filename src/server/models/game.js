@@ -6,7 +6,7 @@ const createPieces = () => {
     pieces.push(new Piece());
   }
   return pieces;
-}
+};
 
 const createPlayers = (players) => {
   const newPlayers = [];
@@ -22,11 +22,7 @@ const createPlayers = (players) => {
 };
 
 export default class Game {
-  constructor({
-    name,
-    lobbyId,
-    players
-  }) {
+  constructor({ name, lobbyId, players }) {
     this.id = lobbyId;
     this.name = name;
     this.over = false;

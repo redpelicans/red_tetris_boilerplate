@@ -1,16 +1,7 @@
-import {
-  LOBBIES
-} from "../../config/actions/lobbies";
-import {
-  LOBBY
-} from "../../config/actions/lobby";
-import {
-  getComplexObjectFromRedis,
-  setComplexObjectToRedis
-} from "storage";
-import {
-  clearPlayerFromGame,
-} from "storage/game";
+import { LOBBIES } from "../../config/actions/lobbies";
+import { LOBBY } from "../../config/actions/lobby";
+import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
+import { clearPlayerFromGame } from "storage/game";
 import Response from "models/response";
 
 export const getLobbies = async () => {
@@ -19,7 +10,7 @@ export const getLobbies = async () => {
 
 export const getLobby = async (id) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
-  const lobby = lobbies?. [id];
+  const lobby = lobbies?.[id];
   if (!lobby) {
     return null;
   } else {
@@ -56,7 +47,7 @@ export const pushLobby = async (lobby, socketId) => {
 export const popLobby = async (lobbyId, ownerId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
-  const lobby = lobbies?. [lobbyId];
+  const lobby = lobbies?.[lobbyId];
   if (!lobby) {
     return Response.error(LOBBIES.DELETE, "Lobby doesn't exists!");
   }
@@ -83,7 +74,7 @@ export const joinLobby = async (player, lobbyId) => {
     return Response.error(LOBBY.SUBSCRIBE, "You already are in another lobby!");
   }
 
-  const lobby = lobbies?. [lobbyId];
+  const lobby = lobbies?.[lobbyId];
   if (!lobby) {
     return Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!");
   }
@@ -100,7 +91,7 @@ export const joinLobby = async (player, lobbyId) => {
 
   lobby.players.push({
     ready: false,
-    player: player
+    player: player,
   });
   lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
@@ -111,7 +102,7 @@ export const joinLobby = async (player, lobbyId) => {
 export const leaveLobby = async (playerId, lobbyId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
-  const lobby = lobbies?. [lobbyId];
+  const lobby = lobbies?.[lobbyId];
   if (!lobby) {
     return Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!");
   }
@@ -149,7 +140,7 @@ export const leaveLobby = async (playerId, lobbyId) => {
 export const readyLobby = async (playerId, lobbyId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
-  const lobby = lobbies?. [lobbyId];
+  const lobby = lobbies?.[lobbyId];
   if (!lobby) {
     return Response.error(LOBBY.READY, "Lobby doesn't exists!");
   }
@@ -174,7 +165,7 @@ export const readyLobby = async (playerId, lobbyId) => {
 export const startGame = async (playerId, lobbyId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
-  const lobby = lobbies?. [lobbyId];
+  const lobby = lobbies?.[lobbyId];
   if (!lobby) {
     return Response.error(LOBBY.START, "Lobby doesn't exists!");
   }
@@ -219,7 +210,7 @@ export const clearPlayerFromLobbies = async (playerId) => {
 export const isLobbyPlaying = async (lobbyId) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
-  const lobby = lobbies?. [lobbyId];
+  const lobby = lobbies?.[lobbyId];
   if (!lobby) {
     return false;
   }
@@ -228,12 +219,12 @@ export const isLobbyPlaying = async (lobbyId) => {
   }
 
   return false;
-}
+};
 
 export const setLobbyWon = async (lobbyId, winner) => {
   const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
 
-  const lobby = lobbies?. [lobbyId];
+  const lobby = lobbies?.[lobbyId];
   if (!lobby) {
     return null;
   }

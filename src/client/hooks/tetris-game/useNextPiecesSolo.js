@@ -34,7 +34,7 @@ export function useNextPiecesSolo() {
 
   return {
     nextPieces,
-    pullNextPiece
+    pullNextPiece,
   };
 }
 

@@ -1,10 +1,5 @@
-import {
-  logerror,
-  loginfo
-} from "utils/log";
-import {
-  deleteKeyFromRedis
-} from "storage";
+import { logerror, loginfo } from "utils/log";
+import { deleteKeyFromRedis } from "storage";
 import eventEmitter from "listeners";
 import event from "listeners/events";
 import {
@@ -13,15 +8,9 @@ import {
   setLoser,
   getGame,
 } from "../../storage/game";
-import {
-  setLobbyWon
-} from "../../storage/lobbies";
+import { setLobbyWon } from "../../storage/lobbies";
 
-export const handlerSendScore = async (socket, {
-  gameId,
-  playerId,
-  score
-}) => {
+export const handlerSendScore = async (socket, { gameId, playerId, score }) => {
   await updateScore(gameId, playerId, score);
   eventEmitter.emit(event.game.score, {
     socket,
@@ -32,11 +21,7 @@ export const handlerSendScore = async (socket, {
   checkWinner(gameId);
 };
 
-export const handlerSendBoard = (socket, {
-  gameId,
-  playerId,
-  boardGame
-}) => {
+export const handlerSendBoard = (socket, { gameId, playerId, boardGame }) => {
   eventEmitter.emit(event.game.board, {
     socket,
     playerId,
@@ -46,11 +31,8 @@ export const handlerSendBoard = (socket, {
 };
 
 export const handlerSendPenalty = (
-  socket, {
-    gameId,
-    playerId,
-    nbLinePenalty
-  },
+  socket,
+  { gameId, playerId, nbLinePenalty },
 ) => {
   eventEmitter.emit(event.game.penalty, {
     socket,
@@ -60,10 +42,7 @@ export const handlerSendPenalty = (
   });
 };
 
-export const handlerSendLose = async (socket, {
-  gameId,
-  playerId
-}) => {
+export const handlerSendLose = async (socket, { gameId, playerId }) => {
   await setLoser(gameId, playerId);
   eventEmitter.emit(event.game.lose, {
     socket,

@@ -1,15 +1,7 @@
-import {
-  LOBBY
-} from "../../../config/actions/lobby";
-import {
-  LOBBIES
-} from "../../../config/actions/lobbies";
-import {
-  MESSAGE
-} from "../../../config/actions/message";
-import {
-  PLAYERS
-} from "../../../config/actions/players";
+import { LOBBY } from "../../../config/actions/lobby";
+import { LOBBIES } from "../../../config/actions/lobbies";
+import { MESSAGE } from "../../../config/actions/message";
+import { PLAYERS } from "../../../config/actions/players";
 
 import {
   setPlayers,

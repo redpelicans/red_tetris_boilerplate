@@ -1,16 +1,7 @@
 import socketIOClient from "socket.io-client";
-import {
-  setupSocketPlayer,
-  removeSocketPlayer
-} from "store/middleware/player";
-import {
-  setupSocketRooms,
-  removeSocketRooms
-} from "store/middleware/rooms";
-import {
-  setupSocketGame,
-  removeSocketGame
-} from "store/middleware/game";
+import { setupSocketPlayer, removeSocketPlayer } from "store/middleware/player";
+import { setupSocketRooms, removeSocketRooms } from "store/middleware/rooms";
+import { setupSocketGame, removeSocketGame } from "store/middleware/game";
 
 const host = process.env.REACT_APP_BACK_HOST || "0.0.0.0";
 const port = process.env.REACT_APP_BACK_PORT || "3004";
