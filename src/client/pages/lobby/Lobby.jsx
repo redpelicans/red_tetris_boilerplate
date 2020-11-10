@@ -13,6 +13,7 @@ import "./Lobby.scss";
 import { socket } from "store/middleware";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { removeSocketRooms } from "../../store/middleware/rooms";
 
 export default function Lobby({ open, state, dispatch }) {
   const notify = (error) => toast.error(error);
@@ -76,6 +77,10 @@ export default function Lobby({ open, state, dispatch }) {
     }
   }, [state.game]);
 
+  const kickPlayer = (ownerId, playerId, lobbyId) => {
+    socket.emit(LOBBY.KICK, { ownerId, playerId, lobbyId });
+  };
+
   return (
     <FlexBox
       wrap="no-wrap"
@@ -115,17 +120,27 @@ export default function Lobby({ open, state, dispatch }) {
                 <div className="h-4 w-4 rounded-full bg-red-500 mr-4" />
               ))}
 
-            {el?.player.id === state?.lobby?.owner?.id ? (
+            {el?.player.id === state?.lobby?.owner?.id && (
               <div className="h-4 w-4 mr-4">
                 <img src="/src/client/assets/img/crown.png" />
               </div>
-            ) : (
-              <div></div>
             )}
+
             {el?.player.id === state?.player?.id ? (
               <span className="text-green-500">{`${el?.player.name}`}</span>
             ) : (
               <span>{`${el?.player.name}`}</span>
+            )}
+
+            {state.lobby.owner.id === state.player.id && (
+              <div
+                className="h-4 w-4 ml-4"
+                onClick={() =>
+                  kickPlayer(state.player.id, el.player.id, state.lobby.id)
+                }
+              >
+                <img src="/src/client/assets/img/red-cross.png" />
+              </div>
             )}
           </FlexBox>
         ))}

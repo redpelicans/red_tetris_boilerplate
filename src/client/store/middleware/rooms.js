@@ -10,6 +10,7 @@ import {
   setLobby,
   setLobbyResponse,
   addMessage,
+  resetMessages,
   setGameStarted,
 } from "actions/store";
 
