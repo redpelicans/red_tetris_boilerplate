@@ -7,9 +7,13 @@ export {
 }
 from "./tetris-game/useGameBoard";
 export {
-  default as useNextPieces, useNextPiecesSolo
+  default as useNextPiecesMulti
 }
-from "./tetris-game/useNextPieces";
+from "./tetris-game/useNextPiecesMulti";
+export {
+  default as useNextPiecesSolo
+}
+from "./tetris-game/useNextPiecesSolo";
 export {
   default as useSocket
 }

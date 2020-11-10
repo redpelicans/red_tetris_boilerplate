@@ -23,34 +23,6 @@ function fetchFromMock(n) {
   return ret;
 }
 
-function useNextPieces(gameId, pieces) {
-  const [nextPieces, setNextPieces] = React.useState(pieces);
-
-  function pullNextPiece() {
-    let nextPiece;
-
-    setNextPieces((oldPieces) => {
-      nextPiece = oldPieces[0];
-
-      if (oldPieces.length < 3) {
-        socket.emit(PIECE.GET, {
-          gameId,
-          nbPieces: 3,
-        });
-      }
-      return oldPieces.slice(1);
-    });
-
-    return nextPiece;
-  }
-
-  return {
-    nextPieces,
-    pullNextPiece,
-    setNextPieces
-  };
-}
-
 export function useNextPiecesSolo() {
   const [nextPieces, setNextPieces] = React.useState(() => fetchFromMock(3));
 
@@ -72,4 +44,4 @@ export function useNextPiecesSolo() {
   };
 }
 
-export default useNextPieces;
+export default useNextPiecesSolo;

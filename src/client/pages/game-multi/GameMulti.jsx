@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { useTetrisGame, useGameBoard, useNextPieces } from "hooks";
+import { useTetrisGame, useGameBoard, useNextPiecesMulti } from "hooks";
 import { Link } from "react-router-dom";
 import { GameContext } from "store";
 import NextPieces from "components/tetris/NextPieces";
@@ -77,7 +77,7 @@ export default function GameMulti() {
     [state.game.id],
   );
 
-  const { nextPieces, pullNextPiece, setNextPieces } = useNextPieces(
+  const { nextPieces, pullNextPiece, setNextPieces } = useNextPiecesMulti(
     state.game.id,
     stateStore.game.pieces,
   );
