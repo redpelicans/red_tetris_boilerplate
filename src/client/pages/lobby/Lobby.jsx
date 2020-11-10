@@ -12,6 +12,7 @@ import useNavigate from "hooks/useNavigate";
 import "./Lobby.scss";
 import { socket } from "store/middleware";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function Lobby({ open, state, dispatch }) {
   const notify = (error) => toast.error(error);
@@ -36,6 +37,15 @@ export default function Lobby({ open, state, dispatch }) {
       if (state.lobbyResponse.type === "error") {
         notify(state?.lobbyResponse?.reason);
       } else if (state.lobbyResponse.type === "success") {
+        dispatch(
+          setLobby({
+            ...state.lobby,
+            players: state.lobby.players.map((player) => ({
+              ...player,
+              ready: false,
+            })),
+          }),
+        );
         console.log("Game successfully launched!");
       }
     }
@@ -120,6 +130,7 @@ export default function Lobby({ open, state, dispatch }) {
 }
 
 const Buttons = ({ state, owner }) => {
+  const { t } = useTranslation();
   const unsubscribeLobby = (lobbyId, playerId) => {
     socket.emit(LOBBY.UNSUBSCRIBE, { lobbyId, playerId });
   };
@@ -147,7 +158,7 @@ const Buttons = ({ state, owner }) => {
             type="button"
             onClick={() => launchGame(state.lobby.id, state.player.id)}
           >
-            Launch game
+            {t("pages.lobby.launch_game")}
           </button>
         ) : (
           <button
@@ -155,7 +166,7 @@ const Buttons = ({ state, owner }) => {
             type="button"
             onClick={() => setReady(state.lobby.id, state.player.id)}
           >
-            Ready
+            {t("pages.lobby.ready")}
           </button>
         )}
         <button
@@ -163,7 +174,7 @@ const Buttons = ({ state, owner }) => {
           type="button"
           onClick={() => unsubscribeLobby(state.lobby.id, state.player.id)}
         >
-          Leave Lobby
+          {t("pages.lobby.leave_lobby")}
         </button>
       </FlexBox>
       {owner && (
@@ -172,7 +183,7 @@ const Buttons = ({ state, owner }) => {
           type="button"
           onClick={() => deleteLobby(state.lobby.id, state.player.id)}
         >
-          Delete lobby
+          {t("pages.lobby.delete_lobby")}
         </button>
       )}
     </FlexBox>

@@ -6,13 +6,11 @@ import {
   gamePadMatrix,
   gamePadMatrixHover,
 } from "components/game-pad/constants";
-import LanguageSelection from "components/language/LanguageSelection";
 import Hoverable from "components/hoverable/Hoverable";
 import Modal from "components/modals/Modal";
 import AnimatedBackground from "./AnimatedBackground";
 import { useTranslation } from "react-i18next";
 import InputUserName from "./InputUserName";
-
 import "./Home.scss";
 
 export default function Home() {
@@ -20,7 +18,6 @@ export default function Home() {
     <FlexBox height="full" width="full" className="overflow-hidden">
       <AnimatedBackground />
       <Modal className="home-modal">
-        <LanguageSelection />
         <h1>Red Tetris</h1>
         <Link to="/single-player[solo]/game" className="mb-10">
           <SinglePlayer />
@@ -69,7 +66,7 @@ const MultiPlayerGamePad = ({ setHasClicked }) => {
         <GamePad className="mr-2" model={gamePadMatrix} size={2} />
         <GamePad model={gamePadMatrix} size={2} />
       </Hoverable.Out>
-      <h2>{t("pages.home.multijoueur")}</h2>
+      <h2>{t("pages.home.multiplayer")}</h2>
     </Hoverable>
   );
 };

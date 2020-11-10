@@ -7,8 +7,10 @@ import { PLAYER } from "../../../config/actions/player";
 import ButtonSpecial from "components/button/ButtonSpecial";
 import { socket, socketPlayerOn } from "store/middleware";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export default function InputUserName() {
+  const { t } = useTranslation();
   const { state, dispatch } = React.useContext(StoreContext);
   const [playerName, setPlayerName] = React.useState("");
   const { navigate } = useNavigate();
@@ -48,13 +50,13 @@ export default function InputUserName() {
         <input
           className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg mr-3 py-1 px-2 block w-full appearance-none leading-normal"
           type="text"
-          placeholder="Player name"
+          placeholder={t("pages.home.player_name")}
           value={playerName}
           onChange={handlePlayerName}
           autoFocus
         />
         <ButtonSpecial className="button-3" type="submit">
-          Create player
+          {t("pages.home.new_player")}
         </ButtonSpecial>
       </form>
     </FlexBox>

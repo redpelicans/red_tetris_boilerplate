@@ -1,6 +1,39 @@
 {
-  "home": {
-    "multijoueur": "Multiplayer",
-    "solo": "Single Player"
-  }
+	"game": {
+		"back_to_lobbies": "Back to lobbies",
+		"game_over": "Game over",
+		"level": "Level",
+		"lines_removed": "{{count}} Line deleted",
+		"lines_removed_plural": "{{count}} Lines deleted",
+		"main_menu": "Main menu",
+		"next_pieces": "Next pieces",
+		"score": "Score",
+		"stats": "Stats",
+		"winner": "Winner"
+	},
+	"home": {
+		"multiplayer": "Multiplayer",
+		"new_player": "New player",
+		"player_name": "Player name",
+		"solo": "Single Player"
+	},
+	"lobbies": {
+		"create_lobby": "Create lobby",
+		"empty_lobby_list": "No lobby found",
+		"join_game": "Join a game",
+		"lobby_name": "Lobby name",
+		"max_players": "Max players",
+		"players_connected": "{{count}} Player connected",
+		"players_connected_plural": "{{count}} Players connected",
+		"playing": "Playing",
+		"search_lobby": "Search a lobby"
+	},
+	"lobby": {
+		"delete_lobby": "Delete lobby",
+		"launch_game": "Launch the game",
+		"leave_lobby": "Leave Lobby",
+		"ready": "Ready",
+		"send": "Send",
+		"type_message": "Type a message"
+	}
 }

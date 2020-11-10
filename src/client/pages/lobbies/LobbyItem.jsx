@@ -1,9 +1,11 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { LOBBY } from "../../../config/actions/lobby";
-import { socket } from "store/middleware";
+import { socket } from "store/middleware/sockets";
+import { useTranslation } from "react-i18next";
 
 export default function LobbyItem({ lobby, state }) {
+  const { t } = useTranslation();
   const subscribeLobby = () => {
     if (!lobby.isPlaying) {
       socket.emit(LOBBY.SUBSCRIBE, {
@@ -32,7 +34,9 @@ export default function LobbyItem({ lobby, state }) {
       </FlexBox>
 
       <FlexBox className={"items-center"}>
-        {lobby.isPlaying && <span className="mr-6">PLAYING</span>}
+        {lobby.isPlaying && (
+          <span className="mr-6">{t("pages.lobbies.playing")}</span>
+        )}
         <span className="mr-2">
           {lobby.players.length}/{lobby.maxPlayer}
         </span>

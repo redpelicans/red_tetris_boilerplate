@@ -5,7 +5,6 @@ import Lobbies from "pages/lobbies/Lobbies";
 import Lobby from "pages/lobby/LobbyContainer";
 import GameMulti from "pages/game-multi/GameMulti";
 import GameSolo from "pages/game-solo/GameSolo";
-
 import FlexBox from "components/flexbox/FlexBox";
 import { GameContextProvider } from "store";
 import { StoreContext } from "store";
