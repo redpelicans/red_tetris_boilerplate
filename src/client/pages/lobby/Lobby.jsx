@@ -132,16 +132,17 @@ export default function Lobby({ open, state, dispatch }) {
               <span>{`${el?.player.name}`}</span>
             )}
 
-            {state.lobby.owner.id === state.player.id && (
-              <div
-                className="h-4 w-4 ml-4"
-                onClick={() =>
-                  kickPlayer(state.player.id, el.player.id, state.lobby.id)
-                }
-              >
-                <img src="/src/client/assets/img/red-cross.png" />
-              </div>
-            )}
+            {state.lobby.owner.id === state.player.id &&
+              el?.player.id !== state?.lobby?.owner?.id && (
+                <div
+                  className="h-4 w-4 ml-4 cursor-pointer"
+                  onClick={() =>
+                    kickPlayer(state.player.id, el.player.id, state.lobby.id)
+                  }
+                >
+                  <img src="/src/client/assets/img/red-cross.png" />
+                </div>
+              )}
           </FlexBox>
         ))}
       </FlexBox>
