@@ -6,12 +6,11 @@ import Overlay from "components/overlay/Overlay";
 import SearchLobby from "./SearchLobby";
 import { StoreContext } from "store";
 import "./Lobbies.scss";
-import { setupSocketRooms } from "store/middleware/sockets";
+import { socket, socketRoomsOn } from "store/middleware";
 import useNavigate from "hooks/useNavigate";
 import { setLobby, setLobbyResponse } from "actions/store";
 import { toast } from "react-toastify";
 import { LOBBY } from "../../../config/actions/lobby";
-import { socket } from "store/middleware/sockets";
 import { isEmpty } from "helpers/common";
 
 export default function Lobbies() {
@@ -39,7 +38,7 @@ export default function Lobbies() {
   }, [searchedValue, state.lobbies]);
 
   React.useEffect(() => {
-    setupSocketRooms(dispatch);
+    socketRoomsOn(dispatch);
   }, []);
 
   React.useEffect(() => {
@@ -49,12 +48,15 @@ export default function Lobbies() {
       } else if (state.lobbyResponse.type === "success") {
         dispatch(setLobby(state.lobbyResponse.payload));
         dispatch(setLobbyResponse({}));
-        navigate(
-          `/rooms/${state.lobbyResponse.payload.name}[${state.player.name}]`,
-        );
       }
     }
   }, [state.lobbyResponse]);
+
+  React.useEffect(() => {
+    if (!isEmpty(Object.keys(state.lobby))) {
+      navigate(`/rooms/${state.lobby.name}[${state.player.name}]`);
+    }
+  }, [state.lobby]);
 
   return (
     <FlexBox
@@ -163,7 +165,7 @@ const JoinButton = ({ players, lobbies }) => {
       <FlexBox direction="col">
         <span className="font-semibold text-white">Join Game</span>
         <span className="text-sm text-white">
-          {Object.keys(players).length} players connected
+          {Object.keys(players || {}).length} players connected
         </span>
       </FlexBox>
     </button>

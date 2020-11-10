@@ -2,7 +2,13 @@ import { logerror, loginfo } from "utils/log";
 import { deleteKeyFromRedis } from "storage";
 import eventEmitter from "listeners";
 import event from "listeners/events";
-import { updateScore, checkForWinner, setLoser } from "../../storage/game";
+import {
+  updateScore,
+  checkForWinner,
+  setLoser,
+  getGame,
+} from "../../storage/game";
+import { setLobbyWon } from "../../storage/lobbies";
 
 export const handlerSendScore = async (socket, { gameId, playerId, score }) => {
   await updateScore(gameId, playerId, score);
@@ -46,7 +52,7 @@ export const handlerSendLose = async (socket, { gameId, playerId }) => {
   checkWinner(gameId);
 };
 
-const checkWinner = async (gameId) => {
+export const checkWinner = async (gameId) => {
   const winner = await checkForWinner(gameId);
 
   if (winner) {
@@ -54,7 +60,17 @@ const checkWinner = async (gameId) => {
       gameId,
       winner,
     });
-    // delete game object?
+
+    const game = await getGame(gameId);
+    if (Object.keys(game).length !== 0) {
+      if ((await setLobbyWon(game.id, winner.player)) != null) {
+        eventEmitter.emit(event.lobby.change, {
+          lobbyId: game.id,
+        });
+
+        eventEmitter.emit(event.lobbies.change);
+      }
+    }
     deleteKeyFromRedis(`game-${gameId}`);
   }
 };

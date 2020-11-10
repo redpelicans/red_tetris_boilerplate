@@ -28,4 +28,7 @@ export default {
     lose: "onLose",
     winner: "onWinner",
   },
+  piece: {
+    send: "onNewPieces",
+  },
 };

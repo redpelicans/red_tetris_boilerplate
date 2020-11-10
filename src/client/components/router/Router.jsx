@@ -11,7 +11,7 @@ import { GameContextProvider } from "store";
 import { StoreContext } from "store";
 import useNavigate from "hooks/useNavigate";
 import { LOBBIES } from "../../../config/actions/lobbies";
-import { socket } from "store/middleware/sockets";
+import { socket } from "store/middleware";
 
 /*
  **   You can had any Route you need inside the <Switch />

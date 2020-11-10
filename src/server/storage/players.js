@@ -18,7 +18,7 @@ export const getPlayer = async (id) => {
 
 export const getPlayerId = async (socketId) => {
   const players = (await getComplexObjectFromRedis("players")) ?? {};
-  const playerId = Object.keys(players).find(
+  const playerId = Object.keys(players || {}).find(
     (key) => players[key].socketId === socketId,
   );
   if (!playerId) {
@@ -54,7 +54,9 @@ export const popPlayer = async (id) => {
 };
 
 const isAvailable = (players, username) => {
-  return !Object.keys(players).some((key) => players[key].name === username);
+  return !Object.keys(players || {}).some(
+    (key) => players[key].name === username,
+  );
 };
 
 const isValid = (username) => {

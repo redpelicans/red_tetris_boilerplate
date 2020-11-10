@@ -1,10 +1,9 @@
 import React from "react";
 
-// MOCK
-
 import MOCK_TETROMINOES from "mocks/Tetrominoes";
 
 const lengthMockTetrominoes = MOCK_TETROMINOES.length;
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
@@ -18,9 +17,7 @@ function fetchFromMock(n) {
   return ret;
 }
 
-// END OF MOCK
-
-function useNextPieces() {
+export function useNextPiecesSolo() {
   const [nextPieces, setNextPieces] = React.useState(() => fetchFromMock(3));
 
   function pullNextPiece() {
@@ -35,7 +32,10 @@ function useNextPieces() {
     return nextPiece;
   }
 
-  return { nextPieces, pullNextPiece };
+  return {
+    nextPieces,
+    pullNextPiece,
+  };
 }
 
-export default useNextPieces;
+export default useNextPiecesSolo;

@@ -6,22 +6,29 @@ import { LOBBY } from "../../config/actions/lobby";
 import { PLAYERS } from "../../config/actions/players";
 import { MESSAGE } from "../../config/actions/message";
 import { GAME } from "../../config/actions/game";
+import { PIECE } from "../../config/actions/piece";
 import GROUP_DOMAIN, { GROUP } from "../../config/actions/group";
-import { getLobby, clearPlayerFromLobbies } from "storage/lobbies";
+import {
+  getLobby,
+  clearPlayerFromLobbies,
+  isLobbyPlaying,
+} from "storage/lobbies";
 import { popPlayer, getPlayerId } from "storage/players";
+import { checkWinner } from "socket/game/handlers";
+import { setLoser, hasLost } from "storage/game";
 import { io } from "socket";
 
 const eventEmitter = new EventEmitter();
 
 // Lobbies change
-eventEmitter.on(event.lobbies.change, async ({ socket }) => {
+eventEmitter.on(event.lobbies.change, async () => {
   const lobbies = await getComplexObjectFromRedis("lobbies");
 
   io.in(GROUP.LOBBIES).emit(LOBBIES.PUBLISH, lobbies);
 });
 
 // Lobby change
-eventEmitter.on(event.lobby.change, async ({ socket, lobbyId }) => {
+eventEmitter.on(event.lobby.change, async ({ lobbyId }) => {
   const lobby = (await getLobby(lobbyId)) ?? {};
   io.in(`${GROUP_DOMAIN}:lobby-${lobbyId}`).emit(LOBBY.PUBLISH, lobby);
 
@@ -55,14 +62,24 @@ eventEmitter.on(event.player.disconnect, async ({ socket }) => {
   const playerId = await getPlayerId(socket.id);
   const lobbyId = await clearPlayerFromLobbies(playerId);
   if (lobbyId) {
+    const lobbyPlaying = await isLobbyPlaying(lobbyId);
+    if (lobbyPlaying) {
+      const loser = await hasLost(lobbyId, playerId);
+      if (!loser) {
+        await setLoser(lobbyId, playerId);
+        eventEmitter.emit(event.game.lose, {
+          socket,
+          playerId,
+          gameId: lobbyId,
+        });
+        checkWinner(lobbyId);
+      }
+    }
     socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
     eventEmitter.emit(event.lobby.change, {
-      socket,
       lobbyId,
     });
-    eventEmitter.emit(event.lobbies.change, {
-      socket,
-    });
+    eventEmitter.emit(event.lobbies.change);
   }
 
   await popPlayer(playerId);
@@ -112,16 +129,18 @@ eventEmitter.on(event.game.started, ({ lobbyId, game }) => {
 
 // Game Score Change
 eventEmitter.on(event.game.score, ({ socket, playerId, gameId, score }) => {
-  socket.broadcast
-    .to(`${GROUP_DOMAIN}:game-${gameId}`)
-    .emit(GAME.GET_SCORE, { playerId, score });
+  socket.broadcast.to(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.GET_SCORE, {
+    playerId,
+    score,
+  });
 });
 
 // Game Board Change
 eventEmitter.on(event.game.board, ({ socket, playerId, gameId, boardGame }) => {
-  socket.broadcast
-    .to(`${GROUP_DOMAIN}:game-${gameId}`)
-    .emit(GAME.GET_BOARD, { playerId, boardGame });
+  socket.broadcast.to(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.GET_BOARD, {
+    playerId,
+    boardGame,
+  });
 });
 
 // Game Penalty
@@ -130,23 +149,33 @@ eventEmitter.on(
   ({ socket, playerId, gameId, nbLinePenalty }) => {
     socket.broadcast
       .to(`${GROUP_DOMAIN}:game-${gameId}`)
-      .emit(GAME.GET_PENALTY, { playerId, nbLinePenalty });
+      .emit(GAME.GET_PENALTY, {
+        playerId,
+        nbLinePenalty,
+      });
   },
 );
 
 // Game Lose
 eventEmitter.on(event.game.lose, ({ socket, playerId, gameId }) => {
-  socket.broadcast
-    .to(`${GROUP_DOMAIN}:game-${gameId}`)
-    .emit(GAME.GET_LOSE, { playerId });
+  socket.broadcast.to(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.GET_LOSE, {
+    playerId,
+  });
 });
 
 // Game Winner
 eventEmitter.on(event.game.winner, ({ winner, gameId }) => {
-  io.in(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.WINNER, { winner });
+  io.in(`${GROUP_DOMAIN}:game-${gameId}`).emit(GAME.WINNER, {
+    winner,
+  });
   eventEmitter.emit(event.room.clear, {
     room: `${GROUP_DOMAIN}:game-${gameId}`,
   });
+});
+
+// Piece Send
+eventEmitter.on(event.piece.send, ({ pieces, gameId }) => {
+  io.in(`${GROUP_DOMAIN}:game-${gameId}`).emit(PIECE.SEND, pieces);
 });
 
 // // Lobby Leaver

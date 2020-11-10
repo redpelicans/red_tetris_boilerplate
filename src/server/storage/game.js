@@ -32,6 +32,15 @@ export const setLoser = async (gameId, playerId) => {
   return await setGame(game);
 };
 
+export const hasLost = async (gameId, playerId) => {
+  const game = await getGame(gameId);
+  if (Object.keys(game).length === 0) return null;
+  const element = game.players.find(
+    (element) => element.player.id === playerId,
+  );
+  return element?.loser;
+};
+
 export const checkForWinner = async (gameId) => {
   const game = await getGame(gameId);
   if (Object.keys(game).length === 0) return null;

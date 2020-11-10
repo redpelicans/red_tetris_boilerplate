@@ -2,7 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { MESSAGE } from "../../../config/actions/message";
 import "./Lobby.scss";
-import { socket } from "store/middleware/sockets";
+import { socket } from "store/middleware";
 
 export default function Chat({ state }) {
   const [message, setMessage] = React.useState("");

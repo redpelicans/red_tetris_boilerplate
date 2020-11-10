@@ -26,9 +26,9 @@ export default function LobbyContainer() {
     }
   }, [state.lobby]);
 
-  const close = () => {
-    setTranslate(false);
-  };
+  React.useEffect(() => {
+    open();
+  }, []);
 
   const open = () => {
     setTranslate(true);
@@ -53,12 +53,7 @@ export default function LobbyContainer() {
         </FlexBox>
         {!isEmpty(state.lobby) && (
           <FlexBox height="full" width="full">
-            <Lobby
-              state={state}
-              open={open}
-              close={close}
-              dispatch={dispatch}
-            />
+            <Lobby state={state} open={open} dispatch={dispatch} />
             <Chat state={state} dispatch={dispatch} />
           </FlexBox>
         )}

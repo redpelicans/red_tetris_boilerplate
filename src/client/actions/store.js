@@ -7,7 +7,6 @@ export const SET_LOBBY = "SET_LOBBY";
 export const SET_LOBBY_RESPONSE = "SET_LOBBY_RESPONSE";
 export const ADD_MESSAGE = "ADD_MESSAGE";
 export const RESET_MESSAGES = "RESET_MESSAGES";
-export const SET_NEXT_PIECES = "SET_NEXT_PIECES";
 export const SET_GAME_STARTED = "SET_GAME_STARTED";
 
 export const setPlayerResponse = (playerResponse) => ({
@@ -52,11 +51,6 @@ export const addMessage = (message) => ({
 
 export const resetMessages = () => ({
   type: RESET_MESSAGES,
-});
-
-export const setNextPieces = (pieces) => ({
-  type: SET_NEXT_PIECES,
-  pieces: pieces,
 });
 
 export const setGameStarted = (game) => ({

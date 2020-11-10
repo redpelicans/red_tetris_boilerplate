@@ -1,10 +1,15 @@
 import Piece from "models/piece";
-import { PIECE } from "../../../config/actions/piece";
+import eventEmitter from "listeners";
+import event from "listeners/events";
 
-export const handlerGetPiece = async (socket, { nb }) => {
-  const tab = [];
-  for (let i = 0; i < nb; i++) {
-    tab.push(new Piece());
+export const handlerGetPiece = async (socket, { gameId, nbPieces }) => {
+  const pieces = [];
+  for (let i = 0; i < nbPieces; i++) {
+    pieces.push(new Piece());
   }
-  socket.emit(PIECE.SEND, tab);
+
+  eventEmitter.emit(event.piece.send, {
+    pieces,
+    gameId,
+  });
 };

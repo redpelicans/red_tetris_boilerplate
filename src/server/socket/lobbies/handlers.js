@@ -17,9 +17,7 @@ export const handlerAddLobby = async (
   if (response.type === "success") {
     socket.join(`${GROUP_DOMAIN}:lobby-${lobby.id}`);
 
-    eventEmitter.emit(event.lobbies.change, {
-      socket,
-    });
+    eventEmitter.emit(event.lobbies.change);
   }
 };
 
@@ -29,13 +27,10 @@ export const handlerDeleteLobby = async (socket, { lobbyId, ownerId }) => {
 
   if (response.type === "success") {
     eventEmitter.emit(event.lobby.change, {
-      socket,
       lobbyId,
     });
 
-    eventEmitter.emit(event.lobbies.change, {
-      socket,
-    });
+    eventEmitter.emit(event.lobbies.change);
   }
 };
 

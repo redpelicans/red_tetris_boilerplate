@@ -1,5 +1,3 @@
-// import { initSocket } from "store/middleware/sockets";
-
 import {
   SET_PLAYER,
   SET_PLAYER_RESPONSE,
@@ -10,12 +8,10 @@ import {
   SET_LOBBIES_RESPONSE,
   ADD_MESSAGE,
   RESET_MESSAGES,
-  SET_NEXT_PIECES,
   SET_GAME_STARTED,
 } from "actions/store";
 
 export const initialState = {
-  // socket: initSocket(),
   player: {},
   playerResponse: {},
   players: {},
@@ -24,7 +20,6 @@ export const initialState = {
   lobby: {},
   lobbyResponse: {},
   messages: [],
-  nextPieces: [],
   game: {},
 };
 
@@ -55,8 +50,6 @@ export default function reducer(state = initialState, action) {
       };
     case RESET_MESSAGES:
       return { ...state, messages: [] };
-    case SET_NEXT_PIECES:
-      return { ...state, nextPieces: [...state.nextPieces, ...action.pieces] };
     case SET_GAME_STARTED:
       return { ...state, game: action.game };
     default:

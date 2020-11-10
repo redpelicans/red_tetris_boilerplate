@@ -1,10 +1,10 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { useTetrisGame, useGameBoard, useNextPieces } from "hooks";
+import { useTetrisGame, useGameBoard, useNextPiecesMulti } from "hooks";
 import { Link } from "react-router-dom";
 import { GameContext } from "store";
-import NextPieces from "./NextPieces";
+import NextPieces from "components/tetris/NextPieces";
 import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
@@ -17,8 +17,10 @@ import { setPenalty, setGame } from "actions/game";
 import { setGameStarted } from "actions/store";
 import { StoreContext } from "store";
 import { GAME } from "../../../config/actions/game";
-import Overlay from "components/overlay/Overlay";
-import { socket, setupSocketGame } from "store/middleware/sockets";
+import Modal from "components/modals/Modal";
+import { socket, socketGameOn, socketGameOff } from "store/middleware";
+import ScatteringGrid from "components/tetris/ScatteringGrid";
+import { deepCopy } from "helpers/functional";
 
 export default function GameMulti() {
   const { state: stateStore, dispatch: dispatchStore } = React.useContext(
@@ -27,8 +29,11 @@ export default function GameMulti() {
   const { state, dispatch } = React.useContext(GameContext);
 
   React.useEffect(() => {
-    setupSocketGame(dispatch);
-    dispatch(setGame(stateStore.game));
+    socketGameOn(dispatch);
+    dispatch(setGame(deepCopy(stateStore.game)));
+    return function unsub() {
+      socketGameOff();
+    };
   }, []);
 
   const gameOver = () => {
@@ -53,17 +58,21 @@ export default function GameMulti() {
     setLinesRemoved((oldValue) => oldValue + value);
   };
 
+  const scoreRef = React.useRef(null);
   const [score, setScore] = React.useState(0);
   const addScore = React.useCallback(
     (value) => {
       setScore((oldScore) => {
         const newScore = oldScore + value;
         if (state.game.id) {
-          socket.emit(GAME.SEND_SCORE, {
-            gameId: state.game.id,
-            playerId: stateStore.player.id,
-            score: newScore,
-          });
+          clearTimeout(scoreRef.current);
+          scoreRef.current = setTimeout(() => {
+            socket.emit(GAME.SEND_SCORE, {
+              gameId: state.game.id,
+              playerId: stateStore.player.id,
+              score: newScore,
+            });
+          }, 300);
         }
         return newScore;
       });
@@ -71,7 +80,17 @@ export default function GameMulti() {
     [state.game.id],
   );
 
-  const { nextPieces, pullNextPiece } = useNextPieces();
+  const { nextPieces, pullNextPiece, setNextPieces } = useNextPiecesMulti(
+    state.game.id,
+    stateStore.game.pieces,
+  );
+
+  React.useEffect(() => {
+    if (state.nextPieces && state.nextPieces.length > 0) {
+      setNextPieces((old) => [...old, ...state.nextPieces]);
+    }
+  }, [state.nextPieces]);
+
   const { grid, piece, ...methods } = useGameBoard(
     10,
     20,
@@ -81,13 +100,18 @@ export default function GameMulti() {
     addRemovedLines,
   );
 
+  const boardRef = React.useRef(null);
+
   React.useEffect(() => {
     if (state.game.id) {
-      socket.emit(GAME.SEND_BOARD, {
-        gameId: state.game.id,
-        playerId: stateStore.player.id,
-        boardGame: grid,
-      });
+      clearTimeout(boardRef.current);
+      boardRef.current = setTimeout(() => {
+        socket.emit(GAME.SEND_BOARD, {
+          gameId: state.game.id,
+          playerId: stateStore.player.id,
+          boardGame: grid,
+        });
+      }, 300);
     }
   }, [grid, state.game.id]);
 
@@ -119,8 +143,7 @@ export default function GameMulti() {
     if (Object.keys(state.winner).length) {
       dispatch(setPlayerIsAlive(false));
       dispatchStore(setGameStarted({}));
-      dispatch(setGame({}));
-      // dispatch(setWinner({}));
+      // dispatch(setGame({}));
     }
   }, [state.winner]);
 
@@ -135,40 +158,26 @@ export default function GameMulti() {
   return (
     <FlexBox
       direction="col"
-      width={"full"}
-      height={"full"}
+      width="full"
+      height="full"
       className="justify-center items-center"
     >
-      {Object.keys(state.winner).length ? (
-        <Overlay isOpen={true} className="create-modal">
-          <span>{`WINNER`}</span>
-          <br />
-          <span>{`name : ${state.winner.player.name}`}</span>
-          <br />
-          <span>{`score : ${state.winner.score}`}</span>
-          <br />
-          <Link
-            to="/rooms/id"
-            className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
-          >
-            Back to rooms
-          </Link>
-        </Overlay>
-      ) : null}
-      <Link
-        to="/"
-        className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
-      >
-        Retour accueil
-      </Link>
-      <button
-        onClick={() => methods.malus(2)}
-        className="text-red-600 bg-grey-200 border-2 border-red-600 p-2 rounded"
-      >
-        TEST MALUS
-      </button>
-      <h1 className="font-bold">{state.alive ? "Still alive" : "GAME OVER"}</h1>
-      <FlexBox direction="row" className="mt-4">
+      {Object.keys(state.winner).length != 0 && (
+        <Modal className="create-modal">
+          <Winner winner={state.winner} game={state.game} />
+        </Modal>
+      )}
+
+      <h2 className="text-3xl font-bold">Red Tetris</h2>
+      <FlexBox direction="row" className="space-x-8">
+        <FlexBox direction="col" className="items-center space-y-4">
+          <NextPieces nextPieces={nextPieces} />
+          <Timer />
+          <Score score={score} />
+          <Level level={state.level} />
+          <LinesRemoved lines={linesRemoved} />
+        </FlexBox>
+
         <FlexBox
           direction="col"
           width={64}
@@ -181,42 +190,7 @@ export default function GameMulti() {
             colHeight={6}
           />
         </FlexBox>
-        <FlexBox direction="col" className="items-center mx-4">
-          <Timer />
-          <Score score={score} />
-          <Level level={state.level} />
-          <LinesRemoved lines={linesRemoved} />
-          <NextPieces nextPieces={nextPieces} />
-        </FlexBox>
-        <FlexBox direction="col" className="items-center mx-4">
-          <span>{`OPPONENTS`}</span>
-          {Object.entries(state.game.players || {}).map(([key, el]) => (
-            <FlexBox
-              direction="col"
-              className="items-center"
-              key={`player-${key}`}
-            >
-              {el?.player.id !== stateStore?.player?.id && (
-                <div>
-                  <span>{`name : ${el?.player.name}`}</span>
-                  <br />
-                  <span>{`score : ${el?.score}`}</span>
-                  <br />
-                  <span>{`status : ${
-                    el?.loser ? "lost" : "still playing"
-                  }`}</span>
-                  <br />
-                  <TetrisGrid
-                    grid={el?.board}
-                    currentPieceColor={"blocked"}
-                    rowHeight={6}
-                    colHeight={6}
-                  />
-                </div>
-              )}
-            </FlexBox>
-          ))}
-        </FlexBox>
+        <ScatteringGrid />
       </FlexBox>
     </FlexBox>
   );
@@ -269,3 +243,23 @@ const Timer = React.memo(() => {
 
   return <p>{elapsedTime}</p>;
 });
+
+const Winner = ({ winner, game }) => (
+  <FlexBox direction="col">
+    <h2 className="text-2xl font-bold space-y-4">And the winner is:</h2>
+
+    <h3 className="text-center text-xl font-semibold">{winner.player.name}</h3>
+
+    <div>
+      <h3 className="text-lg font-semibold">SCORE</h3>
+      <span className="flex justify-center">{winner.score}</span>
+    </div>
+
+    <Link
+      to="/rooms"
+      className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold"
+    >
+      Back to rooms
+    </Link>
+  </FlexBox>
+);

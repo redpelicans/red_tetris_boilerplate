@@ -1,10 +1,9 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { useTetrisGame, useGameBoard, useNextPieces } from "hooks";
-import { Link } from "react-router-dom";
+import { useTetrisGame, useGameBoard, useNextPiecesSolo } from "hooks";
 import { GameContext } from "store";
-import NextPieces from "./NextPieces";
+import NextPieces from "components/tetris/NextPieces";
 import { getElapsedTime } from "helpers/common";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
@@ -13,6 +12,8 @@ import TetrisTheme from "assets/music/Tetris_theme.ogg";
 import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
 import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
+import GameOverStats from "./GameOverStats";
+import Modal from "components/modals/Modal";
 
 export default function GameSolo() {
   const { state, dispatch } = React.useContext(GameContext);
@@ -30,7 +31,7 @@ export default function GameSolo() {
     (value) => setScore((oldScore) => oldScore + value),
     [],
   );
-  const { nextPieces, pullNextPiece } = useNextPieces();
+  const { nextPieces, pullNextPiece } = useNextPiecesSolo();
   const { grid, piece, ...methods } = useGameBoard(
     10,
     20,
@@ -67,24 +68,30 @@ export default function GameSolo() {
   return (
     <FlexBox
       direction="col"
-      width={"full"}
-      height={"full"}
-      className="justify-center items-center"
+      width="full"
+      height="full"
+      className="justify-center items-center space-y-4"
     >
-      <Link
-        to="/"
-        className="font-semibold border-2 p-2 mb-2 border-red-300 rounded"
-      >
-        Retour accueil
-      </Link>
-      <button
-        onClick={() => methods.malus(2)}
-        className="text-red-600 bg-grey-200 border-2 border-red-600 p-2 rounded"
-      >
-        TEST MALUS
-      </button>
-      <h1 className="font-bold">{state.alive ? "Still alive" : "GAME OVER"}</h1>
-      <FlexBox direction="row" className="mt-4">
+      {!state.alive && (
+        <Modal>
+          <GameOverStats
+            score={score}
+            level={state.level}
+            linesRemoved={linesRemoved}
+          />
+        </Modal>
+      )}
+
+      <h2 className="text-3xl font-bold">Red Tetris</h2>
+      <FlexBox direction="row" className="space-x-8">
+        <FlexBox direction="col" className="items-center space-y-4">
+          <h3 className="font-bold text-2xl">Stats</h3>
+          <Timer />
+          <Score score={score} />
+          <Level level={state.level} />
+          <LinesRemoved lines={linesRemoved} />
+        </FlexBox>
+
         <FlexBox
           direction="col"
           width={64}
@@ -97,13 +104,8 @@ export default function GameSolo() {
             colHeight={6}
           />
         </FlexBox>
-        <FlexBox direction="col" className="items-center mx-4">
-          <Timer />
-          <Score score={score} />
-          <Level level={state.level} />
-          <LinesRemoved lines={linesRemoved} />
-          <NextPieces nextPieces={nextPieces} />
-        </FlexBox>
+
+        <NextPieces nextPieces={nextPieces} />
       </FlexBox>
     </FlexBox>
   );
@@ -111,7 +113,7 @@ export default function GameSolo() {
 
 const Score = React.memo(({ score }) => (
   <FlexBox direction="col" className="relative items-center">
-    <h1 className="font-bold w-32 text-center">SCORE</h1>
+    <h1 className="font-bold w-32 text-center text-lg">SCORE</h1>
     <span>{score}</span>
   </FlexBox>
 ));
@@ -119,7 +121,7 @@ const Score = React.memo(({ score }) => (
 const LinesRemoved = React.memo(({ lines }) => <p>{lines} Lines removed</p>);
 
 const Level = React.memo(({ level }) => (
-  <h1 className="font-bold">Level {level}</h1>
+  <h1 className="font-bold text-lg">Level {level}</h1>
 ));
 
 const Timer = React.memo(() => {

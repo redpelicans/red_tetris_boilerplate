@@ -1,7 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import { LOBBY } from "../../../config/actions/lobby";
-import { socket } from "store/middleware/sockets";
+import { socket } from "store/middleware";
 
 export default function LobbyItem({ lobby, state }) {
   const subscribeLobby = () => {
