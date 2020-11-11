@@ -7,10 +7,10 @@ import useGravity from "./useGravity";
  ** This hook manage the env around the game
  **   events, gravity...
  */
-function useTetrisGame(methods, nextPieces) {
+function useTetrisGame(methods, nextPieces, level) {
   const { state } = React.useContext(GameContext);
 
-  const gravityInterval = useGravity();
+  const gravityInterval = useGravity(level);
   React.useEffect(() => {
     if (!state.alive) {
       return;

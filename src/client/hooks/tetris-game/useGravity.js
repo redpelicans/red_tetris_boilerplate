@@ -1,23 +1,22 @@
 import React from "react";
-import { GameContext } from "store";
 import { divideBy } from "helpers/currying";
 import { INTERVAL_MS } from "constants/tetris";
 
-function useGravity() {
-  const { state } = React.useContext(GameContext);
+function useGravity(level) {
+  const gravityInterval = React.useRef(INTERVAL_MS);
 
-  const gravityInterval = React.useMemo(() => {
+  React.useEffect(() => {
     const divideByThree = divideBy(3);
     let interval = INTERVAL_MS;
 
-    for (let i = 0; i < state.level; i++) {
+    for (let i = 0; i < level; i++) {
       interval = interval - divideByThree(interval);
     }
 
-    return interval;
-  }, [state.level]);
+    gravityInterval.current = interval;
+  }, [level]);
 
-  return gravityInterval;
+  return gravityInterval.current;
 }
 
 export default useGravity;
