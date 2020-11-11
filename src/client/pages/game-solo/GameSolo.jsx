@@ -19,6 +19,7 @@ import Modal from "components/modals/Modal";
 import { useTranslation } from "react-i18next";
 import { Score, LinesRemoved, Level, Timer } from "components/tetris/Stats";
 import SoundToggler from "components/sound/SoundToggler";
+import LooseTag from "components/tetris/LooseTag";
 
 export default function GameSolo() {
   const { t } = useTranslation();
@@ -86,8 +87,9 @@ export default function GameSolo() {
           <FlexBox
             direction="col"
             width={64}
-            className="justify-center align-center"
+            className="justify-center align-center relative"
           >
+            {!state.alive && <LooseTag fontSize="4xl" />}
             <TetrisGrid
               grid={grid}
               currentPieceColor={piece.color}
