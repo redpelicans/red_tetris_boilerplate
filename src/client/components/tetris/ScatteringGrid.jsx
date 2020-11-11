@@ -10,34 +10,42 @@ export default function ScatteringGrid() {
     (player) => player.player.id !== stateStore.player.id,
   );
 
-  return opponents.map((opponent) => (
-    <FlexBox
-      direction="col"
-      className="items-center space-y-2"
-      key={`opponent-${opponent.player.id}`}
-    >
-      <p
-        className={
-          "font-semibold text-lg" + (opponent.loser ? " line-through" : "")
-        }
-      >
-        {opponent.player.name}
-      </p>
-
-      <FlexBox
-        direction="col"
-        width={24}
-        className="justify-center align-center"
-      >
-        <TetrisGrid
-          grid={opponent.board}
-          currentPieceColor={"blocked"}
-          rowHeight={2}
-          colHeight={2}
-        />
+  return (
+    <FlexBox direction="col" className="justify-around flex-1">
+      <FlexBox direction="row" className="justify-around flex-1">
+        {opponents.slice(0, 2).map((opponent) => (
+          <OpponentGrid key={opponent.player.id} opponent={opponent} />
+        ))}
       </FlexBox>
 
-      <p>{opponent.score}</p>
+      <FlexBox direction="row" className="justify-around flex-1">
+        {opponents.slice(2, 4).map((opponent) => (
+          <OpponentGrid key={opponent.player.id} opponent={opponent} />
+        ))}
+      </FlexBox>
     </FlexBox>
-  ));
+  );
 }
+
+const OpponentGrid = ({ opponent }) => (
+  <FlexBox direction="col" className="items-center space-y-2">
+    <p
+      className={
+        "font-semibold text-lg" + (opponent.loser ? " line-through" : "")
+      }
+    >
+      {opponent.player.name}
+    </p>
+
+    <FlexBox direction="col" width={24} className="justify-center align-center">
+      <TetrisGrid
+        grid={opponent.board}
+        currentPieceColor={"blocked"}
+        rowHeight={2}
+        colHeight={2}
+      />
+    </FlexBox>
+
+    <p>{opponent.score}</p>
+  </FlexBox>
+);
