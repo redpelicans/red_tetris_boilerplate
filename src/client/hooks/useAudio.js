@@ -11,15 +11,8 @@ function useAudio(url, initialOptions = {}) {
     [],
   );
 
-  const [playing, setPlaying] = React.useState(false);
-  React.useEffect(() => {
-    playing ? audio.play() : audio.pause();
-  }, [playing]);
-
-  const toggle = React.useCallback(
-    () => setPlaying((oldPlaying) => !oldPlaying),
-    [],
-  );
+  const play = () => audio.play();
+  const pause = () => audio.pause();
 
   const [options, setOptions] = React.useState(initialOptions);
   React.useEffect(() => {
@@ -28,7 +21,7 @@ function useAudio(url, initialOptions = {}) {
     });
   }, [options]);
 
-  return [toggle, setOptions];
+  return [play, pause, setOptions];
 }
 
 export default useAudio;

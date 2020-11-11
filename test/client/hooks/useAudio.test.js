@@ -16,16 +16,16 @@ describe("useAudio", () => {
 
   test("should toggle the playing state", () => {
     const { result } = renderHook(() => useAudio());
-    const [toggle] = result.current;
+    const [play, pause] = result.current;
 
     act(() => {
-      toggle();
+      play();
     });
     expect(playStub).toHaveBeenCalled();
     expect(reactStub).toHaveBeenCalled();
 
     act(() => {
-      toggle();
+      pause();
     });
     expect(pauseStub).toHaveBeenCalled();
     expect(reactStub).toHaveBeenCalled();
@@ -33,7 +33,7 @@ describe("useAudio", () => {
 
   test("should trigger the useEffect on options change", () => {
     const { result } = renderHook(() => useAudio());
-    const [_, setOptions] = result.current;
+    const [play, pause, setOptions] = result.current;
 
     act(() => {
       setOptions({});
