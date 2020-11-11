@@ -33,6 +33,6 @@ services:
     ports:
       - "8000:80"
     environment:
-      REACT_APP_BACK_HOST: http://redtetris.co
-      REACT_APP_BACK_PORT: 3004
+      REACT_APP_BACK_HOST: socket.redtetris.co
+      REACT_APP_BACK_PORT: 443
     restart: always
