@@ -29,11 +29,7 @@ services:
     build:
       context: .
       dockerfile: .docker/client/Dockerfile.prod
-      args:
-        server_host: ${RT_SERVER_HOST}
     container_name: redtetris-client-prod
     ports:
       - "8000:80"
-    environment:
-      REACT_APP_SERVER_HOST: ${RT_SERVER_HOST}
     restart: always

@@ -1,6 +1,4 @@
 FROM node:14.9.0-alpine as build
-ARG server_host
-ENV REACT_APP_SERVER_HOST=$server_host
 
 WORKDIR /redtetris/client/
 COPY package*.json ./
