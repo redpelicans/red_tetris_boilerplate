@@ -13,6 +13,8 @@ import "./Lobby.scss";
 import { socket } from "store/middleware";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import Crown from "assets/img/crown.jpg";
+import RedCross from "assets/img/red-cross.png";
 
 export default function Lobby({ open, state, dispatch }) {
   const notify = (error) => toast.error(error);
@@ -112,7 +114,7 @@ export default function Lobby({ open, state, dispatch }) {
 
             {el?.player.id === state?.lobby?.owner?.id && (
               <div className="h-4 w-4 mr-4">
-                <img src={require("assets/img/crown.png")} />
+                <img src={Crown} />
               </div>
             )}
 
@@ -130,7 +132,7 @@ export default function Lobby({ open, state, dispatch }) {
                     kickPlayer(state.player.id, el.player.id, state.lobby.id)
                   }
                 >
-                  <img src={require("assets/img/red-cross.png")} />
+                  <img src={RedCross} />
                 </div>
               )}
           </FlexBox>
