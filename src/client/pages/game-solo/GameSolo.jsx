@@ -71,7 +71,7 @@ export default function GameSolo() {
         )}
         <SoundToggler
           speedRate={speedRate}
-          className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
+          className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow bg-white"
         />
 
         <FlexBox direction="row" className="space-x-8">
