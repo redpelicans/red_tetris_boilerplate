@@ -4,8 +4,9 @@ import { lowerOrEqualThan, divideBy } from "helpers/currying";
 
 export default function useGameStats() {
   const [linesRemoved, setLinesRemoved] = React.useState(0);
-  const addRemovedLines = React.useCallback((value) =>
-    setLinesRemoved((oldValue) => oldValue + value),
+  const addRemovedLines = React.useCallback(
+    (value) => setLinesRemoved((oldValue) => oldValue + value),
+    [],
   );
 
   const [level, setLevel] = React.useState(0);
@@ -30,5 +31,5 @@ export default function useGameStats() {
     setSpeedRate(1.0 + level * 0.05);
   }, [level]);
 
-  return [linesRemoved, addRemovedLines, score, addScore, level, speedRate];
+  return { linesRemoved, addRemovedLines, score, addScore, level, speedRate };
 }

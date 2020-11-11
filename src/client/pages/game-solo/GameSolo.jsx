@@ -26,14 +26,14 @@ export default function GameSolo() {
     dispatch(setPlayerIsAlive(false));
   };
 
-  const [
+  const {
     linesRemoved,
     addRemovedLines,
     score,
     addScore,
     level,
     speedRate,
-  ] = useGameStats();
+  } = useGameStats();
 
   const { nextPieces, pullNextPiece } = useNextPiecesSolo();
   const { grid, piece, ...methods } = useGameBoard(
