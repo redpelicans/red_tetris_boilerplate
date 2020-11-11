@@ -142,60 +142,62 @@ export default function GameMulti() {
   useEventListener("keydown", throttledMove);
 
   return (
-    <FlexBox
-      direction="col"
-      width="full"
-      height="full"
-      className="justify-center items-center"
-    >
-      {Object.keys(state.winner).length !== 0 && (
-        <Modal className="create-modal">
-          <Leaderboard
-            winner={state.winner}
-            players={state.game.players.map((player) =>
-              player.player.id === stateStore.player.id
-                ? { ...player, score }
-                : player,
-            )}
-          />
-        </Modal>
-      )}
+    <>
+      <Link
+        to={{ pathname: "/", state: "forceRefresh" }}
+        className="text-3xl font-bold hover:text-red-600 fixed top-0 right-0 left-0 text-center"
+      >
+        Red Tetris
+      </Link>
+
       <SoundToggler
         speedRate={speedRate}
         className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
       />
 
-      <Link
-        to={{ pathname: "/", state: "forceRefresh" }}
-        className="text-3xl font-bold hover:text-red-600"
-      >
-        Red Tetris
-      </Link>
+      <FlexBox direction="row" height="full" className="justify-around">
+        <FlexBox direction="col" className="justify-center items-end w-6/12">
+          {Object.keys(state.winner).length !== 0 && (
+            <Modal className="create-modal">
+              <Leaderboard
+                winner={state.winner}
+                players={state.game.players.map((player) =>
+                  player.player.id === stateStore.player.id
+                    ? { ...player, score }
+                    : player,
+                )}
+              />
+            </Modal>
+          )}
 
-      <FlexBox direction="row" className="space-x-8">
-        <FlexBox direction="col" className="items-center space-y-4">
-          <NextPieces nextPieces={nextPieces} />
-          <Timer />
-          <Score score={score} />
-          <Level level={level} />
-          <LinesRemoved lines={linesRemoved} />
+          <FlexBox direction="row" className="space-x-8">
+            <FlexBox direction="col" className="items-center space-y-4">
+              <NextPieces nextPieces={nextPieces} />
+              <Timer />
+              <Score score={score} />
+              <Level level={level} />
+              <LinesRemoved lines={linesRemoved} />
+            </FlexBox>
+
+            <FlexBox
+              direction="col"
+              width={64}
+              className="justify-center align-center"
+            >
+              <TetrisGrid
+                grid={grid}
+                currentPieceColor={piece.color}
+                rowHeight={6}
+                colHeight={6}
+              />
+            </FlexBox>
+          </FlexBox>
         </FlexBox>
 
-        <FlexBox
-          direction="col"
-          width={64}
-          className="justify-center align-center"
-        >
-          <TetrisGrid
-            grid={grid}
-            currentPieceColor={piece.color}
-            rowHeight={6}
-            colHeight={6}
-          />
-        </FlexBox>
+        <div className="w-1/12" />
         <ScatteringGrid />
       </FlexBox>
-    </FlexBox>
+    </>
   );
 }
 
