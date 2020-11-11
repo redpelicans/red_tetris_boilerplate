@@ -7,14 +7,12 @@ import NextPieces from "components/tetris/NextPieces";
 import useEventListener from "hooks/useEventListener";
 import useThrottle from "hooks/useThrottle";
 import { DEFAULT_REPEAT_TIMEOUT } from "constants/tetris";
-import TetrisTheme from "assets/music/Tetris_theme.ogg";
-import TetrisGameOverTheme from "assets/music/Tetris_game_over.ogg";
-import useAudio from "hooks/useAudio";
 import { setPlayerIsAlive } from "actions/game";
 import GameOverStats from "./GameOverStats";
 import Modal from "components/modals/Modal";
 import { useTranslation } from "react-i18next";
 import { Score, LinesRemoved, Level, Timer } from "components/tetris/Stats";
+import SoundToggler from "components/sound/SoundToggler";
 
 export default function GameSolo() {
   const { t } = useTranslation();
@@ -44,25 +42,6 @@ export default function GameSolo() {
   );
   const { movePiece } = useTetrisGame(methods, nextPieces);
 
-  const options = {
-    volume: 0.2,
-    loop: true,
-    playbackRate: state.speedRate,
-  };
-  const [toggleMainAudio, setOptions] = useAudio(TetrisTheme, options);
-  const [toggleGameOverAudio] = useAudio(TetrisGameOverTheme);
-
-  React.useEffect(() => {
-    toggleMainAudio();
-    if (state.alive === false) {
-      toggleGameOverAudio();
-    }
-  }, [state.alive]);
-
-  React.useEffect(() => {
-    setOptions({ ...options, playbackRate: state.speedRate });
-  }, [state.speedRate]);
-
   // Add keyboard event
   const throttledMove = useThrottle(movePiece, DEFAULT_REPEAT_TIMEOUT);
   useEventListener("keydown", throttledMove);
@@ -83,6 +62,7 @@ export default function GameSolo() {
           />
         </Modal>
       )}
+      <SoundToggler className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow" />
 
       <h2 className="text-3xl font-bold">Red Tetris</h2>
       <FlexBox direction="row" className="space-x-8">
