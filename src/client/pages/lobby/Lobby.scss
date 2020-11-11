@@ -11,9 +11,17 @@
 }
 
 .red-button {
-  @apply w-48% flex-shrink-0 bg-red-400 text-sm text-white py-1 px-2 rounded font-semibold;
+  @apply w-48% flex-shrink-0 text-sm text-white py-1 px-2 rounded font-semibold;
+}
+
+.launchable {
+  @apply bg-red-400;
 
   &:hover {
     @apply bg-red-600;
   }
+}
+
+.not-launchable {
+  @apply bg-grey-400 cursor-default;
 }
