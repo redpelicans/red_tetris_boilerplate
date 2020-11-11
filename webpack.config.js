@@ -138,6 +138,7 @@ module.exports = () => {
           {
             inject: true,
             template: path.resolve(__dirname, "public/index.html"),
+            favicon: "./public/favicon.ico",
           },
           isEnvProduction
             ? {
