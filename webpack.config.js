@@ -89,7 +89,14 @@ module.exports = () => {
         {
           test: /\.(png|svg|jpe?g|gif)$/,
           include: path.resolve(CLIENT_DIR, "assets/img"),
-          use: require.resolve("file-loader"),
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                esModule: false,
+              },
+            },
+          ],
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
