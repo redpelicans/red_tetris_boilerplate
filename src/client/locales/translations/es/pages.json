@@ -2,6 +2,7 @@
 	"game": {
 		"back_to_lobbies": "Volver a lobbies",
 		"game_over": "Juego terminado",
+		"leaderboard": "Clasificación",
 		"level": "Nivel",
 		"lines_removed": "{{count}} Línea eliminada",
 		"lines_removed_plural": "{{count}} Líneas eliminadas",
