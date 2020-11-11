@@ -112,7 +112,7 @@ export default function Lobby({ open, state, dispatch }) {
 
             {el?.player.id === state?.lobby?.owner?.id && (
               <div className="h-4 w-4 mr-4">
-                <img src="/src/client/assets/img/crown.png" />
+                <img src={require("assets/img/crown.png")} />
               </div>
             )}
 
@@ -130,7 +130,7 @@ export default function Lobby({ open, state, dispatch }) {
                     kickPlayer(state.player.id, el.player.id, state.lobby.id)
                   }
                 >
-                  <img src="/src/client/assets/img/red-cross.png" />
+                  <img src={require("assets/img/red-cross.png")} />
                 </div>
               )}
           </FlexBox>

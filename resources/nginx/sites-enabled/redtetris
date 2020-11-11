@@ -1,0 +1,51 @@
+server {
+    server_name www.redtetris.co;
+    return 301 https://redtetris.co$request_uri;
+}
+
+server {
+    server_name socket.redtetris.co;
+
+    location / {
+        proxy_pass  http://127.0.0.1:3004;
+	proxy_http_version 1.1;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection "upgrade";
+	proxy_set_header Host $host;
+    }
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/socket.redtetris.co/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/socket.redtetris.co/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    server_name redtetris.co;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+    }
+    
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/redtetris.co/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/redtetris.co/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = redtetris.co) {
+        return 301 https://$host$request_uri;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+    }
+
+    server_name redtetris.co;
+    listen 80;
+    listen [::]:80;
+}
