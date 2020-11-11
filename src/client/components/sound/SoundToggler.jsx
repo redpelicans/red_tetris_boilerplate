@@ -5,7 +5,7 @@ import useAudio from "hooks/useAudio";
 import { useTranslation } from "react-i18next";
 import { GameContext } from "store";
 
-export default function SoundToggler({ ...rest }) {
+export default function SoundToggler({ speedRate, ...rest }) {
   const { state } = React.useContext(GameContext);
   const { t } = useTranslation();
   const [soundState, setSoundState] = React.useState(true);
@@ -33,7 +33,7 @@ export default function SoundToggler({ ...rest }) {
   const options = {
     volume: 0.2,
     loop: true,
-    playbackRate: state.speedRate,
+    playbackRate: speedRate,
   };
   const [playMain, pauseMain, setOptions] = useAudio(TetrisTheme, options);
   const [playGameOver, pauseGameOver] = useAudio(TetrisGameOverTheme);
@@ -50,8 +50,8 @@ export default function SoundToggler({ ...rest }) {
   }, [state.alive]);
 
   React.useEffect(() => {
-    setOptions({ ...options, playbackRate: state.speedRate });
-  }, [state.speedRate]);
+    setOptions({ ...options, playbackRate: speedRate });
+  }, [speedRate]);
 
   return soundState ? (
     <div onClick={toggle} {...rest}>

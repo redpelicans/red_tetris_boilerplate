@@ -66,7 +66,10 @@ export default function GameSolo() {
           />
         </Modal>
       )}
-      <SoundToggler className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow" />
+      <SoundToggler
+        speedRate={speedRate}
+        className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
+      />
 
       <h2 className="text-3xl font-bold">Red Tetris</h2>
       <FlexBox direction="row" className="space-x-8">
