@@ -52,53 +52,52 @@ export default function GameSolo() {
   useEventListener("keydown", throttledMove);
 
   return (
-    <FlexBox
-      direction="col"
-      width="full"
-      height="full"
-      className="justify-center items-center space-y-4"
-    >
-      {!state.alive && (
-        <Modal>
-          <GameOverStats
-            score={score}
-            level={level}
-            linesRemoved={linesRemoved}
-          />
-        </Modal>
-      )}
-      <SoundToggler
-        speedRate={speedRate}
-        className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
-      />
+    <FlexBox direction="col" height="full" className="justify-around">
+      <FlexBox className="w-full justify-center">
+        <Link to="/" className="text-3xl font-bold hover:text-red-600">
+          Red Tetris
+        </Link>
+      </FlexBox>
 
-      <Link to="/" className="text-3xl font-bold hover:text-red-600">
-        Red Tetris
-      </Link>
+      <FlexBox direction="col" className="justify-center items-center">
+        {!state.alive && (
+          <Modal>
+            <GameOverStats
+              score={score}
+              level={level}
+              linesRemoved={linesRemoved}
+            />
+          </Modal>
+        )}
+        <SoundToggler
+          speedRate={speedRate}
+          className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
+        />
 
-      <FlexBox direction="row" className="space-x-8">
-        <FlexBox direction="col" className="items-center space-y-4">
-          <h3 className="font-bold text-2xl">{t("pages.game.stats")}</h3>
-          <Timer />
-          <Score score={score} />
-          <Level level={level} />
-          <LinesRemoved lines={linesRemoved} />
+        <FlexBox direction="row" className="space-x-8">
+          <FlexBox direction="col" className="items-center space-y-4">
+            <h3 className="font-bold text-2xl">{t("pages.game.stats")}</h3>
+            <Timer />
+            <Score score={score} />
+            <Level level={level} />
+            <LinesRemoved lines={linesRemoved} />
+          </FlexBox>
+
+          <FlexBox
+            direction="col"
+            width={64}
+            className="justify-center align-center"
+          >
+            <TetrisGrid
+              grid={grid}
+              currentPieceColor={piece.color}
+              rowHeight={6}
+              colHeight={6}
+            />
+          </FlexBox>
+
+          <NextPieces nextPieces={nextPieces} />
         </FlexBox>
-
-        <FlexBox
-          direction="col"
-          width={64}
-          className="justify-center align-center"
-        >
-          <TetrisGrid
-            grid={grid}
-            currentPieceColor={piece.color}
-            rowHeight={6}
-            colHeight={6}
-          />
-        </FlexBox>
-
-        <NextPieces nextPieces={nextPieces} />
       </FlexBox>
     </FlexBox>
   );
