@@ -2,6 +2,13 @@
   position: relative;
 }
 
+.on-top {
+  position: relative;
+  transition: all 300ms ease-in-out;
+  user-select: none;
+  z-index: 2;
+}
+
 .button-special-tetro {
   position: absolute;
   display: none !important;

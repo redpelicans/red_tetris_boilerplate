@@ -55,7 +55,10 @@ export default function InputUserName() {
           onChange={handlePlayerName}
           autoFocus
         />
-        <ButtonSpecial className="button-3" type="submit">
+        <ButtonSpecial
+          className="bg-red-400 hover:bg-red-600 text-sm text-white p-2 rounded"
+          type="submit"
+        >
           {t("pages.home.new_player")}
         </ButtonSpecial>
       </form>

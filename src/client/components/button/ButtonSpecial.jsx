@@ -80,7 +80,7 @@ export default function ButtonSpecial({ onClick, className, children }) {
         )),
       )}
       <button
-        className={className}
+        className={`${className} on-top`}
         onClick={() => {
           newAnim(randomRangeNumber(5, 10));
           if (onClick) {
