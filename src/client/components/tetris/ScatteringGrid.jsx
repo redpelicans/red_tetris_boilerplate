@@ -11,14 +11,25 @@ export default function ScatteringGrid() {
   );
 
   return (
-    <FlexBox direction="col" className="justify-around flex-1">
-      <FlexBox direction="row" className="justify-around flex-1">
+    <FlexBox
+      direction="col"
+      className="items-start justify-around w-5/12 space-y-8"
+    >
+      <FlexBox
+        direction="row"
+        height="full"
+        className="items-end justify-around flex-1"
+      >
         {opponents.slice(0, 2).map((opponent) => (
           <OpponentGrid key={opponent.player.id} opponent={opponent} />
         ))}
       </FlexBox>
 
-      <FlexBox direction="row" className="justify-around flex-1">
+      <FlexBox
+        direction="row"
+        height="full"
+        className="items-start justify-around flex-1"
+      >
         {opponents.slice(2, 4).map((opponent) => (
           <OpponentGrid key={opponent.player.id} opponent={opponent} />
         ))}
