@@ -8,6 +8,8 @@
 		"main_menu": "Menu principal",
 		"next_pieces": "Pièces suivantes",
 		"score": "Score",
+		"sound_off": "Son éteint",
+		"sound_on": "Son allumé",
 		"stats": "Stats",
 		"winner": "Gagnant"
 	},
