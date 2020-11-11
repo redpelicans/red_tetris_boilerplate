@@ -25,6 +25,7 @@ import { deepCopy } from "helpers/functional";
 import { useTranslation } from "react-i18next";
 import { Score, LinesRemoved, Level, Timer } from "components/tetris/Stats";
 import SoundToggler from "components/sound/SoundToggler";
+import Crown from "assets/img/crown.png";
 
 export default function GameMulti() {
   const { state: stateStore, dispatch: dispatchStore } = React.useContext(
@@ -149,7 +150,14 @@ export default function GameMulti() {
     >
       {Object.keys(state.winner).length !== 0 && (
         <Modal className="create-modal">
-          <Winner winner={state.winner} game={state.game} />
+          <Leaderboard
+            winner={state.winner}
+            players={state.game.players.map((player) =>
+              player.player.id === stateStore.player.id
+                ? { ...player, score }
+                : player,
+            )}
+          />
         </Modal>
       )}
       <SoundToggler
@@ -185,27 +193,43 @@ export default function GameMulti() {
   );
 }
 
-const Winner = ({ winner }) => {
+const Leaderboard = ({ winner, players }) => {
   const { t } = useTranslation();
+  const playersWithoutWinner = players.filter(
+    (player) => player.player.id !== winner.player.id,
+  );
+  const sortedPlayers = playersWithoutWinner.sort(
+    (current, next) => current.score > next.score,
+  );
 
   return (
     <FlexBox direction="col">
       <h2 className="text-2xl font-bold space-y-4">
-        {t("pages.game.winner")}:
+        {t("pages.game.leaderboard")}:
       </h2>
 
-      <h3 className="text-center text-xl font-semibold">
-        {winner.player.name}
-      </h3>
+      <FlexBox direction="row" className="justify-between border-b-2 mb-2">
+        <FlexBox direction="row" className="items-center">
+          <img src={Crown} className="h-4 w-4 mr-1" />
+          <h3 className="font-bold">{winner.player.name}</h3>
+        </FlexBox>
+        <h3 className="italic">{winner.score}</h3>
+      </FlexBox>
 
-      <div>
-        <h3 className="text-lg font-semibold">{t("pages.game.score")}</h3>
-        <span className="flex justify-center">{winner.score}</span>
-      </div>
+      {sortedPlayers.map((player, idx) => (
+        <FlexBox
+          key={idx}
+          direction="row"
+          className="justify-between border-b pl-5 mb-2"
+        >
+          <h3 className="font-bold">{player.player.name}</h3>
+          <h3 className="italic">{player.score}</h3>
+        </FlexBox>
+      ))}
 
       <Link
         to="/rooms"
-        className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold"
+        className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold mt-4"
       >
         {t("pages.game.back_to_lobbies")}
       </Link>

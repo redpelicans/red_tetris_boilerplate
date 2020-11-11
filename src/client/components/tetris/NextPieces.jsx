@@ -6,11 +6,17 @@ const NextPieces = React.memo(({ nextPieces }) => {
   const { t } = useTranslation();
 
   return (
-    <FlexBox direction="col" className="space-y-4">
-      <h1 className="font-bold text-2xl">{t("pages.game.next_pieces")}</h1>
-      {nextPieces[0] && <Previsualisation nextPiece={nextPieces[0]} size={4} />}
-      {nextPieces[1] && <Previsualisation nextPiece={nextPieces[1]} size={2} />}
-    </FlexBox>
+    nextPieces && (
+      <FlexBox direction="col" className="space-y-4">
+        <h1 className="font-bold text-2xl">{t("pages.game.next_pieces")}</h1>
+        {nextPieces[0] && (
+          <Previsualisation nextPiece={nextPieces[0]} size={4} />
+        )}
+        {nextPieces[1] && (
+          <Previsualisation nextPiece={nextPieces[1]} size={2} />
+        )}
+      </FlexBox>
+    )
   );
 });
 

@@ -2,6 +2,7 @@
 	"game": {
 		"back_to_lobbies": "Back to lobbies",
 		"game_over": "Game over",
+		"leaderboard": "Leaderboard",
 		"level": "Level",
 		"lines_removed": "{{count}} Line deleted",
 		"lines_removed_plural": "{{count}} Lines deleted",

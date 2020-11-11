@@ -2,6 +2,7 @@
 	"game": {
 		"back_to_lobbies": "Retour aux salons",
 		"game_over": "Partie terminée",
+		"leaderboard": "Classement",
 		"level": "Niveau",
 		"lines_removed": "{{count}} Ligne supprimée",
 		"lines_removed_plural": "{{count}} Lignes supprimées",
