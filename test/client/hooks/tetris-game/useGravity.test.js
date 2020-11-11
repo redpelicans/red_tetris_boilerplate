@@ -1,21 +1,17 @@
 import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import useGravity from "hooks/tetris-game/useGravity";
-import { GameContextProvider } from "store/layers/game";
 import { INTERVAL_MS } from "constants/tetris";
 
 describe("useGravity", () => {
-  const useContextStub = jest.spyOn(React, "useContext");
-  const useMemoStub = jest.spyOn(React, "useMemo");
+  const useRefStub = jest.spyOn(React, "useRef");
+  const useEffectStub = jest.spyOn(React, "useEffect");
 
   test("should compute the gravity time interval", () => {
-    const wrapper = ({ children }) => (
-      <GameContextProvider>{children}</GameContextProvider>
-    );
-    const { result } = renderHook(() => useGravity(), { wrapper });
+    const { result } = renderHook(() => useGravity(0));
 
-    expect(useContextStub).toHaveBeenCalled();
-    expect(useMemoStub).toHaveBeenCalled();
+    expect(useRefStub).toHaveBeenCalled();
+    expect(useEffectStub).toHaveBeenCalled();
     expect(result.current).toEqual(INTERVAL_MS);
   });
 });
