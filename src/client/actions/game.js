@@ -15,19 +15,9 @@ export const setPlayerIsAlive = (alive) => ({
   alive,
 });
 
-export const addScore = (score) => ({
-  type: SET_OWNER_SCORE,
-  score,
-});
-
-export const inscreaseRowsRemoved = (nbRowsRemoved) => ({
-  type: INCREASE_ROWS_REMOVED,
-  increment: nbRowsRemoved,
-});
-
 export const setGame = (game) => ({
   type: SET_GAME,
-  game: game,
+  game,
 });
 
 export const setScore = (payload) => ({
@@ -60,5 +50,5 @@ export const setPenalty = (payload) => ({
 
 export const setNextPieces = (pieces) => ({
   type: SET_NEXT_PIECES,
-  pieces: pieces,
+  pieces,
 });
