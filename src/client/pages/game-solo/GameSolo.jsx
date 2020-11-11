@@ -1,6 +1,7 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
+import { Link } from "react-router-dom";
 import {
   useTetrisGame,
   useGameBoard,
@@ -71,7 +72,10 @@ export default function GameSolo() {
         className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
       />
 
-      <h2 className="text-3xl font-bold">Red Tetris</h2>
+      <Link to="/" className="text-3xl font-bold hover:text-red-600">
+        Red Tetris
+      </Link>
+
       <FlexBox direction="row" className="space-x-8">
         <FlexBox direction="col" className="items-center space-y-4">
           <h3 className="font-bold text-2xl">{t("pages.game.stats")}</h3>
