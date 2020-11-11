@@ -3,11 +3,9 @@ import { setupSocketPlayer, removeSocketPlayer } from "store/middleware/player";
 import { setupSocketRooms, removeSocketRooms } from "store/middleware/rooms";
 import { setupSocketGame, removeSocketGame } from "store/middleware/game";
 
-const host = process.env.REACT_APP_BACK_HOST || "0.0.0.0";
-const port = process.env.REACT_APP_BACK_PORT || "3004";
-const endpoint = `${host}:${port}`;
+const host = process.env.REACT_APP_SERVER_HOST || "0.0.0.0:3004";
 
-export const socket = socketIOClient(endpoint);
+export const socket = socketIOClient(host);
 
 let socketPlayer = false;
 let socketRooms = false;

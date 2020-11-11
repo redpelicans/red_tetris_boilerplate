@@ -1,4 +1,5 @@
 build
+resources
 coverage
 .storybook
 README.md
