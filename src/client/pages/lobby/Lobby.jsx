@@ -13,6 +13,8 @@ import "./Lobby.scss";
 import { socket } from "store/middleware";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import Crown from "assets/img/crown.png";
+import RedCross from "assets/img/red-cross.png";
 
 export default function Lobby({ open, state, dispatch }) {
   const notify = (error) => toast.error(error);
@@ -112,7 +114,7 @@ export default function Lobby({ open, state, dispatch }) {
 
             {el?.player.id === state?.lobby?.owner?.id && (
               <div className="h-4 w-4 mr-4">
-                <img src={require("assets/img/crown.png")} />
+                <img src={Crown} />
               </div>
             )}
 
@@ -130,7 +132,7 @@ export default function Lobby({ open, state, dispatch }) {
                     kickPlayer(state.player.id, el.player.id, state.lobby.id)
                   }
                 >
-                  <img src={require("assets/img/red-cross.png")} />
+                  <img src={RedCross} />
                 </div>
               )}
           </FlexBox>
@@ -157,24 +159,32 @@ const Buttons = ({ state, owner }) => {
   };
 
   const launchGame = (lobbyId, ownerId) => {
-    console.log("Launching game...");
     socket.emit(LOBBY.START, { lobbyId, ownerId });
   };
+
+  const isLaunchable =
+    state.lobby.players.length > 1 &&
+    state.lobby.players.reduce(
+      (current, next) => current + (next.ready ? 1 : 0),
+      0,
+    ) ===
+      state.lobby.players.length - 1;
 
   return (
     <FlexBox direction="col" className="px-6 py-2">
       <FlexBox direction="row" className="justify-between">
         {owner ? (
           <button
-            className="red-button"
+            className={`red-button ${isLaunchable ? "" : "not-"}launchable`}
             type="button"
             onClick={() => launchGame(state.lobby.id, state.player.id)}
+            disabled={!isLaunchable}
           >
             {t("pages.lobby.launch_game")}
           </button>
         ) : (
           <button
-            className="red-button"
+            className="red-button launchable"
             type="button"
             onClick={() => setReady(state.lobby.id, state.player.id)}
           >
@@ -182,7 +192,7 @@ const Buttons = ({ state, owner }) => {
           </button>
         )}
         <button
-          className="red-button"
+          className="red-button launchable"
           type="button"
           onClick={() => unsubscribeLobby(state.lobby.id, state.player.id)}
         >
@@ -191,7 +201,7 @@ const Buttons = ({ state, owner }) => {
       </FlexBox>
       {owner && (
         <button
-          className="flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-2 px-2 mt-2 rounded"
+          className="red-button launchable py-2 px-2 mt-2 w-full"
           type="button"
           onClick={() => deleteLobby(state.lobby.id, state.player.id)}
         >
