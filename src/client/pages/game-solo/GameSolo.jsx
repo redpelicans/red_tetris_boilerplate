@@ -1,7 +1,12 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { useTetrisGame, useGameBoard, useNextPiecesSolo } from "hooks";
+import {
+  useTetrisGame,
+  useGameBoard,
+  useNextPiecesSolo,
+  useGameStats,
+} from "hooks";
 import { GameContext } from "store";
 import NextPieces from "components/tetris/NextPieces";
 import useEventListener from "hooks/useEventListener";
@@ -21,16 +26,15 @@ export default function GameSolo() {
     dispatch(setPlayerIsAlive(false));
   };
 
-  const [linesRemoved, setLinesRemoved] = React.useState(0);
-  const addRemovedLines = React.useCallback((value) =>
-    setLinesRemoved((oldValue) => oldValue + value),
-  );
+  const {
+    linesRemoved,
+    addRemovedLines,
+    score,
+    addScore,
+    level,
+    speedRate,
+  } = useGameStats();
 
-  const [score, setScore] = React.useState(0);
-  const addScore = React.useCallback(
-    (value) => setScore((oldScore) => oldScore + value),
-    [],
-  );
   const { nextPieces, pullNextPiece } = useNextPiecesSolo();
   const { grid, piece, ...methods } = useGameBoard(
     10,
@@ -40,7 +44,7 @@ export default function GameSolo() {
     addScore,
     addRemovedLines,
   );
-  const { movePiece } = useTetrisGame(methods, nextPieces);
+  const { movePiece } = useTetrisGame(methods, nextPieces, level);
 
   // Add keyboard event
   const throttledMove = useThrottle(movePiece, DEFAULT_REPEAT_TIMEOUT);
@@ -57,12 +61,15 @@ export default function GameSolo() {
         <Modal>
           <GameOverStats
             score={score}
-            level={state.level}
+            level={level}
             linesRemoved={linesRemoved}
           />
         </Modal>
       )}
-      <SoundToggler className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow" />
+      <SoundToggler
+        speedRate={speedRate}
+        className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
+      />
 
       <h2 className="text-3xl font-bold">Red Tetris</h2>
       <FlexBox direction="row" className="space-x-8">
@@ -70,7 +77,7 @@ export default function GameSolo() {
           <h3 className="font-bold text-2xl">{t("pages.game.stats")}</h3>
           <Timer />
           <Score score={score} />
-          <Level level={state.level} />
+          <Level level={level} />
           <LinesRemoved lines={linesRemoved} />
         </FlexBox>
 

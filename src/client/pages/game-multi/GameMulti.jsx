@@ -1,7 +1,12 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
-import { useTetrisGame, useGameBoard, useNextPiecesMulti } from "hooks";
+import {
+  useTetrisGame,
+  useGameBoard,
+  useNextPiecesMulti,
+  useGameStats,
+} from "hooks";
 import { Link } from "react-router-dom";
 import { GameContext } from "store";
 import NextPieces from "components/tetris/NextPieces";
@@ -43,8 +48,16 @@ export default function GameMulti() {
     dispatch(setPlayerIsAlive(false));
   };
 
-  const [linesRemoved, setLinesRemoved] = React.useState(0);
-  const addRemovedLines = (value) => {
+  const {
+    linesRemoved,
+    addRemovedLines,
+    score,
+    addScore,
+    level,
+    speedRate,
+  } = useGameStats();
+
+  const addRemovedLinesWithEmit = (value) => {
     if (value > 1) {
       if (state.game.id) {
         socket.emit(GAME.SEND_PENALTY, {
@@ -54,30 +67,23 @@ export default function GameMulti() {
         });
       }
     }
-    setLinesRemoved((oldValue) => oldValue + value);
+    addRemovedLines(value);
   };
 
   const scoreRef = React.useRef(null);
-  const [score, setScore] = React.useState(0);
-  const addScore = React.useCallback(
-    (value) => {
-      setScore((oldScore) => {
-        const newScore = oldScore + value;
-        if (state.game.id) {
-          clearTimeout(scoreRef.current);
-          scoreRef.current = setTimeout(() => {
-            socket.emit(GAME.SEND_SCORE, {
-              gameId: state.game.id,
-              playerId: stateStore.player.id,
-              score: newScore,
-            });
-          }, 300);
-        }
-        return newScore;
-      });
-    },
-    [state.game.id],
-  );
+  React.useEffect(() => {
+    if (state.game.id) {
+      scoreRef.current = setTimeout(() => {
+        socket.emit(GAME.SEND_SCORE, {
+          gameId: state.game.id,
+          playerId: stateStore.player.id,
+          score,
+        });
+      }, 300);
+
+      return () => clearTimeout(scoreRef.current);
+    }
+  }, [score]);
 
   const { nextPieces, pullNextPiece, setNextPieces } = useNextPiecesMulti(
     state.game.id,
@@ -96,7 +102,7 @@ export default function GameMulti() {
     gameOver,
     pullNextPiece,
     addScore,
-    addRemovedLines,
+    addRemovedLinesWithEmit,
   );
 
   const boardRef = React.useRef(null);
@@ -121,7 +127,7 @@ export default function GameMulti() {
     }
   }, [state.penalty]);
 
-  const { movePiece } = useTetrisGame(methods, nextPieces);
+  const { movePiece } = useTetrisGame(methods, nextPieces, level);
 
   React.useEffect(() => {
     if (Object.keys(state.winner).length) {
@@ -146,7 +152,10 @@ export default function GameMulti() {
           <Winner winner={state.winner} game={state.game} />
         </Modal>
       )}
-      <SoundToggler className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow" />
+      <SoundToggler
+        speedRate={speedRate}
+        className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
+      />
 
       <h2 className="text-3xl font-bold">Red Tetris</h2>
       <FlexBox direction="row" className="space-x-8">
@@ -154,7 +163,7 @@ export default function GameMulti() {
           <NextPieces nextPieces={nextPieces} />
           <Timer />
           <Score score={score} />
-          <Level level={state.level} />
+          <Level level={level} />
           <LinesRemoved lines={linesRemoved} />
         </FlexBox>
 

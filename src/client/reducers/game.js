@@ -1,7 +1,5 @@
 import {
   SET_PLAYER_IS_ALIVE,
-  SET_OWNER_SCORE,
-  INCREASE_ROWS_REMOVED,
   SET_GAME,
   SET_SCORE,
   SET_BOARD,
@@ -10,15 +8,9 @@ import {
   SET_PENALTY,
   SET_NEXT_PIECES,
 } from "actions/game";
-import { pipe } from "helpers/functional";
-import { lowerOrEqualThan, divideBy } from "helpers/currying";
 
 export const initialState = {
   alive: true,
-  level: 0,
-  rowsRemoved: 0,
-  score: 0,
-  speedRate: 1.0,
   game: {},
   winner: {},
   penalty: 0,
@@ -31,25 +23,6 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         alive: action.alive,
-      };
-    case SET_OWNER_SCORE:
-      return {
-        ...state,
-        score: state.score + action.score,
-      };
-    case INCREASE_ROWS_REMOVED:
-      const newRowsRemoved = state.rowsRemoved + action.increment;
-      const newLevel = pipe(
-        divideBy(10),
-        Math.floor,
-        lowerOrEqualThan(10),
-      )(newRowsRemoved);
-
-      return {
-        ...state,
-        rowsRemoved: newRowsRemoved,
-        level: newLevel,
-        speedRate: 1.0 + newLevel * 0.05,
       };
     case SET_GAME:
       return { ...state, game: action.game };

@@ -1,7 +1,4 @@
 export const SET_PLAYER_IS_ALIVE = "SET_PLAYER_IS_ALIVE";
-export const SET_OWNER_SCORE = "SET_OWNER_SCORE";
-export const INCREASE_SPEED_RATE = "INCREASE_SPEED_RATE";
-export const INCREASE_ROWS_REMOVED = "INCREASE_ROWS_REMOVED";
 export const SET_GAME = "SET_GAME";
 export const SET_SCORE = "SET_SCORE";
 export const SET_BOARD = "SET_BOARD";
@@ -15,19 +12,9 @@ export const setPlayerIsAlive = (alive) => ({
   alive,
 });
 
-export const addScore = (score) => ({
-  type: SET_OWNER_SCORE,
-  score,
-});
-
-export const inscreaseRowsRemoved = (nbRowsRemoved) => ({
-  type: INCREASE_ROWS_REMOVED,
-  increment: nbRowsRemoved,
-});
-
 export const setGame = (game) => ({
   type: SET_GAME,
-  game: game,
+  game,
 });
 
 export const setScore = (payload) => ({
@@ -60,5 +47,5 @@ export const setPenalty = (payload) => ({
 
 export const setNextPieces = (pieces) => ({
   type: SET_NEXT_PIECES,
-  pieces: pieces,
+  pieces,
 });

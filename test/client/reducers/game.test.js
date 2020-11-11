@@ -12,26 +12,6 @@ describe("Game reducer", () => {
     expect(alive).toEqual(false);
   });
 
-  test("SET_OWNER_SCORE", () => {
-    const action = {
-      type: actions.SET_OWNER_SCORE,
-      score: 42,
-    };
-    const { score } = reducer(initialState, action);
-
-    expect(score).toEqual(42);
-  });
-
-  test("INCREASE_ROWS_REMOVED", () => {
-    const action = {
-      type: actions.INCREASE_ROWS_REMOVED,
-      increment: 2,
-    };
-    const { rowsRemoved } = reducer(initialState, action);
-
-    expect(rowsRemoved).toEqual(2);
-  });
-
   test("default", () => {
     const state = reducer(initialState, "NOT_VALID");
     expect(state).toEqual(initialState);
