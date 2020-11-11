@@ -163,7 +163,7 @@ export default function GameMulti() {
           <NextPieces nextPieces={nextPieces} />
           <Timer />
           <Score score={score} />
-          <Level level={state.level} />
+          <Level level={level} />
           <LinesRemoved lines={linesRemoved} />
         </FlexBox>
 
