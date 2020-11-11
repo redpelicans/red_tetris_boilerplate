@@ -39,7 +39,7 @@ export default function ScatteringGrid() {
 }
 
 const OpponentGrid = ({ opponent }) => (
-  <FlexBox direction="col" className="items-center space-y-2">
+  <FlexBox direction="col" className="items-center space-y-2 px-4">
     <p
       className={
         "font-semibold text-lg" + (opponent.loser ? " line-through" : "")
