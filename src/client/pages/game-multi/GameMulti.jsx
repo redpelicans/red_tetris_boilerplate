@@ -157,7 +157,13 @@ export default function GameMulti() {
         className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
       />
 
-      <h2 className="text-3xl font-bold">Red Tetris</h2>
+      <Link
+        to={{ pathname: "/", state: "forceRefresh" }}
+        className="text-3xl font-bold hover:text-red-600"
+      >
+        Red Tetris
+      </Link>
+
       <FlexBox direction="row" className="space-x-8">
         <FlexBox direction="col" className="items-center space-y-4">
           <NextPieces nextPieces={nextPieces} />

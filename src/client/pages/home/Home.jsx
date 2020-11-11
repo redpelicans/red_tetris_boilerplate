@@ -1,6 +1,6 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import GamePad from "components/game-pad/GamePad";
 import {
   gamePadMatrix,
@@ -14,6 +14,14 @@ import InputUserName from "./InputUserName";
 import "./Home.scss";
 
 export default function Home() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (location.state === "forceRefresh") {
+      document.location.reload();
+    }
+  }, []);
+
   return (
     <FlexBox height="full" width="full" className="overflow-hidden">
       <AnimatedBackground />
