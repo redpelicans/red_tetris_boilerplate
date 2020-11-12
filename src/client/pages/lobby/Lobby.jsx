@@ -162,13 +162,11 @@ const Buttons = ({ state, owner }) => {
     socket.emit(LOBBY.START, { lobbyId, ownerId });
   };
 
+  const guests = state.lobby.players.filter(
+    (player) => player.player.id !== state.lobby.owner.id,
+  );
   const isLaunchable =
-    state.lobby.players.length > 1 &&
-    state.lobby.players.reduce(
-      (current, next) => current + (next.ready ? 1 : 0),
-      0,
-    ) ===
-      state.lobby.players.length - 1;
+    guests.length > 0 && guests.every((guest) => guest.ready);
 
   return (
     <FlexBox direction="col" className="px-6 py-2">

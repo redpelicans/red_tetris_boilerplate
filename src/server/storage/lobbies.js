@@ -160,7 +160,10 @@ export const leaveLobby = async (playerId, lobbyId) => {
     lobby.owner = nextOwner.player;
   }
 
-  const newPlayers = deletePlayerFromPlayers(lobby.players, playerId);
+  const newPlayers = setPlayerNotReady(
+    deletePlayerFromPlayers(lobby.players, playerId),
+    lobby.owner.id,
+  );
 
   lobby.players = newPlayers;
   lobbies[lobbyId] = lobby;
@@ -187,7 +190,7 @@ export const readyLobby = async (playerId, lobbyId) => {
     return Response.error(LOBBY.READY, "You are the owner!");
   }
 
-  lobby.players = setPlayerReady(lobby.players, playerId);
+  lobby.players = setReadyOrNot(lobby.players, playerId);
   lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
 
@@ -217,7 +220,7 @@ export const startGame = async (playerId, lobbyId) => {
     return Response.error(LOBBY.START, "All the players need to be ready!");
   }
 
-  const newPlayers = setAllPlayersReady(lobbies[lobbyId].players);
+  const newPlayers = setAllPlayersNotReady(lobbies[lobbyId].players);
   lobbies[lobbyId].players = newPlayers;
   lobbies[lobbyId].isPlaying = true;
   await setComplexObjectToRedis("lobbies", lobbies);
@@ -330,10 +333,21 @@ export const getLobbyIdByPlayerId = (lobbies, playerId) => {
   return lobbyId;
 };
 
-const setPlayerReady = (players, playerId) => {
+const setReadyOrNot = (players, playerId) => {
   return players.filter((el) => {
     if (el.player.id === playerId) {
       el.ready = !el.ready;
+      return el;
+    } else {
+      return el;
+    }
+  });
+};
+
+const setPlayerNotReady = (players, playerId) => {
+  return players.filter((el) => {
+    if (el.player.id === playerId) {
+      el.ready = false;
       return el;
     } else {
       return el;
@@ -363,7 +377,7 @@ const isMaxPlayerValid = (maxPlayer) => {
   return maxPlayer >= 2 && maxPlayer <= 5;
 };
 
-const setAllPlayersReady = (players) => {
+const setAllPlayersNotReady = (players) => {
   return players.map((player) => ({
     ...player,
     ready: false,
