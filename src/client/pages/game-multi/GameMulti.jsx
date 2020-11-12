@@ -26,6 +26,7 @@ import { useTranslation } from "react-i18next";
 import { Score, LinesRemoved, Level, Timer } from "components/tetris/Stats";
 import SoundToggler from "components/sound/SoundToggler";
 import Crown from "assets/img/crown.png";
+import LooseTag from "components/tetris/LooseTag";
 
 export default function GameMulti() {
   const { state: stateStore, dispatch: dispatchStore } = React.useContext(
@@ -152,7 +153,7 @@ export default function GameMulti() {
 
       <SoundToggler
         speedRate={speedRate}
-        className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow"
+        className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow bg-white"
       />
 
       <FlexBox direction="row" height="full" className="justify-around">
@@ -182,8 +183,10 @@ export default function GameMulti() {
             <FlexBox
               direction="col"
               width={64}
-              className="justify-center align-center"
+              className="relative justify-center align-center"
             >
+              {!state.alive && <LooseTag fontSize="4xl" />}
+
               <TetrisGrid
                 grid={grid}
                 currentPieceColor={piece.color}

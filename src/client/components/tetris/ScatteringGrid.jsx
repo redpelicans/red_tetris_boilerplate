@@ -2,6 +2,7 @@ import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
 import TetrisGrid from "components/tetris/Grid";
 import { StoreContext, GameContext } from "store";
+import LooseTag from "components/tetris/LooseTag";
 
 export default function ScatteringGrid() {
   const { state } = React.useContext(GameContext);
@@ -48,7 +49,13 @@ const OpponentGrid = ({ opponent }) => (
       {opponent.player.name}
     </p>
 
-    <FlexBox direction="col" width={24} className="justify-center align-center">
+    <FlexBox
+      direction="col"
+      width={24}
+      className="relative justify-center align-center"
+    >
+      {opponent.loser && <LooseTag fontSize="md" />}
+
       <TetrisGrid
         grid={opponent.board}
         currentPieceColor={"blocked"}
