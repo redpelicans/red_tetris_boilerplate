@@ -27,7 +27,7 @@ export default function Home() {
       <AnimatedBackground />
       <Modal className="home-modal">
         <h1>Red Tetris</h1>
-        <Link to="/single-player[solo]/game" className="mb-10">
+        <Link to="/single-player[solo]/game" className="mb-10 cursor-pointer">
           <SinglePlayer />
         </Link>
         <MultiPlayer />
@@ -65,7 +65,10 @@ const MultiPlayer = () => {
 const MultiPlayerGamePad = ({ setHasClicked }) => {
   const { t } = useTranslation();
   return (
-    <Hoverable className="home-game-pad" onClick={() => setHasClicked(true)}>
+    <Hoverable
+      className="home-game-pad cursor-pointer"
+      onClick={() => setHasClicked(true)}
+    >
       <Hoverable.In className="flex flex-row">
         <GamePad className="mr-2" model={gamePadMatrixHover} size={2} />
         <GamePad model={gamePadMatrixHover} size={2} />
