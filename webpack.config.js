@@ -63,10 +63,6 @@ module.exports = () => {
           },
         },
         {
-          test: /\.worker\.js$/,
-          use: { loader: "worker-loader" },
-        },
-        {
           test: /\.html$/,
           include: path.resolve(__dirname, "public"),
           use: require.resolve("html-loader"),
@@ -125,7 +121,6 @@ module.exports = () => {
         pages: path.resolve(CLIENT_DIR, "pages"),
         reducers: path.resolve(CLIENT_DIR, "reducers"),
         store: path.resolve(CLIENT_DIR, "store"),
-        worker: path.resolve(CLIENT_DIR, "worker"),
       },
       extensions: ["*", ".js", ".jsx", ".scss", ".css"],
     },
