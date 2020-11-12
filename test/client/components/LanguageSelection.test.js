@@ -17,4 +17,8 @@ describe("LanguageSelection", () => {
     userEvent.selectOptions(screen.getByRole("combobox"), "es");
     expect(changeLangStub.mock.calls[1][0]).toBe("es");
   });
+
+  afterAll(() => {
+    changeLangStub.mockRestore();
+  });
 });

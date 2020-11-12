@@ -15,4 +15,8 @@ describe("useAudio", () => {
     expect(useRefStub).toHaveBeenCalled();
     expect(useEffectStub).toHaveBeenCalled();
   });
+
+  afterAll(() => {
+    useEffectStub.mockRestore();
+  });
 });

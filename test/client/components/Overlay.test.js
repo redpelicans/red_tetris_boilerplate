@@ -41,4 +41,10 @@ describe("Overlay", () => {
     expect(addEvtStub).toHaveBeenCalledTimes(2);
     expect(screen.queryByText(/Hello Overlay/i)).not.toBeInTheDocument();
   });
+
+  afterAll(() => {
+    effectStub.mockRestore();
+    addEvtStub.mockRestore();
+    removeEvtStub.mockRestore();
+  });
 });
