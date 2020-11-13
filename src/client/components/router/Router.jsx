@@ -3,14 +3,15 @@ import { HashRouter, Switch, Route } from "react-router-dom";
 import Home from "pages/home/Home";
 import Lobbies from "pages/lobbies/Lobbies";
 import Lobby from "pages/lobby/LobbyContainer";
-import GameMulti from "pages/game-multi/GameMulti";
-import GameSolo from "pages/game-solo/GameSolo";
+const LazyGameMulti = React.lazy(() => import("pages/game-multi/GameMulti"));
+const LazyGameSolo = React.lazy(() => import("pages/game-solo/GameSolo"));
 import FlexBox from "components/flexbox/FlexBox";
 import { GameContextProvider } from "store";
 import { StoreContext } from "store";
 import useNavigate from "hooks/useNavigate";
 import { LOBBIES } from "../../../config/actions/lobbies";
 import { socket } from "store/middleware";
+import { useTranslation } from "react-i18next";
 
 /*
  **   You can had any Route you need inside the <Switch />
@@ -25,7 +26,7 @@ export default function Router() {
         <Route exact path="/" component={Home} />
         <Route path="/single-player[solo]/game">
           <GameContextProvider>
-            <GameSolo />
+            <LazyLoader LazyComponent={LazyGameSolo} />
           </GameContextProvider>
         </Route>
         <ProtectedRoutes />
@@ -60,9 +61,28 @@ const ProtectedRoutes = () => {
 
       <Route exact path="/game-multi">
         <GameContextProvider>
-          <GameMulti />
+          <LazyLoader LazyComponent={LazyGameMulti} />
         </GameContextProvider>
       </Route>
     </>
   );
 };
+
+const Fallback = () => {
+  const { t } = useTranslation();
+
+  return (
+    <FlexBox
+      height="full"
+      className="justify-center items-center font-bold text-4xl"
+    >
+      {t("pages.router.loading")}
+    </FlexBox>
+  );
+};
+
+const LazyLoader = ({ LazyComponent }) => (
+  <React.Suspense fallback={<Fallback />}>
+    <LazyComponent />
+  </React.Suspense>
+);
