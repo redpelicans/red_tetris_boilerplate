@@ -8,7 +8,13 @@ import { nanoid } from "nanoid";
 
 const count = {};
 
-export default function ButtonSpecial({ onClick, className, children, width }) {
+export default function ButtonSpecial({
+  onClick,
+  className,
+  children,
+  width,
+  ...rest
+}) {
   const [obj, setObj] = React.useState({});
 
   const newAnim = (numberPieces) => {
@@ -89,6 +95,7 @@ export default function ButtonSpecial({ onClick, className, children, width }) {
           }
         }}
         onMouseEnter={() => newAnim(randomRangeNumber(1, 2))}
+        {...rest}
       >
         {children}
       </button>
