@@ -66,7 +66,7 @@ export default function ButtonSpecial({ onClick, className, children }) {
   };
 
   return (
-    <div className="button-special-wrapper">
+    <div className={`${className} button-special-wrapper`}>
       {Object.entries(obj).map(([key, tab]) =>
         tab?.map((el, index) => (
           <RandomTetromino
@@ -80,7 +80,7 @@ export default function ButtonSpecial({ onClick, className, children }) {
         )),
       )}
       <button
-        className={`${className} on-top`}
+        className="on-top"
         onClick={() => {
           newAnim(randomRangeNumber(5, 10));
           if (onClick) {

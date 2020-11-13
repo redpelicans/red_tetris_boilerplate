@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { LOBBY } from "../../../config/actions/lobby";
 import { isEmpty } from "helpers/common";
 import { useTranslation } from "react-i18next";
+import ButtonSpecial from "components/button/ButtonSpecial";
 
 export default function Lobbies() {
   const { t } = useTranslation();
@@ -175,7 +176,7 @@ const JoinButton = ({ players, lobbies }) => {
   };
 
   return (
-    <button
+    <ButtonSpecial
       className={`w-3/5 ${isDisabled ? "disabled-btn" : "action-btn "}`}
       disabled={isDisabled}
       onClick={handleClick}
@@ -190,7 +191,7 @@ const JoinButton = ({ players, lobbies }) => {
           })}
         </span>
       </FlexBox>
-    </button>
+    </ButtonSpecial>
   );
 };
 
