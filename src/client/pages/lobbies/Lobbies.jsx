@@ -177,7 +177,8 @@ const JoinButton = ({ players, lobbies }) => {
 
   return (
     <ButtonSpecial
-      className={`w-3/5 ${isDisabled ? "disabled-btn" : "action-btn "}`}
+      width="3/5"
+      className={`${isDisabled ? "disabled-btn" : "action-btn "}`}
       disabled={isDisabled}
       onClick={handleClick}
     >

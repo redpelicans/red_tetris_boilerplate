@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import Crown from "assets/img/crown.png";
 import RedCross from "assets/img/red-cross.png";
+import ButtonSpecial from "components/button/ButtonSpecial";
 
 export default function Lobby({ open, state, dispatch }) {
   const notify = (error) => toast.error(error);
@@ -176,7 +177,9 @@ const Buttons = ({ state, owner }) => {
       <FlexBox direction="row" className="justify-between">
         {owner ? (
           <button
-            className={`red-button ${isLaunchable ? "" : "not-"}launchable`}
+            className={`w-48% red-button ${
+              isLaunchable ? "" : "not-"
+            }launchable`}
             type="button"
             onClick={() => launchGame(state.lobby.id, state.player.id)}
             disabled={!isLaunchable}
@@ -184,16 +187,17 @@ const Buttons = ({ state, owner }) => {
             {t("pages.lobby.launch_game")}
           </button>
         ) : (
-          <button
+          <ButtonSpecial
+            width="48%"
             className="red-button launchable"
             type="button"
             onClick={() => setReady(state.lobby.id, state.player.id)}
           >
             {me.ready ? t("pages.lobby.cancel") : t("pages.lobby.ready")}
-          </button>
+          </ButtonSpecial>
         )}
         <button
-          className="red-button launchable"
+          className="w-48% red-button launchable"
           type="button"
           onClick={() => unsubscribeLobby(state.lobby.id, state.player.id)}
         >

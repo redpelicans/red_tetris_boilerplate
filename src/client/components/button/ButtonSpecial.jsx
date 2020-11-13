@@ -9,7 +9,7 @@ import { nanoid } from "nanoid";
 
 const count = {};
 
-export default function ButtonSpecial({ onClick, className, children }) {
+export default function ButtonSpecial({ onClick, className, children, width }) {
   const [obj, setObj] = React.useState({});
 
   const newAnim = (numberPieces) => {
@@ -66,7 +66,7 @@ export default function ButtonSpecial({ onClick, className, children }) {
   };
 
   return (
-    <div className={`${className} button-special-wrapper`}>
+    <div className={`${width ? `w-${width}` : ""} relative`}>
       {Object.entries(obj).map(([key, tab]) =>
         tab?.map((el, index) => (
           <RandomTetromino
@@ -80,7 +80,9 @@ export default function ButtonSpecial({ onClick, className, children }) {
         )),
       )}
       <button
-        className="on-top"
+        className={`${className} button-special ${
+          width ? "w-full h-full" : ""
+        }`}
         onClick={() => {
           newAnim(randomRangeNumber(5, 10));
           if (onClick) {
