@@ -32,6 +32,7 @@
 		"search_lobby": "Search a lobby"
 	},
 	"lobby": {
+		"cancel": "Cancel",
 		"delete_lobby": "Delete lobby",
 		"launch_game": "Launch the game",
 		"leave_lobby": "Leave Lobby",

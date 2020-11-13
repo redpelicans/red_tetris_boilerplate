@@ -140,12 +140,14 @@ export default function GameMulti() {
 
   return (
     <>
-      <Link
-        to={{ pathname: "/", state: "forceRefresh" }}
-        className="text-3xl font-bold hover:text-red-600 fixed top-0 right-0 left-0 text-center"
-      >
-        Red Tetris
-      </Link>
+      <div className="fixed top-0 right-0 left-0 text-center">
+        <Link
+          to={{ pathname: "/", state: "forceRefresh" }}
+          className="text-3xl font-bold hover:text-red-600"
+        >
+          Red Tetris
+        </Link>
+      </div>
 
       <SoundToggler
         speedRate={speedRate}
