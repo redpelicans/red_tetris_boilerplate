@@ -55,4 +55,8 @@ describe("useTetrisGame", () => {
     expect(mockMethods.rotation).toHaveBeenCalledTimes(1);
     expect(mockMethods.dropDown).toHaveBeenCalledTimes(1);
   });
+
+  afterAll(() => {
+    useContextStub.mockRestore();
+  });
 });

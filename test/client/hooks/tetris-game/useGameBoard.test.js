@@ -74,6 +74,10 @@ describe("useGameBoard", () => {
     expect(result.current.grid).toEqual(afterMoreMalus);
     expect(useStateStub).toHaveBeenCalledTimes(11);
   });
+
+  afterAll(() => {
+    useStateStub.mockRestore();
+  });
 });
 
 const initArrayWithPiece = [

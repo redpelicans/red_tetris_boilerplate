@@ -11,42 +11,42 @@ export const SET_GAME_STARTED = "SET_GAME_STARTED";
 
 export const setPlayerResponse = (playerResponse) => ({
   type: SET_PLAYER_RESPONSE,
-  playerResponse: playerResponse,
+  playerResponse,
 });
 
 export const setPlayer = (player) => ({
   type: SET_PLAYER,
-  player: player,
+  player,
 });
 
 export const setPlayers = (players) => ({
   type: SET_PLAYERS,
-  players: players,
+  players,
 });
 
 export const setLobbies = (lobbies) => ({
   type: SET_LOBBIES,
-  lobbies: lobbies,
+  lobbies,
 });
 
 export const setLobbiesResponse = (lobbiesResponse) => ({
   type: SET_LOBBIES_RESPONSE,
-  lobbiesResponse: lobbiesResponse,
+  lobbiesResponse,
 });
 
 export const setLobby = (lobby) => ({
   type: SET_LOBBY,
-  lobby: lobby,
+  lobby,
 });
 
 export const setLobbyResponse = (lobbyResponse) => ({
   type: SET_LOBBY_RESPONSE,
-  lobbyResponse: lobbyResponse,
+  lobbyResponse,
 });
 
 export const addMessage = (message) => ({
   type: ADD_MESSAGE,
-  message: message,
+  message,
 });
 
 export const resetMessages = () => ({
@@ -55,5 +55,5 @@ export const resetMessages = () => ({
 
 export const setGameStarted = (game) => ({
   type: SET_GAME_STARTED,
-  game: game,
+  game,
 });

@@ -28,19 +28,25 @@ export default function reducer(state = initialState, action) {
       return { ...state, game: action.game };
     case SET_SCORE:
       const newPlayersScore = state.game.players.map((el) => {
-        if (el.player.id === action.playerId) el.score = action.score;
+        if (el.player.id === action.playerId) {
+          el.score = action.score;
+        }
         return el;
       });
       return { ...state, game: { ...state.game, players: newPlayersScore } };
     case SET_BOARD:
       const newPlayersBoard = state.game.players.map((el) => {
-        if (el.player.id === action.playerId) el.board = action.board;
+        if (el.player.id === action.playerId) {
+          el.board = action.board;
+        }
         return el;
       });
       return { ...state, game: { ...state.game, players: newPlayersBoard } };
     case SET_LOSER:
       const newPlayersLoser = state.game.players.map((el) => {
-        if (el.player.id === action.playerId) el.loser = true;
+        if (el.player.id === action.playerId) {
+          el.loser = true;
+        }
         return el;
       });
       return { ...state, game: { ...state.game, players: newPlayersLoser } };

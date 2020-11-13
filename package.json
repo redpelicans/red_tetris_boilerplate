@@ -10,7 +10,7 @@
     "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
     "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
     "test": "jest --watch --notify --runInBand",
-    "coverage": "jest --coverage",
+    "coverage": "jest --coverage --runInBand",
     "format": "prettier --write .",
     "test-ci": "jest --runInBand",
     "format-ci": "prettier --check .",
@@ -88,8 +88,7 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^3.11.0",
-    "webpack-hot-middleware": "^2.10.0",
-    "worker-loader": "^3.0.3"
+    "webpack-hot-middleware": "^2.10.0"
   },
   "nyc": {
     "exclude": [

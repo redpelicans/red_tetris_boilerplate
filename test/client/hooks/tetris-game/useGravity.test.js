@@ -14,4 +14,9 @@ describe("useGravity", () => {
     expect(useEffectStub).toHaveBeenCalled();
     expect(result.current).toEqual(INTERVAL_MS);
   });
+
+  afterAll(() => {
+    useRefStub.mockRestore();
+    useEffectStub.mockRestore();
+  });
 });

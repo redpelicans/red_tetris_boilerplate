@@ -17,4 +17,8 @@ describe("useNextPiecesSolo", () => {
     expect(useStateStub).toHaveBeenCalledTimes(2);
     expect(result.current.nextPieces).toHaveLength(3);
   });
+
+  afterAll(() => {
+    useStateStub.mockRestore();
+  });
 });
