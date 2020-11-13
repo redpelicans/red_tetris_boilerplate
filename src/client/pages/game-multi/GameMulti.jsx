@@ -102,13 +102,15 @@ export default function GameMulti() {
     addRemovedLinesWithEmit,
   );
 
-  const throttledBoard = useThrottle(() => {
+  const emitBoard = () => {
     socket.emit(GAME.SEND_BOARD, {
       gameId: state.game.id,
       playerId: stateStore.player.id,
       boardGame: grid,
     });
-  }, 500);
+  };
+
+  const throttledBoard = useThrottle(emitBoard, 500);
 
   React.useEffect(() => {
     if (state.game.id) {
