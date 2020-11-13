@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./ButtonSpecial.scss";
-import "./Button.scss";
 import Tetromino from "components/tetrominoes/Tetrominoes";
 import { randomPick, randomRangeNumber } from "helpers/common";
 import { pieces } from "constants/tetrominoes";
