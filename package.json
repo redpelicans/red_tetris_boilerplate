@@ -10,7 +10,7 @@
     "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
     "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
     "test": "jest --watch --notify --runInBand",
-    "coverage": "jest --coverage",
+    "coverage": "jest --coverage --runInBand",
     "format": "prettier --write .",
     "test-ci": "jest --runInBand",
     "format-ci": "prettier --check .",
