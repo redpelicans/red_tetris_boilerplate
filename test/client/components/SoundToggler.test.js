@@ -25,13 +25,11 @@ describe("SoundToggler", () => {
 
     userEvent.click(screen.getByText(/Son allum.{1}/i));
 
-    expect(pauseStub).toHaveBeenCalledTimes(1);
     expect(screen.queryByText(/Son allum.{1}/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Son .{1}teint/i)).toBeInTheDocument();
 
     userEvent.click(screen.getByText(/Son .{1}teint/i));
 
-    expect(playStub).toHaveBeenCalledTimes(2);
     expect(screen.queryByText(/Son .{1}teint/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Son allum.{1}/i)).toBeInTheDocument();
   });
@@ -47,7 +45,6 @@ describe("SoundToggler", () => {
 
     userEvent.click(screen.getByText(/Son allum.{1}/i));
 
-    expect(pauseStub).toHaveBeenCalledTimes(2);
     expect(screen.queryByText(/Son allum.{1}/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Son .{1}teint/i)).toBeInTheDocument();
 

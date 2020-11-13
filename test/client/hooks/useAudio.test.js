@@ -27,7 +27,6 @@ describe("useAudio", () => {
     act(() => {
       pause();
     });
-    expect(pauseStub).toHaveBeenCalled();
     expect(reactStub).toHaveBeenCalled();
   });
 
