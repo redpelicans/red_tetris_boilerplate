@@ -49,7 +49,7 @@ export function setupSocketRooms(socket, dispatch) {
   });
 }
 
-export function removeSocketRooms(socket, dispatch) {
+export function removeSocketRooms(socket) {
   socket.off(LOBBIES.PUBLISH);
   socket.off(LOBBIES.RESPONSE);
   socket.off(LOBBY.RESPONSE);

@@ -72,18 +72,13 @@ export default function GameMulti() {
     addRemovedLines(value);
   };
 
-  const scoreRef = React.useRef(null);
   React.useEffect(() => {
     if (state.game.id) {
-      scoreRef.current = setTimeout(() => {
-        socket.emit(GAME.SEND_SCORE, {
-          gameId: state.game.id,
-          playerId: stateStore.player.id,
-          score,
-        });
-      }, 300);
-
-      return () => clearTimeout(scoreRef.current);
+      socket.emit(GAME.SEND_SCORE, {
+        gameId: state.game.id,
+        playerId: stateStore.player.id,
+        score,
+      });
     }
   }, [score]);
 
@@ -107,18 +102,19 @@ export default function GameMulti() {
     addRemovedLinesWithEmit,
   );
 
-  const boardRef = React.useRef(null);
+  const emitBoard = () => {
+    socket.emit(GAME.SEND_BOARD, {
+      gameId: state.game.id,
+      playerId: stateStore.player.id,
+      boardGame: grid,
+    });
+  };
+
+  const throttledBoard = useThrottle(emitBoard, 500);
 
   React.useEffect(() => {
     if (state.game.id) {
-      clearTimeout(boardRef.current);
-      boardRef.current = setTimeout(() => {
-        socket.emit(GAME.SEND_BOARD, {
-          gameId: state.game.id,
-          playerId: stateStore.player.id,
-          boardGame: grid,
-        });
-      }, 300);
+      throttledBoard();
     }
   }, [grid, state.game.id]);
 
