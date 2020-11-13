@@ -32,6 +32,7 @@
 		"search_lobby": "Rechercher un salon de jeu"
 	},
 	"lobby": {
+		"cancel": "Annuler",
 		"delete_lobby": "Supprimer le salon",
 		"launch_game": "Lancer la partie",
 		"leave_lobby": "Quitter le salon",

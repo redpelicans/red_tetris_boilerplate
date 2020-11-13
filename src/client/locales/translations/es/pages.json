@@ -32,6 +32,7 @@
 		"search_lobby": "Encuentra una sala de juegos"
 	},
 	"lobby": {
+		"cancel": "Anular",
 		"delete_lobby": "Eliminar el lobby",
 		"launch_game": "Comenzar el juego",
 		"leave_lobby": "Deja el lobby",
