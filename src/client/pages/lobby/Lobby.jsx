@@ -162,6 +162,9 @@ const Buttons = ({ state, owner }) => {
     socket.emit(LOBBY.START, { lobbyId, ownerId });
   };
 
+  const me = state.lobby.players.filter(
+    (player) => player.player.id === state.player.id,
+  )[0];
   const guests = state.lobby.players.filter(
     (player) => player.player.id !== state.lobby.owner.id,
   );
@@ -186,7 +189,7 @@ const Buttons = ({ state, owner }) => {
             type="button"
             onClick={() => setReady(state.lobby.id, state.player.id)}
           >
-            {t("pages.lobby.ready")}
+            {me.ready ? t("pages.lobby.cancel") : t("pages.lobby.ready")}
           </button>
         )}
         <button
