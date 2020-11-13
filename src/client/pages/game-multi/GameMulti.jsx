@@ -116,22 +116,6 @@ export default function GameMulti() {
     }
   }, [grid, state.game.id]);
 
-  // const boardRef = React.useRef(null);
-
-  // React.useEffect(() => {
-  //   if (state.game.id) {
-  //     clearTimeout(boardRef.current);
-  //     boardRef.current = setTimeout(() => {
-  //       socket.emit(GAME.SEND_BOARD, {
-  //         gameId: state.game.id,
-  //         playerId: stateStore.player.id,
-  //         boardGame: grid,
-  //       });
-  //     }, 300);
-  //     return () => clearTimeout(boardRef.current);
-  //   }
-  // }, [grid, state.game.id]);
-
   React.useEffect(() => {
     if (state.penalty > 0) {
       methods.malus(state.penalty);
