@@ -119,7 +119,7 @@ export default function GameMulti() {
   }, [grid, state.game.id]);
 
   React.useEffect(() => {
-    if (state.penalty > 0) {
+    if (state.penalty > 0 && state.alive) {
       methods.malus(state.penalty);
       dispatch(setPenalty({ nbLinePenalty: 0, playerId: "" }));
     }
