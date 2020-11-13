@@ -98,6 +98,7 @@ export default function ButtonSpecial({ onClick, className, children }) {
 ButtonSpecial.propTypes = {
   onClick: PropTypes.func,
   name: PropTypes.string,
+  children: PropTypes.any,
 };
 
 const RandomTetromino = ({ size, style, color, shape, countKey, ...rest }) => {
