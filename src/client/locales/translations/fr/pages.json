@@ -23,6 +23,7 @@
 	"lobbies": {
 		"create_lobby": "Créer un salon",
 		"empty_lobby_list": "Aucun salon trouvé",
+		"go_back_home": "Retour à l'accueil",
 		"join_game": "Rejoindre une partie",
 		"lobby_name": "Nom du salon",
 		"max_players": "Joueurs max",

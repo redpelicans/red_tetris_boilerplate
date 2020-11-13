@@ -23,6 +23,7 @@
 	"lobbies": {
 		"create_lobby": "Create lobby",
 		"empty_lobby_list": "No lobby found",
+		"go_back_home": "Back to home",
 		"join_game": "Join a game",
 		"lobby_name": "Lobby name",
 		"max_players": "Max players",
