@@ -1,5 +1,6 @@
 import React from "react";
 import FlexBox from "components/flexbox/FlexBox";
+import { Link } from "react-router-dom";
 import LobbyItem from "./LobbyItem";
 import CreateLobby from "./CreateLobby";
 import Overlay from "components/overlay/Overlay";
@@ -15,6 +16,7 @@ import { isEmpty } from "helpers/common";
 import { useTranslation } from "react-i18next";
 
 export default function Lobbies() {
+  const { t } = useTranslation();
   const { state, dispatch } = React.useContext(StoreContext);
   const { navigate } = useNavigate();
   const [hasClickedCreate, setHasClickedCreate] = React.useState(false);
@@ -81,6 +83,13 @@ export default function Lobbies() {
           />
         </Overlay>
       )}
+
+      <Link
+        className="fixed top-0 left-0 pt-1 px-1 mt-1 ml-16 text-sm border rounded shadow"
+        to="/"
+      >
+        {t("pages.lobbies.go_back_home")}
+      </Link>
 
       <SearchLobby
         searchedValue={searchedValue}
