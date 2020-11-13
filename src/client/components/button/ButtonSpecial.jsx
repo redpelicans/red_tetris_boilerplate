@@ -9,12 +9,7 @@ import { nanoid } from "nanoid";
 
 const count = {};
 
-export default function ButtonSpecial({
-  onClick,
-  className,
-  children,
-  ...rest
-}) {
+export default function ButtonSpecial({ onClick, className, children }) {
   const [obj, setObj] = React.useState({});
 
   const newAnim = (numberPieces) => {
@@ -24,8 +19,8 @@ export default function ButtonSpecial({
       array.push({
         size: randomRangeNumber(1, 3),
         style: getCssProperties(),
-        color: color,
-        shape: shape,
+        color,
+        shape,
       });
     }
     setObj((obj) => ({
@@ -59,10 +54,10 @@ export default function ButtonSpecial({
   };
 
   const countKey = (key) => {
-    if (!count[key]) {
-      count[key] = 1;
-    } else {
+    if (count[key]) {
       count[key]++;
+    } else {
+      count[key] = 1;
     }
 
     if (count[key] === obj[key].length) {
@@ -72,25 +67,25 @@ export default function ButtonSpecial({
 
   return (
     <div className="button-special-wrapper">
-      {Object.entries(obj).map(([key, tab]) => {
-        return tab?.map((el, index) => {
-          return (
-            <RandomTetromino
-              countKey={() => countKey(key)}
-              size={el.size}
-              style={el.style}
-              color={el.color}
-              shape={el.shape}
-              key={key + index}
-            />
-          );
-        });
-      })}
+      {Object.entries(obj).map(([key, tab]) =>
+        tab?.map((el, index) => (
+          <RandomTetromino
+            countKey={() => countKey(key)}
+            size={el.size}
+            style={el.style}
+            color={el.color}
+            shape={el.shape}
+            key={key + index}
+          />
+        )),
+      )}
       <button
         className={className}
         onClick={() => {
           newAnim(randomRangeNumber(5, 10));
-          if (onClick) onClick();
+          if (onClick) {
+            onClick();
+          }
         }}
         onMouseEnter={() => newAnim(randomRangeNumber(1, 2))}
       >
