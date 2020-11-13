@@ -69,6 +69,7 @@ export default function Lobbies() {
     >
       {hasClickedCreate && (
         <Overlay
+          data-testid="overlay_create_lobby"
           isOpen={hasClickedCreate}
           close={() => setHasClickedCreate(false)}
           className="create-modal"

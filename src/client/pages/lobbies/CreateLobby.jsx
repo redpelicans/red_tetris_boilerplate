@@ -86,6 +86,7 @@ export default function CreateLobby({ close, state, dispatch }) {
             })}
           </select>
           <button
+            data-testid="create_new_lobby"
             disabled={
               !myLobby?.hash?.length ||
               !myLobby?.name?.length ||
