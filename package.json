@@ -6,7 +6,7 @@
   "scripts": {
     "eslint": "eslint src",
     "client-dist": "NODE_ENV=production webpack --progress --colors",
-    "client-dev": "webpack-dev-server --colors --hot --inline --open --host 0.0.0.0 --port 3000",
+    "client-dev": "NODE_ENV=production webpack-dev-server --colors --hot --inline --open --host 0.0.0.0 --port 3000",
     "srv-dev": "NODE_PATH=src/server DEBUG=tetris:* babel-watch -w src src/server/index.js",
     "srv-dist": "NODE_PATH=src/server DEBUG=tetris:* babel src --out-dir dist",
     "test": "jest --watch --notify --runInBand",
@@ -63,6 +63,7 @@
     "babel-plugin-__coverage__": "^0.111111.1",
     "babel-watch": "^7.0.0",
     "clean-terminal-webpack-plugin": "^3.0.0",
+    "compression-webpack-plugin": "^6.1.1",
     "css-loader": "^4.2.2",
     "dotenv": "^8.2.0",
     "error-overlay-webpack-plugin": "^0.4.1",

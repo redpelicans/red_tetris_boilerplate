@@ -5,6 +5,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ErrorOverlayPlugin = require("error-overlay-webpack-plugin");
 const CleanTerminalPlugin = require("clean-terminal-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 const CLIENT_DIR = path.join(__dirname, "src/client");
 
@@ -23,7 +24,8 @@ module.exports = () => {
 
     output: {
       path: path.join(__dirname, "build"),
-      filename: "bundle.js",
+      filename: "[name].js",
+      chunkFilename: "[id].[chunkhash].js",
       publicPath: "/",
     },
 
@@ -126,6 +128,9 @@ module.exports = () => {
     },
 
     plugins: [
+      new CompressionPlugin({
+        test: /\.(js|scss|ogg)$/i,
+      }),
       new CleanTerminalPlugin(),
       new ErrorOverlayPlugin(),
       new MiniCssExtractPlugin({
