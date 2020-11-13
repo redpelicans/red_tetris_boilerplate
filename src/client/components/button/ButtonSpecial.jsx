@@ -100,6 +100,7 @@ ButtonSpecial.propTypes = {
   onClick: PropTypes.func,
   name: PropTypes.string,
   children: PropTypes.any,
+  width: PropTypes.string,
 };
 
 const RandomTetromino = ({ size, style, color, shape, countKey, ...rest }) => {
