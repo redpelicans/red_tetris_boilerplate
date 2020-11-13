@@ -49,7 +49,7 @@ export default function ButtonSpecial({ onClick, className, children }) {
   const deleteKey = (key) => {
     const oldObj = { ...obj };
     oldObj[key] = undefined;
-    delete count[key];
+    Reflect.deleteProperty(count, key);
     setObj(oldObj);
   };
 
