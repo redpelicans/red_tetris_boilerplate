@@ -2,18 +2,16 @@ import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
 import Response from "models/response";
 import { PLAYER } from "../../config/actions/player";
 
-export const getPlayers = async () => {
-  return (await getComplexObjectFromRedis("players")) ?? {};
-};
+export const getPlayers = async () =>
+  (await getComplexObjectFromRedis("players")) ?? {};
 
 export const getPlayer = async (id) => {
   const players = (await getComplexObjectFromRedis("players")) ?? {};
   const player = players?.[id];
   if (!player) {
     return null;
-  } else {
-    return player;
   }
+  return player;
 };
 
 export const getPlayerId = async (socketId) => {
@@ -23,9 +21,8 @@ export const getPlayerId = async (socketId) => {
   );
   if (!playerId) {
     return null;
-  } else {
-    return playerId;
   }
+  return playerId;
 };
 
 export const pushPlayer = async (player) => {
@@ -46,19 +43,16 @@ export const pushPlayer = async (player) => {
 };
 
 export const popPlayer = async (id) => {
-  let players = (await getComplexObjectFromRedis("players")) ?? {};
-  if (!players?.[id]) return false;
-  delete players[id];
+  const players = (await getComplexObjectFromRedis("players")) ?? {};
+  if (!players?.[id]) {
+    return false;
+  }
+  Reflect.deleteProperty(players, id);
   await setComplexObjectToRedis("players", players);
   return true;
 };
 
-const isAvailable = (players, username) => {
-  return !Object.keys(players || {}).some(
-    (key) => players[key].name === username,
-  );
-};
+const isAvailable = (players, username) =>
+  !Object.keys(players || {}).some((key) => players[key].name === username);
 
-const isValid = (username) => {
-  return RegExp("^[a-zA-Z0-9_-]{3,16}$").test(username);
-};
+const isValid = (username) => RegExp("^[a-zA-Z0-9_-]{3,16}$").test(username);

@@ -1,11 +1,11 @@
 import { LOBBIES } from "../../config/actions/lobbies";
 import { LOBBY } from "../../config/actions/lobby";
 import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
-import { clearPlayerFromGame } from "storage/game";
 import Response from "models/response";
 
 export const getLobbies = async () => {
-  return (await getComplexObjectFromRedis("lobbies")) ?? {};
+  const lobbies = (await getComplexObjectFromRedis("lobbies")) ?? {};
+  return lobbies;
 };
 
 export const getLobby = async (id) => {
@@ -13,9 +13,8 @@ export const getLobby = async (id) => {
   const lobby = lobbies?.[id];
   if (!lobby) {
     return null;
-  } else {
-    return lobby;
   }
+  return lobby;
 };
 
 export const pushLobby = async (lobby, socketId) => {
@@ -59,10 +58,8 @@ export const popLobby = async (lobbyId, ownerId) => {
       "You are not the owner of this lobby!",
     );
   }
-
-  delete lobbies[lobbyId];
+  Reflect.deleteProperty(lobbies, lobbyId);
   await setComplexObjectToRedis("lobbies", lobbies);
-  /* Payload needed? */
   return Response.success(LOBBIES.DELETE, {});
 };
 
@@ -91,7 +88,7 @@ export const joinLobby = async (player, lobbyId) => {
 
   lobby.players.push({
     ready: false,
-    player: player,
+    player,
   });
   lobbies[lobbyId] = lobby;
   await setComplexObjectToRedis("lobbies", lobbies);
@@ -145,13 +142,11 @@ export const leaveLobby = async (playerId, lobbyId) => {
     const response = await popLobby(lobbyId, playerId);
     if (response.type === "success") {
       return Response.success(LOBBY.UNSUBSCRIBE, {});
-    } else {
-      /* Something to handle? */
-      return Response.error(
-        LOBBY.UNSUBSCRIBE,
-        "You are the last player but not the owner there is a problem!",
-      );
     }
+    return Response.error(
+      LOBBY.UNSUBSCRIBE,
+      "You are the last player but not the owner there is a problem!",
+    );
   }
 
   const owner = isOwner(lobby, playerId);
@@ -290,41 +285,31 @@ const isLobbyFull = (lobby) => {
   return maxPlayer <= nbPlayers;
 };
 
-const playerIsOnLobbyBySocketId = (lobbies, socketId) => {
-  return Object.keys(lobbies).some((key) =>
+const playerIsOnLobbyBySocketId = (lobbies, socketId) =>
+  Object.keys(lobbies).some((key) =>
     lobbies[key].players.some((el) => el.player.socketId === socketId),
   );
-};
 
-const playerIsOnLobbyByPlayerId = (lobbies, playerId) => {
-  return Object.keys(lobbies).some((key) =>
+const playerIsOnLobbyByPlayerId = (lobbies, playerId) =>
+  Object.keys(lobbies).some((key) =>
     lobbies[key].players.some((el) => el.player.id === playerId),
   );
-};
 
-const isOnLobby = (lobby, playerId) => {
-  return lobby.players.some((el) => el.player.id === playerId);
-};
+const isOnLobby = (lobby, playerId) =>
+  lobby.players.some((el) => el.player.id === playerId);
 
-const isOwner = (lobby, playerId) => {
-  return lobby?.owner?.id === playerId;
-};
+const isOwner = (lobby, playerId) => lobby?.owner?.id === playerId;
 
-const isLastPlayerInLobby = (lobby) => {
-  return lobby?.players.length <= 1;
-};
+const isLastPlayerInLobby = (lobby) => lobby?.players.length <= 1;
 
-const deletePlayerFromPlayers = (players, playerId) => {
-  return players.filter((el) => el.player.id !== playerId);
-};
+const deletePlayerFromPlayers = (players, playerId) =>
+  players.filter((el) => el.player.id !== playerId);
 
-const getNextOwner = (players, playerId) => {
-  return players.find((el) => el.player.id !== playerId);
-};
+const getNextOwner = (players, playerId) =>
+  players.find((el) => el.player.id !== playerId);
 
-const getPlayer = (players, playerId) => {
-  return players.find((el) => el.player.id === playerId);
-};
+const getPlayer = (players, playerId) =>
+  players.find((el) => el.player.id === playerId);
 
 export const getLobbyIdByPlayerId = (lobbies, playerId) => {
   const lobbyId = Object.keys(lobbies).find((key) =>
@@ -333,53 +318,38 @@ export const getLobbyIdByPlayerId = (lobbies, playerId) => {
   return lobbyId;
 };
 
-const setReadyOrNot = (players, playerId) => {
-  return players.filter((el) => {
+const setReadyOrNot = (players, playerId) =>
+  players.filter((el) => {
     if (el.player.id === playerId) {
       el.ready = !el.ready;
       return el;
-    } else {
-      return el;
     }
+    return el;
   });
-};
 
-const setPlayerNotReady = (players, playerId) => {
-  return players.filter((el) => {
+const setPlayerNotReady = (players, playerId) =>
+  players.filter((el) => {
     if (el.player.id === playerId) {
       el.ready = false;
       return el;
-    } else {
-      return el;
     }
+    return el;
   });
-};
 
-const isLobbyReady = (lobby, playerId) => {
-  return !lobby.players.some(
-    (el) => el.ready !== true && playerId !== el.player.id,
-  );
-};
+const isLobbyReady = (lobby, playerId) =>
+  !lobby.players.some((el) => el.ready !== true && playerId !== el.player.id);
 
-const countPlayers = (lobby) => {
-  return lobby.players.length;
-};
+const countPlayers = (lobby) => lobby.players.length;
 
-const isLobbyOpen = (lobby) => {
-  return !lobby.isPlaying;
-};
+const isLobbyOpen = (lobby) => !lobby.isPlaying;
 
-const isLobbyNameValid = (lobbyName) => {
-  return RegExp("^[a-zA-Z0-9_-]{3,16}$").test(lobbyName);
-};
+const isLobbyNameValid = (lobbyName) =>
+  RegExp("^[a-zA-Z0-9_-]{3,16}$").test(lobbyName);
 
-const isMaxPlayerValid = (maxPlayer) => {
-  return maxPlayer >= 2 && maxPlayer <= 5;
-};
+const isMaxPlayerValid = (maxPlayer) => maxPlayer >= 2 && maxPlayer <= 5;
 
-const setAllPlayersNotReady = (players) => {
-  return players.map((player) => ({
+const setAllPlayersNotReady = (players) =>
+  players.map((player) => ({
     ...player,
     ready: false,
   }));
-};
