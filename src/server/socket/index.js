@@ -1,5 +1,5 @@
 import { bindEvent } from "socket/helpers/socket";
-import { logerror, loginfo } from "utils/log";
+import { loginfo } from "utils/log";
 import socketIO from "socket.io";
 
 import * as piece from "socket/piece";
@@ -41,7 +41,7 @@ const runSocketIo = (httpServer) => {
 };
 
 export const quitSocketIo = () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     io.close(resolve);
   });
 
