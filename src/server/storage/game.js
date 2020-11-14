@@ -64,9 +64,6 @@ export const checkForWinner = async (gameId) => {
   if (playersRemaining === 1) {
     return isWinnerLastPlayer(players);
   } else if (playersRemaining === 0) {
-    console.log("HEY");
-    console.log(getHighestScorePlayer(players));
-
     return getHighestScorePlayer(players);
   }
   return null;

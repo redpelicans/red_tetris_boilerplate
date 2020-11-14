@@ -35,7 +35,7 @@ describe("joinLobby function", () => {
     );
   });
 
-  test("Should return an Error response `you already are in another lobby`", async () => {
+  test("Should return an Error `you already are in another lobby`", async () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
     await pushLobby(lobby2mock, lobby2mock.owner.socketId);
 
@@ -44,13 +44,13 @@ describe("joinLobby function", () => {
     );
   });
 
-  test("No lobbies : should return an Error response `Lobby doesn't exists!`", async () => {
+  test("No lobbies : should return Error `Lobby doesn't exists!`", async () => {
     expect(await joinLobby(playerObject3mock, lobby1mock.id)).toEqual(
       Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!"),
     );
   });
 
-  test("No lobby : should return an Error response `Lobby doesn't exists!`", async () => {
+  test("No lobby : should return an Error `Lobby doesn't exists!`", async () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
     expect(await joinLobby(playerObject3mock, lobby2mock.id)).toEqual(
       Response.error(LOBBY.SUBSCRIBE, "Lobby doesn't exists!"),

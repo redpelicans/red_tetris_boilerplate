@@ -28,7 +28,7 @@ describe("leaveLobby function", () => {
     ).toEqual(Response.success(LOBBY.UNSUBSCRIBE, {}));
   });
 
-  test("No lobby : Should return an Error response `Lobby doesn't exists`", async () => {
+  test("No lobby : Should return an Error `Lobby doesn't exists`", async () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
     expect(await leaveLobby(lobby2mock.players[1].id, lobby2mock.id)).toEqual(
@@ -36,13 +36,13 @@ describe("leaveLobby function", () => {
     );
   });
 
-  test("No lobbies : Should return an Error response `Lobby doesn't exists`", async () => {
+  test("No lobbies : Should return Error `Lobby doesn't exists`", async () => {
     expect(
       await leaveLobby(lobby1mock.players[1].player.id, lobby1mock.id),
     ).toEqual(Response.error(LOBBY.UNSUBSCRIBE, "Lobby doesn't exists!"));
   });
 
-  test("Should return a Success response", async () => {
+  test("Should return a Success response 2", async () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
     expect(await leaveLobby(lobby1mock.owner.id, lobby1mock.id)).toEqual(

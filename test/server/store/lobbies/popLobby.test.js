@@ -25,13 +25,13 @@ describe("popLobby function", () => {
     );
   });
 
-  test("No lobbies : should return an Error response `lobby doesn't exists`", async () => {
+  test("No lobbies : should return `lobby doesn't exists`", async () => {
     expect(await popLobby(lobby1mock.id, lobby1mock.owner.id)).toEqual(
       Response.error(LOBBIES.DELETE, "Lobby doesn't exists!"),
     );
   });
 
-  test("No lobby : should return an Error response `lobby doesn't exists`", async () => {
+  test("No lobby : should return an Error `lobby doesn't exists`", async () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
     expect(await popLobby(lobby2mock.id, lobby2mock.owner.id)).toEqual(
       Response.error(LOBBIES.DELETE, "Lobby doesn't exists!"),

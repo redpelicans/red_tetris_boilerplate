@@ -1,6 +1,5 @@
-import { getLobby, pushLobby } from "storage/lobbies";
 import runRedis, { redisClient } from "storage";
-import { quitRedis, deleteKeyFromRedis } from "storage";
+import { quitRedis } from "storage";
 
 beforeAll((done) => {
   runRedis().then(() => done());

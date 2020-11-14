@@ -15,7 +15,7 @@ afterAll(() => {
 
 describe("getPlayerId function", () => {
   test("No players, should return null", async () => {
-    expect(await getPlayerId("1")).toEqual(null);
+    expect(await getPlayerId("1")).toBeNull();
   });
 
   test("player1 added should return a Player", async () => {
@@ -26,6 +26,6 @@ describe("getPlayerId function", () => {
   });
 
   test("player2 not added, should return null", async () => {
-    expect(await getPlayerId("2")).toBe(null);
+    expect(await getPlayerId("2")).toBeNull();
   });
 });

@@ -30,7 +30,7 @@ describe("popPlayer function", () => {
 
     expect(await popPlayer(player1.id)).toEqual(true);
     players = await getPlayers();
-    expect(players[player1.id]).toEqual(undefined);
+    expect(players[player1.id]).toBeUndefined();
     expect(players[player2.id]).toEqual(player2);
   });
 

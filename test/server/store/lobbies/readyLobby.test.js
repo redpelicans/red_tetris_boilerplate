@@ -26,7 +26,7 @@ describe("readyLobby function", () => {
     ).toEqual(Response.success(LOBBY.READY, {}));
   });
 
-  test("Should return an Error response `You are not in this lobby!`", async () => {
+  test("Should return an Error `You are not in this lobby!`", async () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
     expect(await readyLobby(playerObject3mock.id, lobby1mock.id)).toEqual(
@@ -34,13 +34,13 @@ describe("readyLobby function", () => {
     );
   });
 
-  test("No lobbies : should return an Error response `Lobby doesn't exists!`", async () => {
+  test("No lobbies : should return `Lobby doesn't exists!`", async () => {
     expect(
       await readyLobby(lobby1mock.players[1].player.id, lobby1mock.id),
     ).toEqual(Response.error(LOBBY.READY, "Lobby doesn't exists!"));
   });
 
-  test("No lobby : should return an Error response `Lobby doesn't exists!`", async () => {
+  test("No lobby : should return an Error `Lobby doesn't exists!`", async () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
     expect(

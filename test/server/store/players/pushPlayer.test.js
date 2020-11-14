@@ -1,11 +1,6 @@
 import redismock from "redis-mock";
 import { pushPlayer } from "storage/players";
-import {
-  quitRedis,
-  setComplexObjectToRedis,
-  setRedis,
-  deleteKeyFromRedis,
-} from "storage";
+import { quitRedis, setRedis, deleteKeyFromRedis } from "storage";
 import Response from "models/response";
 import Player from "models/player";
 
@@ -60,7 +55,7 @@ describe("pushPlayer function", () => {
     );
   });
 
-  test("Should return an Error response `Username already exists!`", async () => {
+  test("Should return an Error `Username already exists!`", async () => {
     const player2 = new Player(player2mock);
 
     expect(await pushPlayer(player2)).toEqual(

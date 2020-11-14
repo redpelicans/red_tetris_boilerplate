@@ -14,7 +14,7 @@ afterAll(() => {
 
 describe("getLobby function", () => {
   test("No lobbies, should return null", async () => {
-    expect(await getLobby("1")).toEqual(null);
+    expect(await getLobby("1")).toBeNull();
   });
 
   test("lobby1 added, should return a Lobby", async () => {
@@ -24,6 +24,6 @@ describe("getLobby function", () => {
   });
 
   test("lobby2 not added, should return null", async () => {
-    expect(await getLobby("2")).toBe(null);
+    expect(await getLobby("2")).toBeNull();
   });
 });

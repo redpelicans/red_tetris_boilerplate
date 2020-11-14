@@ -25,7 +25,7 @@ describe("pushLobby function", () => {
     );
   });
 
-  test("Should return an Error `already on another lobby` response", async () => {
+  test("Should return `already on another lobby` response", async () => {
     expect(await pushLobby(lobby1mock, lobby1mock.owner.socketId)).toEqual(
       Response.success(LOBBIES.ADD, lobby1mock),
     );

@@ -21,7 +21,7 @@ describe("checkForWinner function", () => {
     const game = deepCopy(game1mock);
     await setGame(game);
 
-    expect(await checkForWinner(game.id)).toEqual(null);
+    expect(await checkForWinner(game.id)).toBeNull();
   });
 
   test("Should return null : 1 player still playing but low score", async () => {
@@ -31,10 +31,10 @@ describe("checkForWinner function", () => {
     game.players[1].score = 100;
     await setGame(game);
 
-    expect(await checkForWinner(game.id)).toEqual(null);
+    expect(await checkForWinner(game.id)).toBeNull();
   });
 
-  test("Should return winner : 1 player still playing and best score", async () => {
+  test("Should return winner : 1 playing and best score", async () => {
     const game = deepCopy(game1mock);
     game.players[0].loser = true;
     game.players[0].score = 100;

@@ -31,6 +31,6 @@ describe("setLoser function", () => {
   test("Should return null : no game", async () => {
     expect(
       await setLoser(game1mock.id, game1mock.players[0].player.id),
-    ).toEqual(null);
+    ).toBeNull();
   });
 });

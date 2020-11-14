@@ -29,7 +29,7 @@ describe("startGame function", () => {
     );
   });
 
-  test("Should return an Error response `You need to be at least 2 players!`", async () => {
+  test("Should return `You need to be at least 2 players!`", async () => {
     const lobby = deepCopy(lobby1mock);
     lobby.players.pop();
     await pushLobby(lobby, lobby.owner.socketId);
@@ -39,7 +39,7 @@ describe("startGame function", () => {
     );
   });
 
-  test("Should return an Error response `All the players need to be ready!`", async () => {
+  test("Should return `All the players need to be ready!`", async () => {
     await pushLobby(lobby1mock, lobby1mock.owner.socketId);
 
     expect(
@@ -47,7 +47,7 @@ describe("startGame function", () => {
     ).toEqual(Response.error(LOBBY.START, "All the players need to be ready!"));
   });
 
-  test("No lobbies : should return an Error response `Lobby doesn't exists!`", async () => {
+  test("No lobbies : should return an `Lobby doesn't exists!`", async () => {
     expect(
       await startGame(lobby1mock.players[0].player.id, lobby1mock.id),
     ).toEqual(Response.error(LOBBY.START, "Lobby doesn't exists!"));

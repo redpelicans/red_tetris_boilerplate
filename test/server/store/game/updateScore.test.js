@@ -31,6 +31,6 @@ describe("updateScore function", () => {
   test("Should return null : no game", async () => {
     expect(
       await updateScore(game1mock.id, game1mock.players[0].player.id, 200),
-    ).toEqual(null);
+    ).toBeNull();
   });
 });
