@@ -1,4 +1,4 @@
-import { logerror, loginfo } from "utils/log";
+import { loginfo } from "utils/log";
 import express from "express";
 import http from "http";
 import path from "path";
@@ -8,8 +8,7 @@ const app = express();
 export const httpServer = http.createServer(app);
 
 const runHttpServer = () =>
-  new Promise((resolve, reject) => {
-    /* To check and remove if not needed */
+  new Promise((resolve) => {
     const file =
       params.url === "/bundle.js" ? "/../../build/bundle.js" : "/../index.html";
 
@@ -24,7 +23,7 @@ const runHttpServer = () =>
   });
 
 export const quitHttpServer = async () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     httpServer.close(resolve);
   });
 
