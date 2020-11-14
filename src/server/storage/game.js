@@ -1,19 +1,24 @@
 import { getComplexObjectFromRedis, setComplexObjectToRedis } from "storage";
 
 export const setGame = async (game) => {
-  return await setComplexObjectToRedis(`game-${game.id}`, game);
+  await setComplexObjectToRedis(`game-${game.id}`, game);
 };
 
 export const getGame = async (id) => {
-  return (await getComplexObjectFromRedis(`game-${id}`)) ?? {};
+  const game = (await getComplexObjectFromRedis(`game-${id}`)) ?? {};
+  return game;
 };
 
 export const updateScore = async (gameId, playerId, score) => {
   const game = await getGame(gameId);
-  if (Object.keys(game).length === 0) return null;
+  if (Object.keys(game).length === 0) {
+    return null;
+  }
   const newPlayers = [];
   game.players.forEach((element) => {
-    if (element.player.id === playerId) element.score = score;
+    if (element.player.id === playerId) {
+      element.score = score;
+    }
     newPlayers.push(element);
   });
   game.players = newPlayers;
@@ -22,10 +27,14 @@ export const updateScore = async (gameId, playerId, score) => {
 
 export const setLoser = async (gameId, playerId) => {
   const game = await getGame(gameId);
-  if (Object.keys(game).length === 0) return null;
+  if (Object.keys(game).length === 0) {
+    return null;
+  }
   const newPlayers = [];
   game.players.forEach((element) => {
-    if (element.player.id === playerId) element.loser = true;
+    if (element.player.id === playerId) {
+      element.loser = true;
+    }
     newPlayers.push(element);
   });
   game.players = newPlayers;
@@ -34,7 +43,9 @@ export const setLoser = async (gameId, playerId) => {
 
 export const hasLost = async (gameId, playerId) => {
   const game = await getGame(gameId);
-  if (Object.keys(game).length === 0) return null;
+  if (Object.keys(game).length === 0) {
+    return null;
+  }
   const element = game.players.find(
     (element) => element.player.id === playerId,
   );
@@ -43,41 +54,42 @@ export const hasLost = async (gameId, playerId) => {
 
 export const checkForWinner = async (gameId) => {
   const game = await getGame(gameId);
-  if (Object.keys(game).length === 0) return null;
+  if (Object.keys(game).length === 0) {
+    return null;
+  }
 
   const players = game.players;
 
   const playersRemaining = nbPlayersRemaining(players);
-  const winner =
-    playersRemaining === 1
-      ? isWinnerLastPlayer(players)
-      : playersRemaining === 0
-      ? getHighestScorePlayer(players)
-      : null;
-
-  return winner;
+  if (playersRemaining === 1) {
+    return isWinnerLastPlayer(players);
+  } else if (playersRemaining === 0) {
+    return getHighestScorePlayer(players);
+  }
+  return null;
 };
 
 const nbPlayersRemaining = (players) => {
-  return players.filter((el) => el.loser === false).length;
+  const nbPlayers = players.filter((el) => el.loser === false).length;
+  return nbPlayers;
 };
 
 const isWinnerLastPlayer = (players) => {
-  // handle same score?
   const winner = players.find((el) => el.loser === false);
   const test = players.some(
-    (el) => el.player.id != winner.id && el.score > winner.score,
+    (el) => el.player.id !== winner.id && el.score > winner.score,
   );
   if (test) {
     return null;
-  } else {
-    return winner;
   }
+  return winner;
 };
 
 const getHighestScorePlayer = (players) => {
-  return players.reduce((acc, el) => {
-    if (!acc || el.score > acc.score) return (acc = el);
+  players.reduce((acc, el) => {
+    if (!acc || el.score > acc.score) {
+      return (acc = el);
+    }
     return acc;
   }, null);
 };

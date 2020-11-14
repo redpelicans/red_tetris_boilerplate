@@ -16,7 +16,8 @@ export default function GameOverStats({ score, level, linesRemoved }) {
 
       <Link
         to="/"
-        className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold"
+        className="self-center p-2 bg-red-500 rounded
+        w-full text-center text-white font-semibold"
       >
         {t("pages.game.main_menu")}
       </Link>

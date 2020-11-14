@@ -14,8 +14,6 @@ export default function Chat({ state }) {
   };
 
   const scrollDown = () => {
-    /** You can avoid using getElementById if you can get the div rendered by Item component using refs.
-     * You can look at refs forwarding and other technics to see how you can solve this */
     const divToScrollTo = document.getElementById("chat");
     if (divToScrollTo) {
       divToScrollTo.scrollTop = divToScrollTo.scrollHeight;
@@ -57,13 +55,14 @@ export default function Chat({ state }) {
       >
         <ul
           id="chat"
-          className="overflow-y-scroll hide-scroll h-3/4 w-full px-2 shadow-lg bg-grey-100 rounded"
+          className="overflow-y-scroll hide-scroll h-3/4 w-full
+          px-2 shadow-lg bg-grey-100 rounded"
         >
           {state.messages.map((message) => (
             <li
               key={message.id}
               className={`flex flex-col mr-1 ml-1 ${
-                message.sender == state.player.name
+                message.sender === state.player.name
                   ? "items-end text-right"
                   : "items-start text-left"
               } word-breaker`}
@@ -83,7 +82,8 @@ export default function Chat({ state }) {
             className="w-84% shadow-lg pl-2 bg-grey-100"
           />
           <button
-            className="w-15% flex-shrink-0 bg-red-400 hover:bg-red-600 text-sm text-white py-1 px-2 rounded"
+            className="w-15% flex-shrink-0 bg-red-400 hover:bg-red-600
+            text-sm text-white py-1 px-2 rounded"
             type="submit"
           >
             {t("pages.lobby.send")}

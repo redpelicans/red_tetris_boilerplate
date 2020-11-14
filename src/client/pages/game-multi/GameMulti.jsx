@@ -151,7 +151,8 @@ export default function GameMulti() {
 
       <SoundToggler
         speedRate={speedRate}
-        className="fixed top-0 right-0 z-50 p-1 m-1 cursor-pointer border rounded shadow bg-white"
+        className="fixed top-0 right-0 z-50 p-1 m-1
+        cursor-pointer border rounded shadow bg-white"
       />
 
       <FlexBox direction="row" height="full" className="justify-around">
@@ -238,7 +239,8 @@ const Leaderboard = ({ winner, players }) => {
 
       <Link
         to="/rooms"
-        className="self-center p-2 bg-red-500 rounded w-full text-center text-white font-semibold mt-4"
+        className="self-center p-2 bg-red-500 rounded w-full
+        text-center text-white font-semibold mt-4"
       >
         {t("pages.game.back_to_lobbies")}
       </Link>

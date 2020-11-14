@@ -9,12 +9,10 @@ import "./styles.scss";
 import "locales/i18n";
 
 ReactDom.render(
-  // <React.StrictMode>
   <StoreContextProvider>
     <Router />
     <LanguageSelection />
     <ToastContainer />
   </StoreContextProvider>,
-  // </React.StrictMode>,
   document.getElementById("tetris"),
 );
