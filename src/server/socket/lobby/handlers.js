@@ -1,4 +1,3 @@
-import { logerror, loginfo } from "utils/log";
 import { getPlayer } from "storage/players";
 import {
   joinLobby,

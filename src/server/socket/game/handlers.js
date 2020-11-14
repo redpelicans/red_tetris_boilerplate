@@ -1,4 +1,3 @@
-import { logerror, loginfo } from "utils/log";
 import { deleteKeyFromRedis } from "storage";
 import eventEmitter from "listeners";
 import event from "listeners/events";
@@ -63,7 +62,7 @@ export const checkWinner = async (gameId) => {
 
     const game = await getGame(gameId);
     if (Object.keys(game).length !== 0) {
-      if ((await setLobbyWon(game.id, winner.player)) != null) {
+      if ((await setLobbyWon(game.id, winner.player)) !== null) {
         eventEmitter.emit(event.lobby.change, {
           lobbyId: game.id,
         });

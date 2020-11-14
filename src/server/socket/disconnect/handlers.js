@@ -1,4 +1,4 @@
-import { logerror, loginfo } from "utils/log";
+import { loginfo } from "utils/log";
 import eventEmitter from "listeners";
 import event from "listeners/events";
 

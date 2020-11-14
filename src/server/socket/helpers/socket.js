@@ -1,4 +1,4 @@
-import { logerror, loginfo } from "utils/log";
+import { logerror } from "utils/log";
 import Joi from "joi";
 import Hoek from "@hapi/hoek";
 
@@ -11,7 +11,10 @@ import Hoek from "@hapi/hoek";
  */
 
 export const createEvent = (name, rules, fn) => {
-  Hoek.assert(!!name, "socket/helpers - socket.createEvent() must have a name");
+  Hoek.assert(
+    Boolean(name),
+    "socket/helpers - socket.createEvent() must have a name",
+  );
   Hoek.assert(
     typeof fn === "function",
     "socket/helpers - socket.createEvent() must have a function",
@@ -39,9 +42,8 @@ export const bindEvent = (socket, { name, validation, fn }) => {
         if (error) {
           logerror("bindEvent error!", error.details);
           return socket.emit(name, { error });
-        } else {
-          return fn(socket, payload);
         }
+        return fn(socket, payload);
       });
     } else {
       return fn(socket, payload);
