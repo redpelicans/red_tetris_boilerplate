@@ -40,18 +40,13 @@ eventEmitter.on(event.lobby.change, async ({ lobbyId }) => {
 });
 
 // Players change
-eventEmitter.on(event.players.change, async ({ socket }) => {
+eventEmitter.on(event.players.change, async () => {
   const players = await getComplexObjectFromRedis("players");
-  // to check
-  // socket.emit(PLAYERS.PUBLISH, players);
   io.in(GROUP.LOBBIES).emit(PLAYERS.PUBLISH, players);
 });
 
 // Lobbies Subscribe
 eventEmitter.on(event.lobbies.subscribe, async ({ socket }) => {
-  // socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
-  // socket.leave(`${GROUP_DOMAIN}:lobby-${lobbyId}`);
-
   const players = await getComplexObjectFromRedis("players");
   socket.emit(PLAYERS.PUBLISH, players);
 
@@ -106,10 +101,10 @@ eventEmitter.on(event.message.new, async ({ lobbyId, messageObject }) => {
 
 // Clear Room
 eventEmitter.on(event.room.clear, async ({ room }) => {
-  io.in(room).clients(function (error, clients) {
+  io.in(room).clients((error, clients) => {
     if (clients.length > 0) {
-      clients.forEach(function (socket_id) {
-        io.sockets.sockets[socket_id].leave(room);
+      clients.forEach((socketId) => {
+        io.sockets.sockets[socketId].leave(room);
       });
     }
   });
@@ -117,10 +112,10 @@ eventEmitter.on(event.room.clear, async ({ room }) => {
 
 // Join based on room
 eventEmitter.on(event.room.join, async ({ roomIn, roomTo }) => {
-  io.in(roomIn).clients(function (error, clients) {
+  io.in(roomIn).clients((error, clients) => {
     if (clients.length > 0) {
-      clients.forEach(function (socket_id) {
-        io.sockets.sockets[socket_id].join(roomTo);
+      clients.forEach((socketId) => {
+        io.sockets.sockets[socketId].join(roomTo);
       });
     }
   });
@@ -185,13 +180,5 @@ eventEmitter.on(event.game.winner, ({ winner, gameId }) => {
 eventEmitter.on(event.piece.send, ({ pieces, gameId }) => {
   io.in(`${GROUP_DOMAIN}:game-${gameId}`).emit(PIECE.SEND, pieces);
 });
-
-// // Lobby Leaver
-// // TODO
-// eventEmitter.on(event.game.leaver, ({ socketId }) => {
-//   socket.broadcast
-//     .to(`${GROUP_DOMAIN}:lobby-${lobbyId}`)
-//     .emit(LOBBY.LEAVER, { socketId });
-// });
 
 export default eventEmitter;

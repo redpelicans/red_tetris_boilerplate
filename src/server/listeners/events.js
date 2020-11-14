@@ -6,7 +6,6 @@ export default {
   lobby: {
     change: "onLobbyChange",
     kicked: "onLobbyKicked",
-    // leaver: "onLobbyLeaver",
   },
   players: {
     change: "onPlayersChange",
