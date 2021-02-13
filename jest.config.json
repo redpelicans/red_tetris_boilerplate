@@ -1,0 +1,23 @@
+{
+  "setupFilesAfterEnv": ["<rootDir>/setupTests.js"],
+  "collectCoverage": true,
+  "coverageReporters": ["lcov"],
+  "coverageDirectory": "coverage",
+  "coverageThreshold": {
+   "global": {
+   "branches": 0,
+   "functions": 0,
+   "lines": 0,
+   "statements": 0
+   }
+  },
+  "modulePathIgnorePatterns": ["<rootDir>/dist/"],
+  "moduleDirectories": ["node_modules", "src"],
+  "moduleFileExtensions": ["js", "jsx"],
+  "moduleNameMapper": {
+    "\\.(css|less|scss)$": "identity-obj-proxy"
+  },
+  "transform": {
+    "^.+\\.(js|jsx)$": "babel-jest"
+  }
+ }
